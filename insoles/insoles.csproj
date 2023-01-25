@@ -18,6 +18,10 @@
     <None Remove="DeviceList\Icons\insole-blue-icon.png" />
     <None Remove="DeviceList\Icons\insole-icon.png" />
     <None Remove="DeviceList\Icons\red-circle-icon.png" />
+    <None Remove="TimeLine\Icons\fast-backward-icon.png" />
+    <None Remove="TimeLine\Icons\fast-forward-icon.png" />
+    <None Remove="TimeLine\Icons\pause-icon.png" />
+    <None Remove="TimeLine\Icons\play-icon.png" />
     <None Remove="ToolBar\Icons\capture-blue-icon.png" />
     <None Remove="ToolBar\Icons\capturedFiles-blue-icon.png" />
     <None Remove="ToolBar\Icons\connect-blue-icon.png" />
@@ -77,6 +81,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="DeviceList\Icons\red-circle-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="TimeLine\Icons\fast-backward-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="TimeLine\Icons\fast-forward-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="TimeLine\Icons\pause-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="TimeLine\Icons\play-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="ToolBar\Icons\capture-blue-icon.png">

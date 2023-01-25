@@ -45,19 +45,19 @@
                 <StackPanel>
                     <Button x:Name="play" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" MaxHeight="25" Padding="5 5 5 5" Background="Blue">
                         <DockPanel>
-                            <Image DockPanel.Dock="Left" VerticalAlignment="Center" HorizontalAlignment="Left" MaxHeight="15" MaxWidth="15" Source="pack://application:,,,/UI/TimeLine/Icons/play-icon.png" Margin="5 0 0 0"/>
+                            <Image DockPanel.Dock="Left" VerticalAlignment="Center" HorizontalAlignment="Left" MaxHeight="15" MaxWidth="15" Source="pack://application:,,,/TimeLine/Icons/play-icon.png" Margin="5 0 0 0"/>
                             <TextBlock DockPanel.Dock="Left" VerticalAlignment="Center" HorizontalAlignment="Center" Text="Play" Foreground="White" FontSize="12"/>
                         </DockPanel>
                     </Button>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Button x:Name="begin" MaxWidth="25" MaxHeight="25" Padding="5 5 5 5" Margin="5 5 5 5">
-                            <Image Source="pack://application:,,,/UI/TimeLine/Icons/fast-backward-icon.png"/>
+                            <Image Source="pack://application:,,,/TimeLine/Icons/fast-backward-icon.png"/>
                         </Button>
                         <Button x:Name="pause" MaxWidth="25" MaxHeight="25"  Padding="5 5 5 5"  Margin="5 5 5 5">
-                            <Image x:Name="pauseImage" Source="pack://application:,,,/UI/ToolBar/Icons/pause-icon.png"/>
+                            <Image x:Name="pauseImage" Source="pack://application:,,,/TimeLine/Icons/pause-icon.png"/>
                         </Button>
                         <Button x:Name="end" MaxWidth="25" MaxHeight="25" Padding="5 5 5 5"  Margin="5 5 5 5">
-                            <Image Source="pack://application:,,,/UI/TimeLine/Icons/fast-forward-icon.png"/>
+                            <Image Source="pack://application:,,,/TimeLine/Icons/fast-forward-icon.png"/>
                         </Button>
                     </StackPanel>
                 </StackPanel>
