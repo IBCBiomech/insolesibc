@@ -124,7 +124,11 @@ namespace insoles
                 // Añade datos inventados quitar
                 deviceListClass.showInsoles();
 
-                deviceListClass.addInsole(new InsolesInfo("Insole", "Left"));
+                deviceListClass.addInsole(new InsolesInfo(0, "WISEWALK", "Left", "ASDFG"));
+                InsolesInfo insoleRight = new InsolesInfo(1, "WISEWALK", "Right", "ASTF");
+                insoleRight.battery = 56;
+                insoleRight.fw = "1.19";
+                deviceListClass.addInsole(insoleRight);
 
             }
             deviceListLoadedCheck(onScanFunction);

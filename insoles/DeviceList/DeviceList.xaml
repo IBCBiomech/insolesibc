@@ -29,7 +29,7 @@
         </controls:MultiSelectTreeView.Resources>
         <controls:MultiSelectTreeViewItem x:Name="baseItem">
             <controls:MultiSelectTreeViewItem.Header>
-                <TextBlock>DAT System</TextBlock>
+                <TextBlock>INSOLES IBC</TextBlock>
             </controls:MultiSelectTreeViewItem.Header>
             <controls:MultiSelectTreeViewItem ItemsSource="{Binding cameras}" Visibility="Collapsed" x:Name="cameras" Padding="0 10 0 2.5">
                 <controls:MultiSelectTreeViewItem.ItemContainerStyle>
@@ -46,7 +46,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Image Grid.Column="0" Source="pack://application:,,,/UI/DeviceList/Icons/camera-blue-icon-small.png" Height="20" Width="20"/>
+                        <Image Grid.Column="0" Source="pack://application:,,,/DeviceList/Icons/camera-blue-icon-small.png" Height="20" Width="20"/>
                         <TextBlock Text="Cameras" Grid.Column="1" TextAlignment="Center"/>
                         <TextBlock Text="Device Number" Grid.Column="2" TextAlignment="Center" TextWrapping="Wrap"/>
                         <TextBlock Text="FPS" Grid.Column="3" TextAlignment="Center"/>
@@ -64,7 +64,7 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Image Grid.Column="1" Height="15" Width="15" Source="pack://application:,,,/UI/DeviceList/Icons/arrow-icon.png"/>
+                            <Image Grid.Column="1" Height="15" Width="15" Source="pack://application:,,,/DeviceList/Icons/arrow-icon.png"/>
                             <TextBlock Text="{Binding Path=name}" Grid.Column="2" TextAlignment="Center"/>
                             <TextBlock Text="{Binding Path=number}" Grid.Column="3" TextAlignment="Center"/>
                             <TextBlock Text="{Binding Path=fps}" Grid.Column="4" TextAlignment="Center"/>
@@ -74,35 +74,45 @@
             </controls:MultiSelectTreeViewItem>
             <controls:MultiSelectTreeViewItem ItemsSource="{Binding insoles}" Visibility="Collapsed" x:Name="insoles" Padding="0 10 0 2.5">
                 <controls:MultiSelectTreeViewItem.Header>
-                    <Grid Width="280">
+                    <Grid Width="320">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="30"/>
+                            <ColumnDefinition Width="0.5*"/>
                             <ColumnDefinition Width="1.5*"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <Image Grid.Column="0" Source="pack://application:,,,/UI/DeviceList/Icons/insole-blue-icon-small.png" Height="20" Width="20"/>
-                        <TextBlock Text="IMU-Insoles" Grid.Column="1" TextAlignment="Center"/>
-                        <TextBlock Text="SIDE" Grid.Column="2" TextAlignment="Center"/>
-                        <TextBlock Text="" Grid.Column="3" TextAlignment="Center"/>
-                        <TextBlock Text="" Grid.Column="4" TextAlignment="Center"/>
+                        <Image Grid.Column="0" Source="pack://application:,,,/DeviceList/Icons/insole-blue-icon-small.png" Height="20" Width="20"/>
+                        <TextBlock Text="Id" Grid.Column="1" TextAlignment="Center"/>
+                        <TextBlock Text="IMU-Insoles" Grid.Column="2" TextAlignment="Center"/>
+                        <TextBlock Text="SIDE" Grid.Column="3" TextAlignment="Center"/>
+                        <TextBlock Text="Address" Grid.Column="4" TextAlignment="Center"/>
+                        <TextBlock Text="Battery" Grid.Column="5" TextAlignment="Center"/>
+                        <TextBlock Text="FW" Grid.Column="6" TextAlignment="Center"/>
                     </Grid>
                 </controls:MultiSelectTreeViewItem.Header>
                 <controls:MultiSelectTreeViewItem.ItemTemplate>
                     <DataTemplate DataType="{x:Type class:InsolesInfo}">
-                        <Grid Margin="-19,0,0,0" Width="280">
+                        <Grid Margin="-19,0,0,0" Width="320">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="15"/>
                                 <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="0.5*"/>
                                 <ColumnDefinition Width="1.5*"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Image Grid.Column="1" Height="15" Width="15" Source="pack://application:,,,/UI/DeviceList/Icons/arrow-icon.png"/>
-                            <TextBlock Text="{Binding Path=name}" Grid.Column="2" TextAlignment="Center"/>
-                            <TextBlock Text="{Binding Path=side}" Grid.Column="3" TextAlignment="Center"/>
+                            <Image Grid.Column="1" Height="15" Width="15" Source="pack://application:,,,/DeviceList/Icons/arrow-icon.png"/>
+                            <TextBlock Text="{Binding Path=id}" Grid.Column="2" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding Path=name}" Grid.Column="3" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding Path=side}" Grid.Column="4" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding Path=address}" Grid.Column="5" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding Path=battery, Converter={StaticResource batteryConverter}}" Grid.Column="6" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding Path=fw}" Grid.Column="7" TextAlignment="Center" />
                         </Grid>
                     </DataTemplate>
                 </controls:MultiSelectTreeViewItem.ItemTemplate>

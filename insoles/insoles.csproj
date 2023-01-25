@@ -9,6 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="DeviceList\Icons\arrow-icon.png" />
+    <None Remove="DeviceList\Icons\camera-blue-icon-small.png" />
+    <None Remove="DeviceList\Icons\camera-blue-icon.png" />
+    <None Remove="DeviceList\Icons\camera-icon.png" />
+    <None Remove="DeviceList\Icons\green-circle-icon.png" />
+    <None Remove="DeviceList\Icons\insole-blue-icon-small.png" />
+    <None Remove="DeviceList\Icons\insole-blue-icon.png" />
+    <None Remove="DeviceList\Icons\insole-icon.png" />
+    <None Remove="DeviceList\Icons\red-circle-icon.png" />
     <None Remove="ToolBar\Icons\capture-blue-icon.png" />
     <None Remove="ToolBar\Icons\capturedFiles-blue-icon.png" />
     <None Remove="ToolBar\Icons\connect-blue-icon.png" />
@@ -43,6 +52,33 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="DeviceList\Icons\arrow-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="DeviceList\Icons\camera-blue-icon-small.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="DeviceList\Icons\camera-blue-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="DeviceList\Icons\camera-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="DeviceList\Icons\green-circle-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="DeviceList\Icons\insole-blue-icon-small.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="DeviceList\Icons\insole-blue-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="DeviceList\Icons\insole-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="DeviceList\Icons\red-circle-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="ToolBar\Icons\capture-blue-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

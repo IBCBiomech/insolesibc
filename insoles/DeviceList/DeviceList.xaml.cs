@@ -168,5 +168,11 @@ namespace insoles.DeviceList
             CameraInfo cameraInfo = treeViewItem.DataContext as CameraInfo;
             cameraInfo.fps = calculateFps(cameraInfo.number);
         }
+        public void connectIMU(string mac, byte handler)
+        {
+            InsolesInfo imuInfo = VM.insoles.Where((insole) => insole.address == mac).First();
+            imuInfo.handler = handler;
+            imuInfo.connected = true;
+        }
     }
 }
