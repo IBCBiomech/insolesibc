@@ -1,0 +1,34 @@
+﻿<Page x:Class="insoles.FileBrowser.FileBrowser"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:insoles.FileBrowser"
+      xmlns:classes="clr-namespace:insoles.FileBrowser.ShellClasses"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="FileBrowser">
+
+    <TreeView Name="treeView" BorderThickness="0">
+        <TreeView.ItemContainerStyle>
+            <Style TargetType="{x:Type TreeViewItem}">
+                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                <Setter Property="KeyboardNavigation.AcceptsReturn" Value="True" />
+                <EventSetter Event="MouseDoubleClick" Handler="onItemDoubleClick" />
+            </Style>
+        </TreeView.ItemContainerStyle>
+        <TreeView.Resources>
+            <HierarchicalDataTemplate DataType="{x:Type classes:FileSystemObjectInfo}" ItemsSource="{Binding Path=Children}">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="{Binding Path=ImageSource, UpdateSourceTrigger=PropertyChanged}" Margin="0,1,8,1"></Image>
+                    <TextBlock Text="{Binding Path=FileSystemInfo.Name}"></TextBlock>
+                    <StackPanel.ContextMenu>
+                        <ContextMenu Visibility="{Binding Path=CanOpenWith}">
+                            <MenuItem Header="Abrir con" Click="OpenWith"/>
+                        </ContextMenu>
+                    </StackPanel.ContextMenu>
+                </StackPanel>
+            </HierarchicalDataTemplate>
+        </TreeView.Resources>
+    </TreeView>
+</Page>

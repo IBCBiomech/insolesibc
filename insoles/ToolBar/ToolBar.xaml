@@ -1,0 +1,150 @@
+﻿<Page x:Class="insoles.ToolBar.ToolBar"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:insoles.ToolBar"
+      mc:Ignorable="d" 
+      d:DesignHeight="60" d:DesignWidth="1000"
+      Title="ToolBar">
+
+    <DockPanel Background="LightGray">
+        <DockPanel.Resources>
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                <ContentPresenter x:Name="PART_Content"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  TextElement.Foreground="{TemplateBinding Foreground}"></ContentPresenter>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="BorderBrush" Value="Transparent"/>
+                        <Setter Property="Foreground" Value="Gray"/>
+                    </Trigger>
+                    <EventTrigger RoutedEvent="Button.PreviewMouseLeftButtonDown">
+                        <BeginStoryboard>
+                            <Storyboard Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)">
+                                <ColorAnimation From="Transparent" To="LightBlue" Duration="0:0:0.1"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="Button.PreviewMouseLeftButtonUp">
+                        <BeginStoryboard>
+                            <Storyboard Storyboard.TargetProperty="(Button.Background).(SolidColorBrush.Color)">
+                                <ColorAnimation From="LightBlue" To="Transparent" Duration="0:0:0.1"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="{x:Type Image}">
+                <Setter Property="Width" Value="30"/>
+                <Setter Property="Height" Value="30"/>
+            </Style>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="TextAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="11"/>
+            </Style>
+            <Style TargetType="{x:Type StackPanel}">
+                <Setter Property="Margin" Value="5 0 5 0"/>
+            </Style>
+        </DockPanel.Resources>
+        <Button x:Name="scan" DockPanel.Dock="Left">
+            <Button.IsEnabled>
+                <Binding Path="scanEnabled" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+            </Button.IsEnabled>
+            <StackPanel>
+                <Image Source="pack://application:,,,/ToolBar/Icons/scan-blue-icon.png"/>
+                <TextBlock>Scan</TextBlock>
+            </StackPanel>
+        </Button>
+        <Button x:Name="connect" DockPanel.Dock="Left">
+            <Button.IsEnabled>
+                <Binding Path="connectEnabled" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+            </Button.IsEnabled>
+            <StackPanel>
+                <Image Source="pack://application:,,,/ToolBar/Icons/connect-blue-icon.png"/>
+                <TextBlock>Connect</TextBlock>
+            </StackPanel>
+        </Button>
+        <Button x:Name="disconnect" DockPanel.Dock="Left">
+            <Button.IsEnabled>
+                <Binding Path="disconnectEnabled" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+            </Button.IsEnabled>
+            <StackPanel>
+                <Image Source="pack://application:,,,/ToolBar/Icons/disconnect-blue-icon.png"/>
+                <TextBlock>Disconnect</TextBlock>
+            </StackPanel>
+        </Button>
+        <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" DockPanel.Dock="Left"/>
+        <Button x:Name="openCamera" DockPanel.Dock="Left">
+            <Button.IsEnabled>
+                <Binding Path="openCameraEnabled" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+            </Button.IsEnabled>
+            <StackPanel>
+                <Image Source="pack://application:,,,/ToolBar/Icons/openCamera-blue-icon.png"/>
+                <TextBlock>Open Camera</TextBlock>
+            </StackPanel>
+        </Button>
+        <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" DockPanel.Dock="Left"/>
+        <Button x:Name="record" DockPanel.Dock="Left">
+            <Button.IsEnabled>
+                <Binding Path="recordEnabled" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+            </Button.IsEnabled>
+            <StackPanel>
+                <Image x:Name="recordImage" Source="pack://application:,,,/ToolBar/Icons/record-stop-blue-icon.png"/>
+                <TextBlock x:Name="recordText">Record Stopped</TextBlock>
+            </StackPanel>
+        </Button>
+        <Button x:Name="capture" DockPanel.Dock="Left">
+            <Button.IsEnabled>
+                <Binding Path="captureEnabled" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+            </Button.IsEnabled>
+            <StackPanel>
+                <Image Source="pack://application:,,,/ToolBar/Icons/capture-blue-icon.png"/>
+                <TextBlock>Capture</TextBlock>
+            </StackPanel>
+        </Button>
+        <Button x:Name="pause" DockPanel.Dock="Left">
+            <Button.IsEnabled>
+                <Binding Path="pauseEnabled" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+            </Button.IsEnabled>
+            <StackPanel>
+                <Image Source="pack://application:,,,/ToolBar/Icons/pause-blue-icon.png" x:Name="pauseImage"/>
+                <TextBlock x:Name="pauseText">Pause</TextBlock>
+            </StackPanel>
+        </Button>
+        <Button Grid.Column="7" x:Name="stop" DockPanel.Dock="Left">
+            <Button.IsEnabled>
+                <Binding Path="stopEnabled" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+            </Button.IsEnabled>
+            <StackPanel>
+                <Image Source="pack://application:,,,/ToolBar/Icons/stop-blue-icon.png"/>
+                <TextBlock>Stop</TextBlock>
+            </StackPanel>
+        </Button>
+        <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" DockPanel.Dock="Left"/>
+        <Button x:Name="capturedFiles" DockPanel.Dock="Left">
+            <Button.IsEnabled>
+                <Binding Path="capturedFilesEnabled" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+            </Button.IsEnabled>
+            <StackPanel>
+                <Image Source="pack://application:,,,/ToolBar/Icons/capturedFiles-blue-icon.png"/>
+                <TextBlock>Show Captured Files</TextBlock>
+            </StackPanel>
+        </Button>
+        <Frame Visibility="Collapsed" Source="pack://application:,,,/FileSaver/SavingMenu.xaml" x:Name="savingMenu" DockPanel.Dock="Right"/>
+    </DockPanel>
+</Page>

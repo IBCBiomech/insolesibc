@@ -4,9 +4,48 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:insoles"
+        xmlns:dock="https://github.com/Dirkster99/AvalonDock"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Frame Grid.Row="0" Source="pack://application:,,,/ToolBar/ToolBar.xaml" x:Name="toolBar"/>
+        <dock:DockingManager Grid.Row="1">
+            <dock:LayoutRoot>
+                <dock:LayoutPanel Orientation="Vertical" DockHeight="*" DockWidth="*">
+                    <dock:LayoutAnchorablePaneGroup Orientation="Horizontal" DockHeight="1.5*" DockWidth="*">
+                        <dock:LayoutAnchorablePane DockHeight="*" DockWidth="0.75*">
+                            <dock:LayoutAnchorable x:Name="leftPanelAnchorable" CanFloat="True" CanClose="False" CanHide="True" CanAutoHide="False">
+                                <TabControl Grid.Column="0" TabStripPlacement="Top">
+                                    <TabItem Header="Devices">
+                                        <Frame Source="pack://application:,,,/DeviceList/DeviceList.xaml" x:Name="deviceList"/>
+                                    </TabItem>
+                                    <TabItem Header="Sessions">
+                                        <Frame Source="pack://application:,,,/FileBrowser/FileBrowser.xaml" x:Name="sessions"/>
+                                    </TabItem>
+                                </TabControl>
+                            </dock:LayoutAnchorable>
+                        </dock:LayoutAnchorablePane>
+                        <dock:LayoutAnchorablePaneGroup Orientation="Vertical" DockHeight="*" DockWidth="4*">
+                            <dock:LayoutAnchorablePaneGroup Orientation="Horizontal" DockHeight="1.5*" DockWidth="*">
+                                <dock:LayoutAnchorablePane DockHeight="*" DockWidth="*">
+                                    <dock:LayoutAnchorable x:Name="camaraAnchorable" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False" Title="Camera">
+                                        <Frame Source="pack://application:,,,/CamaraViewport/CamaraViewport.xaml" x:Name="camaraViewport"/>
+                                    </dock:LayoutAnchorable>
+                                </dock:LayoutAnchorablePane>
+                            </dock:LayoutAnchorablePaneGroup>
+                        </dock:LayoutAnchorablePaneGroup>
+                    </dock:LayoutAnchorablePaneGroup>
+                    <dock:LayoutAnchorablePane DockWidth="*" DockHeight="0.25*">
+                        <dock:LayoutAnchorable CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                            <Frame Source="pack://application:,,,/TimeLine/TimeLine.xaml" x:Name="timeLine"/>
+                        </dock:LayoutAnchorable>
+                    </dock:LayoutAnchorablePane>
+                </dock:LayoutPanel>
+            </dock:LayoutRoot>
+        </dock:DockingManager>
     </Grid>
 </Window>

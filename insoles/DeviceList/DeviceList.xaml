@@ -1,0 +1,112 @@
+﻿<Page x:Class="insoles.DeviceList.DeviceList"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:insoles.DeviceList"
+      xmlns:class="clr-namespace:insoles.DeviceList.TreeClasses"
+      xmlns:converter="clr-namespace:insoles.DeviceList.Converters" xmlns:controls="clr-namespace:System.Windows.Controls;assembly=MultiSelectTreeView"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="DeviceList">
+    <Page.DataContext>
+        <class:DeviceListInfo x:Name="VM"/>
+    </Page.DataContext>
+    <Page.Resources>
+        <converter:ConnectedConverter x:Key="connectedConverter"/>
+        <converter:BatteryConverter x:Key="batteryConverter"/>
+        <Style x:Key="TreeViewItemStyle" TargetType="controls:MultiSelectTreeViewItem">
+            <Setter Property="Margin" Value="5 5 5 5" />
+        </Style>
+    </Page.Resources>
+
+    <controls:MultiSelectTreeView BorderThickness="0" ItemContainerStyle="{StaticResource TreeViewItemStyle}" x:Name="treeView">
+        <controls:MultiSelectTreeView.Resources>
+            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                        Color="LightSkyBlue" />
+            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                        Color="LightSkyBlue" />
+        </controls:MultiSelectTreeView.Resources>
+        <controls:MultiSelectTreeViewItem x:Name="baseItem">
+            <controls:MultiSelectTreeViewItem.Header>
+                <TextBlock>DAT System</TextBlock>
+            </controls:MultiSelectTreeViewItem.Header>
+            <controls:MultiSelectTreeViewItem ItemsSource="{Binding cameras}" Visibility="Collapsed" x:Name="cameras" Padding="0 10 0 2.5">
+                <controls:MultiSelectTreeViewItem.ItemContainerStyle>
+                    <Style TargetType="{x:Type controls:MultiSelectTreeViewItem}">
+                        <EventSetter Event="MouseDoubleClick" Handler="onCameraDoubleClick" />
+                    </Style>
+                </controls:MultiSelectTreeViewItem.ItemContainerStyle>
+                <controls:MultiSelectTreeViewItem.Header>
+                    <Grid Width="280">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0" Source="pack://application:,,,/UI/DeviceList/Icons/camera-blue-icon-small.png" Height="20" Width="20"/>
+                        <TextBlock Text="Cameras" Grid.Column="1" TextAlignment="Center"/>
+                        <TextBlock Text="Device Number" Grid.Column="2" TextAlignment="Center" TextWrapping="Wrap"/>
+                        <TextBlock Text="FPS" Grid.Column="3" TextAlignment="Center"/>
+                        <TextBlock Text="" Grid.Column="4" TextAlignment="Center"/>
+                    </Grid>
+                </controls:MultiSelectTreeViewItem.Header>
+                <controls:MultiSelectTreeViewItem.ItemTemplate>
+                    <DataTemplate DataType="{x:Type class:CameraInfo}">
+                        <Grid Margin="-19,0,0,0" Width="280">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="1.5*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Column="1" Height="15" Width="15" Source="pack://application:,,,/UI/DeviceList/Icons/arrow-icon.png"/>
+                            <TextBlock Text="{Binding Path=name}" Grid.Column="2" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding Path=number}" Grid.Column="3" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding Path=fps}" Grid.Column="4" TextAlignment="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </controls:MultiSelectTreeViewItem.ItemTemplate>
+            </controls:MultiSelectTreeViewItem>
+            <controls:MultiSelectTreeViewItem ItemsSource="{Binding insoles}" Visibility="Collapsed" x:Name="insoles" Padding="0 10 0 2.5">
+                <controls:MultiSelectTreeViewItem.Header>
+                    <Grid Width="280">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0" Source="pack://application:,,,/UI/DeviceList/Icons/insole-blue-icon-small.png" Height="20" Width="20"/>
+                        <TextBlock Text="IMU-Insoles" Grid.Column="1" TextAlignment="Center"/>
+                        <TextBlock Text="SIDE" Grid.Column="2" TextAlignment="Center"/>
+                        <TextBlock Text="" Grid.Column="3" TextAlignment="Center"/>
+                        <TextBlock Text="" Grid.Column="4" TextAlignment="Center"/>
+                    </Grid>
+                </controls:MultiSelectTreeViewItem.Header>
+                <controls:MultiSelectTreeViewItem.ItemTemplate>
+                    <DataTemplate DataType="{x:Type class:InsolesInfo}">
+                        <Grid Margin="-19,0,0,0" Width="280">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="1.5*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Column="1" Height="15" Width="15" Source="pack://application:,,,/UI/DeviceList/Icons/arrow-icon.png"/>
+                            <TextBlock Text="{Binding Path=name}" Grid.Column="2" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding Path=side}" Grid.Column="3" TextAlignment="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </controls:MultiSelectTreeViewItem.ItemTemplate>
+            </controls:MultiSelectTreeViewItem>
+        </controls:MultiSelectTreeViewItem>
+    </controls:MultiSelectTreeView>
+</Page>

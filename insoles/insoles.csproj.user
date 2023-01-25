@@ -1,4 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup />
+  <ItemGroup>
+    <ApplicationDefinition Update="App.xaml">
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="ToolBar\ToolBar.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="CamaraViewport\CamaraViewport.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="DeviceList\DeviceList.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="FileBrowser\FileBrowser.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="TimeLine\TimeLine.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="FileSaver\SavingMenu.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="ToolBar\ToolBar.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
 </Project>

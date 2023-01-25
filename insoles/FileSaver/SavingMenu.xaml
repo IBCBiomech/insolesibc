@@ -1,0 +1,48 @@
+﻿<Page x:Class="insoles.FileSaver.SavingMenu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:insoles.FileSaver"
+        mc:Ignorable="d"
+        Height="50" Width="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Width="50" Height="20" Click="changeDirectory" Content="Abrir" Margin="10 2.5 10 2.5"/>
+                <TextBlock x:Name="route" Grid.Column="1" VerticalAlignment="Center"/>
+            </Grid>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal" Grid.Column="0" Margin="10 5 10 5">
+                    <CheckBox IsEnabled="False" x:Name="csv" Padding="0 0 2 0" IsChecked="True"/>
+                    <TextBlock Padding="2 0 0 0" Text="Incluir CSV"/>
+                </StackPanel>
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal" Grid.Column="1" Margin="10 5 10 5">
+                    <CheckBox x:Name="video" Padding="0 0 2 0" IsChecked="False">
+                        <CheckBox.IsEnabled>
+                            <Binding Path="videoCheckboxEnabled" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                        </CheckBox.IsEnabled>
+                    </CheckBox>
+                    <TextBlock Padding="2 0 0 0" Text="Incluir Video"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <Button x:Name="ok" Grid.Column="1" Width="40" Height="25" Content="Ok" Margin="10 0 10 0"/>
+    </Grid>
+</Page>

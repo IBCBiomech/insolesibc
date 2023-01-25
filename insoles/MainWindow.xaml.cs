@@ -1,4 +1,5 @@
-﻿using System;
+﻿using insoles.ToolBar;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +21,17 @@ namespace insoles
     /// </summary>
     public partial class MainWindow : Window
     {
+        public VirtualToolBar virtualToolBar;
+        public FileSaver.FileSaver fileSaver;
+        public event EventHandler initialized;
         public MainWindow()
         {
             InitializeComponent();
+
+            virtualToolBar = new VirtualToolBar();
+            fileSaver = new FileSaver.FileSaver();
+
+            initialized?.Invoke(this, EventArgs.Empty);
         }
     }
 }
