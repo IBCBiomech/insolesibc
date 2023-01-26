@@ -1,4 +1,5 @@
 ﻿using DirectShowLib;
+using ibcdatacsharp.DeviceList.TreeClasses;
 using insoles.DeviceList.TreeClasses;
 using insoles.Graphs;
 using insoles.ToolBar;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,6 +17,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using WisewalkSDK;
+using static WisewalkSDK.Wisewalk;
 
 namespace insoles
 {
@@ -31,7 +34,10 @@ namespace insoles
         public event EventHandler initialized;
 
         private List<Wisewalk.ComPort> ports = new List<Wisewalk.ComPort>();
+        public IMUInfo imuInfo;
+        public List<int> devHandlers;
         private List<Wisewalk.Dev> scanDevices = new List<Wisewalk.Dev>();
+        private List<Wisewalk.Dev> conn_list_dev;
         private string port_selected;
         private string error;
         private List<int> counter = new List<int>();
@@ -185,6 +191,12 @@ namespace insoles
             deviceListLoadedCheck(onScanFunction);
             virtualToolBar.onScanClick();
         }
+
+        private Dev findIMU(IMUInfo imuInfo)
+        {
+            return scanDevices.FirstOrDefault(de => GetMacAddress(de) == imuInfo.address);
+        }
+
         // Conecta el boton connect
         private void onConnect(object sender, EventArgs e)
         {
@@ -193,6 +205,7 @@ namespace insoles
             {
                 DeviceList.DeviceList deviceListClass = deviceList.Content as DeviceList.DeviceList;
                 IList<object> selectedItems = (IList<object>)deviceListClass.treeView.SelectedItems;
+                List<IMUInfo> connectedIMUs = new List<IMUInfo>();
                 List<InsolesInfo> connectedInsoles = new List<InsolesInfo>();
                 List<object> selectedIMUs = new List<object>(); // Necesario porque deviceListClass.treeView.SelectedItems puede cambiar despues de clicar connect
                 foreach (object selected in selectedItems)
@@ -214,6 +227,17 @@ namespace insoles
                             //deviceListClass.connectCamera(treeViewItem);
                         }
                     }
+                }
+                conn_list_dev = new List<Dev>();
+                // Operación atómica de conexión
+                foreach (IMUInfo imu in connectedIMUs)
+                {
+                    conn_list_dev.Add(findIMU(imu));
+                    devHandlers.Remove((int)imu.id);
+                }
+                if (!api.Connect(scanDevices, out error))
+                {
+                    Trace.WriteLine("Connect error " + error);
                 }
             }
             deviceListLoadedCheck(onConnectFunction);
@@ -324,6 +348,8 @@ namespace insoles
             Trace.WriteLine("# of devices: " + devices.Count);
             ShowScanList(scanDevices);
         }
+
+
         private async void Api_deviceConnected(byte handler, WisewalkSDK.Device dev)
         {
             // Esta funcion tiene que ser LOCAL
@@ -370,6 +396,15 @@ namespace insoles
 
             mac = devices[idx].mac[5].ToString("X2") + ":" + devices[idx].mac[4].ToString("X2") + ":" + devices[idx].mac[3].ToString("X2") + ":" +
                                     devices[idx].mac[2].ToString("X2") + ":" + devices[idx].mac[1].ToString("X2") + ":" + devices[idx].mac[0].ToString("X2");
+
+            return mac;
+        }
+        private string GetMacAddress(Wisewalk.Dev device)
+        {
+            string mac = "";
+
+            mac = device.mac[5].ToString("X2") + ":" + device.mac[4].ToString("X2") + ":" + device.mac[3].ToString("X2") + ":" +
+                                    device.mac[2].ToString("X2") + ":" + device.mac[1].ToString("X2") + ":" + device.mac[0].ToString("X2");
 
             return mac;
         }
