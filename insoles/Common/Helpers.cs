@@ -5,8 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Controls;
-using System.Runtime.CompilerServices;
-using System.Windows.Navigation;
+using MathNet.Numerics.LinearAlgebra;
+using System.Drawing;
+using Color = System.Drawing.Color;
 
 namespace insoles.Common
 {
@@ -177,5 +178,78 @@ namespace insoles.Common
             s = (float)Math.Sqrt((1 - z) / w);
             return new Quaternion(x, y, s * u, s * v);
         }
+        #region pressure_map
+        public static (float, int)[] CountFrequences(Matrix<float> array)
+        {
+            Dictionary<float, int> elementCounts = new Dictionary<float, int>();
+
+
+            for (int i = 0; i < array.RowCount; i++)
+            {
+                for (int j = 0; j < array.ColumnCount; j++)
+                {
+                    float element = array[i, j];
+                    if (elementCounts.ContainsKey(element))
+                        elementCounts[element]++;
+                    else
+                        elementCounts.Add(element, 1);
+                }
+            }
+
+
+            (float, int)[] frequences = new (float, int)[elementCounts.Count];
+            int k = 0;
+            foreach (KeyValuePair<float, int> count in elementCounts)
+            {
+                frequences[k] = (count.Key, count.Value);
+                k++;
+            }
+            return frequences;
+        }
+        public static byte ColorToByte(Color color)
+        {
+            return (byte)((color.R * 255 + color.G * 255 + color.B * 255) / 3);
+        }
+        public static int ColorToInt(Color color)
+        {
+            int colorData = color.R << 16;
+            colorData |= color.G << 8;
+            colorData |= color.B << 0;
+            return colorData;
+        }
+        public static Matrix<float> ImageToMatrix(Bitmap image)
+        {
+            Matrix<float> floats = Matrix<float>.Build.Dense(image.Width, image.Height);
+            for (int i = 0; i < image.Width; i++)
+            {
+                for (int j = 0; j < image.Height; j++)
+                {
+                    floats[i, j] = ColorToByte(image.GetPixel(i, j));
+                }
+            }
+            return floats;
+        }
+        public static int SquareDistance(int x1, int y1, int x2, int y2)
+        {
+            int dist_x = x1 - x2;
+            int dist_y = y1 - y2;
+            dist_x = dist_x * dist_x;
+            dist_y = dist_y * dist_y;
+            return dist_x + dist_y;
+        }
+        public static Tuple<double, double> Average(List<Tuple<int, int>> values)
+        {
+            double x = 0;
+            double y = 0;
+            foreach (Tuple<int, int> item in values)
+            {
+                x += item.Item1;
+                y += item.Item2;
+            }
+            x /= values.Count;
+            y /= values.Count;
+            return new Tuple<double, double>(x, y);
+        }
+        #endregion pressure_map
     }
 }
