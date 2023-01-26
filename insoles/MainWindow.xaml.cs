@@ -1,14 +1,20 @@
 ﻿using DirectShowLib;
 using insoles.DeviceList.TreeClasses;
+using insoles.Graphs;
 using insoles.ToolBar;
 using OpenCvSharp;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Navigation;
+using WisewalkSDK;
 
 namespace insoles
 {
@@ -17,15 +23,38 @@ namespace insoles
     /// </summary>
     public partial class MainWindow : System.Windows.Window
     {
+        public Wisewalk api;
+
+        public GraphManager graphManager;
         public VirtualToolBar virtualToolBar;
         public FileSaver.FileSaver fileSaver;
         public event EventHandler initialized;
+
+        private List<Wisewalk.ComPort> ports = new List<Wisewalk.ComPort>();
+        private List<Wisewalk.Dev> scanDevices = new List<Wisewalk.Dev>();
+        private string port_selected;
+        private string error;
+        private List<int> counter = new List<int>();
+        public Dictionary<string, WisewalkSDK.Device> devices_list
+        {
+            get
+            {
+                return api.GetDevicesConnected();
+            }
+        }
         public MainWindow()
         {
             InitializeComponent();
 
             virtualToolBar = new VirtualToolBar();
             fileSaver = new FileSaver.FileSaver();
+            graphManager = new GraphManager();
+
+            api = new Wisewalk();
+            api.scanFinished += Api_scanFinished;
+            api.deviceConnected += Api_deviceConnected;
+            api.onError += Api_onError;
+            api.deviceDisconnected += Api_onDisconnect;
 
             initToolBarHandlers();
 
@@ -68,6 +97,23 @@ namespace insoles
             // Funcion que se ejecuta al clicar el boton scan
             void onScanFunction()
             {
+                void getInsoles()
+                {
+
+                    ShowPorts();
+                    api.Open(port_selected, out error);
+
+                    if (!api.ScanDevices(out error))
+                    {
+                        // Error
+                        Trace.WriteLine("", "Error to scan devices - " + error);
+                    }
+                    else
+                    {
+                        Thread.Sleep(2000);
+                    }
+
+                }
                 // Añade las camaras al TreeView
                 async void addCameras(DeviceList.DeviceList deviceListClass)
                 {
@@ -102,6 +148,7 @@ namespace insoles
                     //names.ForEach(n => Trace.WriteLine(n));
                     List<int> indices = await Task.Run(() => cameraIndices(names.Count));
                     //indices.ForEach(i => Trace.WriteLine(i));
+                    await Task.Run(() => getInsoles()); //necesario para escanear IMUs
 
                     List<CameraInfo> cameras = new List<CameraInfo>();
                     for (int i = 0; i < names.Count; i++)
@@ -113,6 +160,16 @@ namespace insoles
                     }
                     deviceListClass.setCameras(cameras);
 
+                    await Task.Delay(4000);
+
+                    List<InsolesInfo> insoles = new List<InsolesInfo>();
+                    for (int i = 0; i < scanDevices.Count; i++)
+                    {
+                        string side = "left or right";
+                        string name = "Wisewalk";
+                        insoles.Add(new InsolesInfo(i, name, side, GetMacAddress(scanDevices, i)));
+                    }
+                    deviceListClass.setInsoles(insoles);
                     //MessageBox.Show(scanDevices.Count + " IMUs encontrados", "Scan Devices", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
 
@@ -123,12 +180,6 @@ namespace insoles
                 deviceListClass.showCameras();
                 // Añade datos inventados quitar
                 deviceListClass.showInsoles();
-
-                deviceListClass.addInsole(new InsolesInfo(0, "WISEWALK", "Left", "ASDFG"));
-                InsolesInfo insoleRight = new InsolesInfo(1, "WISEWALK", "Right", "ASTF");
-                insoleRight.battery = 56;
-                insoleRight.fw = "1.19";
-                deviceListClass.addInsole(insoleRight);
 
             }
             deviceListLoadedCheck(onScanFunction);
@@ -223,7 +274,7 @@ namespace insoles
         private void onCapture(object sender, EventArgs e)
         {
             virtualToolBar.captureClick();
-            //graphManager.initCapture();
+            graphManager.initCapture();
         }
         // Funcion que se ejecuta al clicar el boton Pause
         private void onPause(object sender, EventArgs e)
@@ -245,6 +296,124 @@ namespace insoles
         private void onCapturedFiles(object sender, EventArgs e)
         {
             //virtualToolBar.openClick();
+        }
+        private void ShowPorts()
+        {
+
+
+            ports = api.GetUsbDongles();
+            foreach (Wisewalk.ComPort port in ports)
+            {
+                Match match1 = Regex.Match(port.description, "nRF52 USB CDC BLE*", RegexOptions.IgnoreCase);
+                if (match1.Success)
+                {
+                    port_selected = port.name;
+                    Trace.WriteLine(port.description);
+
+                }
+            }
+        }
+        public DateTime GetDateTime()
+        {
+            DateTime dateTime = new DateTime(2022, 11, 8, 13, 0, 0, 0);
+            return dateTime;
+        }
+        private void Api_scanFinished(List<Wisewalk.Dev> devices)
+        {
+            scanDevices = devices;
+            Trace.WriteLine("# of devices: " + devices.Count);
+            ShowScanList(scanDevices);
+        }
+        private async void Api_deviceConnected(byte handler, WisewalkSDK.Device dev)
+        {
+            // Esta funcion tiene que ser LOCAL
+            void setRTCDevice(byte deviceHandler, byte sampleRate, byte packetType)
+            {
+                if (deviceHandler == handler)
+                {
+                    api.SetRTCDevice(deviceHandler, GetDateTime(), out error);
+                    Dispatcher.BeginInvoke(
+                    () => (deviceList.Content as DeviceList.DeviceList).
+                    updateHeaderInfo(dev.Id, handler)
+                );
+                    api.updateDeviceConfiguration -= setRTCDevice;
+                }
+            }
+
+            await Dispatcher.BeginInvoke(
+                () => (deviceList.Content as DeviceList.DeviceList).
+                connectInsole(dev.Id, handler)
+            );
+
+            api.SetDeviceConfiguration(handler, 100, 3, out error);
+            api.updateDeviceConfiguration += setRTCDevice;
+
+
+            counter.Add(0);
+        }
+        private void ShowScanList(List<Wisewalk.Dev> devices)
+        {
+
+            for (int idx = 0; idx < devices.Count; idx++)
+            {
+                string macAddress = devices[idx].mac[5].ToString("X2") + ":" + devices[idx].mac[4].ToString("X2") + ":" + devices[idx].mac[3].ToString("X2") + ":" +
+                                    devices[idx].mac[2].ToString("X2") + ":" + devices[idx].mac[1].ToString("X2") + ":" + devices[idx].mac[0].ToString("X2");
+
+
+                Trace.WriteLine("MacAddress: ", " * " + macAddress);
+            }
+
+        }
+        private string GetMacAddress(List<Wisewalk.Dev> devices, int idx)
+        {
+            string mac = "";
+
+            mac = devices[idx].mac[5].ToString("X2") + ":" + devices[idx].mac[4].ToString("X2") + ":" + devices[idx].mac[3].ToString("X2") + ":" +
+                                    devices[idx].mac[2].ToString("X2") + ":" + devices[idx].mac[1].ToString("X2") + ":" + devices[idx].mac[0].ToString("X2");
+
+            return mac;
+        }
+        private void Api_onDisconnect(byte deviceHandler)
+        {
+            Trace.WriteLine("Api_onDisconnect");
+            Dispatcher.BeginInvoke(
+                    () => (deviceList.Content as DeviceList.DeviceList).
+                    disconnectInsole(deviceHandler)
+                );
+            //devices_list.Remove(deviceHandler.ToString());
+        }
+        private void Api_onError(byte deviceHandler, string error)
+        {
+            if (deviceHandler != 0xFF)
+            {
+                SetLogText(devices_list[deviceHandler.ToString()].Id, error);
+            }
+            else
+            {
+                SetLogText("", error);
+            }
+        }
+        private void SetLogText(string device, string text)
+        {
+
+
+            var output = "";
+            var message = "";
+
+            if (device != "")
+            {
+                message = $"{DateTime.Now:HH:mm:ss.fff}   RX from [{device}]:   {text} ";
+            }
+            else
+            {
+                message = $"{DateTime.Now:HH:mm:ss.fff}:   {text} ";
+            }
+
+            output += message + Environment.NewLine;
+
+            Trace.Write(output);
+
+
         }
     }
 }

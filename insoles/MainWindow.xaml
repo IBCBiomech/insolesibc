@@ -32,6 +32,11 @@
                         <dock:LayoutAnchorablePaneGroup Orientation="Vertical" DockHeight="*" DockWidth="4*">
                             <dock:LayoutAnchorablePaneGroup Orientation="Horizontal" DockHeight="1.5*" DockWidth="*">
                                 <dock:LayoutAnchorablePane DockHeight="*" DockWidth="*">
+                                    <dock:LayoutAnchorable x:Name="graphSumPressuresAnchorable" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False" Title="Camera">
+                                        <Frame Source="pack://application:,,,/Graphs/GraphSumPressures.xaml" x:Name="graphSumPressures"/>
+                                    </dock:LayoutAnchorable>
+                                </dock:LayoutAnchorablePane>
+                                <dock:LayoutAnchorablePane DockHeight="*" DockWidth="*">
                                     <dock:LayoutAnchorable x:Name="camaraAnchorable" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False" Title="Camera">
                                         <Frame Source="pack://application:,,,/CamaraViewport/CamaraViewport.xaml" x:Name="camaraViewport"/>
                                     </dock:LayoutAnchorable>

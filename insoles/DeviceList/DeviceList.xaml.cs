@@ -97,9 +97,26 @@ namespace insoles.DeviceList
         {
             return VM.insoles;
         }
-        public void setInsoles(ObservableCollection<InsolesInfo> insoles)
+        public void setInsoles(List<InsolesInfo> insoles)
         {
-            VM.insoles = insoles;
+            VM.insoles = new ObservableCollection<InsolesInfo>(VM.insoles.Where(insole => insoles.Any(newInsole => newInsole.address == insole.address)));
+            foreach (InsolesInfo insole in insoles)
+            {
+                if (!VM.insoles.Any(insoleOld => insoleOld.address == insole.address))
+                {
+                    VM.insoles.Add(insole);
+                }
+                /*
+                else // Cambiar el numero de la camara si es diferente (no se si con las camaras es necesario)
+                {
+                    int index = VM.insoles.ToList().FindIndex(insoleOld => insoleOld.name == insole.name);
+                    if (VM.cameras[index].number != insole.number)
+                    {
+                        VM.cameras[index].number = insole.number;
+                    }
+                }
+                */
+            }
         }
         public void addInsole(InsolesInfo insole)
         {
@@ -168,11 +185,28 @@ namespace insoles.DeviceList
             CameraInfo cameraInfo = treeViewItem.DataContext as CameraInfo;
             cameraInfo.fps = calculateFps(cameraInfo.number);
         }
-        public void connectIMU(string mac, byte handler)
+        public void connectInsole(string mac, byte handler)
         {
             InsolesInfo imuInfo = VM.insoles.Where((insole) => insole.address == mac).First();
             imuInfo.handler = handler;
             imuInfo.connected = true;
+        }
+        public void disconnectInsole(byte handler)
+        {
+            InsolesInfo insoleInfo = VM.insoles.Where((imu) => imu.handler == handler).First();
+            insoleInfo.connected = false;
+            insoleInfo.battery = null;
+            insoleInfo.fw = null;
+        }
+        public void updateHeaderInfo(string mac, byte handler)
+        {
+            InsolesInfo insoleInfo = VM.insoles.Where((imu) => imu.address == mac).First();
+            Dictionary<string, WisewalkSDK.Device> devicesConnected = mainWindow.api.GetDevicesConnected();
+            WisewalkSDK.Device device = devicesConnected[handler.ToString()];
+            insoleInfo.battery = device.HeaderInfo.battery;
+            insoleInfo.fw = device.HeaderInfo.fwVersion;
+            //imuInfo.battery = mainWindow.devices_list[handler.ToString()].HeaderInfo.battery;
+            //imuInfo.fw = mainWindow.devices_list[handler.ToString()].HeaderInfo.fwVersion;
         }
     }
 }

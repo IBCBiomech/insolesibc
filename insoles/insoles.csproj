@@ -53,6 +53,15 @@
     <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.7.0.20230115" />
     <PackageReference Include="OpenCvSharp4.WpfExtensions" Version="4.7.0.20230115" />
     <PackageReference Include="ScottPlot.WPF" Version="4.1.60" />
+    <PackageReference Include="System.IO.Ports" Version="7.0.0" />
+    <PackageReference Include="System.Management" Version="7.0.0" />
+    <PackageReference Include="System.Management.dll" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="WisewalkSDK">
+      <HintPath>..\..\..\..\Desktop\SampleCode\API\WisewalkSDK.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

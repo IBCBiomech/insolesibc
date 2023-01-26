@@ -21,6 +21,9 @@
     <Page Update="FileBrowser\FileBrowser.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Graphs\GraphSumPressures.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
