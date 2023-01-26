@@ -36,7 +36,7 @@ namespace insoles
         private List<Wisewalk.ComPort> ports = new List<Wisewalk.ComPort>();
         public IMUInfo imuInfo;
         public List<int> devHandlers;
-        private List<Wisewalk.Dev> scanDevices = new List<Wisewalk.Dev>();
+        public List<Wisewalk.Dev> scanDevices = new List<Wisewalk.Dev>();
         private List<Wisewalk.Dev> conn_list_dev;
         private string port_selected;
         private string error;

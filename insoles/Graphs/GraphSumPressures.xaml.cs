@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
@@ -9,10 +10,12 @@ namespace insoles.Graphs;
 /// </summary>
 public partial class GraphSumPressures : Page
 {
+   
     private const DispatcherPriority UPDATE_PRIORITY = DispatcherPriority.Render;
     private const DispatcherPriority CLEAR_PRIORITY = DispatcherPriority.Render;
 
     public Model2S model { get; private set; }
+    
     public GraphSumPressures()
     {
         InitializeComponent();

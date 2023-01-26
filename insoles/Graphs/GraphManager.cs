@@ -3,6 +3,7 @@ using insoles.ToolBar.Enums;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -172,16 +173,26 @@ namespace insoles.Graphs
 
         public void activate()
         {
+            
 
             if (!active)
             {
+
                 active = true;
                 timeLine.endReplay(); // De momento cuando empieza a stremear apaga el replay
 
+
                 mainWindow.api.dataReceived += Api_dataReceived;
 
-                Application.Current.Dispatcher.InvokeAsync(() =>
+                mainWindow.api.SetDeviceConfiguration(0, 100, 3, out error);
+               
+                mainWindow.api.SetDeviceConfiguration(1, 100, 3, out error);
+                Task.Delay(3000);
+
+                Application.Current.Dispatcher.BeginInvoke(() =>
                 {
+                    mainWindow.api.StartStream(out error);
+
                     graph.initCapture();
                     virtualToolBar.stopEvent += onStop;
 
