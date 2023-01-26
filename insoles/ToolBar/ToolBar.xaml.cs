@@ -41,12 +41,12 @@ namespace insoles.ToolBar
         {
             if (recordState == RecordState.RecordStopped)
             {
-                recordImage.Source = new BitmapImage(new Uri("pack://application:,,,/UI/ToolBar/Icons/Blue/record-stop-blue-icon.png"));
+                recordImage.Source = new BitmapImage(new Uri("pack://application:,,,/ToolBar/Icons/record-stop-blue-icon.png"));
                 recordText.Text = "Record Stopped";
             }
             else if (recordState == RecordState.Recording)
             {
-                recordImage.Source = new BitmapImage(new Uri("pack://application:,,,/UI/ToolBar/Icons/record-recording-icon.png"));
+                recordImage.Source = new BitmapImage(new Uri("pack://application:,,,/ToolBar/Icons/record-recording-icon.png"));
                 recordText.Text = "Recording...";
             }
         }

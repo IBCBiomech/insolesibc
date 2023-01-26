@@ -201,7 +201,7 @@ namespace insoles.FileSaver
             {
                 csvFile = baseFilename + ".txt";
                 csvData = new StringBuilder();
-                csvData.Append(Config.csvHeader1IMU);
+                csvData.Append(Config.csvHeaderInsoles);
             }
             if (recordVideo)
             {
@@ -268,27 +268,6 @@ namespace insoles.FileSaver
                 videoWriter.Dispose();
                 videoWriter = null;
             }
-        }
-        public void saveFakeFileSagital(string path, string filename)
-        {
-            float randomAngle()
-            {
-                Random random = new Random();
-                float n = random.NextSingle();
-                return n * 360 - 180;
-            }
-            csvData = new StringBuilder();
-            csvData.Append(Config.csvHeaderSagital);
-            int numFrames = 1000;
-            for(int i = 0; i < numFrames; i++)
-            {
-                string line = "1 " + (0.01 * i).ToString("F2") + " " + (i).ToString() + " " +
-                                randomAngle().ToString("F2") + " " + randomAngle().ToString("F2") + " " +
-                                randomAngle().ToString("F2") + "\n";
-                csvData.Append(line);
-            }
-            string filePath = path + Path.DirectorySeparatorChar + filename;
-            File.WriteAllTextAsync(filePath, csvData.ToString());
         }
     }
 }
