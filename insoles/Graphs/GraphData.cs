@@ -187,6 +187,16 @@ namespace insoles.Graphs
     }
     public class DataInsole
     {
+        private Dictionary<Sensor, int> pressures = new Dictionary<Sensor, int>();
+        public int getPressure(Sensor sensor)
+        {
+            return pressures[sensor];
+        }
+        public int this[Sensor sensor]
+        {
+            get { return pressures[sensor]; }
+        }
+        /*
         public int arch { get; set; }
         public int hallux { get; set; }
         public int heel_L { get; set; }
@@ -195,8 +205,10 @@ namespace insoles.Graphs
         public int met_3 { get; set; }
         public int met_5 { get; set; }
         public int toes { get; set; }
+        */
         public DataInsole(string[] values, int firstIndex)
         {
+            /*
             arch = int.Parse(values[firstIndex]);
             hallux = int.Parse(values[firstIndex + 1]);
             heel_L = int.Parse(values[firstIndex + 2]);
@@ -205,6 +217,15 @@ namespace insoles.Graphs
             met_3 = int.Parse(values[firstIndex + 5]);
             met_5 = int.Parse(values[firstIndex + 6]);
             toes = int.Parse(values[firstIndex + 7]);
+            */
+            pressures[Sensor.ARCH] = int.Parse(values[firstIndex]);
+            pressures[Sensor.HALLUX] = int.Parse(values[firstIndex + 1]);
+            pressures[Sensor.HEEL_L] = int.Parse(values[firstIndex + 2]);
+            pressures[Sensor.HEEL_R] = int.Parse(values[firstIndex + 3]);
+            pressures[Sensor.MET1] = int.Parse(values[firstIndex + 4]);
+            pressures[Sensor.MET3] = int.Parse(values[firstIndex + 5]);
+            pressures[Sensor.MET5] = int.Parse(values[firstIndex + 6]);
+            pressures[Sensor.TOES] = int.Parse(values[firstIndex + 7]);
         }
     }
 }

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace insoles.Graphs
 {
-    enum Sensor
+    public enum Sensor
     {
         HALLUX,
         TOES,
