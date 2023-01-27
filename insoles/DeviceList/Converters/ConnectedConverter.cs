@@ -14,11 +14,11 @@ namespace insoles.DeviceList.Converters
             bool connected = (bool)value;
             if (connected)
             {
-                return new Uri("pack://application:,,,/UI/DeviceList/Icons/green-circle-icon.png");
+                return new Uri("pack://application:,,,/DeviceList/Icons/green-circle-icon.png");
             }
             else
             {
-                return new Uri("pack://application:,,,/UI/DeviceList/Icons/red-circle-icon.png");
+                return new Uri("pack://application:,,,/DeviceList/Icons/red-circle-icon.png");
             }
         }
 

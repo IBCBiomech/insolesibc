@@ -178,9 +178,7 @@ namespace insoles
                 //deviceListClass.clearAll();
                 addCameras(deviceListClass);
                 deviceListClass.showCameras();
-                // Añade datos inventados quitar
                 deviceListClass.showInsoles();
-
             }
             deviceListLoadedCheck(onScanFunction);
             virtualToolBar.onScanClick();
