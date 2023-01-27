@@ -129,8 +129,8 @@ namespace insoles.Graphs
 
         const float G = 9.8f;
 
-        private List<WisewalkSDK.SoleSensor> soleLeft;
-        private List<WisewalkSDK.SoleSensor> soleRight;
+        private List<WisewalkSDK.SoleSensor>? soleLeft;
+        private List<WisewalkSDK.SoleSensor>? soleRight;
 
         //End Wise
         public CaptureManager(VirtualToolBar virtualToolBar, DeviceList.DeviceList deviceList)
@@ -184,13 +184,15 @@ namespace insoles.Graphs
 
                 mainWindow.api.dataReceived += Api_dataReceived;
 
-                mainWindow.api.SetDeviceConfiguration(0, 100, 3, out error);
-               
-                mainWindow.api.SetDeviceConfiguration(1, 100, 3, out error);
-                Task.Delay(3000);
+                
 
                 Application.Current.Dispatcher.BeginInvoke(() =>
                 {
+                    mainWindow.api.SetDeviceConfiguration(0, 100, 3, out error);
+
+                    mainWindow.api.SetDeviceConfiguration(1, 100, 3, out error);
+                    
+                    Task.Delay(2000);
                     mainWindow.api.StartStream(out error);
 
                     graph.initCapture();
@@ -262,6 +264,7 @@ namespace insoles.Graphs
         //Callback para recoger datas del IMU
         public void Api_dataReceived(byte deviceHandler, WisewalkSDK.WisewalkData data)
         {
+            
             float sumSole(WisewalkSDK.SoleSensor sole)
             {
                 return sole.arch + sole.hallux + sole.heel_R +
@@ -287,17 +290,42 @@ namespace insoles.Graphs
             }
             if (numSoles % 2 == 0)
             {
-                float[] sum_left = new float[soleLeft.Count];
-                for (int i = 0; i < soleLeft.Count; i++)
+                //float[] sum_left = new float[soleLeft.Count];
+                float[] sum_left = new float[4];
+                if (deviceHandler == 0)
                 {
-                    sum_left[i] = sumSole(soleLeft[i]);
+                    for (int i = 0; i < 4; i++)
+                    {
+                        sum_left[i] = ( 4095f - data.Sole[i].hallux ) + (4095f - data.Sole[i].arch ) + (4095f - data.Sole[i].heel_R) +
+                                (4095f - data.Sole[i].heel_L) + (4095f - data.Sole[i].met_1) + (4095f - data.Sole[i].met_3) +
+                                (4095f - data.Sole[i].met_5) + (4095f - data.Sole[i].toes);
+                       
+                    }
+                    
                 }
-                float[] sum_right = new float[soleRight.Count];
-                for (int i = 0; i < soleRight.Count; i++)
+                float[] sum_right = new float[4];
+                if (deviceHandler == 1)
                 {
-                    sum_right[i] = sumSole(soleRight[i]);
+                    for (int i = 0; i < 4; i++)
+                    {
+                        sum_right[i] = (4095f - data.Sole[i].hallux) + (4095f - data.Sole[i].arch) + (4095f - data.Sole[i].heel_R) +
+                                (4095f - data.Sole[i].heel_L) + (4095f - data.Sole[i].met_1) + (4095f - data.Sole[i].met_3) +
+                                (4095f - data.Sole[i].met_5) + (4095f - data.Sole[i].toes);
+                    }
+
                 }
-                GraphSumPressures graph = new GraphSumPressures(); // Cambiar esto
+
+                //for (int i = 0; i < soleLeft.Count; i++)
+                //{
+                //    sum_left[i] = sumSole(soleLeft[i]);
+                //}
+                //float[] sum_right = new float[soleRight.Count];
+                //for (int i = 0; i < soleRight.Count; i++)
+                //{
+                //    sum_right[i] = sumSole(soleRight[i]);
+                //}
+
+                // GraphSumPressures graph = new GraphSumPressures(); // Cambiar esto
                 graph.drawData(sum_left, sum_right);
                 if (virtualToolBar.recordState == RecordState.Recording)
                 {
