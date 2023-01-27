@@ -22,6 +22,7 @@ namespace insoles.Graphs
             sensor_map = Helpers.ImageToMatrix(bmp);
             length[0] = sensor_map.RowCount;
             length[1] = sensor_map.ColumnCount;
+            Trace.WriteLine("size " + length[0] + ", " + length[1]);
             (float, int)[] frequences = Helpers.CountFrequences(sensor_map);
             codes = new Codes(frequences);
         }

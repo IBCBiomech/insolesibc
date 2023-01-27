@@ -69,6 +69,7 @@ namespace insoles.Graphs
                 cp_sensors_right[sensor] = Helpers.Average(sensor_positions_right[sensor]);
                 area_sensors_right[sensor] = sensor_positions_right[sensor].Count;
             }
+            
         }
         public void Calculate(GraphData graphData)
         {
@@ -195,10 +196,11 @@ namespace insoles.Graphs
             else if (centerRight == null)
             {
                 totalCenter = centerLeft;
+                Trace.WriteLine("centerLeft");
             }
             else
             {
-                double x = (total_pressure_left * centerLeft.Item1 + total_pressure_right * centerLeft.Item1) / (total_pressure_left + total_pressure_right);
+                double x = (total_pressure_left * centerLeft.Item1 + total_pressure_right * centerRight.Item1) / (total_pressure_left + total_pressure_right);
                 double y = (total_pressure_left * centerLeft.Item2 + total_pressure_right * centerRight.Item2) / (total_pressure_left + total_pressure_right);
                 totalCenter = new Tuple<double, double>(x, y);
             }

@@ -1,6 +1,7 @@
 ﻿using ScottPlot.Statistics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -63,6 +64,7 @@ namespace insoles.Graphs
                 {
                     Tuple<double, double> currentPointD = data[i].totalCenter;
                     Tuple<int, int> currentPoint = toInt(currentPointD);
+                    Trace.WriteLine(currentPoint.Item1 + ", " + currentPoint.Item2);
                     writeableBitmap.DrawLine(lastPoint.Item1, lastPoint.Item2, currentPoint.Item1, currentPoint.Item2, Colors.Purple);
                     lastPoint = currentPoint;
                 }
