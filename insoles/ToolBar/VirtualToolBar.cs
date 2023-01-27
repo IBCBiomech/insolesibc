@@ -5,6 +5,9 @@ using System.Windows;
 using System.Windows.Navigation;
 using insoles.ToolBar.Enums;
 using insoles.FileSaver;
+using insoles.Graphs;
+using Microsoft.WindowsAPICodePack.Shell;
+using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 
 namespace insoles.ToolBar
 {
@@ -44,7 +47,7 @@ namespace insoles.ToolBar
         private TimeLine.TimeLine timeLine;
 
         private SavingMenu saveMenu;
-        //private GraphManager graphManager;
+        private GraphManager graphManager;
 
         public delegate void PauseEventHandler(object sender, PauseState args);
         public delegate void StopEventHandler(object sender);
@@ -78,7 +81,7 @@ namespace insoles.ToolBar
         {
             MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
             
-            //graphManager = mainWindow.graphManager;
+            graphManager = mainWindow.graphManager;
             
             if (mainWindow.toolBar.Content == null)
             {
@@ -239,7 +242,6 @@ namespace insoles.ToolBar
             }
         }
         // Abre los ficheros (csv y avi)
-        /*
         public void openClick()
         {
             double getVideoDuration(string path)
@@ -256,7 +258,7 @@ namespace insoles.ToolBar
             {
                 using (var reader = new StreamReader(filename))
                 {
-                    int headerLines = Config.csvHeader1IMU.Split('\n').Length - 1; //Hay un salto de linea al final del header
+                    int headerLines = Config.csvHeaderInsoles.Split('\n').Length - 1; //Hay un salto de linea al final del header
                     string header = "";
                     for (int _ = 0; _ < headerLines; _++)
                     {
@@ -371,6 +373,5 @@ namespace insoles.ToolBar
                 }
             }
         }
-        */
     }
 }

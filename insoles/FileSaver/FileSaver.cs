@@ -1,5 +1,6 @@
 ﻿using insoles.ToolBar;
 using insoles.ToolBar.Enums;
+using MathNet.Numerics.Random;
 using OpenCvSharp;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Navigation;
 
 namespace insoles.FileSaver
@@ -268,6 +270,40 @@ namespace insoles.FileSaver
                 videoWriter.Dispose();
                 videoWriter = null;
             }
+        }
+        public void saveFakeFile()
+        {
+            string stringSole()
+            {
+                IEnumerable<int> randomPressures()
+                {
+                    Random random = new Random();
+                    return random.NextInt32Sequence(0, 4095);
+                }
+                IEnumerable<int> pressures = randomPressures();
+                IEnumerator<int> enumerator = pressures.GetEnumerator();
+                string result = "";
+                for(int i = 0; i < 7; i++)
+                {
+                    result += enumerator.Current.ToString() + " ";
+                    enumerator.MoveNext();
+                }
+                result += enumerator.Current.ToString();
+                return result;
+            }
+            csvFile = fileName() + ".txt";
+            csvData = new StringBuilder();
+            csvData.Append(Config.csvHeaderInsoles);
+            int n = 100;
+            for(int i = 0; i < n; i++)
+            {
+                string dataline = "1 " + (i * 0.01f).ToString("F2") + " " +
+                            (i).ToString() + " " + stringSole() + " " +
+                            stringSole() + "\n";
+                csvData.Append(dataline);
+            }
+            string filePath = Config.INITIAL_PATH + Path.DirectorySeparatorChar + csvFile;
+            File.WriteAllTextAsync(filePath, csvData.ToString());
         }
     }
 }

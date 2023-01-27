@@ -7,6 +7,9 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Graphs\GraphButterfly.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="ToolBar\ToolBar.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -19,6 +22,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="FileBrowser\FileBrowser.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Graphs\GraphButterfly.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Graphs\GraphSumPressures.xaml">

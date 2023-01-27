@@ -44,6 +44,18 @@
                             </dock:LayoutAnchorablePaneGroup>
                         </dock:LayoutAnchorablePaneGroup>
                     </dock:LayoutAnchorablePaneGroup>
+                    <dock:LayoutAnchorablePaneGroup Orientation="Horizontal" DockHeight="1.5*" DockWidth="*">
+                        <dock:LayoutAnchorablePane DockHeight="*" DockWidth="*">
+                            <dock:LayoutAnchorable x:Name="graphButterflyAnchorable" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False" Title="Butterfly">
+                                <Frame Source="pack://application:,,,/Graphs/GraphButterfly.xaml" x:Name="graphButterfly"/>
+                            </dock:LayoutAnchorable>
+                        </dock:LayoutAnchorablePane>
+                        <dock:LayoutAnchorablePane DockHeight="*" DockWidth="*">
+                            <dock:LayoutAnchorable x:Name="graphPressuresAnchorable" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False" Title="Pressure map">
+                                <Frame x:Name="graphPressures"/>
+                            </dock:LayoutAnchorable>
+                        </dock:LayoutAnchorablePane>
+                    </dock:LayoutAnchorablePaneGroup>
                     <dock:LayoutAnchorablePane DockWidth="*" DockHeight="0.25*">
                         <dock:LayoutAnchorable CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
                             <Frame Source="pack://application:,,,/TimeLine/TimeLine.xaml" x:Name="timeLine"/>

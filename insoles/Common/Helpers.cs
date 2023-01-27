@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using MathNet.Numerics.LinearAlgebra;
 using System.Drawing;
 using Color = System.Drawing.Color;
+using System.IO;
 
 namespace insoles.Common
 {
@@ -249,6 +250,13 @@ namespace insoles.Common
             x /= values.Count;
             y /= values.Count;
             return new Tuple<double, double>(x, y);
+        }
+        public static string GetFilePath(string filename)
+        {
+            string workingDirectory = Environment.CurrentDirectory;
+            string projectDirectory = Directory.GetParent(workingDirectory).Parent.Parent.FullName;
+            string path = Path.Combine(projectDirectory, filename);
+            return path;
         }
         #endregion pressure_map
     }

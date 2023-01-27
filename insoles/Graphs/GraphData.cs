@@ -57,6 +57,7 @@ namespace insoles.Graphs
         public FrameDataMetaFactory()
         {
             factories = new List<FrameDataFactory>();
+            factories.Add(new FrameDataFactoryInsoles());
         }
         public void changeHeader(string header)
         {

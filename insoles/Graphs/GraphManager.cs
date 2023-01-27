@@ -1,4 +1,5 @@
-﻿using insoles.ToolBar;
+﻿using insoles.TimeLine;
+using insoles.ToolBar;
 using insoles.ToolBar.Enums;
 using System;
 using System.Collections.Generic;
@@ -26,20 +27,7 @@ namespace insoles.Graphs
         {
             MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
             VirtualToolBar virtualToolBar = mainWindow.virtualToolBar;
-            if (mainWindow.timeLine.Content == null)
-            {
-                mainWindow.timeLine.Navigated += delegate (object sender, NavigationEventArgs e)
-                {
-                    TimeLine.TimeLine timeLine = mainWindow.timeLine.Content as TimeLine.TimeLine;
-                    replayManager = new ReplayManager(timeLine);
-                };
-            }
-            else
-            {
-                TimeLine.TimeLine timeLine = mainWindow.timeLine.Content as TimeLine.TimeLine;
-                replayManager = new ReplayManager(timeLine);
-            }
-
+            replayManager = new ReplayManager();
             if (mainWindow.deviceList.Content == null)
             {
                 mainWindow.deviceList.Navigated += delegate (object sender, NavigationEventArgs e)
@@ -54,7 +42,7 @@ namespace insoles.Graphs
                 captureManager = new CaptureManager(virtualToolBar, deviceList);
             }
         }
-        public void initReplay()
+        public void initReplay(GraphData data)
         {
             if (captureManager.active)
             {
@@ -62,11 +50,11 @@ namespace insoles.Graphs
             }
             if (!replayManager.active)
             {
-                replayManager.activate();
+                replayManager.activate(data);
             }
             else
             {
-                replayManager.reset();
+                replayManager.reset(data);
             }
         }
         // Configura el modo capture
@@ -311,19 +299,45 @@ namespace insoles.Graphs
         public event FrameEventHandler frameEvent;
 
         private TimeLine.TimeLine timeLine;
-        public ReplayManager(TimeLine.TimeLine timeLine)
+        private Butterfly butterfly;
+
+        private GraphData graphData;
+        public ReplayManager()
         {
             active = false;
-            this.timeLine = timeLine;
+            MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
+            if (mainWindow.timeLine.Content == null)
+            {
+                mainWindow.timeLine.Navigated += delegate (object sender, NavigationEventArgs e)
+                {
+                    timeLine = mainWindow.timeLine.Content as TimeLine.TimeLine;
+                };
+            }
+            else
+            {
+                timeLine = mainWindow.timeLine.Content as TimeLine.TimeLine;
+            }
+            if (mainWindow.butterfly == null)
+            {
+                mainWindow.initialized += (s, e) =>
+                {
+                    butterfly = mainWindow.butterfly;
+                };
+            }
+            else
+            {
+                butterfly = mainWindow.butterfly;
+            }
         }
-        public void activate()
+        public void activate(GraphData graphData)
         {
             if (!active)
             {
                 active = true;
-                //this.graphData = graphData;
+                this.graphData = graphData;
+                butterfly.Calculate(graphData);
                 //timeLine.model.timeEvent += onUpdateTimeLine;
-                timeLine.startReplay();
+                //timeLine.startReplay();
             }
         }
         public void deactivate()
@@ -337,12 +351,12 @@ namespace insoles.Graphs
                 //frameEvent -= graph.onUpdateTimeLine;
             }
         }
-        public void reset()
+        public void reset(GraphData graphData)
         {
             if (active)
             {
-                //this.graphData = graphData;
-                List<Frame>? graphs = null;
+                this.graphData = graphData;
+                butterfly.Calculate(graphData);
                 //graph.clearData();
                 //graph.drawData(graphData);
             }

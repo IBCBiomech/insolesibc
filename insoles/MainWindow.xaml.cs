@@ -30,6 +30,9 @@ namespace insoles
         public FileSaver.FileSaver fileSaver;
         public event EventHandler initialized;
 
+        public Foot foot;
+        public Butterfly butterfly;
+
         private List<Wisewalk.ComPort> ports = new List<Wisewalk.ComPort>();
         private List<Wisewalk.Dev> scanDevices = new List<Wisewalk.Dev>();
         private string port_selected;
@@ -45,10 +48,11 @@ namespace insoles
         public MainWindow()
         {
             InitializeComponent();
-
             virtualToolBar = new VirtualToolBar();
             fileSaver = new FileSaver.FileSaver();
             graphManager = new GraphManager();
+            butterfly = new Butterfly();
+            foot = new Foot();
 
             api = new Wisewalk();
             api.scanFinished += Api_scanFinished;
@@ -59,6 +63,8 @@ namespace insoles
             initToolBarHandlers();
 
             initialized?.Invoke(this, EventArgs.Empty);
+
+            //fileSaver.saveFakeFile();
         }
         // Conecta los botones de la ToolBar
         private void initToolBarHandlers()
@@ -293,7 +299,7 @@ namespace insoles
         // Funcion que se ejecuta al clicar el boton Show Captured Files
         private void onCapturedFiles(object sender, EventArgs e)
         {
-            //virtualToolBar.openClick();
+            virtualToolBar.openClick();
         }
         private void ShowPorts()
         {
