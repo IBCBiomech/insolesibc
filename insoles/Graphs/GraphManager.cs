@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
+using WisewalkSDK;
 
 namespace insoles.Graphs
 {
@@ -239,6 +240,24 @@ namespace insoles.Graphs
         //Callback para recoger datas del IMU
         public void Api_dataReceived(byte deviceHandler, WisewalkSDK.WisewalkData data)
         {
+            void transformPressures(ref List<SoleSensor> data)
+            {
+                int transformationFunction(int value)
+                {
+                    return 4095 - value;
+                }
+                for(int i = 0; i < data.Count; i++)
+                {
+                    data[i].arch = transformationFunction(data[i].arch);
+                    data[i].hallux = transformationFunction(data[i].hallux);
+                    data[i].heel_L = transformationFunction(data[i].heel_L);
+                    data[i].heel_R = transformationFunction(data[i].heel_R);
+                    data[i].met_1 = transformationFunction(data[i].met_1);
+                    data[i].met_3 = transformationFunction(data[i].met_3);
+                    data[i].met_5 = transformationFunction(data[i].met_5);
+                    data[i].toes = transformationFunction(data[i].toes);
+                }
+            }
             float sumSole(WisewalkSDK.SoleSensor sole)
             {
                 return sole.arch + sole.hallux + sole.heel_R +
@@ -247,10 +266,10 @@ namespace insoles.Graphs
             }
             string stringSole(WisewalkSDK.SoleSensor sole)
             {
-                return sole.arch.ToString("F2") + " " + sole.hallux.ToString("F2") + " " +
-                    sole.heel_R.ToString("F2") + " " + sole.heel_L.ToString("F2") + " " +
-                    sole.met_1.ToString("F2") + " " + sole.met_3.ToString("F2") + " " +
-                    sole.met_5.ToString("F2") + " " + sole.toes.ToString("F2");
+                return sole.arch.ToString() + " " + sole.hallux.ToString() + " " +
+                    sole.heel_R.ToString() + " " + sole.heel_L.ToString() + " " +
+                    sole.met_1.ToString() + " " + sole.met_3.ToString() + " " +
+                    sole.met_5.ToString() + " " + sole.toes.ToString();
             }
             if (deviceHandler == id_left)
             {
@@ -264,11 +283,13 @@ namespace insoles.Graphs
             }
             if (numSoles % 2 == 0)
             {
+                transformPressures(ref soleLeft);
                 float[] sum_left = new float[soleLeft.Count];
                 for (int i = 0; i < soleLeft.Count; i++)
                 {
                     sum_left[i] = sumSole(soleLeft[i]);
                 }
+                transformPressures(ref soleRight);
                 float[] sum_right = new float[soleRight.Count];
                 for (int i = 0; i < soleRight.Count; i++)
                 {
