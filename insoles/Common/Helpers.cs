@@ -259,5 +259,14 @@ namespace insoles.Common
             return path;
         }
         #endregion pressure_map
+        public static void print(int[] data)
+        {
+            Trace.Write("[");
+            for(int i = 0; i < data.Length; i++)
+            {
+                Trace.Write(data[i] + ", ");
+            }
+            Trace.WriteLine("]");
+        }
     }
 }

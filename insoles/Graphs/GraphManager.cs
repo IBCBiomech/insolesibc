@@ -321,6 +321,7 @@ namespace insoles.Graphs
 
         private TimeLine.TimeLine timeLine;
         private Butterfly butterfly;
+        private PressureMap pressureMap;
 
         private GraphData graphData;
         public ReplayManager()
@@ -349,6 +350,17 @@ namespace insoles.Graphs
             {
                 butterfly = mainWindow.butterfly;
             }
+            if (mainWindow.pressureMap == null)
+            {
+                mainWindow.initialized += (s, e) =>
+                {
+                    pressureMap = mainWindow.pressureMap;
+                };
+            }
+            else
+            {
+                pressureMap = mainWindow.pressureMap;
+            }
         }
         public void activate(GraphData graphData)
         {
@@ -357,6 +369,7 @@ namespace insoles.Graphs
                 active = true;
                 this.graphData = graphData;
                 butterfly.Calculate(graphData);
+                pressureMap.Calculate(graphData);
                 //timeLine.model.timeEvent += onUpdateTimeLine;
                 //timeLine.startReplay();
             }

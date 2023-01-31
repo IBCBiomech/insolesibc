@@ -52,7 +52,7 @@
                         </dock:LayoutAnchorablePane>
                         <dock:LayoutAnchorablePane DockHeight="*" DockWidth="*">
                             <dock:LayoutAnchorable x:Name="graphPressuresAnchorable" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False" Title="Pressure map">
-                                <Frame x:Name="graphPressures"/>
+                                <Frame Source="pack://application:,,,/Graphs/GraphPressureHeatmap.xaml" x:Name="graphPressures"/>
                             </dock:LayoutAnchorable>
                         </dock:LayoutAnchorablePane>
                     </dock:LayoutAnchorablePaneGroup>

@@ -196,6 +196,7 @@ namespace insoles.Graphs
         public int this[Sensor sensor]
         {
             get { return pressures[sensor]; }
+            set { pressures[sensor] = value; }
         }
         /*
         public int arch { get; set; }
@@ -227,6 +228,25 @@ namespace insoles.Graphs
             pressures[Sensor.MET3] = int.Parse(values[firstIndex + 5]);
             pressures[Sensor.MET5] = int.Parse(values[firstIndex + 6]);
             pressures[Sensor.TOES] = int.Parse(values[firstIndex + 7]);
+        }
+        public DataInsole()
+        {
+            pressures[Sensor.ARCH] = 0;
+            pressures[Sensor.HALLUX] = 0;
+            pressures[Sensor.HEEL_L] = 0;
+            pressures[Sensor.HEEL_R] = 0;
+            pressures[Sensor.MET1] = 0;
+            pressures[Sensor.MET3] = 0;
+            pressures[Sensor.MET5] = 0;
+            pressures[Sensor.TOES] = 0;
+        }
+        public override string ToString() {
+            string result = "";
+            foreach (Sensor sensor in (Sensor[])Enum.GetValues(typeof(Sensor)))
+            {
+                result += sensor.ToString() + " " + pressures[sensor] + ", ";
+            }
+            return result;
         }
     }
 }

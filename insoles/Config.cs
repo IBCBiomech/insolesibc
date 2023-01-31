@@ -33,5 +33,6 @@ namespace insoles
         public static Color colorY = Color.Green;
         public static Color colorZ = Color.Blue;
         public static Color colorW = Color.Orange;
+        public const float BACKGROUND = -1;
     }
 }

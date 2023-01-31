@@ -32,6 +32,7 @@ namespace insoles
 
         public Foot foot;
         public Butterfly butterfly;
+        public PressureMap pressureMap;
 
         private List<Wisewalk.ComPort> ports = new List<Wisewalk.ComPort>();
         private List<Wisewalk.Dev> scanDevices = new List<Wisewalk.Dev>();
@@ -52,6 +53,7 @@ namespace insoles
             fileSaver = new FileSaver.FileSaver();
             graphManager = new GraphManager();
             butterfly = new Butterfly();
+            pressureMap = new PressureMap();
             foot = new Foot();
 
             api = new Wisewalk();

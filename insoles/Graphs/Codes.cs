@@ -14,7 +14,7 @@ namespace insoles.Graphs
         HEEL_L,
         HEEL_R
     }
-    internal class Codes
+    public class Codes
     {
         private float background;
         private float foot;

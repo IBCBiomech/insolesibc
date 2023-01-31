@@ -12,11 +12,12 @@ namespace insoles.Graphs
     public class Foot
     {
         private int[] length = new int[2];
-        private Matrix<float> sensor_map;
-        private Codes codes;
+        public Matrix<float> sensor_map { get; private set; }
+        public Codes codes { get; private set; }
         public Foot()
         {
-            string path = Helpers.GetFilePath("foot_preprocess.png");
+            string file = "foot4q_preprocess.png";
+            string path = Helpers.GetFilePath(file);
             Trace.WriteLine(path);
             Bitmap bmp = new Bitmap(path);
             sensor_map = Helpers.ImageToMatrix(bmp);
