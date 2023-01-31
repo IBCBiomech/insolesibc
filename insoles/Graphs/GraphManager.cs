@@ -4,6 +4,7 @@ using insoles.ToolBar.Enums;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
@@ -171,6 +172,13 @@ namespace insoles.Graphs
 
                 Application.Current.Dispatcher.InvokeAsync(() =>
                 {
+                    mainWindow.api.SetDeviceConfiguration(0, 100, 3, out error);
+
+                    mainWindow.api.SetDeviceConfiguration(1, 100, 3, out error);
+
+                    Task.Delay(2000);
+                    mainWindow.api.StartStream(out error);
+
                     graph.initCapture();
                     virtualToolBar.stopEvent += onStop;
 

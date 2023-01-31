@@ -221,6 +221,10 @@ namespace insoles
                         }
                     }
                 }
+                if (!api.Connect(scanDevices, out error))
+                {
+                    Trace.WriteLine("Connect error " + error);
+                }
             }
             deviceListLoadedCheck(onConnectFunction);
         }
