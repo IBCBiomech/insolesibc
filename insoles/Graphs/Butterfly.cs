@@ -120,8 +120,8 @@ namespace insoles.Graphs
                     pressure_center_right = new Vector2(x_right, y_right);
                 }
                 */
-                Tuple<double, double> pressure_center_left;
-                Tuple<double, double> pressure_center_right;
+                Tuple<double, double>? pressure_center_left;
+                Tuple<double, double>? pressure_center_right;
 
                 int total_pressure_left = 0;
                 foreach (Sensor sensor in (Sensor[])Enum.GetValues(typeof(Sensor)))
@@ -143,7 +143,7 @@ namespace insoles.Graphs
                 }
                 else
                 {
-                    pressure_center_left = new Tuple<double, double>(0, 0);
+                    pressure_center_left = null;
                 }
 
                 int total_pressure_right = 0;
@@ -166,7 +166,7 @@ namespace insoles.Graphs
                 }
                 else
                 {
-                    pressure_center_right = new Tuple<double, double>(0, 0);
+                    pressure_center_right = null;
                 }
 
 
