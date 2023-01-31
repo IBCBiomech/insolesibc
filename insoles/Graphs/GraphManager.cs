@@ -303,7 +303,8 @@ namespace insoles.Graphs
                 {
                     sum_right[i] = sumSole(soleRight[i]);
                 }
-                GraphSumPressures graph = new GraphSumPressures(); // Cambiar esto
+
+                //GraphSumPressures graph = new GraphSumPressures(); // Cambiar esto. Iván: esta línea la tengo que quitar para que funcione el gráfico
                 graph.drawData(sum_left, sum_right);
                 if (virtualToolBar.recordState == RecordState.Recording)
                 {
