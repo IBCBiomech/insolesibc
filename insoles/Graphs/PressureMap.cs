@@ -98,13 +98,17 @@ namespace insoles.Graphs
         {
             if (isInitialized)
             {
+                graph.calculating = true;
                 Calculate_(graphData);
+                graph.calculating = false;
             }
             else
             {
+                graph.calculating = true;
                 initialized += (s, e) =>
                 {
                     Calculate_(graphData);
+                    graph.calculating = false;
                 };
             }
         }
@@ -113,8 +117,6 @@ namespace insoles.Graphs
             DataInsole left = new DataInsole();
             DataInsole right = new DataInsole();
             average(graphData, ref left, ref right);
-            Trace.WriteLine(left);
-            Trace.WriteLine(right);
 
             Matrix<float> pressure_map = foot.sensor_map.MapIndexed((row, col, code) => {
                 if (code == foot.codes.Background())

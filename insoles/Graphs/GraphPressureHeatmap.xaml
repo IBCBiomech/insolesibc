@@ -10,5 +10,7 @@
 
     <Grid>
         <WpfPlot  x:Name="plot"/>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36"
+                   Visibility="{Binding calculating_visibility}" Text="Calculating..."/>
     </Grid>
 </Page>

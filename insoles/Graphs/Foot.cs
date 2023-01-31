@@ -14,9 +14,17 @@ namespace insoles.Graphs
         private int[] length = new int[2];
         public Matrix<float> sensor_map { get; private set; }
         public Codes codes { get; private set; }
+
+        public enum Quality { HIGH, MID, LOW};
+
+        private Dictionary<Quality, string> resolutions = new Dictionary<Quality, string>();
         public Foot()
         {
-            string file = "foot2q_preprocess.png";
+            resolutions[Quality.HIGH] = "foot_preprocess.png";
+            resolutions[Quality.MID] = "foot2q_preprocess.png";
+            resolutions[Quality.LOW] = "foot4q_preprocess.png";
+            Quality quality = Config.footQuality;
+            string file = resolutions[quality];
             string path = Helpers.GetFilePath(file);
             Bitmap bmp = new Bitmap(path);
             sensor_map = Helpers.ImageToMatrix(bmp);

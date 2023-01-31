@@ -1,6 +1,9 @@
-﻿using OpenCvSharp;
+﻿using insoles.Graphs;
+using OpenCvSharp;
 using System;
 using System.Drawing;
+
+using Quality = insoles.Graphs.Foot.Quality;
 
 namespace insoles
 {
@@ -34,5 +37,6 @@ namespace insoles
         public static Color colorZ = Color.Blue;
         public static Color colorW = Color.Orange;
         public const float BACKGROUND = -1;
+        public const Quality footQuality = Quality.MID;
     }
 }
