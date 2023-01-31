@@ -84,7 +84,7 @@ namespace insoles.Graphs
         private DeviceList.DeviceList deviceList;
         private TimeLine.TimeLine timeLine;
 
-        GraphSumPressures graph;
+        GraphSumPressuresLive graph;
 
         MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
 
@@ -134,12 +134,12 @@ namespace insoles.Graphs
             {
                 mainWindow.graphSumPressures.Navigated += (sender, e) =>
                 {
-                    graph = mainWindow.graphSumPressures.Content as GraphSumPressures;
+                    graph = mainWindow.graphSumPressures.Content as GraphSumPressuresLive;
                 };
             }
             else
             {
-                graph = mainWindow.graphSumPressures.Content as GraphSumPressures;
+                graph = mainWindow.graphSumPressures.Content as GraphSumPressuresLive;
             }
         }
 
@@ -307,6 +307,8 @@ namespace insoles.Graphs
                             stringSole(soleRight[i]) + "\n";
                     }
                     mainWindow.fileSaver.appendCSVManual(dataline);
+                    fakets += soleLeft.Count * 0.01f;
+                    frame += soleLeft.Count;
                 }
             }
         }

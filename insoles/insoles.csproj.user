@@ -16,6 +16,9 @@
     <Compile Update="Graphs\GraphPressureMap.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Graphs\GraphSumPressuresLive.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="ToolBar\ToolBar.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -40,6 +43,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Graphs\GraphSumPressures.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Graphs\GraphSumPressuresLive.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
