@@ -16,14 +16,12 @@ namespace insoles.Graphs
         public Codes codes { get; private set; }
         public Foot()
         {
-            string file = "foot4q_preprocess.png";
+            string file = "foot2q_preprocess.png";
             string path = Helpers.GetFilePath(file);
-            Trace.WriteLine(path);
             Bitmap bmp = new Bitmap(path);
             sensor_map = Helpers.ImageToMatrix(bmp);
             length[0] = sensor_map.RowCount;
             length[1] = sensor_map.ColumnCount;
-            Trace.WriteLine("size " + length[0] + ", " + length[1]);
             (float, int)[] frequences = Helpers.CountFrequences(sensor_map);
             codes = new Codes(frequences);
         }

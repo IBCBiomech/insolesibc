@@ -17,6 +17,9 @@ namespace insoles.Graphs
         //private GraphPressureMap graph;
         private GraphPressureHeatmap graph;
         private Foot foot;
+
+        private bool isInitialized = false;
+        public event EventHandler initialized;
         public PressureMap()
         {
             MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
@@ -36,13 +39,13 @@ namespace insoles.Graphs
                 mainWindow.initialized += (s, e) =>
                 {
                     foot = mainWindow.foot;
-                    CalculateMinDistances();
+                    Task.Run(() => CalculateMinDistances());
                 };
             }
             else
             {
                 foot = mainWindow.foot;
-                CalculateMinDistances();
+                Task.Run(() => CalculateMinDistances());
             }
         }
         private void CalculateMinDistances()
@@ -88,8 +91,24 @@ namespace insoles.Graphs
                     }
                 });
             }
+            isInitialized = true;
+            initialized?.Invoke(this, EventArgs.Empty);
         }
         public void Calculate(GraphData graphData)
+        {
+            if (isInitialized)
+            {
+                Calculate_(graphData);
+            }
+            else
+            {
+                initialized += (s, e) =>
+                {
+                    Calculate_(graphData);
+                };
+            }
+        }
+        private void Calculate_(GraphData graphData)
         {
             DataInsole left = new DataInsole();
             DataInsole right = new DataInsole();

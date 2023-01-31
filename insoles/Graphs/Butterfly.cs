@@ -168,7 +168,6 @@ namespace insoles.Graphs
                 {
                     pressure_center_right = new Tuple<double, double>(0, 0);
                 }
-                //Trace.WriteLine("left: " + total_pressure_left / 1000000 + " right: " + total_pressure_right / 1000000);
 
 
                 frames[i] = new FramePressures(pressure_center_left, pressure_center_right, total_pressure_left, total_pressure_right);
@@ -196,7 +195,6 @@ namespace insoles.Graphs
             else if (centerRight == null)
             {
                 totalCenter = centerLeft;
-                Trace.WriteLine("centerLeft");
             }
             else
             {

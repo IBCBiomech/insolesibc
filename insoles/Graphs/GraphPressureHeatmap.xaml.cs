@@ -36,7 +36,7 @@ namespace insoles.Graphs
             dataDouble = dataDouble.Transpose();
             double[,] dataArray = dataDouble.ToArray();
             double?[,] dataNull = replaceWithNull(dataArray, Config.BACKGROUND);
-            model.Draw(dataNull);
+            Dispatcher.Invoke(() => model.Draw(dataNull));
         }
         private double?[,] replaceWithNull(double[,] array, double value)
         {
