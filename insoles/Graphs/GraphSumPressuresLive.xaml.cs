@@ -32,13 +32,17 @@ namespace insoles.Graphs
         private const string labelLeft = "Left";
         private const string labelRight = "Right";
 
-        //Timer timer = new Timer();
+        Timer timer = new Timer();
         public GraphSumPressuresLive()
         {
             InitializeComponent();
             signalPlotLeft = plot.Plot.AddSignal(valuesLeft, color: leftColor, label: labelLeft);
             signalPlotRight = plot.Plot.AddSignal(valuesRight, color: rightColor, label: labelRight);
             plot.Plot.AxisAutoX(margin: 0);
+            plot.IsHitTestVisible = false;
+            //plot.RightClicked -= plot.DefaultRightClickEvent;
+            
+            
             plot.Refresh();
         }
         public void initCapture()
@@ -71,25 +75,41 @@ namespace insoles.Graphs
         }
         public async void drawData(float[] left, float[] right)
         {
-            await Application.Current.Dispatcher.InvokeAsync(() =>
+            if (nextIndex >= CAPACITY)
             {
-                Array.Copy(valuesLeft, left.Length, valuesLeft, 0, valuesLeft.Length - left.Length);
-                Array.Copy(valuesRight, right.Length, valuesRight, 0, valuesRight.Length - right.Length);
-                /*
-                for(int i = 0; i < left.Length; i++)
+                await Application.Current.Dispatcher.InvokeAsync(() =>
                 {
-                    valuesLeft[valuesLeft.Length - left.Length + i] = left[i];
-                }
-                for (int i = 0; i < left.Length; i++)
+                    Array.Copy(valuesLeft, left.Length, valuesLeft, 0, valuesLeft.Length - left.Length);
+                    Array.Copy(valuesRight, right.Length, valuesRight, 0, valuesRight.Length - right.Length);
+                    /*
+                    for(int i = 0; i < left.Length; i++)
+                    {
+                        valuesLeft[valuesLeft.Length - left.Length + i] = left[i];
+                    }
+                    for (int i = 0; i < left.Length; i++)
+                    {
+                        valuesRight[valuesRight.Length - right.Length + i] = right[i];
+                    }
+                    */
+                    Array.Copy(left, 0, valuesLeft, valuesLeft.Length - left.Length, left.Length);
+                    Array.Copy(right, 0, valuesRight, valuesRight.Length - right.Length, right.Length);
+                    plot.Plot.SetAxisLimits(yMin: 0, yMax: Math.Max(valuesLeft.Max(), valuesRight.Max()) * 1.2);
+                    plot.Render();
+                });
+            }
+            else
+            {
+                await Application.Current.Dispatcher.InvokeAsync(() =>
                 {
-                    valuesRight[valuesRight.Length - right.Length + i] = right[i];
-                }
-                */
-                Array.Copy(left, 0, valuesLeft, valuesLeft.Length - left.Length, left.Length);
-                Array.Copy(right, 0, valuesRight, valuesRight.Length - right.Length, right.Length);
-                plot.Plot.SetAxisLimits(yMin: 0, yMax: Math.Max(valuesLeft.Max(), valuesRight.Max()) * 1.2);
-                plot.Render();
-            });
+                    Array.Copy(left, 0, valuesLeft, nextIndex, left.Length);
+                    Array.Copy(right, 0, valuesRight, nextIndex, right.Length);
+                    plot.Plot.SetAxisLimits(yMin: 0, yMax: Math.Max(valuesLeft.Max(), valuesRight.Max()) * 1.2);
+                    plot.Render();
+                    nextIndex+= left.Length;
+                });
+            }
+            // Si CAPACITY NO es multiplo del numero de datos del paquete 
+            // Hay que poner otro caso
         }
         public async void clearData()
         {
