@@ -76,22 +76,24 @@ namespace insoles.Graphs
         }
         public async void drawData(float[] left, float[] right)
         {
+            await Application.Current.Dispatcher.InvokeAsync(() =>
+            {
+                Array.Copy(valuesLeft, left.Length, valuesLeft, 0, valuesLeft.Length - left.Length);
+                Array.Copy(valuesRight, right.Length, valuesRight, 0, valuesRight.Length - right.Length);
+                
+                Array.Copy(left, 0, valuesLeft, valuesLeft.Length - left.Length, left.Length);
+                Array.Copy(right, 0, valuesRight, valuesRight.Length - right.Length, right.Length);
+                plot.Plot.SetAxisLimits(yMin: 0, yMax: Math.Max(valuesLeft.Max(), valuesRight.Max()) * 1.2);
+                plot.Render();
+            });
+            /*
             if (nextIndex >= CAPACITY)
             {
                 await Application.Current.Dispatcher.InvokeAsync(() =>
                 {
                     Array.Copy(valuesLeft, left.Length, valuesLeft, 0, valuesLeft.Length - left.Length);
                     Array.Copy(valuesRight, right.Length, valuesRight, 0, valuesRight.Length - right.Length);
-                    /*
-                    for(int i = 0; i < left.Length; i++)
-                    {
-                        valuesLeft[valuesLeft.Length - left.Length + i] = left[i];
-                    }
-                    for (int i = 0; i < left.Length; i++)
-                    {
-                        valuesRight[valuesRight.Length - right.Length + i] = right[i];
-                    }
-                    */
+
                     Array.Copy(left, 0, valuesLeft, valuesLeft.Length - left.Length, left.Length);
                     Array.Copy(right, 0, valuesRight, valuesRight.Length - right.Length, right.Length);
                     plot.Plot.SetAxisLimits(yMin: 0, yMax: Math.Max(valuesLeft.Max(), valuesRight.Max()) * 1.2);
@@ -124,6 +126,7 @@ namespace insoles.Graphs
                     nextIndex+= Math.Max(left.Length, right.Length);
                 });
             }
+            */
         }
         public async void clearData()
         {

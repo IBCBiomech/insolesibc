@@ -80,6 +80,14 @@ namespace insoles.Graphs
                 DataInsole pressure_left = frameData.left;
                 DataInsole pressure_right = frameData.right;
                 /*
+                Random random = new Random();
+                DataInsole pressure_left = new DataInsole();
+                pressure_left[Sensor.MET1] = random.Next(0, 4000);
+                DataInsole pressure_right = new DataInsole();
+                pressure_right[Sensor.MET1] = random.Next(0, 4000);
+                pressure_right[Sensor.HALLUX] = random.Next(0, 4000);
+                */
+                /*
                 Vector2? pressure_center_left = null;
                 int total_pressure_left = 0;
                 foreach (Sensor sensor in (Sensor[])Enum.GetValues(typeof(Sensor)))
