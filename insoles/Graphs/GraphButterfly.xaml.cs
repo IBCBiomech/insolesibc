@@ -64,7 +64,6 @@ namespace insoles.Graphs
                 {
                     Tuple<double, double> currentPointD = data[i].totalCenter;
                     Tuple<int, int> currentPoint = toInt(currentPointD);
-                    Trace.WriteLine(currentPoint.Item1 + ", " + currentPoint.Item2);
                     writeableBitmap.DrawLine(lastPoint.Item1, lastPoint.Item2, currentPoint.Item1, currentPoint.Item2, Colors.Purple);
                     lastPoint = currentPoint;
                 }

@@ -67,6 +67,7 @@ namespace insoles
             initialized?.Invoke(this, EventArgs.Empty);
 
             //fileSaver.saveFakeFile();
+            //virtualToolBar.transformFiles();
         }
         // Conecta los botones de la ToolBar
         private void initToolBarHandlers()

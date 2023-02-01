@@ -8,6 +8,14 @@ using insoles.FileSaver;
 using insoles.Graphs;
 using Microsoft.WindowsAPICodePack.Shell;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Reflection.PortableExecutable;
+using ScottPlot.Plottable;
+using System.Text;
+using System.Windows.Controls;
+using System.Windows.Shapes;
+using Path = System.IO.Path;
+using OpenCvSharp;
 
 namespace insoles.ToolBar
 {
@@ -239,6 +247,65 @@ namespace insoles.ToolBar
             if(stopEvent != null)
             {
                 stopEvent?.Invoke(this);
+            }
+        }
+        public void transformFiles()
+        {
+            string fileLeft = Config.INITIAL_PATH + Path.DirectorySeparatorChar + "data_L.csv";
+            string fileRight = Config.INITIAL_PATH + Path.DirectorySeparatorChar + "data_R.csv";
+            const int HALLUX = 0;
+            const int TOES = 1;
+            const int MET_1 = 2;
+            const int MET_3 = 3;
+            const int MET_5 = 4;
+            const int ARCH = 5;
+            const int HEEL_L = 6;
+            const int HEEL_R = 7;
+            int[] indices = new int[] {ARCH, HALLUX, HEEL_R, HEEL_L, MET_1, MET_3, MET_5, TOES   };
+            using(var readerLeft = new StreamReader(fileLeft))
+            {
+                using (var readerRight = new StreamReader(fileRight))
+                {
+                    int headerLines = 1;
+                    for (int _ = 0; _ < headerLines; _++)
+                    {
+                        readerLeft.ReadLine();
+                        readerRight.ReadLine();
+                        int frame = 0;
+                        StringBuilder csvData = new StringBuilder();
+                        csvData.Append(Config.csvHeaderInsoles);
+                        while (!readerLeft.EndOfStream && !readerRight.EndOfStream)
+                        {
+                            string lineLeft = readerLeft.ReadLine();
+                            string lineRight = readerRight.ReadLine();
+                            string separator = ";";
+                            string[] valuesLeft = lineLeft.Split(separator);
+                            string[] valuesRight = lineRight.Split(separator);
+                            string dataLine = "1 " + (frame * 0.01f).ToString("F2") + 
+                                " " + frame.ToString();
+                            for (int i = 0; i < indices.Length; i++)
+                            {
+                                string s = valuesLeft[indices[i]];
+                                int v = int.Parse(s);
+                                v = 4095 - v;
+                                dataLine += " " + v.ToString();
+                            }
+                            for (int i = 0; i < indices.Length; i++)
+                            {
+                                string s = valuesRight[indices[i]];
+                                int v = int.Parse(s);
+                                v = 4095 - v;
+                                dataLine += " " + v.ToString();
+                            }
+                            dataLine += "\n";
+                            csvData.Append(dataLine);
+                            frame++;
+                        }
+                        string filename = "data.csv";
+                        string filePath = Config.INITIAL_PATH + Path.DirectorySeparatorChar + filename;
+                        File.WriteAllTextAsync(filePath, csvData.ToString());
+                    }
+                }
             }
         }
         // Abre los ficheros (csv y avi)
