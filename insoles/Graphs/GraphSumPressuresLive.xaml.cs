@@ -64,9 +64,10 @@ namespace insoles.Graphs
         private void updateGraph(object sender, EventArgs e)
         {
             Random random = new Random();
-            float[] left = new float[4];
-            float[] right = new float[4];
-            for(int i = 0; i < 4; i++)
+            int PACKET_SIZE = 3;
+            float[] left = new float[PACKET_SIZE];
+            float[] right = new float[PACKET_SIZE];
+            for(int i = 0; i < PACKET_SIZE; i++)
             {
                 left[i] = random.NextSingle() * 100;
                 right[i] = random.NextSingle() * 100;
@@ -97,6 +98,21 @@ namespace insoles.Graphs
                     plot.Render();
                 });
             }
+            else if(nextIndex + Math.Max(left.Length, right.Length) > CAPACITY)
+            {
+                await Application.Current.Dispatcher.InvokeAsync(() =>
+                {
+                    Array.Copy(valuesLeft, CAPACITY - nextIndex, valuesLeft, 0, valuesLeft.Length - left.Length);
+                    Array.Copy(valuesRight, CAPACITY - nextIndex, valuesRight, 0, valuesRight.Length - right.Length);
+
+                    Array.Copy(left, 0, valuesLeft, valuesLeft.Length - left.Length, left.Length);
+                    Array.Copy(right, 0, valuesRight, valuesRight.Length - right.Length, right.Length);
+
+                    plot.Plot.SetAxisLimits(yMin: 0, yMax: Math.Max(valuesLeft.Max(), valuesRight.Max()) * 1.2);
+                    plot.Render();
+                    nextIndex += Math.Max(left.Length, right.Length);
+                });
+            }
             else
             {
                 await Application.Current.Dispatcher.InvokeAsync(() =>
@@ -105,11 +121,9 @@ namespace insoles.Graphs
                     Array.Copy(right, 0, valuesRight, nextIndex, right.Length);
                     plot.Plot.SetAxisLimits(yMin: 0, yMax: Math.Max(valuesLeft.Max(), valuesRight.Max()) * 1.2);
                     plot.Render();
-                    nextIndex+= left.Length;
+                    nextIndex+= Math.Max(left.Length, right.Length);
                 });
             }
-            // Si CAPACITY NO es multiplo del numero de datos del paquete 
-            // Hay que poner otro caso
         }
         public async void clearData()
         {
