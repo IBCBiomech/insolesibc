@@ -4,13 +4,21 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:insoles.Graphs"
+      xmlns:converter="clr-namespace:insoles.Graphs.Converters"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="GraphPressureHeatmap">
 
+    <Page.Resources>
+        <converter:PreTextConverter x:Key="maxConverter" text="Max: "/>
+    </Page.Resources>
     <Grid>
-        <WpfPlot  x:Name="plot"/>
+        <WpfPlot x:Name="plot" Visibility="{Binding graph_visibility}"/>
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36"
                    Visibility="{Binding calculating_visibility}" Text="Calculating..."/>
+        <TextBlock Text="N/m&#x00B2;" TextAlignment="Right" Padding="0 0 70 0" Visibility="{Binding graph_visibility}"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Visibility="{Binding graph_visibility}">
+            <TextBlock Text="{Binding max, Converter={StaticResource maxConverter}}"/>
+        </StackPanel>
     </Grid>
 </Page>

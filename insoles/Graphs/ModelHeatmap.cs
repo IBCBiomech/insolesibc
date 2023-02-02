@@ -1,5 +1,9 @@
 ﻿using ScottPlot;
+using ScottPlot.Drawing;
 using ScottPlot.Plottable;
+using System;
+using System.Drawing;
+using System.Windows.Media.Animation;
 
 namespace insoles.Graphs
 {
@@ -13,7 +17,9 @@ namespace insoles.Graphs
         }
         public void Draw(double?[,] data)
         {
-            Heatmap heatmap = plot.Plot.AddHeatmap(data);
+            plot.Plot.Clear();
+            Heatmap heatmap = plot.Plot.AddHeatmap(data, colormap:Colormap.Amp);
+            heatmap.Update(data, min: 0);
             Colorbar colorbar = plot.Plot.AddColorbar(heatmap);
             plot.Plot.Margins(0, 0);
             plot.Refresh();

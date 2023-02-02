@@ -1,4 +1,5 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.Statistics;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -17,6 +18,19 @@ namespace insoles.Graphs
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ModelHeatmap model { get; private set; }
+        private int max_ = int.MinValue;
+        public int max
+        {
+            get
+            {
+                return max_;
+            }
+            set
+            {
+                max_ = value;
+                NotifyPropertyChanged();
+            }
+        }
         public bool calculating 
         {
             set { 
@@ -37,6 +51,19 @@ namespace insoles.Graphs
             set
             {
                 calculating_visibility_ = value;
+                NotifyPropertyChanged();
+            }
+        }
+        private Visibility graph_visibility_ = Visibility.Hidden;
+        public Visibility graph_visibility
+        {
+            get
+            {
+                return graph_visibility_;
+            }
+            set
+            {
+                graph_visibility_ = value;
                 NotifyPropertyChanged();
             }
         }
@@ -73,6 +100,8 @@ namespace insoles.Graphs
             double[,] dataArray = dataDouble.ToArray();
             double?[,] dataNull = replaceWithNull(dataArray, Config.BACKGROUND);
             Dispatcher.Invoke(() => model.Draw(dataNull));
+            max = (int)dataDouble.Enumerate().Maximum();
+            graph_visibility = Visibility.Visible;
         }
         private double?[,] replaceWithNull(double[,] array, double value)
         {

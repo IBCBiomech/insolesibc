@@ -9,6 +9,8 @@ using System.Windows.Controls;
 using System.Drawing;
 using System.Timers;
 using System.Diagnostics;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace insoles.Graphs
 {
@@ -33,6 +35,7 @@ namespace insoles.Graphs
         private const string labelRight = "Right";
 
         Timer timer = new Timer();
+
         public GraphSumPressuresLive()
         {
             InitializeComponent();
