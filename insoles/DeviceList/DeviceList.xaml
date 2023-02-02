@@ -3,8 +3,10 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:System="clr-namespace:System;assembly=mscorlib"
       xmlns:local="clr-namespace:insoles.DeviceList"
       xmlns:class="clr-namespace:insoles.DeviceList.TreeClasses"
+      xmlns:enum="clr-namespace:insoles.DeviceList.Enums"
       xmlns:converter="clr-namespace:insoles.DeviceList.Converters" xmlns:controls="clr-namespace:System.Windows.Controls;assembly=MultiSelectTreeView"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
@@ -15,6 +17,12 @@
     <Page.Resources>
         <converter:ConnectedConverter x:Key="connectedConverter"/>
         <converter:BatteryConverter x:Key="batteryConverter"/>
+        <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="enum:Side"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
         <Style x:Key="TreeViewItemStyle" TargetType="controls:MultiSelectTreeViewItem">
             <Setter Property="Margin" Value="5 5 5 5" />
         </Style>
@@ -113,7 +121,8 @@
                             <Image Grid.Column="2" Height="15" Width="15" Source="{Binding Path=connected, Converter={StaticResource connectedConverter}}"/>
                             <TextBlock Text="{Binding Path=id}" Grid.Column="3" TextAlignment="Center"/>
                             <TextBlock Text="{Binding Path=name}" Grid.Column="4" TextAlignment="Center"/>
-                            <TextBlock Text="{Binding Path=side}" Grid.Column="5" TextAlignment="Center"/>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource dataFromEnum}}"
+                                      SelectedItem="{Binding Path=side}" Grid.Column="5"/>
                             <TextBlock Text="{Binding Path=address}" Grid.Column="6" TextAlignment="Center"/>
                             <TextBlock Text="{Binding Path=battery, Converter={StaticResource batteryConverter}}" Grid.Column="7" TextAlignment="Center"/>
                             <TextBlock Text="{Binding Path=fw}" Grid.Column="8" TextAlignment="Center" />

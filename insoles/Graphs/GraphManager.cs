@@ -1,4 +1,5 @@
-﻿using insoles.TimeLine;
+﻿using insoles.DeviceList.Enums;
+using insoles.TimeLine;
 using insoles.ToolBar;
 using insoles.ToolBar.Enums;
 using System;
@@ -93,9 +94,6 @@ namespace insoles.Graphs
         //Begin Wise
         public Dictionary<string, WisewalkSDK.Device> devices_list = new Dictionary<string, WisewalkSDK.Device>();
         public List<int> counter = new List<int>();
-
-        int id_left = 0;
-        int id_right = 1;
 
         int numSoles = 0;
 
@@ -279,12 +277,12 @@ namespace insoles.Graphs
                     sole.met_1.ToString() + " " + sole.met_3.ToString() + " " +
                     sole.met_5.ToString() + " " + sole.toes.ToString();
             }
-            if (deviceHandler == id_left)
+            if (deviceList.Side(deviceHandler) == Side.Left)
             {
                 soleLeft = data.Sole;
                 numSoles++;
             }
-            else if (deviceHandler == id_right)
+            else if (deviceList.Side(deviceHandler) == Side.Right)
             {
                 soleRight = data.Sole;
                 numSoles++;

@@ -14,6 +14,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Navigation;
+using System.Xml.Linq;
 using WisewalkSDK;
 
 namespace insoles
@@ -169,15 +170,16 @@ namespace insoles
                     }
                     deviceListClass.setCameras(cameras);
 
-                    await Task.Delay(4000);
+                    //await Task.Delay(4000);
 
                     List<InsolesInfo> insoles = new List<InsolesInfo>();
                     for (int i = 0; i < scanDevices.Count; i++)
                     {
-                        string side = "left or right";
                         string name = "Wisewalk";
-                        insoles.Add(new InsolesInfo(i, name, side, GetMacAddress(scanDevices, i)));
+                        insoles.Add(new InsolesInfo(name, GetMacAddress(scanDevices, i)));
                     }
+                    //insoles.Add(new InsolesInfo("Wisewalk", "AD:EF:GH"));
+                    //insoles.Add(new InsolesInfo("Wisewalk", "TD:CK:PO"));
                     deviceListClass.setInsoles(insoles);
                     //MessageBox.Show(scanDevices.Count + " IMUs encontrados", "Scan Devices", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
