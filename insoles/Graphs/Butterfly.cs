@@ -19,6 +19,7 @@ namespace insoles.Graphs
         private FramePressures[] frames;
 
         private GraphButterflyScottplot graph;
+        private GraphsCP graphCP;
         private Foot foot;
         public Butterfly()
         {
@@ -33,6 +34,17 @@ namespace insoles.Graphs
             else
             {
                 graph = mainWindow.graphButterfly.Content as GraphButterflyScottplot;
+            }
+            if (mainWindow.graphCP.Content == null)
+            {
+                mainWindow.graphCP.Navigated += (s, e) =>
+                {
+                    graphCP = mainWindow.graphCP.Content as GraphsCP;
+                };
+            }
+            else
+            {
+                graphCP = mainWindow.graphCP.Content as GraphsCP;
             }
             if (mainWindow.foot == null)
             {
@@ -178,18 +190,21 @@ namespace insoles.Graphs
                 }
 
 
-                frames[i] = new FramePressures(pressure_center_left, pressure_center_right, total_pressure_left, total_pressure_right);
+                frames[i] = new FramePressures(i, pressure_center_left, pressure_center_right, total_pressure_left, total_pressure_right);
             }
             graph.DrawData(frames);
+            graphCP.DrawData(frames);
         }
     }
     public class FramePressures
     {
+        public int frame { get; private set; }
         public Tuple<double, double>? totalCenter { get; private set; }
         public Tuple<double, double>? centerLeft { get; private set; }
         public Tuple<double, double>? centerRight { get; private set; }
-        public FramePressures(Tuple<double, double>? centerLeft, Tuple<double, double>? centerRight, int total_pressure_left, int total_pressure_right)
+        public FramePressures(int frame, Tuple<double, double>? centerLeft, Tuple<double, double>? centerRight, int total_pressure_left, int total_pressure_right)
         {
+            this.frame = frame;
             this.centerLeft = centerLeft;
             this.centerRight = centerRight;
             if (centerLeft == null && centerRight == null)

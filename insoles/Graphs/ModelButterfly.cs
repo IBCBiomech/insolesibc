@@ -13,6 +13,7 @@ using ScottPlot.Drawing;
 using static System.Net.WebRequestMethods;
 using System.Windows.Documents;
 using System.Collections.Generic;
+using ScottPlot.Plottable;
 
 namespace insoles.Graphs
 {
@@ -21,6 +22,7 @@ namespace insoles.Graphs
         private WpfPlot plot;
         private Foot foot;
         private ScottPlot.Plottable.Image image;
+        private ScatterPlot cps;
         private const double HEIGHT = 695;
         private const double WIDTH = 720;
         private double scale = 1;
@@ -77,6 +79,7 @@ namespace insoles.Graphs
         }
         public void DrawData(List<double> x_list, List<double> y_list)
         {
+            plot.Plot.Clear(typeof(ScatterPlot));
             double[] x = new double[x_list.Count];
             double[] y = new double[y_list.Count];
             double qualityMult = 1 / Config.qualitySizes[Config.footQuality];
@@ -88,7 +91,7 @@ namespace insoles.Graphs
             {
                 y[i] = y_list[i] * qualityMult * scale;
             }
-            plot.Plot.AddScatterLines(x, y, Color.Purple);
+            cps = plot.Plot.AddScatterLines(x, y, Color.Purple);
             plot.Refresh();
         }
     }
