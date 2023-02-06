@@ -1,4 +1,5 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿using insoles.Common;
+using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.Statistics;
 using System;
 using System.ComponentModel;
@@ -98,29 +99,10 @@ namespace insoles.Graphs
             Matrix<double> dataDouble = data.Map(Convert.ToDouble);
             dataDouble = dataDouble.Transpose();
             double[,] dataArray = dataDouble.ToArray();
-            double?[,] dataNull = replaceWithNull(dataArray, Config.BACKGROUND);
+            double?[,] dataNull = Helpers.replace(dataArray, Config.BACKGROUND, null);
             Dispatcher.Invoke(() => model.Draw(dataNull));
             max = (int)dataDouble.Enumerate().Maximum();
             graph_visibility = Visibility.Visible;
-        }
-        private double?[,] replaceWithNull(double[,] array, double value)
-        {
-            double?[,] result = new double?[array.GetLength(0), array.GetLength(1)];
-            for(int i = 0; i < array.GetLength(0); i++)
-            {
-                for(int j = 0; j < array.GetLength(1); j++)
-                {
-                    if(array[i, j] == value)
-                    {
-                        result[i, j] = null;
-                    }
-                    else
-                    {
-                        result[i, j] = array[i, j];
-                    }
-                }
-            }
-            return result;
         }
     }
 }

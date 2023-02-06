@@ -10,6 +10,9 @@
     <Compile Update="Graphs\GraphButterfly.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Graphs\GraphButterflyScottplot.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Graphs\GraphPressureHeatmap.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -34,6 +37,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Graphs\GraphButterfly.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Graphs\GraphButterflyScottplot.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Graphs\GraphPressureHeatmap.xaml">

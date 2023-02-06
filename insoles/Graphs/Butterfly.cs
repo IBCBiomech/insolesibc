@@ -18,7 +18,7 @@ namespace insoles.Graphs
 
         private FramePressures[] frames;
 
-        private GraphButterfly graph;
+        private GraphButterflyScottplot graph;
         private Foot foot;
         public Butterfly()
         {
@@ -27,12 +27,12 @@ namespace insoles.Graphs
             {
                 mainWindow.graphButterfly.Navigated += (s, e) =>
                 {
-                    graph = mainWindow.graphButterfly.Content as GraphButterfly;
+                    graph = mainWindow.graphButterfly.Content as GraphButterflyScottplot;
                 };
             }
             else
             {
-                graph = mainWindow.graphButterfly.Content as GraphButterfly;
+                graph = mainWindow.graphButterfly.Content as GraphButterflyScottplot;
             }
             if (mainWindow.foot == null)
             {

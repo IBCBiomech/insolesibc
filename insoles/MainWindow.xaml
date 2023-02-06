@@ -47,7 +47,7 @@
                     <dock:LayoutAnchorablePaneGroup Orientation="Horizontal" DockHeight="1.5*" DockWidth="*">
                         <dock:LayoutAnchorablePane DockHeight="*" DockWidth="*">
                             <dock:LayoutAnchorable x:Name="graphButterflyAnchorable" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False" Title="Butterfly">
-                                <Frame Source="pack://application:,,,/Graphs/GraphButterfly.xaml" x:Name="graphButterfly"/>
+                                <Frame Source="pack://application:,,,/Graphs/GraphButterflyScottplot.xaml" x:Name="graphButterfly"/>
                             </dock:LayoutAnchorable>
                         </dock:LayoutAnchorablePane>
                         <dock:LayoutAnchorablePane DockHeight="*" DockWidth="*">

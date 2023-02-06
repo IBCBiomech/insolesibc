@@ -52,6 +52,25 @@ namespace insoles.Graphs
             }
             return image;
         }
+        public byte[] getImageB()
+        {
+            byte[] image = new byte[sensor_map.RowCount * sensor_map.ColumnCount];
+            for (int i = 0; i < sensor_map.ColumnCount; i++)
+            {
+                for (int j = 0; j < sensor_map.RowCount; j++)
+                {
+                    if (sensor_map[j, i] == codes.Background())
+                    {
+                        image[i * sensor_map.RowCount + j] = Helpers.ColorToByte(Color.White);
+                    }
+                    else
+                    {
+                        image[i * sensor_map.RowCount + j] = Helpers.ColorToByte(Color.Gray);
+                    }
+                }
+            }
+            return image;
+        }
         public int getLength(int index)
         {
             return length[index];

@@ -209,7 +209,7 @@ namespace insoles.Common
         }
         public static byte ColorToByte(Color color)
         {
-            return (byte)((color.R * 255 + color.G * 255 + color.B * 255) / 3);
+            return (byte)((color.R + color.G + color.B) / 3);
         }
         public static int ColorToInt(Color color)
         {
@@ -267,6 +267,25 @@ namespace insoles.Common
                 Trace.Write(data[i] + ", ");
             }
             Trace.WriteLine("]");
+        }
+        public static double?[,] replace(double[,] array, double value, double? replacement)
+        {
+            double?[,] result = new double?[array.GetLength(0), array.GetLength(1)];
+            for (int i = 0; i < array.GetLength(0); i++)
+            {
+                for (int j = 0; j < array.GetLength(1); j++)
+                {
+                    if (array[i, j] == value)
+                    {
+                        result[i, j] = replacement;
+                    }
+                    else
+                    {
+                        result[i, j] = array[i, j];
+                    }
+                }
+            }
+            return result;
         }
     }
 }

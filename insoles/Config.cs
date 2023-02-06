@@ -1,6 +1,8 @@
 ﻿using insoles.Graphs;
 using OpenCvSharp;
+using OpenCvSharp.Aruco;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 using Quality = insoles.Graphs.Foot.Quality;
@@ -38,5 +40,11 @@ namespace insoles
         public static Color colorW = Color.Orange;
         public const float BACKGROUND = -1;
         public const Quality footQuality = Quality.MID;
+        public static Dictionary<Quality, double> qualitySizes = new Dictionary<Quality, double>() 
+        {
+            [Quality.HIGH] = 1,
+            [Quality.MID] = 0.5,
+            [Quality.LOW] = 0.25
+        };
     }
 }
