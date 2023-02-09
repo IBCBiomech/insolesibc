@@ -4,7 +4,9 @@ using insoles.ToolBar;
 using insoles.ToolBar.Enums;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -86,7 +88,7 @@ namespace insoles.Graphs
         private DeviceList.DeviceList deviceList;
         private TimeLine.TimeLine timeLine;
 
-        GraphSumPressuresLive graph;
+        GraphSumPressures graph;
 
         MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
 
@@ -119,6 +121,8 @@ namespace insoles.Graphs
         private List<WisewalkSDK.SoleSensor> soleLeft;
         private List<WisewalkSDK.SoleSensor> soleRight;
 
+        System.Timers.Timer fakeTimer;
+
         //End Wise
         public CaptureManager(VirtualToolBar virtualToolBar, DeviceList.DeviceList deviceList)
         {
@@ -133,12 +137,12 @@ namespace insoles.Graphs
             {
                 mainWindow.graphSumPressures.Navigated += (sender, e) =>
                 {
-                    graph = mainWindow.graphSumPressures.Content as GraphSumPressuresLive;
+                    graph = mainWindow.graphSumPressures.Content as GraphSumPressures;
                 };
             }
             else
             {
-                graph = mainWindow.graphSumPressures.Content as GraphSumPressuresLive;
+                graph = mainWindow.graphSumPressures.Content as GraphSumPressures;
             }
         }
 
@@ -179,7 +183,6 @@ namespace insoles.Graphs
 
                     graph.initCapture();
                     virtualToolBar.stopEvent += onStop;
-
                 });
             }
             /*
@@ -188,6 +191,13 @@ namespace insoles.Graphs
             {
                 mainWindow.startActiveDevices();
             }
+            */
+            //datos falsos
+            /*
+            fakeTimer = new System.Timers.Timer();
+            fakeTimer.Interval = 40;
+            fakeTimer.Elapsed += (s, e) => Fake_dataReceived();
+            fakeTimer.Start();
             */
         }
         public void deactivate()
@@ -240,6 +250,23 @@ namespace insoles.Graphs
         {
             fakets = 0;
             frame = 0;
+        }
+
+        private void Fake_dataReceived()
+        {
+            int n = 4;
+            Random random = new Random();
+            float[] sum_left = new float[n];
+            for (int i = 0; i < n; i++)
+            {
+                sum_left[i] = random.Next(10000);
+            }
+            float[] sum_right = new float[n];
+            for (int i = 0; i < n; i++)
+            {
+                sum_right[i] = random.Next(10000);
+            }
+            graph.drawData(sum_left, sum_right);
         }
 
         //Begin Wise
@@ -331,6 +358,7 @@ namespace insoles.Graphs
         private TimeLine.TimeLine timeLine;
         private Butterfly butterfly;
         private PressureMap pressureMap;
+        private GraphSumPressures sumPressures;
 
         private GraphData graphData;
         public ReplayManager()
@@ -370,6 +398,17 @@ namespace insoles.Graphs
             {
                 pressureMap = mainWindow.pressureMap;
             }
+            if (mainWindow.graphSumPressures.Content == null)
+            {
+                mainWindow.graphSumPressures.Navigated += delegate (object sender, NavigationEventArgs e)
+                {
+                    sumPressures = mainWindow.graphSumPressures.Content as GraphSumPressures;
+                };
+            }
+            else
+            {
+                sumPressures = mainWindow.graphSumPressures.Content as GraphSumPressures;
+            }
         }
         public void activate(GraphData graphData)
         {
@@ -379,8 +418,9 @@ namespace insoles.Graphs
                 this.graphData = graphData;
                 butterfly.Calculate(graphData);
                 pressureMap.Calculate(graphData);
-                //timeLine.model.timeEvent += onUpdateTimeLine;
-                //timeLine.startReplay();
+                sumPressures.drawData(graphData);
+                timeLine.model.timeEvent += onUpdateTimeLine;
+                timeLine.startReplay();
             }
         }
         public void deactivate()
@@ -389,9 +429,9 @@ namespace insoles.Graphs
             {
                 active = false;
                 timeLine.endReplay();
-                //timeLine.model.timeEvent -= onUpdateTimeLine;
-                //graph.clearData();
-                //frameEvent -= graph.onUpdateTimeLine;
+                timeLine.model.timeEvent -= onUpdateTimeLine;
+                sumPressures.clearData();
+                frameEvent -= sumPressures.onUpdateTimeLine;
             }
         }
         public void reset(GraphData graphData)
@@ -400,11 +440,11 @@ namespace insoles.Graphs
             {
                 this.graphData = graphData;
                 butterfly.Calculate(graphData);
-                //graph.clearData();
-                //graph.drawData(graphData);
+                sumPressures.clearData();
+                sumPressures.drawData(graphData);
             }
         }
-        /*
+        
         public void onUpdateTimeLine(object sender, double time)
         {
             int initialEstimation(double time)
@@ -453,6 +493,6 @@ namespace insoles.Graphs
             estimatedFrame = Math.Min(estimatedFrame, graphData.maxFrame); // No salirse del rango
             frameEvent?.Invoke(this, searchFrameLineal(time, estimatedFrame, -1, double.MaxValue));
         }
-        */
+        
     }
 }

@@ -2,6 +2,7 @@
 using ScottPlot.Drawing;
 using ScottPlot.Plottable;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Media.Animation;
 

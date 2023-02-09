@@ -16,7 +16,7 @@ public partial class GraphSumPressures : Page
     public GraphSumPressures()
     {
         InitializeComponent();
-        model = new Model2S(plot, 0, 10000, title: "Pressures", units: "Pascal");
+        model = new Model2S(plot, 0, 10000);
         MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
         DataContext = this;
         //this.plot.Plot.XLabel("Frames");
@@ -33,24 +33,21 @@ public partial class GraphSumPressures : Page
             model.updateData(left, right);
         });
     }
-    /*
     public async void drawData(GraphData data)
     {
-        double[] accX = new double[data.length];
-        double[] accY = new double[data.length];
-        double[] accZ = new double[data.length];
+        double[] left = new double[data.length];
+        double[] right = new double[data.length];
         for (int i = 0; i < data.length; i++)
         {
-            accX[i] = ((FrameData1IMU)data[i]).accX;
-            accY[i] = ((FrameData1IMU)data[i]).accY;
-            accZ[i] = ((FrameData1IMU)data[i]).accZ;
+            FrameDataInsoles data_i = (FrameDataInsoles)data[i];
+            left[i] = data_i.left.totalPressure;
+            right[i] = data_i.right.totalPressure;
         }
         await Application.Current.Dispatcher.BeginInvoke(UPDATE_PRIORITY, () =>
         {
-            model.updateData(accX, accY, accZ);
+            model.updateData(left, right);
         });
     }
-    */
     public async void onUpdateTimeLine(object sender, int frame)
     {
         await Application.Current.Dispatcher.BeginInvoke(UPDATE_PRIORITY, () =>

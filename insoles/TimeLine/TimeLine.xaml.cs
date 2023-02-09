@@ -290,13 +290,13 @@ namespace insoles.TimeLine
                 play.IsEnabled = !value;
                 if (value)
                 {
-                    pauseImage.Source = new BitmapImage(new Uri("pack://application:,,,/UI/ToolBar/Icons/play-pause-icon.png"));
+                    pauseImage.Source = new BitmapImage(new Uri("pack://application:,,,/ToolBar/Icons/play-pause-icon.png"));
                     timer.Stop();
                     stopwatch.Stop();
                 }
                 else
                 {
-                    pauseImage.Source = new BitmapImage(new Uri("pack://application:,,,/UI/ToolBar/Icons/pause-icon.png"));
+                    pauseImage.Source = new BitmapImage(new Uri("pack://application:,,,/ToolBar/Icons/pause-icon.png"));
                     timer.Start();
                     stopwatch.Start();
                 }

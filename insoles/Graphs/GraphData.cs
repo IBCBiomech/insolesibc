@@ -240,6 +240,18 @@ namespace insoles.Graphs
             pressures[Sensor.MET5] = 0;
             pressures[Sensor.TOES] = 0;
         }
+        public int totalPressure
+        {
+            get
+            {
+                int result = 0;
+                foreach(Sensor sensor in Enum.GetValues(typeof(Sensor)))
+                {
+                    result += pressures[sensor];
+                }
+                return result;
+            }
+        }
         public override string ToString() {
             string result = "";
             foreach (Sensor sensor in (Sensor[])Enum.GetValues(typeof(Sensor)))

@@ -4,6 +4,8 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Numerics;
+using System.Windows.Input;
+using System.Windows.Markup;
 
 namespace insoles.Graphs
 {
@@ -39,16 +41,24 @@ namespace insoles.Graphs
         private const string labelLeft = "Left";
         private const string labelRight = "Right";
 
-        public Model2S(WpfPlot plot, double minY, double maxY, string title = "", string units = "")
+        private CaptureModel captureModel;
+        private ReplayModel replayModel;
+
+        public Model2S(WpfPlot plot, double minY, double maxY)
         {
+            captureModel = new CaptureModel(this);
+            replayModel = new ReplayModel(this);
+
             this.minY = minY;
             this.maxY = maxY;
             this.plot = plot;
 
             lineFrame = plot.Plot.AddVerticalLine(0, color: frameColor, width: verticalLineWidth, style: LineStyle.Dash);
 
-            plot.Plot.SetAxisLimitsX(xMin: 0, MAX_POINTS);
+            plot.Plot.SetAxisLimitsY(minY, maxY);
             plot.Plot.Legend(location: Alignment.UpperRight);
+            plot.Plot.XLabel("s");
+            plot.Plot.YLabel("N/m\xB2");
 
 
             plot.Plot.Style(Style.Seaborn);
@@ -67,114 +77,125 @@ namespace insoles.Graphs
         }
         public void initCapture()
         {
-            valuesLeft = new double[CAPACITY];
-            valuesRight = new double[CAPACITY];
-            plot.Plot.Remove(signalPlotLeft);
-            plot.Plot.Remove(signalPlotRight);
-            signalPlotLeft = plot.Plot.AddSignal(valuesLeft, color: leftColor, label: labelLeft);
-            signalPlotRight = plot.Plot.AddSignal(valuesRight, color: rightColor, label: labelRight);
-            signalPlotLeft.MarkerSize = 0;
-            signalPlotRight.MarkerSize = 0;
-            plot.Plot.SetAxisLimitsY(yMin: minY, yMax: maxY);
-            nextIndex = 0;
-            maxRenderIndex = nextIndex;
+            clear();
+            captureModel.initCapture();
         }
         #region Replay
         // Añade todos los datos de golpe (solo para replay)
         public void updateData(double[] left, double[] right)
         {
-            valuesLeft = left;
-            valuesRight = right;
-            plot.Plot.Remove(signalPlotLeft);
-            plot.Plot.Remove(signalPlotRight);
-            signalPlotLeft = plot.Plot.AddSignal(valuesLeft, color: leftColor, label: labelLeft);
-            signalPlotRight = plot.Plot.AddSignal(valuesRight, color: rightColor, label: labelRight);
-            signalPlotLeft.MarkerSize = 0;
-            signalPlotRight.MarkerSize = 0;
-            maxRenderIndex = 0;
-            //plot.Plot.SetAxisLimitsX(xMin: 0, xMax: Math.Min(MAX_POINTS, valuesX.Length));
-            plot.Plot.SetAxisLimitsX(xMin: 0, xMax: valuesLeft.Length);
-            plot.Plot.SetAxisLimitsY(yMin: minY, yMax: maxY);
+            clear();
+            replayModel.updateData(left, right);
         }
         // Cambia los datos a mostrar
         public void updateIndex(int index)
         {
-            index = Math.Min(index, valuesLeft.Length); //Por si acaso
-            maxRenderIndex = index;
-
-            signalPlotLeft.Label = "Left= " + valuesLeft[index].ToString("0.##");
-            signalPlotRight.Label = "Right= " + valuesRight[index].ToString("0.##");
-
-            //plot.Plot.SetAxisLimits(xMin: Math.Max(0, index - MAX_POINTS),
-            //    xMax: Math.Max(index + RIGHT_SEPARATION, Math.Min(MAX_POINTS, valuesX.Length)));
-            plot.Render();
+            replayModel.updateIndex(index);
         }
         #endregion Replay
         // Esta version funciona mejor pero usa mas memoria. Si se sobrepasa la memoria incial hay que modificar el tamaño de las arrays.
 
         // Actualiza los datos
-        public async void updateData(float[] dataLeft, float[] dataRight, bool render = true)
+        public void updateData(float[] dataLeft, float[] dataRight, bool render = true)
         {
-            if (nextIndex + Math.Max(dataLeft.Length, dataRight.Length) >= CAPACITY) // No deberia pasar
-            {
-                CAPACITY = CAPACITY * GROW_FACTOR;
-                Array.Resize(ref valuesLeft, CAPACITY);
-                Array.Resize(ref valuesRight, CAPACITY);
-                plot.Plot.Remove(signalPlotLeft);
-                plot.Plot.Remove(signalPlotRight);
-                signalPlotLeft = plot.Plot.AddSignal(valuesLeft, color: Color.Red, label: "X");
-                signalPlotRight = plot.Plot.AddSignal(valuesRight, color: Color.Green, label: "Y");
-                signalPlotLeft.MarkerSize = 0;
-                signalPlotRight.MarkerSize = 0;
-            }
-            for (int i = 0; i < dataLeft.Length; i++)
-            {
-                valuesLeft[nextIndex + i] = dataLeft[i];
-            }
-            for (int i = 0; i < dataRight.Length; i++)
-            {
-                valuesRight[nextIndex + i] = dataRight[i];
-            }
-            signalPlotLeft.Label = "Left= " + dataLeft[dataLeft.Length - 1].ToString("0.##");
-            signalPlotRight.Label = "Right= " + dataRight[dataRight.Length - 1].ToString("0.##");
-            nextIndex += Math.Max(dataLeft.Length, dataRight.Length);
-            if (render)
-            {
-                this.render();
-            }
-        }
-        // Actualiza el renderizado
-        public async void render()
-        {
-            int index = nextIndex - 1;
-            if (index < 0)
-            {
-                index = 0;
-            }
-            maxRenderIndex = index;
-            plot.Plot.SetAxisLimits(xMin: Math.Max(0, index - MAX_POINTS),
-                xMax: Math.Max(index + RIGHT_SEPARATION, Math.Min(MAX_POINTS, valuesLeft.Length)));
-            plot.Render();
+            clear();
+            captureModel.updateData(dataLeft, dataRight, render);
         }
         // Borra todos los puntos de todas las lineas
         public void clear()
         {
-            nextIndex = 0;
-            maxRenderIndex = nextIndex;
+            plot.Plot.Clear(typeof(SignalPlot));
             plot.Render();
         }
-        // Usar esto para actualizar la line tambien
-        private int maxRenderIndex
+        class CaptureModel
         {
-            get
+            Model2S model;
+            private const int CAPACITY = 200;
+            double[] valuesLeft;
+            double[] valuesRight;
+            SignalPlot signalPlotLeft;
+            SignalPlot signalPlotRight;
+            private int nextIndex = 0;
+
+            public CaptureModel(Model2S model)
             {
-                return (int)lineFrame.X;
+                this.model = model;
             }
-            set
+            public void initCapture()
             {
-                signalPlotLeft.MaxRenderIndex = value;
-                signalPlotRight.MaxRenderIndex = value;
-                lineFrame.X = value;
+                valuesLeft = new double[CAPACITY];
+                valuesRight = new double[CAPACITY];
+                signalPlotLeft = model.plot.Plot.AddSignal(valuesLeft, color: model.leftColor, label: labelLeft);
+                signalPlotRight = model.plot.Plot.AddSignal(valuesRight, color: model.rightColor, label: labelRight);
+                signalPlotLeft.MarkerSize = 0;
+                signalPlotRight.MarkerSize = 0;
+                nextIndex = 0;
+                model.plot.Plot.SetAxisLimitsX(xMin: 0, xMax: CAPACITY);
+            }
+            public void updateData(float[] dataLeft, float[] dataRight, bool render = true)
+            {
+                for (int i = 0; i < dataLeft.Length; i++)
+                {
+                    int index = (nextIndex + i) % CAPACITY;
+                    valuesLeft[index] = dataLeft[i];
+                    valuesRight[index] = dataRight[i];
+                }
+                signalPlotLeft.Label = labelLeft + "= " + dataLeft[dataLeft.Length - 1].ToString("0.##");
+                signalPlotRight.Label = labelRight + "= " + dataRight[dataRight.Length - 1].ToString("0.##");
+                nextIndex += dataLeft.Length;
+                model.lineFrame.X = nextIndex % CAPACITY;
+                if (render)
+                {
+                    model.plot.Render();
+                }
+            }
+        }
+        class ReplayModel
+        {
+            Model2S model;
+            double[] valuesLeft;
+            double[] valuesRight;
+            SignalPlot signalPlotLeft;
+            SignalPlot signalPlotRight;
+            public ReplayModel(Model2S model)
+            {
+                this.model = model;
+            }
+            public void updateData(double[] left, double[] right)
+            {
+                valuesLeft = left;
+                valuesRight = right;
+                signalPlotLeft = model.plot.Plot.AddSignal(valuesLeft, color: model.leftColor, label: "X");
+                signalPlotRight = model.plot.Plot.AddSignal(valuesRight, color: model.rightColor, label: "Y");
+                signalPlotLeft.MarkerSize = 0;
+                signalPlotRight.MarkerSize = 0;
+                maxRenderIndex = 0;
+                model.plot.Plot.SetAxisLimitsX(xMin: 0, xMax: valuesLeft.Length);
+                model.plot.Render();
+            }
+            public void updateIndex(int index)
+            {
+                Trace.WriteLine(index);
+                index = Math.Min(index, valuesLeft.Length); //Por si acaso
+                maxRenderIndex = index;
+
+                signalPlotLeft.Label = labelLeft + "= " + valuesLeft[index].ToString("0.##");
+                signalPlotRight.Label = labelRight + "= " + valuesRight[index].ToString("0.##");
+
+                model.plot.Render();
+            }
+            private int maxRenderIndex
+            {
+                get
+                {
+                    return (int)model.lineFrame.X;
+                }
+                set
+                {
+                    signalPlotLeft.MaxRenderIndex = value;
+                    signalPlotRight.MaxRenderIndex = value;
+                    model.lineFrame.X = value;
+                }
             }
         }
     }
