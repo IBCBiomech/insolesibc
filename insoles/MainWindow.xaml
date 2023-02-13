@@ -51,7 +51,7 @@
                             </dock:LayoutAnchorable>
                         </dock:LayoutAnchorablePane>
                         <dock:LayoutAnchorablePane DockHeight="*" DockWidth="*">
-                            <dock:LayoutAnchorable x:Name="graphCPAnchorable" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False" Title="Butterfly">
+                            <dock:LayoutAnchorable x:Name="graphCPAnchorable" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False" Title="COP">
                                 <Frame Source="pack://application:,,,/Graphs/GraphsCP.xaml" x:Name="graphCP"/>
                             </dock:LayoutAnchorable>
                         </dock:LayoutAnchorablePane>
