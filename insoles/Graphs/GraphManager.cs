@@ -419,6 +419,7 @@ namespace insoles.Graphs
                 butterfly.Calculate(graphData);
                 pressureMap.Calculate(graphData);
                 sumPressures.drawData(graphData);
+                frameEvent += sumPressures.onUpdateTimeLine;
                 timeLine.model.timeEvent += onUpdateTimeLine;
                 timeLine.startReplay();
             }
@@ -440,6 +441,7 @@ namespace insoles.Graphs
             {
                 this.graphData = graphData;
                 butterfly.Calculate(graphData);
+                pressureMap.Calculate(graphData);
                 sumPressures.clearData();
                 sumPressures.drawData(graphData);
             }

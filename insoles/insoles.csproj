@@ -29,6 +29,7 @@
     <None Remove="ToolBar\Icons\disconnect-blue-icon.png" />
     <None Remove="ToolBar\Icons\openCamera-blue-icon.png" />
     <None Remove="ToolBar\Icons\pause-blue-icon.png" />
+    <None Remove="ToolBar\Icons\pause-icon.png" />
     <None Remove="ToolBar\Icons\play-pause-blue-icon.png" />
     <None Remove="ToolBar\Icons\play-pause-icon.png" />
     <None Remove="ToolBar\Icons\record-recording-icon.png" />
@@ -117,6 +118,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="ToolBar\Icons\pause-blue-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ToolBar\Icons\pause-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="ToolBar\Icons\play-pause-blue-icon.png">
