@@ -209,7 +209,9 @@ namespace insoles.DeviceList
         }
         public Side Side(byte handler)
         {
-            InsolesInfo insoleInfo = VM.insoles.Where((insole) => insole.handler == handler).First();
+            Dictionary<string, WisewalkSDK.Device> devicesConnected = mainWindow.api.GetDevicesConnected();
+            WisewalkSDK.Device device = devicesConnected[handler.ToString()];
+            InsolesInfo insoleInfo = VM.insoles.Where((insole) => insole.address == device.Id).First();
             return insoleInfo.side.Value;
         }
     }
