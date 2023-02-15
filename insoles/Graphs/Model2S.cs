@@ -98,7 +98,6 @@ namespace insoles.Graphs
         // Actualiza los datos
         public void updateData(float[] dataLeft, float[] dataRight, bool render = true)
         {
-            clear();
             captureModel.updateData(dataLeft, dataRight, render);
         }
         // Borra todos los puntos de todas las lineas
