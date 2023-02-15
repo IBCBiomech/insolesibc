@@ -273,36 +273,39 @@ namespace insoles.Graphs
         //Callback para recoger datas del IMU
         public void Api_dataReceived(byte deviceHandler, WisewalkSDK.WisewalkData data)
         {
+            int transform(int value)
+            {
+                return 4095 - value;
+            }
+            // No usar esto
+            /*
             void transformPressures(ref List<SoleSensor> data)
             {
-                int transformationFunction(int value)
-                {
-                    return 4095 - value;
-                }
                 for(int i = 0; i < data.Count; i++)
                 {
-                    data[i].arch = transformationFunction(data[i].arch);
-                    data[i].hallux = transformationFunction(data[i].hallux);
-                    data[i].heel_L = transformationFunction(data[i].heel_L);
-                    data[i].heel_R = transformationFunction(data[i].heel_R);
-                    data[i].met_1 = transformationFunction(data[i].met_1);
-                    data[i].met_3 = transformationFunction(data[i].met_3);
-                    data[i].met_5 = transformationFunction(data[i].met_5);
-                    data[i].toes = transformationFunction(data[i].toes);
+                    data[i].arch = transform(data[i].arch);
+                    data[i].hallux = transform(data[i].hallux);
+                    data[i].heel_L = transform(data[i].heel_L);
+                    data[i].heel_R = transform(data[i].heel_R);
+                    data[i].met_1 = transform(data[i].met_1);
+                    data[i].met_3 = transform(data[i].met_3);
+                    data[i].met_5 = transform(data[i].met_5);
+                    data[i].toes = transform(data[i].toes);
                 }
             }
+            */
             float sumSole(WisewalkSDK.SoleSensor sole)
             {
-                return sole.arch + sole.hallux + sole.heel_R +
-                        sole.heel_L + sole.met_1 + sole.met_3 +
-                        sole.met_5 + sole.toes;
+                return transform(sole.arch) + transform(sole.hallux) + transform(sole.heel_R) +
+                        transform(sole.heel_L) + transform(sole.met_1) + transform(sole.met_3) +
+                        transform(sole.met_5) + transform(sole.toes);
             }
             string stringSole(WisewalkSDK.SoleSensor sole)
             {
-                return sole.arch.ToString() + " " + sole.hallux.ToString() + " " +
-                    sole.heel_R.ToString() + " " + sole.heel_L.ToString() + " " +
-                    sole.met_1.ToString() + " " + sole.met_3.ToString() + " " +
-                    sole.met_5.ToString() + " " + sole.toes.ToString();
+                return transform(sole.arch).ToString() + " " + transform(sole.hallux).ToString() + " " +
+                    transform(sole.heel_R).ToString() + " " + transform(sole.heel_L).ToString() + " " +
+                    transform(sole.met_1).ToString() + " " + transform(sole.met_3).ToString() + " " +
+                    transform(sole.met_5).ToString() + " " + transform(sole.toes).ToString();
             }
             if (deviceList.Side(deviceHandler) == Side.Left)
             {
@@ -316,13 +319,13 @@ namespace insoles.Graphs
             }
             if (numSoles % 2 == 0)
             {
-                transformPressures(ref soleLeft);
+                //transformPressures(ref soleLeft);
                 float[] sum_left = new float[soleLeft.Count];
                 for (int i = 0; i < soleLeft.Count; i++)
                 {
                     sum_left[i] = sumSole(soleLeft[i]);
                 }
-                transformPressures(ref soleRight);
+                //transformPressures(ref soleRight);
                 float[] sum_right = new float[soleRight.Count];
                 for (int i = 0; i < soleRight.Count; i++)
                 {
