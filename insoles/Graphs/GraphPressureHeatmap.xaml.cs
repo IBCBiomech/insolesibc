@@ -1,11 +1,16 @@
 ﻿using insoles.Common;
+using insoles.Graphs.Converters;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.Statistics;
 using System;
+using System.Collections;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace insoles.Graphs
 {
@@ -19,7 +24,21 @@ namespace insoles.Graphs
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ModelHeatmap model { get; private set; }
+        private int avg_ = int.MinValue;
         private int max_ = int.MinValue;
+        private int min_ = int.MinValue;
+        public int avg
+        {
+            get
+            {
+                return avg_;
+            }
+            set
+            {
+                avg_ = value;
+                NotifyPropertyChanged();
+            }
+        }
         public int max
         {
             get
@@ -29,6 +48,18 @@ namespace insoles.Graphs
             set
             {
                 max_ = value;
+                NotifyPropertyChanged();
+            }
+        }
+        public int min
+        {
+            get
+            {
+                return min_;
+            }
+            set
+            {
+                min_ = value;
                 NotifyPropertyChanged();
             }
         }
@@ -92,7 +123,44 @@ namespace insoles.Graphs
             {
                 foot = mainWindow.foot;
             }
+            metric.SelectionChanged += (s, e) =>
+            {
+                selectionChanged();
+            };
+            metric.SelectedIndex = 0;
             DataContext = this;
+        }
+        private void selectionChanged()
+        {
+            string selected = metric.SelectedValue.ToString();
+            Binding binding = new Binding();
+            switch (selected)
+            {
+                case var value when value == (string)FindResource("avgStr"):
+                    binding.Source = avg;
+                    binding.Converter = (PreTextConverter)FindResource("avgConverter");
+                    metricValue.SetBinding(TextBlock.TextProperty, binding);
+                    NotifyPropertyChanged(nameof(avg));
+                    break;
+                case var value when value == (string)FindResource("maxStr"):
+                    binding.Source = max;
+                    binding.Converter = (PreTextConverter)FindResource("maxConverter");
+                    metricValue.SetBinding(TextBlock.TextProperty, binding);
+                    NotifyPropertyChanged(nameof(max));
+                    break;
+                case var value when value == (string)FindResource("minStr"):
+                    binding.Source = min;
+                    binding.Converter = (PreTextConverter)FindResource("minConverter");
+                    metricValue.SetBinding(TextBlock.TextProperty, binding);
+                    NotifyPropertyChanged(nameof(min));
+                    break;
+                default:
+                    Trace.WriteLine(selected);
+                    Trace.WriteLine((string)FindResource("avgStr"));
+                    Trace.WriteLine((string)FindResource("maxStr"));
+                    Trace.WriteLine((string)FindResource("minStr"));
+                    throw new Exception("seleccion max min avg error");
+            }
         }
         public void DrawData(Matrix<float> data)
         {
@@ -101,8 +169,12 @@ namespace insoles.Graphs
             double[,] dataArray = dataDouble.ToArray();
             double?[,] dataNull = Helpers.replace(dataArray, Config.BACKGROUND, null);
             Dispatcher.Invoke(() => model.Draw(dataNull));
-            max = (int)dataDouble.Enumerate().Maximum();
+            var filtered = dataDouble.Enumerate().Where(x => x != Config.BACKGROUND);
+            avg = (int)filtered.Average();
+            max = (int)filtered.Maximum();
+            min = (int)filtered.Minimum();
             graph_visibility = Visibility.Visible;
+            selectionChanged(); // Si no se llama aqui no se muestra hasta que se cambia
         }
     }
 }
