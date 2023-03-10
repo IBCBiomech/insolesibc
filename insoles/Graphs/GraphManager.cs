@@ -5,6 +5,7 @@ using insoles.ToolBar.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -271,12 +272,33 @@ namespace insoles.Graphs
 
         //Begin Wise
         //Callback para recoger datas del IMU
+
+        //Método para transformar la presión a valor adecuado
+        public int transform(int value)
+        {
+            return (4095 - value);
+        }
+
+        //function that sums all sensor pressures
+        public float sumSole(WisewalkSDK.SoleSensor sole)
+        {
+            return transform(sole.arch) + transform(sole.hallux) + transform(sole.heel_R) +
+                    transform(sole.heel_L) + transform(sole.met_1) + transform(sole.met_3) +
+                    transform(sole.met_5) + transform(sole.toes);
+        }
+        //function that concatenates all sensor pressure in a single line
+        public string stringSole(WisewalkSDK.SoleSensor sole)
+        {
+            return transform(sole.arch).ToString() + " " + transform(sole.hallux).ToString() + " " +
+                transform(sole.heel_R).ToString() + " " + transform(sole.heel_L).ToString() + " " +
+                transform(sole.met_1).ToString() + " " + transform(sole.met_3).ToString() + " " +
+                transform(sole.met_5).ToString() + " " + transform(sole.toes).ToString();
+        }
+
+       
         public void Api_dataReceived(byte deviceHandler, WisewalkSDK.WisewalkData data)
         {
-            int transform(int value)
-            {
-                return 4095 - value;
-            }
+           
             // No usar esto
             /*
             void transformPressures(ref List<SoleSensor> data)
@@ -294,19 +316,7 @@ namespace insoles.Graphs
                 }
             }
             */
-            float sumSole(WisewalkSDK.SoleSensor sole)
-            {
-                return transform(sole.arch) + transform(sole.hallux) + transform(sole.heel_R) +
-                        transform(sole.heel_L) + transform(sole.met_1) + transform(sole.met_3) +
-                        transform(sole.met_5) + transform(sole.toes);
-            }
-            string stringSole(WisewalkSDK.SoleSensor sole)
-            {
-                return transform(sole.arch).ToString() + " " + transform(sole.hallux).ToString() + " " +
-                    transform(sole.heel_R).ToString() + " " + transform(sole.heel_L).ToString() + " " +
-                    transform(sole.met_1).ToString() + " " + transform(sole.met_3).ToString() + " " +
-                    transform(sole.met_5).ToString() + " " + transform(sole.toes).ToString();
-            }
+          
             if (deviceList.Side(deviceHandler) == Side.Left)
             {
                 soleLeft = data.Sole;
@@ -340,12 +350,19 @@ namespace insoles.Graphs
                     for (int i = 0; i < soleLeft.Count; i++)
                     {
                         dataline += "1 " + (fakets + i * 0.01f).ToString("F2") + " " +
-                            (frame + i).ToString() + " " + stringSole(soleLeft[i]) + " " +
-                            stringSole(soleRight[i]) + "\n";
+                            (frame + i).ToString() + " " + stringSole(soleLeft[i]) + " " + stringSole(soleRight[i]) + " " +
+                            sumSole(soleLeft[i]).ToString() + " " +
+                            sumSole(soleRight[i]).ToString() + " " +"\n";
                     }
+
+
+                    //dataline = "1 " + (fakets).ToString("F2") + " " +
+                    //        (frame).ToString() + " " + sum_left.Average().ToString() + " " +
+                    //        sum_right.Average().ToString() + "\n";
+
                     mainWindow.fileSaver.appendCSVManual(dataline);
-                    fakets += soleLeft.Count * 0.01f;
-                    frame += soleLeft.Count;
+                    fakets += 0.01f;
+                    frame += 1;
                 }
             }
         }
