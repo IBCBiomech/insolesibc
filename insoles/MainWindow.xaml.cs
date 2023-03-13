@@ -176,7 +176,9 @@ namespace insoles
                     for (int i = 0; i < scanDevices.Count; i++)
                     {
                         string name = "Wisewalk";
-                        insoles.Add(new InsolesInfo(name, GetMacAddress(scanDevices, i)));
+                        InsolesInfo insole = new InsolesInfo(name, GetMacAddress(scanDevices, i));
+                        insole.setID();
+                        insoles.Add(insole);
                     }
                     //insoles.Add(new InsolesInfo("Wisewalk", "AD:EF:GH"));
                     //insoles.Add(new InsolesInfo("Wisewalk", "TD:CK:PO"));
