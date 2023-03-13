@@ -1,0 +1,147 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+	<UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="DeviceList\Icons\arrow-icon.png" />
+    <None Remove="DeviceList\Icons\camera-blue-icon-small.png" />
+    <None Remove="DeviceList\Icons\camera-blue-icon.png" />
+    <None Remove="DeviceList\Icons\camera-icon.png" />
+    <None Remove="DeviceList\Icons\green-circle-icon.png" />
+    <None Remove="DeviceList\Icons\insole-blue-icon-small.png" />
+    <None Remove="DeviceList\Icons\insole-blue-icon.png" />
+    <None Remove="DeviceList\Icons\insole-icon.png" />
+    <None Remove="DeviceList\Icons\red-circle-icon.png" />
+    <None Remove="TimeLine\Icons\fast-backward-icon.png" />
+    <None Remove="TimeLine\Icons\fast-forward-icon.png" />
+    <None Remove="TimeLine\Icons\pause-icon.png" />
+    <None Remove="TimeLine\Icons\play-icon.png" />
+    <None Remove="ToolBar\Icons\capture-blue-icon.png" />
+    <None Remove="ToolBar\Icons\capturedFiles-blue-icon.png" />
+    <None Remove="ToolBar\Icons\connect-blue-icon.png" />
+    <None Remove="ToolBar\Icons\disconnect-blue-icon.png" />
+    <None Remove="ToolBar\Icons\openCamera-blue-icon.png" />
+    <None Remove="ToolBar\Icons\pause-blue-icon.png" />
+    <None Remove="ToolBar\Icons\pause-icon.png" />
+    <None Remove="ToolBar\Icons\play-pause-blue-icon.png" />
+    <None Remove="ToolBar\Icons\play-pause-icon.png" />
+    <None Remove="ToolBar\Icons\record-recording-icon.png" />
+    <None Remove="ToolBar\Icons\record-stop-blue-icon.png" />
+    <None Remove="ToolBar\Icons\scan-blue-icon.png" />
+    <None Remove="ToolBar\Icons\stop-blue-icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DirectShowLib" Version="1.0.0" />
+    <PackageReference Include="DirectShowLib.Standard" Version="2.1.0" />
+    <PackageReference Include="Dirkster.AvalonDock" Version="4.71.1" />
+    <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
+    <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
+    <PackageReference Include="MultiSelectTreeView" Version="1.0.9" />
+    <PackageReference Include="OpenCvSharp4" Version="4.7.0.20230115" />
+    <PackageReference Include="OpenCvSharp4.Extensions" Version="4.7.0.20230115" />
+    <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.7.0.20230115" />
+    <PackageReference Include="OpenCvSharp4.WpfExtensions" Version="4.7.0.20230115" />
+    <PackageReference Include="ScottPlot.WPF" Version="4.1.60" />
+    <PackageReference Include="System.IO.Ports" Version="7.0.0" />
+    <PackageReference Include="System.Management" Version="7.0.0" />
+    <PackageReference Include="System.Management.dll" Version="1.0.0" />
+    <PackageReference Include="WriteableBitmapEx" Version="1.6.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="WisewalkSDK">
+      <HintPath>WisewalkSDK.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="DeviceList\Icons\arrow-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="DeviceList\Icons\camera-blue-icon-small.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="DeviceList\Icons\camera-blue-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="DeviceList\Icons\camera-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="DeviceList\Icons\green-circle-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="DeviceList\Icons\insole-blue-icon-small.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="DeviceList\Icons\insole-blue-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="DeviceList\Icons\insole-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="DeviceList\Icons\red-circle-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="TimeLine\Icons\fast-backward-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="TimeLine\Icons\fast-forward-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="TimeLine\Icons\pause-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="TimeLine\Icons\play-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ToolBar\Icons\capture-blue-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ToolBar\Icons\capturedFiles-blue-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ToolBar\Icons\connect-blue-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ToolBar\Icons\disconnect-blue-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ToolBar\Icons\openCamera-blue-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ToolBar\Icons\pause-blue-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ToolBar\Icons\pause-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ToolBar\Icons\play-pause-blue-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ToolBar\Icons\play-pause-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ToolBar\Icons\record-recording-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ToolBar\Icons\record-stop-blue-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ToolBar\Icons\scan-blue-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ToolBar\Icons\stop-blue-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+</Project>

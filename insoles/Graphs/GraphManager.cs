@@ -334,7 +334,9 @@ namespace insoles.Graphs
                     for (int j = 0; j < Config.NUMPACKETS; j++)
                     {
                         
-                        dataline = "1 " + (fakets).ToString("F2") + " " + (frame).ToString() + " " + stringSole(soleLeft[j]) + " " + stringSole(soleRight[j]) + " " +
+                        dataline = "1 " + (fakets).ToString("F2") + " " + (frame).ToString() + " " +
+                            soleLeft[j].arch + " " + soleLeft[i].hallux + " " + soleLeft[j].heel_L + " " + soleLeft[j].heel_R + " " + soleLeft[j].met_1 + " " + soleLeft[j].met_3 + " " + soleLeft[j].met_5 + " " + soleLeft[j].toes + " " + 
+                            stringSole(soleRight[j]) + " " +
                             sum_left.ToString() + " " + sum_right.ToString() + " " +"\n";
                         fakets += 0.01f;
                         frame += 1;
