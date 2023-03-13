@@ -17,11 +17,20 @@ namespace insoles.Graphs
     /// <summary>
     /// Lógica de interacción para GraphPressureHeatmap.xaml
     /// </summary>
+    public enum Metric { Avg, Max, Min}
+    public class MetricEventArgs : EventArgs
+    {
+        public Metric metric { get; set; }
+    }
     public partial class GraphPressureHeatmap : Page, INotifyPropertyChanged
     {
         private Foot foot;
+        private PressureMap pressureMap;
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public delegate void MetricChangedEventHandler(object sender, MetricEventArgs e);
+        public MetricChangedEventHandler MetricChanged;
 
         public ModelHeatmap model { get; private set; }
         private int avg_ = int.MinValue;
@@ -123,6 +132,17 @@ namespace insoles.Graphs
             {
                 foot = mainWindow.foot;
             }
+            if (mainWindow.pressureMap == null)
+            {
+                mainWindow.initialized += (s, e) =>
+                {
+                    pressureMap = mainWindow.pressureMap;
+                };
+            }
+            else
+            {
+                pressureMap = mainWindow.pressureMap;
+            }
             metric.SelectionChanged += (s, e) =>
             {
                 selectionChanged();
@@ -142,6 +162,7 @@ namespace insoles.Graphs
                     binding.Converter = (PreTextConverter)FindResource("avgConverter");
                     metricValue.SetBinding(TextBlock.TextProperty, binding);
                     NotifyPropertyChanged(nameof(avg));
+                    MetricChanged?.Invoke(this, new MetricEventArgs { metric = Metric.Avg });
                     break;
                 case var value when value == (string)FindResource("maxStr"):
                     binding = new Binding("max");
@@ -149,6 +170,7 @@ namespace insoles.Graphs
                     binding.Converter = (PreTextConverter)FindResource("maxConverter");
                     metricValue.SetBinding(TextBlock.TextProperty, binding);
                     NotifyPropertyChanged(nameof(max));
+                    MetricChanged?.Invoke(this, new MetricEventArgs { metric = Metric.Max });
                     break;
                 case var value when value == (string)FindResource("minStr"):
                     binding = new Binding("min");
@@ -156,6 +178,7 @@ namespace insoles.Graphs
                     binding.Converter = (PreTextConverter)FindResource("minConverter");
                     metricValue.SetBinding(TextBlock.TextProperty, binding);
                     NotifyPropertyChanged(nameof(min));
+                    MetricChanged?.Invoke(this, new MetricEventArgs { metric = Metric.Min });
                     break;
                 default:
                     Trace.WriteLine(selected);

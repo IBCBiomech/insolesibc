@@ -18,8 +18,13 @@ namespace insoles.Graphs
         private GraphPressureHeatmap graph;
         private Foot foot;
 
+        private Dictionary<Metric, Matrix<float>> pressureMaps = new Dictionary<Metric, Matrix<float>>();
+
         private bool isInitialized = false;
         public event EventHandler initialized;
+
+        private Metric metric;
+        private bool dirty = true;
         public PressureMap()
         {
             MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
@@ -28,11 +33,13 @@ namespace insoles.Graphs
                 mainWindow.graphPressures.Navigated += (s, e) =>
                 {
                     graph = mainWindow.graphPressures.Content as GraphPressureHeatmap;
+                    graph.MetricChanged += changeMetric;
                 };
             }
             else
             {
                 graph = mainWindow.graphPressures.Content as GraphPressureHeatmap;
+                graph.MetricChanged += changeMetric;
             }
             if (mainWindow.foot == null)
             {
@@ -96,10 +103,27 @@ namespace insoles.Graphs
         }
         public void Calculate(GraphData graphData)
         {
+            void CalculateAll()
+            {
+                DataInsole leftAvg = new DataInsole();
+                DataInsole rightAvg = new DataInsole();
+                average(graphData, ref leftAvg, ref rightAvg);
+                pressureMaps[Metric.Avg] = Calculate_(leftAvg, rightAvg);
+
+                DataInsole leftMax = new DataInsole();
+                DataInsole rightMax = new DataInsole();
+                max(graphData, ref leftMax, ref rightMax);
+                pressureMaps[Metric.Max] = Calculate_(leftMax, rightMax);
+
+                DataInsole leftMin = new DataInsole();
+                DataInsole rightMin = new DataInsole();
+                min(graphData, ref leftMin, ref rightMin);
+                pressureMaps[Metric.Min] = Calculate_(leftMin, rightMin);
+            }
             if (isInitialized)
             {
                 graph.calculating = true;
-                Calculate_(graphData);
+                CalculateAll();
                 graph.calculating = false;
             }
             else
@@ -107,17 +131,13 @@ namespace insoles.Graphs
                 graph.calculating = true;
                 initialized += (s, e) =>
                 {
-                    Calculate_(graphData);
+                    CalculateAll();
                     graph.calculating = false;
                 };
             }
         }
-        private void Calculate_(GraphData graphData)
+        private Matrix<float> Calculate_(DataInsole left, DataInsole right)
         {
-            DataInsole left = new DataInsole();
-            DataInsole right = new DataInsole();
-            average(graphData, ref left, ref right);
-
             Matrix<float> pressure_map = foot.sensor_map.MapIndexed((row, col, code) => {
                 if (code == foot.codes.Background())
                 {
@@ -149,7 +169,7 @@ namespace insoles.Graphs
 
             });
 
-            graph.DrawData(pressure_map);
+            return pressure_map;
         }
         private void average(GraphData data, ref DataInsole left, ref DataInsole right)
         {
@@ -167,6 +187,56 @@ namespace insoles.Graphs
                 left[sensor] /= data.length;
                 right[sensor] /= data.length;
             }
+        }
+        private void max(GraphData data, ref DataInsole left, ref DataInsole right)
+        {
+            foreach (Sensor sensor in Enum.GetValues(typeof(Sensor)))
+            {
+                left[sensor] = int.MinValue;
+                right[sensor] = int.MinValue;
+            }
+            for (int i = 0; i < data.length; i++)
+            {
+                FrameDataInsoles frameData = (FrameDataInsoles)data[i];
+                foreach (Sensor sensor in Enum.GetValues(typeof(Sensor)))
+                {
+                    if (frameData.left[sensor] > left[sensor])
+                    {
+                        left[sensor] = frameData.left[sensor];
+                    }
+                    if (frameData.right[sensor] > right[sensor])
+                    {
+                        right[sensor] = frameData.right[sensor];
+                    }
+                }
+            }
+        }
+        private void min(GraphData data, ref DataInsole left, ref DataInsole right)
+        {
+            foreach (Sensor sensor in Enum.GetValues(typeof(Sensor)))
+            {
+                left[sensor] = int.MaxValue;
+                right[sensor] = int.MaxValue;
+            }
+            for (int i = 0; i < data.length; i++)
+            {
+                FrameDataInsoles frameData = (FrameDataInsoles)data[i];
+                foreach (Sensor sensor in Enum.GetValues(typeof(Sensor)))
+                {
+                    if (frameData.left[sensor] < left[sensor])
+                    {
+                        left[sensor] = frameData.left[sensor];
+                    }
+                    if (frameData.right[sensor] < right[sensor])
+                    {
+                        right[sensor] = frameData.right[sensor];
+                    }
+                }
+            }
+        }
+        public void changeMetric(object sender, MetricEventArgs e)
+        {
+            metric = e.metric;
         }
     }
 }
