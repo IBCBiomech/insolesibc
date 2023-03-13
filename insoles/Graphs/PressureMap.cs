@@ -124,6 +124,7 @@ namespace insoles.Graphs
             {
                 graph.calculating = true;
                 CalculateAll();
+                graph.DrawData(pressureMaps[metric]);
                 graph.calculating = false;
             }
             else
@@ -132,6 +133,7 @@ namespace insoles.Graphs
                 initialized += (s, e) =>
                 {
                     CalculateAll();
+                    graph.DrawData(pressureMaps[metric]);
                     graph.calculating = false;
                 };
             }
@@ -237,6 +239,10 @@ namespace insoles.Graphs
         public void changeMetric(object sender, MetricEventArgs e)
         {
             metric = e.metric;
+            if (pressureMaps.ContainsKey(metric) && !graph.calculating)
+            {
+                graph.DrawData(pressureMaps[metric]);
+            }
         }
     }
 }

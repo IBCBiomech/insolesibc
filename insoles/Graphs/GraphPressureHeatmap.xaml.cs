@@ -84,6 +84,10 @@ namespace insoles.Graphs
                     calculating_visibility = Visibility.Collapsed;
                 }
             }
+            get
+            {
+                return calculating_visibility == Visibility.Visible;
+            }
         }
         private Visibility calculating_visibility_ = Visibility.Collapsed;
         public Visibility calculating_visibility 
