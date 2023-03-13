@@ -13,6 +13,7 @@ namespace insoles
     {
         public static string[] allowedExtensions = new string[] { ".txt", ".csv", ".c3d", ".avi", ".mov", ".mp4" };
         public const bool showOnlyInitialPath = true;
+        public const int NUMPACKETS = 4;
         public static string INITIAL_PATH
         {
             get
