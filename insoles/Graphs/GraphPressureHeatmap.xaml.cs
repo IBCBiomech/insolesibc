@@ -133,23 +133,26 @@ namespace insoles.Graphs
         private void selectionChanged()
         {
             string selected = metric.SelectedValue.ToString();
-            Binding binding = new Binding();
+            Binding binding;
             switch (selected)
             {
                 case var value when value == (string)FindResource("avgStr"):
-                    binding.Source = avg;
+                    binding = new Binding("avg");
+                    binding.Source = this;
                     binding.Converter = (PreTextConverter)FindResource("avgConverter");
                     metricValue.SetBinding(TextBlock.TextProperty, binding);
                     NotifyPropertyChanged(nameof(avg));
                     break;
                 case var value when value == (string)FindResource("maxStr"):
-                    binding.Source = max;
+                    binding = new Binding("max");
+                    binding.Source = this;
                     binding.Converter = (PreTextConverter)FindResource("maxConverter");
                     metricValue.SetBinding(TextBlock.TextProperty, binding);
                     NotifyPropertyChanged(nameof(max));
                     break;
                 case var value when value == (string)FindResource("minStr"):
-                    binding.Source = min;
+                    binding = new Binding("min");
+                    binding.Source = this;
                     binding.Converter = (PreTextConverter)FindResource("minConverter");
                     metricValue.SetBinding(TextBlock.TextProperty, binding);
                     NotifyPropertyChanged(nameof(min));
@@ -174,7 +177,6 @@ namespace insoles.Graphs
             max = (int)filtered.Maximum();
             min = (int)filtered.Minimum();
             graph_visibility = Visibility.Visible;
-            selectionChanged(); // Si no se llama aqui no se muestra hasta que se cambia
         }
     }
 }
