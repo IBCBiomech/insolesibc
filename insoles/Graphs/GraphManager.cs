@@ -333,11 +333,14 @@ namespace insoles.Graphs
                     dataline = "";
                     for (int j = 0; j < Config.NUMPACKETS; j++)
                     {
-                        
-                        dataline = "1 " + (fakets).ToString("F2") + " " + (frame).ToString() + " " +
-                            soleLeft[j].arch + " " + soleLeft[i].hallux + " " + soleLeft[j].heel_L + " " + soleLeft[j].heel_R + " " + soleLeft[j].met_1 + " " + soleLeft[j].met_3 + " " + soleLeft[j].met_5 + " " + soleLeft[j].toes + " " + 
-                            stringSole(soleRight[j]) + " " +
-                            sum_left.ToString() + " " + sum_right.ToString() + " " +"\n";
+                        string leftSide = $" {4095 - soleLeft[j].arch} {4095 - soleLeft[j].hallux} {4095 - soleLeft[j].heel_L} {4095 - soleLeft[j].heel_R} {4095 - soleLeft[j].met_1} {4095 - soleLeft[j].met_3} {4095 - soleLeft[j].met_5} {4095 - soleLeft[j].toes}";
+                        string rightSide = $" {4095 - soleRight[j].arch} {4095 - soleRight[j].hallux} {4095 - soleRight[j].heel_L} {4095 - soleRight[j].heel_R} {4095 - soleRight[j].met_1} {4095 - soleRight[j].met_3} {4095 - soleRight[j].met_5} {4095 - soleRight[j].toes}";
+
+                        int leftSum = ( 4095 * 8 ) - ( soleLeft[j].arch + soleLeft[j].hallux + soleLeft[j].heel_L + soleLeft[j].heel_R + soleLeft[j].met_1 + soleLeft[j].met_3 + soleLeft[j].met_5 + soleLeft[j].toes);
+                        int rightSum = ( 4095 * 8 ) - ( soleRight[j].arch + soleRight[j].hallux + soleRight[j].heel_L + soleRight[j].heel_R + soleRight[j].met_1 + soleRight[j].met_3 + soleRight[j].met_5 + soleRight[j].toes);
+
+                        dataline = "1 " + (fakets).ToString("F2") + " " + (frame).ToString() + " " + leftSide.ToString() + " " + rightSide.ToString() + " " +
+                           " " + leftSum.ToString() + " " + rightSum.ToString() + " " +"\n";
                         fakets += 0.01f;
                         frame += 1;
                         mainWindow.fileSaver.appendCSVManual(dataline);
