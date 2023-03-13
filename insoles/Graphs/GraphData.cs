@@ -179,7 +179,7 @@ namespace insoles.Graphs
         public DataInsole right { get; set; }
         public FrameDataInsoles(string csvLine)
         {
-            string[] values = csvLine.Split(' ');
+            string[] values = System.Text.RegularExpressions.Regex.Split(csvLine, @"\s+");
             time = getDouble(values, 1);
             frame = getInt(values, 2);
             left = new DataInsole(values, 3);
@@ -220,6 +220,7 @@ namespace insoles.Graphs
             met_5 = int.Parse(values[firstIndex + 6]);
             toes = int.Parse(values[firstIndex + 7]);
             */
+            Trace.WriteLine(values[firstIndex]);
             pressures[Sensor.ARCH] = int.Parse(values[firstIndex]);
             pressures[Sensor.HALLUX] = int.Parse(values[firstIndex + 1]);
             pressures[Sensor.HEEL_L] = int.Parse(values[firstIndex + 2]);
