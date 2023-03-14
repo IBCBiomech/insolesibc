@@ -220,7 +220,6 @@ namespace insoles.Graphs
             met_5 = int.Parse(values[firstIndex + 6]);
             toes = int.Parse(values[firstIndex + 7]);
             */
-            Trace.WriteLine(values[firstIndex]);
             pressures[Sensor.ARCH] = int.Parse(values[firstIndex]);
             pressures[Sensor.HALLUX] = int.Parse(values[firstIndex + 1]);
             pressures[Sensor.HEEL_L] = int.Parse(values[firstIndex + 2]);

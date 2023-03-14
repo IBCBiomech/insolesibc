@@ -132,35 +132,38 @@ namespace insoles.Graphs
         }
         private void selectionChanged()
         {
-            string selected = metric.SelectedValue.ToString();
-            Binding binding = new Binding();
-            switch (selected)
+            Dispatcher.Invoke(() =>
             {
-                case var value when value == (string)FindResource("avgStr"):
-                    binding.Source = avg;
-                    binding.Converter = (PreTextConverter)FindResource("avgConverter");
-                    metricValue.SetBinding(TextBlock.TextProperty, binding);
-                    NotifyPropertyChanged(nameof(avg));
-                    break;
-                case var value when value == (string)FindResource("maxStr"):
-                    binding.Source = max;
-                    binding.Converter = (PreTextConverter)FindResource("maxConverter");
-                    metricValue.SetBinding(TextBlock.TextProperty, binding);
-                    NotifyPropertyChanged(nameof(max));
-                    break;
-                case var value when value == (string)FindResource("minStr"):
-                    binding.Source = min;
-                    binding.Converter = (PreTextConverter)FindResource("minConverter");
-                    metricValue.SetBinding(TextBlock.TextProperty, binding);
-                    NotifyPropertyChanged(nameof(min));
-                    break;
-                default:
-                    Trace.WriteLine(selected);
-                    Trace.WriteLine((string)FindResource("avgStr"));
-                    Trace.WriteLine((string)FindResource("maxStr"));
-                    Trace.WriteLine((string)FindResource("minStr"));
-                    throw new Exception("seleccion max min avg error");
-            }
+                string selected = metric.SelectedValue.ToString();
+                Binding binding = new Binding();
+                switch (selected)
+                {
+                    case var value when value == (string)FindResource("avgStr"):
+                        binding.Source = avg;
+                        binding.Converter = (PreTextConverter)FindResource("avgConverter");
+                        metricValue.SetBinding(TextBlock.TextProperty, binding);
+                        NotifyPropertyChanged(nameof(avg));
+                        break;
+                    case var value when value == (string)FindResource("maxStr"):
+                        binding.Source = max;
+                        binding.Converter = (PreTextConverter)FindResource("maxConverter");
+                        metricValue.SetBinding(TextBlock.TextProperty, binding);
+                        NotifyPropertyChanged(nameof(max));
+                        break;
+                    case var value when value == (string)FindResource("minStr"):
+                        binding.Source = min;
+                        binding.Converter = (PreTextConverter)FindResource("minConverter");
+                        metricValue.SetBinding(TextBlock.TextProperty, binding);
+                        NotifyPropertyChanged(nameof(min));
+                        break;
+                    default:
+                        Trace.WriteLine(selected);
+                        Trace.WriteLine((string)FindResource("avgStr"));
+                        Trace.WriteLine((string)FindResource("maxStr"));
+                        Trace.WriteLine((string)FindResource("minStr"));
+                        throw new Exception("seleccion max min avg error");
+                }
+            });
         }
         public void DrawData(Matrix<float> data)
         {
