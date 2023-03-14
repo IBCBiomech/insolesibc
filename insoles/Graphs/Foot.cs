@@ -1,4 +1,7 @@
-﻿using DirectShowLib;
+﻿//#define LOOP
+#define PLANTILLA //Comentar esto para usar el pie
+
+using DirectShowLib;
 using insoles.Common;
 using MathNet.Numerics.LinearAlgebra;
 using System.Collections.Generic;
@@ -25,13 +28,62 @@ namespace insoles.Graphs
             resolutions[Quality.LOW] = "foot4q_preprocess.png";
             Quality quality = Config.footQuality;
             string file = resolutions[quality];
+#if PLANTILLA
+            file = "plantilla.png";
+#endif
             string path = Helpers.GetFilePath(file);
             Bitmap bmp = new Bitmap(path);
             sensor_map = Helpers.ImageToMatrix(bmp);
             length[0] = sensor_map.RowCount;
             length[1] = sensor_map.ColumnCount;
+#if PLANTILLA
+            codes = new Codes();
+            replaceWithClosestNum();
+#else
             (float, int)[] frequences = Helpers.CountFrequences(sensor_map);
             codes = new Codes(frequences);
+#endif
+        }
+        private void replaceWithClosestNum()
+        {
+#if LOOP
+            for(int i = 0; i < sensor_map.RowCount; i++)
+            {
+                for(int j = 0; j < sensor_map.ColumnCount; j++)
+                {
+                    sensor_map[i, j] = codes.transformValue(sensor_map[i, j]);
+                }
+            }
+#else
+            sensor_map = sensor_map.Map(codes.transformValue);
+#endif
+        }
+        private void replaceWithFoot()
+        {
+#if LOOP
+            for (int i = 0; i < sensor_map.RowCount; i++)
+            {
+                for (int j = 0; j < sensor_map.ColumnCount; j++)
+                {
+                    if (!codes.IsValidCode(sensor_map[i, j]))
+                    {
+                        sensor_map[i, j] = codes.Foot();
+                    }
+                }
+            }
+#else
+            sensor_map = sensor_map.Map((value) =>
+            {
+                if (codes.IsValidCode(value))
+                {
+                    return value;
+                }
+                else
+                {
+                    return codes.Foot();
+                }
+            });
+#endif
         }
         public int[] getImage()
         {

@@ -55,6 +55,21 @@ namespace insoles.Graphs
                 Task.Run(() => CalculateMinDistances());
             }
         }
+        private void drawSensorMap()
+        {
+            Matrix<float> pressureMap = foot.sensor_map.Map((value) =>
+            {
+                if (value < 100)
+                {
+                    return value * 2.5f;
+                }
+                else
+                {
+                    return value;
+                }
+            });
+            graph.DrawData(pressureMap);
+        }
         private void CalculateMinDistances()
         {
             Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_left = foot.CalculateSensorPositionsLeft();

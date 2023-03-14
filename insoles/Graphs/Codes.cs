@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace insoles.Graphs
@@ -33,6 +35,7 @@ namespace insoles.Graphs
             sensor[Sensor.HEEL_L] = frequences[5].Item1;
             sensor[Sensor.HEEL_R] = frequences[7].Item1;
         }
+        // dibujo pie
         public Codes((float, int)[] frequences)
         {
             background = frequences[0].Item1;
@@ -45,6 +48,52 @@ namespace insoles.Graphs
             sensor[Sensor.ARCH] = frequences[4].Item1;
             sensor[Sensor.HEEL_L] = frequences[5].Item1;
             sensor[Sensor.HEEL_R] = frequences[7].Item1;
+        }
+        // Dibujo plantilla
+        public Codes()
+        {
+            background = 255;
+            foot = 0;
+            sensor[Sensor.HALLUX] = 10;
+            sensor[Sensor.TOES] = 20;
+            sensor[Sensor.MET1] = 30;
+            sensor[Sensor.MET3] = 40;
+            sensor[Sensor.MET5] = 50;
+            sensor[Sensor.ARCH] = 60;
+            sensor[Sensor.HEEL_L] = 70;
+            sensor[Sensor.HEEL_R] = 80;
+        }
+        public float transformValue(float value)
+        {
+            float diff = float.MaxValue;
+            float result = value;
+            float currentDiff;
+
+            currentDiff = Math.Abs(value - background);
+            if (currentDiff < diff)
+            {
+                result = background;
+                diff = currentDiff;
+            }
+
+            foreach (float code in sensor.Values)
+            {
+                currentDiff = Math.Abs(value - code);
+                if(currentDiff < diff)
+                {
+                    result = value;
+                    diff = currentDiff;
+                }
+            }
+
+            currentDiff = Math.Abs(value - foot);
+            if (currentDiff < diff)
+            {
+                result = foot;
+                diff = currentDiff;
+            }
+
+            return result;
         }
         public float GetCode(Sensor s)
         {
@@ -61,6 +110,10 @@ namespace insoles.Graphs
         public bool IsSensor(float code)
         {
             return sensor.ContainsValue(code);
+        }
+        public bool IsValidCode(float code)
+        {
+            return code == background || code == foot || sensor.ContainsValue(code);
         }
         public Sensor GetSensor(float code)
         {
