@@ -179,7 +179,7 @@ namespace insoles.Graphs
         public DataInsole right { get; set; }
         public FrameDataInsoles(string csvLine)
         {
-            string[] values = csvLine.Split(' ');
+            string[] values = System.Text.RegularExpressions.Regex.Split(csvLine, @"\s+");
             time = getDouble(values, 1);
             frame = getInt(values, 2);
             left = new DataInsole(values, 3);
