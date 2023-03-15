@@ -29,7 +29,7 @@ namespace insoles.Graphs
             Quality quality = Config.footQuality;
             string file = resolutions[quality];
 #if PLANTILLA
-            file = "plantilla.png";
+            file = "bitmap_heatmap.png";
 #endif
             string path = Helpers.GetFilePath(file);
             Bitmap bmp = new Bitmap(path);
@@ -38,7 +38,8 @@ namespace insoles.Graphs
             length[1] = sensor_map.ColumnCount;
 #if PLANTILLA
             codes = new Codes();
-            replaceWithClosestNum();
+            //replaceWithClosestNum();
+            //sensor_map = codes.removeOutliers(sensor_map);
 #else
             (float, int)[] frequences = Helpers.CountFrequences(sensor_map);
             codes = new Codes(frequences);

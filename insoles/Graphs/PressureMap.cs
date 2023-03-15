@@ -59,6 +59,10 @@ namespace insoles.Graphs
         {
             Matrix<float> pressureMap = foot.sensor_map.Map((value) =>
             {
+                if(value == 10 || value == 30 || value == 70)
+                {
+                    return 1000;
+                }
                 if (value < 100)
                 {
                     return value * 2.5f;
@@ -118,6 +122,8 @@ namespace insoles.Graphs
         }
         public void Calculate(GraphData graphData)
         {
+            //drawSensorMap();
+            //return;
             void CalculateAll()
             {
                 DataInsole leftAvg = new DataInsole();
