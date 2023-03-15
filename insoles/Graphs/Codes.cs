@@ -276,7 +276,7 @@ namespace insoles.Graphs
                 currentDiff = Math.Abs(value - code);
                 if(currentDiff < diff)
                 {
-                    result = value;
+                    result = code;
                     diff = currentDiff;
                 }
             }

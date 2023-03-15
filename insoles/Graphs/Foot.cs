@@ -1,5 +1,6 @@
 ﻿//#define LOOP
 #define PLANTILLA //Comentar esto para usar el pie
+//#define CSV //Comentar para usar bitmap en vez del modelo csv
 
 using DirectShowLib;
 using insoles.Common;
@@ -9,6 +10,8 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Numerics;
+using MathNet.Numerics.Data.Text;
+using static insoles.Graphs.Foot;
 
 namespace insoles.Graphs
 {
@@ -23,24 +26,33 @@ namespace insoles.Graphs
         private Dictionary<Quality, string> resolutions = new Dictionary<Quality, string>();
         public Foot()
         {
+#if PLANTILLA
+#if CSV
+            //opcion 1 usar csv
+            string file = "model_heatmap.csv";
+            string path = Helpers.GetFilePath(file);
+            sensor_map = DelimitedReader.Read<float>(path, false, ",", false);
+#else
+            //opcion 2 usar bitmap
+            string file = "bitmap_heatmap.png";
+            string path = Helpers.GetFilePath(file);
+            Bitmap bmp = new Bitmap(path);
+            sensor_map = Helpers.ImageToMatrix(bmp);
+#endif
+            codes = new Codes();
+            length[0] = sensor_map.RowCount;
+            length[1] = sensor_map.ColumnCount;
+#else
             resolutions[Quality.HIGH] = "foot_preprocess.png";
             resolutions[Quality.MID] = "foot2q_preprocess.png";
             resolutions[Quality.LOW] = "foot4q_preprocess.png";
             Quality quality = Config.footQuality;
             string file = resolutions[quality];
-#if PLANTILLA
-            file = "bitmap_heatmap.png";
-#endif
             string path = Helpers.GetFilePath(file);
             Bitmap bmp = new Bitmap(path);
             sensor_map = Helpers.ImageToMatrix(bmp);
             length[0] = sensor_map.RowCount;
             length[1] = sensor_map.ColumnCount;
-#if PLANTILLA
-            codes = new Codes();
-            //replaceWithClosestNum();
-            //sensor_map = codes.removeOutliers(sensor_map);
-#else
             (float, int)[] frequences = Helpers.CountFrequences(sensor_map);
             codes = new Codes(frequences);
 #endif

@@ -61,7 +61,7 @@ namespace insoles.Graphs
             {
                 if(value == 10 || value == 30 || value == 70)
                 {
-                    return 1000;
+                    
                 }
                 if (value < 100)
                 {
@@ -189,7 +189,6 @@ namespace insoles.Graphs
                     else
                         return right[sensor];
                 }
-
             });
 
             return pressure_map;

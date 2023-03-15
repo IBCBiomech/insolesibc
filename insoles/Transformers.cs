@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using ScottPlot.Drawing;
 using insoles.Common;
 using System.Diagnostics;
+using MathNet.Numerics.Data.Text;
 
 namespace insoles
 {
@@ -33,8 +34,28 @@ namespace insoles
             */
             Codes codes = new Codes();
             sensor_map = replaceWithClosestNum(sensor_map, codes);
+            checkAllValuesValid(sensor_map, codes);
             sensor_map = removeOutliers(sensor_map, codes);
+            DelimitedWriter.Write(Config.INITIAL_PATH + "\\model_heatmap.csv", sensor_map, ",");
             saveBitmap(sensor_map);
+        }
+        private static void checkAllValuesValid(Matrix<float> matrix, Codes codes)
+        {
+            int count = 0;
+            for(int i = 0; i < matrix.RowCount; i++)
+            {
+                for(int j = 0; j < matrix.ColumnCount; j++)
+                {
+                    if(!codes.IsValidCode(matrix[i, j]))
+                    {
+                        count++;
+                    }
+                }
+            }
+            if(count > 0)
+            {
+                throw new Exception(count + " Invalid values");
+            }
         }
         private static void printCode(Matrix<float> matrix, float code)
         {

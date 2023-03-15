@@ -49,6 +49,7 @@ namespace insoles
         }
         public MainWindow()
         {
+            //Transformers.transformImage();
             InitializeComponent();
             virtualToolBar = new VirtualToolBar();
             fileSaver = new FileSaver.FileSaver();
