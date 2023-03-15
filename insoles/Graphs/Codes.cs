@@ -22,6 +22,7 @@ namespace insoles.Graphs
     {
         private float background;
         private float foot;
+        public const int FOOT_BUTERFLY = 128;
         public Dictionary<Sensor, float> sensor { get; private set; } = new Dictionary<Sensor, float>();
         private Dictionary<Sensor, string> sensorNames = new Dictionary<Sensor, string>();
         private Dictionary<Sensor, (float, float)> centers = new Dictionary<Sensor, (float, float)>();
@@ -285,6 +286,38 @@ namespace insoles.Graphs
             if (currentDiff < diff)
             {
                 result = foot;
+                diff = currentDiff;
+            }
+
+            return result;
+        }
+        public float transformToBackgroundOrFoot(float value)
+        {
+            float diff = float.MaxValue;
+            float result = value;
+            float currentDiff;
+
+            currentDiff = Math.Abs(value - background);
+            if (currentDiff < diff)
+            {
+                result = background;
+                diff = currentDiff;
+            }
+
+            foreach (float code in sensor.Values)
+            {
+                currentDiff = Math.Abs(value - code);
+                if (currentDiff < diff)
+                {
+                    result = FOOT_BUTERFLY;
+                    diff = currentDiff;
+                }
+            }
+
+            currentDiff = Math.Abs(value - foot);
+            if (currentDiff < diff)
+            {
+                result = FOOT_BUTERFLY;
                 diff = currentDiff;
             }
 

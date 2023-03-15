@@ -49,7 +49,8 @@ namespace insoles
         }
         public MainWindow()
         {
-            //Transformers.transformImage();
+            //Transformers.transformImageHeatmap();
+            //Transformers.transformImageButterfly();
             InitializeComponent();
             virtualToolBar = new VirtualToolBar();
             fileSaver = new FileSaver.FileSaver();

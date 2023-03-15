@@ -11,12 +11,15 @@ using ScottPlot.Drawing;
 using insoles.Common;
 using System.Diagnostics;
 using MathNet.Numerics.Data.Text;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
+using System.IO;
 
 namespace insoles
 {
     public class Transformers
     {
-        public static void transformImage()
+        #region HEATMAP
+        public static void transformImageHeatmap()
         {
             string file = "plantilla.png";
             string path = Helpers.GetFilePath(file);
@@ -37,7 +40,7 @@ namespace insoles
             checkAllValuesValid(sensor_map, codes);
             sensor_map = removeOutliers(sensor_map, codes);
             DelimitedWriter.Write(Config.INITIAL_PATH + "\\model_heatmap.csv", sensor_map, ",");
-            saveBitmap(sensor_map);
+            saveBitmap(sensor_map, "bitmap_heatmap.png");
         }
         private static void checkAllValuesValid(Matrix<float> matrix, Codes codes)
         {
@@ -75,7 +78,7 @@ namespace insoles
                 Trace.WriteLine(point + " " + side);
             }
         }
-        public static void saveBitmap(Matrix<float> matrix)
+        public static void saveBitmap(Matrix<float> matrix, string filename)
         {
             int height = matrix.RowCount;
             int width = matrix.ColumnCount;
@@ -88,7 +91,7 @@ namespace insoles
                     bitmap.SetPixel(i, j, Color.FromArgb(255, value, value, value));
                 }
             }
-            bitmap.Save(Config.INITIAL_PATH + "\\bitmap_heatmap.png", ImageFormat.Png);
+            bitmap.Save(Config.INITIAL_PATH + "\\" + filename, ImageFormat.Png);
         }
         public static Matrix<float> removeOutliers(Matrix<float> map, Codes codes)
         {
@@ -188,5 +191,57 @@ namespace insoles
         {
             return map.Map(codes.transformValue);
         }
+        #endregion HEATMAP
+        #region BUTTERFLY
+        public static void transformImageButterfly()
+        {
+            string file = "plantilla.png";
+            string path = Helpers.GetFilePath(file);
+            Bitmap bmp = new Bitmap(path);
+            Matrix<float> sensor_map = Helpers.ImageToMatrix(bmp);
+            /*
+            sensor_map = Matrix<float>.Build.DenseOfArray(
+                new float[,] { 
+                    { 10, 10, 0, 0, 10, 10 },
+                    { 20, 10, 0, 0 , 10, 20 },
+                    {0, 0, 0, 0, 0, 0 },
+                    {20, 20, 0, 0, 20, 20 }
+                }
+                );
+            */
+            Codes codes = new Codes();
+            sensor_map = replaceWithClosestNum(sensor_map, codes);
+            checkAllValuesValid(sensor_map, codes);
+            sensor_map = replaceWithBackgroundOrFoot(sensor_map, codes);
+            DelimitedWriter.Write(Config.INITIAL_PATH + "\\model_butterfly.csv", sensor_map, ",");
+            saveBitmapTransparent(sensor_map, "bitmap_butterfly.png", (int)codes.Background());
+        }
+        private static Matrix<float> replaceWithBackgroundOrFoot(Matrix<float> map, Codes codes)
+        {
+            return map.Map(codes.transformToBackgroundOrFoot);
+        }
+        public static void saveBitmapTransparent(Matrix<float> matrix, string filename, int transparentValue = 255)
+        {
+            int height = matrix.RowCount;
+            int width = matrix.ColumnCount;
+            Bitmap bitmap = new Bitmap(height, width, PixelFormat.Format32bppArgb);
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    int value = (int)matrix[i, j];
+                    if (value == transparentValue)
+                    {
+                        bitmap.SetPixel(i, j, Color.FromArgb(0, value, value, value));
+                    }
+                    else
+                    {
+                        bitmap.SetPixel(i, j, Color.FromArgb(255, value, value, value));
+                    }
+                }
+            }
+            bitmap.Save(Config.INITIAL_PATH + "\\" + filename, ImageFormat.Png);
+        }
+        #endregion BUTTERFLY
     }
 }
