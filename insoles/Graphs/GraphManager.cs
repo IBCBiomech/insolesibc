@@ -5,6 +5,7 @@ using insoles.ToolBar.Enums;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using WisewalkSDK;
+
 
 namespace insoles.Graphs
 {
@@ -248,65 +250,57 @@ namespace insoles.Graphs
 
         public void onInitRecord(object sender, EventArgs args)
         {
-            fakets = 0;
+            fakets = 0.00f;
             frame = 0;
         }
 
-        private void Fake_dataReceived()
-        {
-            int n = 4;
-            Random random = new Random();
-            float[] sum_left = new float[n];
-            for (int i = 0; i < n; i++)
-            {
-                sum_left[i] = random.Next(10000);
-            }
-            float[] sum_right = new float[n];
-            for (int i = 0; i < n; i++)
-            {
-                sum_right[i] = random.Next(10000);
-            }
-            graph.drawData(sum_left, sum_right);
-        }
+        //private void Fake_dataReceived()
+        //{
+        //    int n = 4;
+        //    Random random = new Random();
+        //    float[] sum_left = new float[n];
+        //    for (int i = 0; i < n; i++)
+        //    {
+        //        sum_left[i] = random.Next(10000);
+        //    }
+        //    float[] sum_right = new float[n];
+        //    for (int i = 0; i < n; i++)
+        //    {
+        //        sum_right[i] = random.Next(10000);
+        //    }
+        //    graph.drawData(sum_left, sum_right);
+        //}
 
         //Begin Wise
         //Callback para recoger datas del IMU
+
+        //Método para transformar la presión a valor adecuado
+        public int transform(int value)
+        {
+            return (4095 - value);
+        }
+
+        //function that sums all sensor pressures
+        public float sumSole(WisewalkSDK.SoleSensor sole)
+        {
+            return transform(sole.arch) + transform(sole.hallux) + transform(sole.heel_R) +
+                    transform(sole.heel_L) + transform(sole.met_1) + transform(sole.met_3) +
+                    transform(sole.met_5) + transform(sole.toes);
+        }
+        //function that concatenates all sensor pressure in a single line
+        public string stringSole(WisewalkSDK.SoleSensor sole)
+        {
+            return transform(sole.arch).ToString() + " " + transform(sole.hallux).ToString() + " " +
+                transform(sole.heel_R).ToString() + " " + transform(sole.heel_L).ToString() + " " +
+                transform(sole.met_1).ToString() + " " + transform(sole.met_3).ToString() + " " +
+                transform(sole.met_5).ToString() + " " + transform(sole.toes).ToString();
+        }
+
+       
         public void Api_dataReceived(byte deviceHandler, WisewalkSDK.WisewalkData data)
         {
-            int transform(int value)
-            {
-                return 4095 - value;
-            }
-            // No usar esto
-            /*
-            void transformPressures(ref List<SoleSensor> data)
-            {
-                for(int i = 0; i < data.Count; i++)
-                {
-                    data[i].arch = transform(data[i].arch);
-                    data[i].hallux = transform(data[i].hallux);
-                    data[i].heel_L = transform(data[i].heel_L);
-                    data[i].heel_R = transform(data[i].heel_R);
-                    data[i].met_1 = transform(data[i].met_1);
-                    data[i].met_3 = transform(data[i].met_3);
-                    data[i].met_5 = transform(data[i].met_5);
-                    data[i].toes = transform(data[i].toes);
-                }
-            }
-            */
-            float sumSole(WisewalkSDK.SoleSensor sole)
-            {
-                return transform(sole.arch) + transform(sole.hallux) + transform(sole.heel_R) +
-                        transform(sole.heel_L) + transform(sole.met_1) + transform(sole.met_3) +
-                        transform(sole.met_5) + transform(sole.toes);
-            }
-            string stringSole(WisewalkSDK.SoleSensor sole)
-            {
-                return transform(sole.arch).ToString() + " " + transform(sole.hallux).ToString() + " " +
-                    transform(sole.heel_R).ToString() + " " + transform(sole.heel_L).ToString() + " " +
-                    transform(sole.met_1).ToString() + " " + transform(sole.met_3).ToString() + " " +
-                    transform(sole.met_5).ToString() + " " + transform(sole.toes).ToString();
-            }
+           
+                      
             if (deviceList.Side(deviceHandler) == Side.Left)
             {
                 soleLeft = data.Sole;
@@ -321,31 +315,33 @@ namespace insoles.Graphs
             {
                 //transformPressures(ref soleLeft);
                 float[] sum_left = new float[soleLeft.Count];
-                for (int i = 0; i < soleLeft.Count; i++)
+                float[] sum_right = new float[soleRight.Count];
+
+                for (int i = 0; i < Config.NUMPACKETS; i++)
                 {
                     sum_left[i] = sumSole(soleLeft[i]);
-                }
-                //transformPressures(ref soleRight);
-                float[] sum_right = new float[soleRight.Count];
-                for (int i = 0; i < soleRight.Count; i++)
-                {
                     sum_right[i] = sumSole(soleRight[i]);
                 }
 
+
                 //GraphSumPressures graph = new GraphSumPressures(); // Cambiar esto. Iván: esta línea la tengo que quitar para que funcione el gráfico
                 graph.drawData(sum_left, sum_right);
+
                 if (virtualToolBar.recordState == RecordState.Recording)
                 {
+
                     dataline = "";
-                    for (int i = 0; i < soleLeft.Count; i++)
+                    for (int j = 0; j < Config.NUMPACKETS; j++)
                     {
-                        dataline += "1 " + (fakets + i * 0.01f).ToString("F2") + " " +
-                            (frame + i).ToString() + " " + stringSole(soleLeft[i]) + " " +
-                            stringSole(soleRight[i]) + "\n";
+                        
+                        dataline = "1 " + (fakets).ToString("F2") + " " + (frame).ToString() + " " + stringSole(soleLeft[j]) + " " + stringSole(soleRight[j]) + " " +
+                            sum_left.ToString() + " " + sum_right.ToString() + " " +"\n";
+                        fakets += 0.01f;
+                        frame += 1;
+                        mainWindow.fileSaver.appendCSVManual(dataline);
+                        
                     }
-                    mainWindow.fileSaver.appendCSVManual(dataline);
-                    fakets += soleLeft.Count * 0.01f;
-                    frame += soleLeft.Count;
+              
                 }
             }
         }
