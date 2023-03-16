@@ -29,7 +29,7 @@ namespace insoles.Graphs
         private const double WIDTH = 474;
         private double scale = 1;
 #if PLANTILLA
-        string file = "bitmap_butterfly.png";
+        string file = "Assets/bitmap_butterfly.png";
 #else
         string file = "bitmap.png";
 #endif
