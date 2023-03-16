@@ -18,6 +18,7 @@ namespace insoles
 {
     public class Transformers
     {
+        private const float FACTOR = 1.15f;
         #region HEATMAP
         public static void transformImageHeatmap()
         {
@@ -38,9 +39,9 @@ namespace insoles
             Codes codes = new Codes();
             sensor_map = replaceWithClosestNum(sensor_map, codes);
             checkAllValuesValid(sensor_map, codes);
-            sensor_map = removeOutliers(sensor_map, codes);
-            DelimitedWriter.Write(Config.INITIAL_PATH + "\\model_heatmap.csv", sensor_map, ",");
-            saveBitmap(sensor_map, "bitmap_heatmap.png");
+            sensor_map = removeOutliers(sensor_map, codes, 30);
+            DelimitedWriter.Write(Config.INITIAL_PATH + "\\model_heatmap_30_closest.csv", sensor_map, ",");
+            saveBitmap(sensor_map, "bitmap_heatmap_30_closest.png");
         }
         private static void checkAllValuesValid(Matrix<float> matrix, Codes codes)
         {
@@ -145,6 +146,77 @@ namespace insoles
                             if (otherCount > 0)
                             {
                                 float avgDistOtherSensor = sumDistOtherSensor / otherCount;
+                                if (avgDistOtherSensor < minDistances[point].Item2)
+                                {
+                                    minDistances[point] = (minDistances[point].Item1, avgDistOtherSensor, otherSensor);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            foreach (KeyValuePair<(int, int, float), (float, float, Sensor)> minDistance in minDistances)
+            {
+                if (minDistance.Value.Item2 * FACTOR < minDistance.Value.Item1)
+                {
+                    map[minDistance.Key.Item1, minDistance.Key.Item2] = foot;
+                }
+            }
+            return map;
+        }
+        // usar solo los 'numPoints' puntos mas proximos
+        public static Matrix<float> removeOutliers(Matrix<float> map, Codes codes, int numPoints)
+        {
+            Dictionary<Sensor, float> sensor = codes.sensor;
+            float foot = codes.Foot();
+            Dictionary<Sensor, List<(int, int, float)>> sensorPoints = new Dictionary<Sensor, List<(int, int, float)>>();
+            foreach (KeyValuePair<Sensor, float> code in sensor)
+            {
+                sensorPoints[code.Key] = FindAll(map, (value) => value == code.Value);
+            }
+            Dictionary<(int, int, float), (float, float, Sensor)> minDistances = new Dictionary<(int, int, float), (float, float, Sensor)>();
+            foreach (Sensor s in sensor.Keys)
+            {
+                List<(int, int, float)> points = sensorPoints[s];
+                foreach ((int, int, float) point in points)
+                {
+                    List<float> dists = new List<float>();
+                    foreach ((int, int, float) otherPoint in points)
+                    {
+                        if (sameFoot(point, otherPoint, map.RowCount))
+                        {
+                            dists.Add(distance(point, otherPoint));
+                        }
+                    }
+                    dists.Sort((a, b) => a.CompareTo(b));
+                    float sumDist = 0;
+                    for(int i = 0; i < Math.Min(numPoints, dists.Count); i++)
+                    {
+                        sumDist += dists[i];
+                    }
+                    minDistances[point] = (sumDist / Math.Min(numPoints, dists.Count), float.MaxValue, s);
+                    foreach (Sensor otherSensor in sensor.Keys)
+                    {
+                        if (otherSensor != s)
+                        {
+                            List<(int, int, float)> otherSensorPoints = sensorPoints[otherSensor];
+                            List<float> distsOtherSensor = new List<float>();
+                            foreach ((int, int, float) otherSensorPoint in otherSensorPoints)
+                            {
+                                if (sameFoot(point, otherSensorPoint, map.RowCount))
+                                {
+                                    distsOtherSensor.Add(distance(point, otherSensorPoint));
+                                }
+                            }
+                            distsOtherSensor.Sort((a, b) => a.CompareTo(b));
+                            float sumDistOtherSensor = 0;
+                            for (int i = 0; i < Math.Min(numPoints, distsOtherSensor.Count); i++)
+                            {
+                                sumDistOtherSensor += distsOtherSensor[i];
+                            }
+                            if (distsOtherSensor.Count > 0)
+                            {
+                                float avgDistOtherSensor = sumDistOtherSensor / Math.Min(numPoints, distsOtherSensor.Count);
                                 if (avgDistOtherSensor < minDistances[point].Item2)
                                 {
                                     minDistances[point] = (minDistances[point].Item1, avgDistOtherSensor, otherSensor);

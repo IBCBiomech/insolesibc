@@ -29,12 +29,12 @@ namespace insoles.Graphs
 #if PLANTILLA
 #if CSV
             //opcion 1 usar csv
-            string file = "model_heatmap.csv";
+            string file = "model_heatmap_30_closest.csv";
             string path = Helpers.GetFilePath(file);
             sensor_map = DelimitedReader.Read<float>(path, false, ",", false);
 #else
             //opcion 2 usar bitmap
-            string file = "bitmap_heatmap.png";
+            string file = "bitmap_heatmap_30_closest.png";
             string path = Helpers.GetFilePath(file);
             Bitmap bmp = new Bitmap(path);
             sensor_map = Helpers.ImageToMatrix(bmp);

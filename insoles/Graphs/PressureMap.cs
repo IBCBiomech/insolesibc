@@ -59,9 +59,13 @@ namespace insoles.Graphs
         {
             Matrix<float> pressureMap = foot.sensor_map.Map((value) =>
             {
-                if(value == 10 || value == 30 || value == 70)
+                if(value == 10 || value == 30 || value == 50 || value == 70)
                 {
-                    
+                    return 1000;
+                }
+                if(value == 20 || value == 40 || value == 80)
+                {
+                    //return 1000;
                 }
                 if (value < 100)
                 {
