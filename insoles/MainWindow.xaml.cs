@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Navigation;
 using System.Xml.Linq;
 using WisewalkSDK;
+using static WisewalkSDK.Wisewalk;
 
 namespace insoles
 {
@@ -196,6 +198,10 @@ namespace insoles
             deviceListLoadedCheck(onScanFunction);
             virtualToolBar.onScanClick();
         }
+        private Dev findInsole(InsolesInfo insoleInfo)
+        {
+            return scanDevices.FirstOrDefault(de => GetMacAddress(de) == insoleInfo.address);
+        }
         // Conecta el boton connect
         private void onConnect(object sender, EventArgs e)
         {
@@ -226,7 +232,12 @@ namespace insoles
                         }
                     }
                 }
-                if (!api.Connect(scanDevices, out error))
+                List<Dev> conn_list_dev = new List<Dev>();
+                foreach (InsolesInfo insole in connectedInsoles)
+                {
+                    conn_list_dev.Add(findInsole(insole));
+                }
+                if (!api.Connect(conn_list_dev, out error))
                 {
                     Trace.WriteLine("Connect error " + error);
                 }
@@ -385,6 +396,15 @@ namespace insoles
 
             mac = devices[idx].mac[5].ToString("X2") + ":" + devices[idx].mac[4].ToString("X2") + ":" + devices[idx].mac[3].ToString("X2") + ":" +
                                     devices[idx].mac[2].ToString("X2") + ":" + devices[idx].mac[1].ToString("X2") + ":" + devices[idx].mac[0].ToString("X2");
+
+            return mac;
+        }
+        private string GetMacAddress(Wisewalk.Dev device)
+        {
+            string mac = "";
+
+            mac = device.mac[5].ToString("X2") + ":" + device.mac[4].ToString("X2") + ":" + device.mac[3].ToString("X2") + ":" +
+                                    device.mac[2].ToString("X2") + ":" + device.mac[1].ToString("X2") + ":" + device.mac[0].ToString("X2");
 
             return mac;
         }
