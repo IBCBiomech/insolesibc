@@ -54,6 +54,7 @@ namespace insoles
             //Transformers.transformImageHeatmap();
             //Transformers.transformImageButterfly();
             InitializeComponent();
+            Application.Current.MainWindow = this;
             virtualToolBar = new VirtualToolBar();
             fileSaver = new FileSaver.FileSaver();
             graphManager = new GraphManager();

@@ -28,6 +28,7 @@
     <None Remove="ToolBar\Icons\capturedFiles-blue-icon.png" />
     <None Remove="ToolBar\Icons\connect-blue-icon.png" />
     <None Remove="ToolBar\Icons\disconnect-blue-icon.png" />
+    <None Remove="ToolBar\Icons\ibc-logo.png" />
     <None Remove="ToolBar\Icons\openCamera-blue-icon.png" />
     <None Remove="ToolBar\Icons\pause-blue-icon.png" />
     <None Remove="ToolBar\Icons\pause-icon.png" />
@@ -43,6 +44,7 @@
     <PackageReference Include="DirectShowLib" Version="1.0.0" />
     <PackageReference Include="DirectShowLib.Standard" Version="2.1.0" />
     <PackageReference Include="Dirkster.AvalonDock" Version="4.71.1" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.8.0" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="MathNet.Numerics.Data.Text" Version="5.0.0" />
     <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
@@ -114,6 +116,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="ToolBar\Icons\disconnect-blue-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="ToolBar\Icons\ibc-logo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="ToolBar\Icons\openCamera-blue-icon.png">
