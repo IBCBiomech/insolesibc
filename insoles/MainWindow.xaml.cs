@@ -198,6 +198,11 @@ namespace insoles
             deviceListLoadedCheck(onScanFunction);
             virtualToolBar.onScanClick();
         }
+        private byte handler(InsolesInfo insole)
+        {
+            string handler = devices_list.Where(d => d.Value.Id == insole.address).FirstOrDefault().Key;
+            return byte.Parse(handler);
+        }
         private Dev findInsole(InsolesInfo insoleInfo)
         {
             return scanDevices.FirstOrDefault(de => GetMacAddress(de) == insoleInfo.address);
@@ -252,7 +257,7 @@ namespace insoles
             {
                 DeviceList.DeviceList deviceListClass = deviceList.Content as DeviceList.DeviceList;
                 IList<object> selectedItems = (IList<object>)deviceListClass.treeView.SelectedItems;
-                List<string> InsolesToDisconnect = new List<string>();
+                List<InsolesInfo> insolesToDisconnect = new List<InsolesInfo>();
                 List<int> devHandlers = new List<int>();
                 Trace.WriteLine("before disconnect");
                 foreach (object selected in selectedItems)
@@ -264,8 +269,17 @@ namespace insoles
                         InsolesInfo insoleInfo = treeViewItem.DataContext as InsolesInfo;
 
                         //devHandlers.Add(insoleInfo.handler);
+                        insolesToDisconnect.Add(insoleInfo);
+                        devHandlers.Add(handler(insoleInfo));
                     }
                 }
+
+                if (!api.Disconnect(devHandlers, out error))
+                {
+                    Trace.WriteLine("Disconnect error " + error);
+                }
+                await Task.Delay(4000);
+                deviceListClass.disconnectInsoles(insolesToDisconnect);
             }
             deviceListLoadedCheck(onDisconnectFunction);
         }
