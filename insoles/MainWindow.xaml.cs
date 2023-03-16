@@ -172,7 +172,7 @@ namespace insoles
                     }
                     deviceListClass.setCameras(cameras);
 
-                    //await Task.Delay(4000);
+                    await Task.Delay(4000);
 
                     List<InsolesInfo> insoles = new List<InsolesInfo>();
                     for (int i = 0; i < scanDevices.Count; i++)
