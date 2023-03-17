@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using DirectShowLib;
 using System.Diagnostics;
 using System.Linq;
+using MathNet.Numerics.Data.Text;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace insoles.Graphs
 {
@@ -71,7 +73,16 @@ namespace insoles.Graphs
                 inverse_distances = CalculateMinDistances(centersLeft, centersRight);
 #endif
 #if BAKGROUND_DISTANCES
-                inverse_distances_background = CalculateMinDistancesBackground();
+                try
+                {
+                    string file = "Assets/inverse_distances_background.mtx";
+                    inverse_distances_background = MatrixMarketReader.ReadMatrix<float>(Helpers.GetFilePath(file));
+                }
+                catch (System.IO.FileNotFoundException)
+                {
+                    MessageBox.Show("No se ha encontrado el fichero de la matrix\nSe va a proceder a recalcularla", "inverse_distances_background.mtx not found", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.Yes);
+                    inverse_distances_background = CalculateMinDistancesBackground();
+                }
 #endif
                 isInitialized = true;
                 initialized?.Invoke(this, EventArgs.Empty);
@@ -240,6 +251,7 @@ namespace insoles.Graphs
                     return 1.0f / min_distance;
                 }
             });
+            MatrixMarketWriter.WriteMatrix(Config.INITIAL_PATH + "\\inverse_distances_background.mtx", inverse_distances);
             return inverse_distances;
         }
         private void CalculateMinDistances()
