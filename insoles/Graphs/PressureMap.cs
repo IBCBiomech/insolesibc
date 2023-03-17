@@ -1,4 +1,5 @@
 ﻿#define REDUCE_SENSORS //Comentar esto para que no haga la media de MET y HEEL
+#define BAKGROUND_DISTANCES //Comentar esto para no usar las distancias al borde
 
 using System;
 using System.Drawing;
@@ -68,6 +69,9 @@ namespace insoles.Graphs
                 inverse_reduced_distances = CalculateMinDistances(centersLeftReduced, centersRightReduced);
 #else
                 inverse_distances = CalculateMinDistances(centersLeft, centersRight);
+#endif
+#if BAKGROUND_DISTANCES
+                inverse_distances_background = CalculateMinDistancesBackground();
 #endif
                 isInitialized = true;
                 initialized?.Invoke(this, EventArgs.Empty);
@@ -204,8 +208,39 @@ namespace insoles.Graphs
         }
         private Matrix<float> CalculateMinDistancesBackground()
         {
-            Helpers.FindAll(foot.sensor_map, (value) => value == foot.codes.Background());
-            return foot.sensor_map;
+            List<(int, int, float)> backgroundPoints = Helpers.FindAll(foot.sensor_map, (value) => value == foot.codes.Background());
+            // Añadir los bordes de la imagen
+            for(int i = 0; i < foot.sensor_map.RowCount; i++)
+            {
+                backgroundPoints.Add((i, -1, foot.codes.Background()));
+                backgroundPoints.Add((i, foot.sensor_map.ColumnCount, foot.codes.Background()));
+            }
+            for (int i = 0; i < foot.sensor_map.ColumnCount; i++)
+            {
+                backgroundPoints.Add((-1, i, foot.codes.Background()));
+                backgroundPoints.Add((foot.sensor_map.RowCount, i, foot.codes.Background()));
+            }
+            Matrix<float> inverse_distances = foot.sensor_map.MapIndexed((row, col, code) =>
+            {
+                if (code == foot.codes.Background())
+                {
+                    return 0f;
+                }
+                else
+                {
+                    int min_distance = int.MaxValue;
+                    foreach((int, int, float) point in backgroundPoints)
+                    {
+                        int distance = Helpers.SquareDistance(row, col, point.Item1, point.Item2);
+                        if (distance < min_distance)
+                        {
+                            min_distance = distance;
+                        }
+                    }
+                    return 1.0f / min_distance;
+                }
+            });
+            return inverse_distances;
         }
         private void CalculateMinDistances()
         {
@@ -319,6 +354,9 @@ namespace insoles.Graphs
                             numerator += right[sensor] * inverse_distance;
                         denominator += inverse_distance;
                     }
+#if BAKGROUND_DISTANCES
+                    denominator += inverse_distances_background[row, col];
+#endif
                     return numerator / denominator;
                 }
             });
