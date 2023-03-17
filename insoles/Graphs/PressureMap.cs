@@ -204,6 +204,7 @@ namespace insoles.Graphs
         }
         private Matrix<float> CalculateMinDistancesBackground()
         {
+            Helpers.FindAll(foot.sensor_map, (value) => value == foot.codes.Background());
             return foot.sensor_map;
         }
         private void CalculateMinDistances()

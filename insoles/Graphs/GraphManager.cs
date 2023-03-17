@@ -317,19 +317,33 @@ namespace insoles.Graphs
             }
             if (numSoles % 2 == 0)
             {
-                //transformPressures(ref soleLeft);
-                float[] avg_left = new float[soleLeft.Count];
-                float[] avg_right = new float[soleRight.Count];
 
-                for (int i = 0; i < Config.NUMPACKETS; i++)
+                //transformPressures(ref soleLeft);
+                float[] metric_left = new float[soleLeft.Count];
+                float[] metric_right = new float[soleRight.Count];
+
+                GraphSumPressures.Metric metric = graph.metricSelected;
+
+                if (metric == GraphSumPressures.Metric.Avg)
                 {
-                    avg_left[i] = avgSole(soleLeft[i]);
-                    avg_right[i] = avgSole(soleRight[i]);
+                    for (int i = 0; i < Config.NUMPACKETS; i++)
+                    {
+                        metric_left[i] = avgSole(soleLeft[i]);
+                        metric_right[i] = avgSole(soleRight[i]);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < Config.NUMPACKETS; i++)
+                    {
+                        metric_left[i] = sumSole(soleLeft[i]);
+                        metric_right[i] = sumSole(soleRight[i]);
+                    }
                 }
 
 
                 //GraphSumPressures graph = new GraphSumPressures(); // Cambiar esto. Iván: esta línea la tengo que quitar para que funcione el gráfico
-                graph.drawData(avg_left, avg_right);
+                graph.drawData(metric_left, metric_right);
 
                 if (virtualToolBar.recordState == RecordState.Recording)
                 {
@@ -339,7 +353,7 @@ namespace insoles.Graphs
                     {
                         
                         dataline = "1 " + (fakets).ToString("F2") + " " + (frame).ToString() + " " + stringSole(soleLeft[j]) + " " + stringSole(soleRight[j]) + " " +
-                            avg_left.ToString() + " " + avg_right.ToString() + " " +"\n";
+                            metric_left.ToString() + " " + metric_right.ToString() + " " +"\n";
                         fakets += 0.01f;
                         frame += 1;
                         mainWindow.fileSaver.appendCSVManual(dataline);

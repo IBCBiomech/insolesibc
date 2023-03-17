@@ -295,5 +295,17 @@ namespace insoles.Common
             }
             return result;
         }
+        public static List<(int, int, float)> FindAll(Matrix<float> matrix, Func<float, bool> func)
+        {
+            List<(int, int, float)> result = new List<(int, int, float)>();
+            foreach (var tuple in matrix.EnumerateIndexed())
+            {
+                if (func(tuple.Item3))
+                {
+                    result.Add(tuple);
+                }
+            }
+            return result;
+        }
     }
 }
