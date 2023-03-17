@@ -188,7 +188,7 @@ namespace insoles.Graphs
     }
     public class DataInsole
     {
-        private Dictionary<Sensor, int> pressures = new Dictionary<Sensor, int>();
+        public Dictionary<Sensor, int> pressures { get; private set; } = new Dictionary<Sensor, int>();
         public int getPressure(Sensor sensor)
         {
             return pressures[sensor];

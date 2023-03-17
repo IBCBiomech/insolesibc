@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define REDUCE_SENSORS //Comentar esto para que no haga la media de MET y HEEL
+
+using System;
 using System.Drawing;
 using System.Collections.Generic;
 using MathNet.Numerics.LinearAlgebra;
@@ -8,12 +10,24 @@ using System.Windows.Markup;
 using System.Threading.Tasks;
 using DirectShowLib;
 using System.Diagnostics;
+using System.Linq;
 
 namespace insoles.Graphs
 {
+    public enum SensorReduced
+    {
+        HALLUX,
+        TOES,
+        MET,
+        ARCH,
+        HEEL
+    }
     public class PressureMap
     {
+        delegate void ActionRef<T1, T2, T3>(T1 arg1, ref T2 arg2, ref T3 arg3);
+
         private Dictionary<Sensor, Matrix<float>> inverse_distances = new Dictionary<Sensor, Matrix<float>>();
+        private Dictionary<SensorReduced, Matrix<float>> inverse_reduced_distances = new Dictionary<SensorReduced, Matrix<float>>();
         //private GraphPressureMap graph;
         private GraphPressureHeatmap graph;
         private Foot foot;
@@ -25,8 +39,38 @@ namespace insoles.Graphs
 
         private Metric metric;
         private bool dirty = true;
+
+        private Dictionary<Sensor, (float, float)> centersLeft = new Dictionary<Sensor, (float, float)>();
+        private Dictionary<Sensor, (float, float)> centersRight = new Dictionary<Sensor, (float, float)>();
+
+        private Dictionary<SensorReduced, (float, float)> centersLeftReduced = new Dictionary<SensorReduced, (float, float)>();
+        private Dictionary<SensorReduced, (float, float)> centersRightReduced = new Dictionary<SensorReduced, (float, float)>();
         public PressureMap()
         {
+            void initFunc()
+            {
+                (float, float) reduceSensorsFunc(List<(float, float)> centers)
+                {
+                    float sum1 = 0;
+                    float sum2 = 0;
+                    foreach (var c in centers)
+                    {
+                        sum1 += c.Item1;
+                        sum2 += c.Item2;
+                    }
+                    return (sum1 / centers.Count, sum2 / centers.Count);
+                }
+                CalculateCenters();
+#if REDUCE_SENSORS
+                centersLeftReduced = ReduceSensors(centersLeft, reduceSensorsFunc);
+                centersRightReduced = ReduceSensors(centersRight, reduceSensorsFunc);
+                inverse_reduced_distances = CalculateMinDistances(centersLeftReduced, centersRightReduced);
+#else
+                inverse_distances = CalculateMinDistances(centersLeft, centersRight);
+#endif
+                isInitialized = true;
+                initialized?.Invoke(this, EventArgs.Empty);
+            }
             MainWindow mainWindow = Application.Current.MainWindow as MainWindow;
             if (mainWindow.graphPressures.Content == null)
             {
@@ -46,13 +90,17 @@ namespace insoles.Graphs
                 mainWindow.initialized += (s, e) =>
                 {
                     foot = mainWindow.foot;
-                    Task.Run(() => CalculateMinDistances());
+                    Task.Run(() => {
+                        initFunc();
+                    });
                 };
             }
             else
             {
                 foot = mainWindow.foot;
-                Task.Run(() => CalculateMinDistances());
+                Task.Run(() => {
+                    initFunc();
+                });
             }
         }
         private void drawSensorMap()
@@ -77,6 +125,80 @@ namespace insoles.Graphs
                 }
             });
             graph.DrawData(pressureMap);
+        }
+        private Dictionary<SensorReduced, T> ReduceSensors<T>(Dictionary<Sensor, T> centers, Func<List<T>, T> transformFuncion)
+        {
+            Dictionary<SensorReduced, T> centersReduced = new Dictionary<SensorReduced, T>();
+            centersReduced[SensorReduced.HALLUX] = centers[Sensor.HALLUX];
+            centersReduced[SensorReduced.TOES] = centers[Sensor.TOES];
+
+            List<T> mets = new List<T>();
+            mets.Add(centers[Sensor.MET1]);
+            mets.Add(centers[Sensor.MET3]);
+            mets.Add(centers[Sensor.MET5]);
+            centersReduced[SensorReduced.MET] = transformFuncion(mets);
+
+            centersReduced[SensorReduced.ARCH] = centers[Sensor.ARCH];
+
+            List<T> heels = new List<T>();
+            heels.Add(centers[Sensor.HEEL_L]);
+            heels.Add(centers[Sensor.HEEL_R]);
+            centersReduced[SensorReduced.HEEL] = transformFuncion(heels);
+
+            return centersReduced;
+        }
+        private void CalculateCenters()
+        {
+            (float, float) CalculateCenter(List<Tuple<int,int>> sensor_positions)
+            {
+                int rowSum = 0;
+                int colSum = 0;
+                foreach (Tuple<int, int> position in sensor_positions)
+                {
+                    rowSum += position.Item1;
+                    colSum += position.Item2;
+                }
+                float centerRow = (float)rowSum / sensor_positions.Count;
+                float centerCol = (float)colSum / sensor_positions.Count;
+                return (centerRow, centerCol);
+            }
+            Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_left = foot.CalculateSensorPositionsLeft();
+            Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_right = foot.CalculateSensorPositionsRight();
+            foreach (Sensor sensor in (Sensor[])Enum.GetValues(typeof(Sensor)))
+            {
+                centersLeft[sensor] = CalculateCenter(sensor_positions_left[sensor]);
+                centersRight[sensor] = CalculateCenter(sensor_positions_right[sensor]);
+            }
+        }
+        private Dictionary<T, Matrix<float>> CalculateMinDistances<T>(Dictionary<T, (float, float)> centersLeft, Dictionary<T, (float, float)> centersRight) where T : Enum
+        {
+            Dictionary<T, Matrix<float>> inverse_distances = new Dictionary<T, Matrix<float>>();
+            foreach (T sensor in (T[])Enum.GetValues(typeof(T)))
+            {
+                inverse_distances[sensor] = foot.sensor_map.MapIndexed((row, col, code) =>
+                {
+                    if (code != foot.codes.Background())
+                    {
+                        if (row < foot.sensor_map.RowCount / 2)
+                        {
+                            (float, float) point = centersLeft[sensor];
+                            float distance = Helpers.SquareDistance(row, col, point.Item1, point.Item2);
+                            return 1.0f / distance;
+                        }
+                        else
+                        {
+                            (float, float) point = centersRight[sensor];
+                            float distance = Helpers.SquareDistance(row, col, point.Item1, point.Item2);
+                            return 1.0f / distance;
+                        }
+                    }
+                    else
+                    {
+                        return 0.0f;
+                    }
+                });
+            }
+            return inverse_distances;
         }
         private void CalculateMinDistances()
         {
@@ -121,8 +243,6 @@ namespace insoles.Graphs
                     }
                 });
             }
-            isInitialized = true;
-            initialized?.Invoke(this, EventArgs.Empty);
         }
         public void Calculate(GraphData graphData)
         {
@@ -130,20 +250,28 @@ namespace insoles.Graphs
             //return;
             void CalculateAll()
             {
-                DataInsole leftAvg = new DataInsole();
-                DataInsole rightAvg = new DataInsole();
-                average(graphData, ref leftAvg, ref rightAvg);
-                pressureMaps[Metric.Avg] = Calculate_(leftAvg, rightAvg);
-
-                DataInsole leftMax = new DataInsole();
-                DataInsole rightMax = new DataInsole();
-                max(graphData, ref leftMax, ref rightMax);
-                pressureMaps[Metric.Max] = Calculate_(leftMax, rightMax);
-
-                DataInsole leftMin = new DataInsole();
-                DataInsole rightMin = new DataInsole();
-                min(graphData, ref leftMin, ref rightMin);
-                pressureMaps[Metric.Min] = Calculate_(leftMin, rightMin);
+                void CalculateOne(GraphData graphData, ActionRef<GraphData, DataInsole, DataInsole> func, Metric metric)
+                {
+                    int reduceFunc(List<int> pressures)
+                    {
+                        return pressures.Sum() / pressures.Count;
+                    }
+                    DataInsole leftInsole = new DataInsole();
+                    DataInsole rightInsole = new DataInsole();
+                    func(graphData, ref leftInsole, ref rightInsole);
+                    Dictionary<Sensor, int> pressuresLeft = leftInsole.pressures;
+                    Dictionary<Sensor, int> pressuresRight = rightInsole.pressures;
+#if REDUCE_SENSORS
+                    Dictionary<SensorReduced, int> pressuresLeftReduced = ReduceSensors(pressuresLeft, reduceFunc);
+                    Dictionary<SensorReduced, int> pressuresRightReduced = ReduceSensors(pressuresRight, reduceFunc);
+                    pressureMaps[metric] = CalculateFromPoint(pressuresLeftReduced, pressuresRightReduced, inverse_reduced_distances);
+#else
+                    pressureMaps[metric] = CalculateFromPoint(pressuresLeft, pressuresRight, inverse_distances);
+#endif
+                }
+                CalculateOne(graphData, average, Metric.Avg);
+                CalculateOne(graphData, average, Metric.Max);
+                CalculateOne(graphData, average, Metric.Min);
             }
             if (isInitialized)
             {
@@ -162,6 +290,33 @@ namespace insoles.Graphs
                     graph.calculating = false;
                 };
             }
+        }
+        private Matrix<float> CalculateFromPoint<T>(Dictionary<T, int> left, Dictionary<T, int> right, 
+            Dictionary<T, Matrix<float>> inverse_distances) where T : Enum
+        {
+            Matrix<float> pressure_map = foot.sensor_map.MapIndexed((row, col, code) => {
+                if (code == foot.codes.Background())
+                {
+                    return Config.BACKGROUND;
+                }
+                else
+                {
+                    float numerator = 0.0f;
+                    float denominator = 0.0f;
+                    foreach (T sensor in (T[])Enum.GetValues(typeof(T)))
+                    {
+                        float inverse_distance = inverse_distances[sensor][row, col];
+                        if (row < foot.sensor_map.RowCount / 2)
+                            numerator += left[sensor] * inverse_distance;
+                        else
+                            numerator += right[sensor] * inverse_distance;
+                        denominator += inverse_distance;
+                    }
+                    return numerator / denominator;
+                }
+            });
+
+            return pressure_map;
         }
         private Matrix<float> Calculate_(DataInsole left, DataInsole right)
         {
