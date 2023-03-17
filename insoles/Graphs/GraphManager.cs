@@ -287,6 +287,10 @@ namespace insoles.Graphs
                     transform(sole.heel_L) + transform(sole.met_1) + transform(sole.met_3) +
                     transform(sole.met_5) + transform(sole.toes);
         }
+        public float avgSole(WisewalkSDK.SoleSensor sole)
+        {
+            return sumSole(sole) / Config.NUM_SENSORS;
+        }
         //function that concatenates all sensor pressure in a single line
         public string stringSole(WisewalkSDK.SoleSensor sole)
         {
@@ -314,18 +318,18 @@ namespace insoles.Graphs
             if (numSoles % 2 == 0)
             {
                 //transformPressures(ref soleLeft);
-                float[] sum_left = new float[soleLeft.Count];
-                float[] sum_right = new float[soleRight.Count];
+                float[] avg_left = new float[soleLeft.Count];
+                float[] avg_right = new float[soleRight.Count];
 
                 for (int i = 0; i < Config.NUMPACKETS; i++)
                 {
-                    sum_left[i] = sumSole(soleLeft[i]);
-                    sum_right[i] = sumSole(soleRight[i]);
+                    avg_left[i] = avgSole(soleLeft[i]);
+                    avg_right[i] = avgSole(soleRight[i]);
                 }
 
 
                 //GraphSumPressures graph = new GraphSumPressures(); // Cambiar esto. Iván: esta línea la tengo que quitar para que funcione el gráfico
-                graph.drawData(sum_left, sum_right);
+                graph.drawData(avg_left, avg_right);
 
                 if (virtualToolBar.recordState == RecordState.Recording)
                 {
@@ -335,7 +339,7 @@ namespace insoles.Graphs
                     {
                         
                         dataline = "1 " + (fakets).ToString("F2") + " " + (frame).ToString() + " " + stringSole(soleLeft[j]) + " " + stringSole(soleRight[j]) + " " +
-                            sum_left.ToString() + " " + sum_right.ToString() + " " +"\n";
+                            avg_left.ToString() + " " + avg_right.ToString() + " " +"\n";
                         fakets += 0.01f;
                         frame += 1;
                         mainWindow.fileSaver.appendCSVManual(dataline);

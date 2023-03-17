@@ -16,7 +16,7 @@ public partial class GraphSumPressures : Page
     public GraphSumPressures()
     {
         InitializeComponent();
-        model = new Model2S(plot, 0, 10000);
+        model = new Model2S(plot, -100, 2000);
         MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
         DataContext = this;
         //this.plot.Plot.XLabel("Frames");

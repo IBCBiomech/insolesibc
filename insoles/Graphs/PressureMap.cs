@@ -28,6 +28,7 @@ namespace insoles.Graphs
 
         private Dictionary<Sensor, Matrix<float>> inverse_distances = new Dictionary<Sensor, Matrix<float>>();
         private Dictionary<SensorReduced, Matrix<float>> inverse_reduced_distances = new Dictionary<SensorReduced, Matrix<float>>();
+        private Matrix<float> inverse_distances_background;
         //private GraphPressureMap graph;
         private GraphPressureHeatmap graph;
         private Foot foot;
@@ -170,6 +171,7 @@ namespace insoles.Graphs
                 centersRight[sensor] = CalculateCenter(sensor_positions_right[sensor]);
             }
         }
+
         private Dictionary<T, Matrix<float>> CalculateMinDistances<T>(Dictionary<T, (float, float)> centersLeft, Dictionary<T, (float, float)> centersRight) where T : Enum
         {
             Dictionary<T, Matrix<float>> inverse_distances = new Dictionary<T, Matrix<float>>();
@@ -199,6 +201,10 @@ namespace insoles.Graphs
                 });
             }
             return inverse_distances;
+        }
+        private Matrix<float> CalculateMinDistancesBackground()
+        {
+            return foot.sensor_map;
         }
         private void CalculateMinDistances()
         {
