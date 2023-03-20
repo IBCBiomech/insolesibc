@@ -324,8 +324,8 @@ namespace insoles.Graphs
 #endif
                 }
                 CalculateOne(graphData, average, Metric.Avg);
-                CalculateOne(graphData, average, Metric.Max);
-                CalculateOne(graphData, average, Metric.Min);
+                CalculateOne(graphData, max, Metric.Max);
+                CalculateOne(graphData, min, Metric.Min);
             }
             if (isInitialized)
             {
