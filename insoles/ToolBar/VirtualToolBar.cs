@@ -379,7 +379,7 @@ namespace insoles.ToolBar
                             csvData = await Task.Run(()=>extractCSV(file2));
                             setTimeLineLimits(csvData, videoPath);
                             graphManager.initReplay(csvData);
-                            camaraViewport.initReplay(videoPath);
+                            await Task.Run(() => camaraViewport.initReplay(videoPath));
                             fileOpenEvent?.Invoke(this, file2, file1);
                             MessageBox.Show("Ficheros " + file1 + " " + file2 + " cargados.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
@@ -397,7 +397,7 @@ namespace insoles.ToolBar
                             csvData = await Task.Run(() => extractCSV(file1));
                             setTimeLineLimits(csvData, videoPath);
                             graphManager.initReplay(csvData);
-                            camaraViewport.initReplay(videoPath);
+                            await Task.Run(() => camaraViewport.initReplay(videoPath));
                             fileOpenEvent?.Invoke(this, file1, file2);
                             MessageBox.Show("Ficheros " + file1 + " " + file2 + " cargados.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                         }
@@ -419,7 +419,7 @@ namespace insoles.ToolBar
                     {
                         string videoPath = file;
                         timeLine.model.updateLimits(0, getVideoDuration(videoPath));
-                        camaraViewport.initReplay(videoPath);
+                        await Task.Run(() => camaraViewport.initReplay(videoPath));
                         fileOpenEvent?.Invoke(this, null, file);
                         MessageBox.Show("Fichero " + file + " cargado.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
