@@ -10,6 +10,10 @@
 
     <Grid>
         <WpfPlot  x:Name="plot"/>
+        <ComboBox Name="metric" SelectedValuePath="Content" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <ComboBoxItem Content="avg"></ComboBoxItem>
+            <ComboBoxItem Content="sum"></ComboBoxItem>
+        </ComboBox>
     </Grid>
 </Page>
 

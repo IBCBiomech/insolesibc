@@ -1,4 +1,7 @@
-﻿using DirectShowLib;
+﻿#define PLANTILLA //Comentar esto para usar el pie
+//#define CSV //Comentar para usar bitmap en vez del modelo csv
+
+using DirectShowLib;
 using insoles.Common;
 using MathNet.Numerics.LinearAlgebra;
 using System.Collections.Generic;
@@ -6,6 +9,8 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Numerics;
+using MathNet.Numerics.Data.Text;
+using static insoles.Graphs.Foot;
 
 namespace insoles.Graphs
 {
@@ -20,6 +25,23 @@ namespace insoles.Graphs
         private Dictionary<Quality, string> resolutions = new Dictionary<Quality, string>();
         public Foot()
         {
+#if PLANTILLA
+#if CSV
+            //opcion 1 usar csv
+            string file = "Assets/model_heatmap_30_closest.csv";
+            string path = Helpers.GetFilePath(file);
+            sensor_map = DelimitedReader.Read<float>(path, false, ",", false);
+#else
+            //opcion 2 usar bitmap
+            string file = "Assets/bitmap_heatmap_30_closest.png";
+            string path = Helpers.GetFilePath(file);
+            Bitmap bmp = new Bitmap(path);
+            sensor_map = Helpers.ImageToMatrix(bmp);
+#endif
+            codes = new Codes();
+            length[0] = sensor_map.RowCount;
+            length[1] = sensor_map.ColumnCount;
+#else
             resolutions[Quality.HIGH] = "foot_preprocess.png";
             resolutions[Quality.MID] = "foot2q_preprocess.png";
             resolutions[Quality.LOW] = "foot4q_preprocess.png";
@@ -32,6 +54,7 @@ namespace insoles.Graphs
             length[1] = sensor_map.ColumnCount;
             (float, int)[] frequences = Helpers.CountFrequences(sensor_map);
             codes = new Codes(frequences);
+#endif
         }
         public int[] getImage()
         {

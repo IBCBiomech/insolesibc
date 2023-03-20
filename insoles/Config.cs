@@ -47,5 +47,6 @@ namespace insoles
             [Quality.MID] = 0.5,
             [Quality.LOW] = 0.25
         };
+        public const int NUM_SENSORS = 8;
     }
 }

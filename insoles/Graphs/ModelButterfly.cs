@@ -1,4 +1,6 @@
-﻿using ScottPlot;
+﻿#define PLANTILLA
+
+using ScottPlot;
 using Style = ScottPlot.Style;
 using System.Drawing;
 using System.IO;
@@ -23,10 +25,14 @@ namespace insoles.Graphs
         private Foot foot;
         private ScottPlot.Plottable.Image image;
         private ScatterPlot cps;
-        private const double HEIGHT = 695;
-        private const double WIDTH = 720;
+        private const double HEIGHT = 605;
+        private const double WIDTH = 474;
         private double scale = 1;
+#if PLANTILLA
+        string file = "Assets/bitmap_butterfly.png";
+#else
         string file = "bitmap.png";
+#endif
         public ModelButterfly(WpfPlot plot, Foot foot)
         {
             this.plot = plot;
@@ -82,8 +88,12 @@ namespace insoles.Graphs
             plot.Plot.Clear(typeof(ScatterPlot));
             double[] x = new double[x_list.Count];
             double[] y = new double[y_list.Count];
+#if PLANTILLA
+            double qualityMult = 1;
+#else
             double qualityMult = 1 / Config.qualitySizes[Config.footQuality];
-            for(int i = 0; i < x_list.Count; i++)
+#endif
+            for (int i = 0; i < x_list.Count; i++)
             {
                 x[i] = (x_list[i] * qualityMult - WIDTH / 2) * scale;
             }

@@ -197,6 +197,16 @@ namespace insoles.DeviceList
             insoleInfo.battery = null;
             insoleInfo.fw = null;
         }
+        public void disconnectInsoles(List<InsolesInfo> insoles)
+        {
+            foreach (InsolesInfo insoleToDisconnect in insoles)
+            {
+                InsolesInfo insoleInfo = VM.insoles.Where((insole) => insole.address == insoleToDisconnect.address).First();
+                insoleInfo.connected = false;
+                insoleInfo.battery = null;
+                insoleInfo.fw = null;
+            }
+        }
         public void updateHeaderInfo(string mac, byte handler)
         {
             InsolesInfo insoleInfo = VM.insoles.Where((insole) => insole.address == mac).First();

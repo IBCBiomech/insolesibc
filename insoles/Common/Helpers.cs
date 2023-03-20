@@ -238,6 +238,14 @@ namespace insoles.Common
             dist_y = dist_y * dist_y;
             return dist_x + dist_y;
         }
+        public static float SquareDistance(float x1, float y1, float x2, float y2)
+        {
+            float dist_x = x1 - x2;
+            float dist_y = y1 - y2;
+            dist_x = dist_x * dist_x;
+            dist_y = dist_y * dist_y;
+            return dist_x + dist_y;
+        }
         public static Tuple<double, double> Average(List<Tuple<int, int>> values)
         {
             double x = 0;
@@ -283,6 +291,18 @@ namespace insoles.Common
                     {
                         result[i, j] = array[i, j];
                     }
+                }
+            }
+            return result;
+        }
+        public static List<(int, int, float)> FindAll(Matrix<float> matrix, Func<float, bool> func)
+        {
+            List<(int, int, float)> result = new List<(int, int, float)>();
+            foreach (var tuple in matrix.EnumerateIndexed())
+            {
+                if (func(tuple.Item3))
+                {
+                    result.Add(tuple);
                 }
             }
             return result;

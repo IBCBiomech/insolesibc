@@ -21,6 +21,7 @@ namespace insoles.Graphs
             plot.Plot.Clear();
             Heatmap heatmap = plot.Plot.AddHeatmap(data, colormap:Colormap.Amp);
             heatmap.Update(data, min: 0);
+            heatmap.Smooth = true;
             Colorbar colorbar = plot.Plot.AddColorbar(heatmap);
             plot.Plot.Margins(0, 0);
             plot.Refresh();

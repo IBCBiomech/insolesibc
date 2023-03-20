@@ -6,10 +6,10 @@
         xmlns:local="clr-namespace:insoles"
         xmlns:dock="https://github.com/Dirkster99/AvalonDock"
         mc:Ignorable="d"
-        Title="MainWindow" Height="900" Width="1400">
+        Title="IBC Insoles Capture Tool [©2023 IBCBio Build 0.0.1]" Height="900" Width="1400">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Frame Grid.Row="0" Source="pack://application:,,,/ToolBar/ToolBar.xaml" x:Name="toolBar"/>
@@ -61,7 +61,7 @@
                             </dock:LayoutAnchorable>
                         </dock:LayoutAnchorablePane>
                     </dock:LayoutAnchorablePaneGroup>
-                    <dock:LayoutAnchorablePane DockWidth="*" DockHeight="0.25*">
+                    <dock:LayoutAnchorablePane DockWidth="*" DockHeight="0.5*">
                         <dock:LayoutAnchorable CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
                             <Frame Source="pack://application:,,,/TimeLine/TimeLine.xaml" x:Name="timeLine"/>
                         </dock:LayoutAnchorable>

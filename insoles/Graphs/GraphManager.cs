@@ -287,6 +287,10 @@ namespace insoles.Graphs
                     transform(sole.heel_L) + transform(sole.met_1) + transform(sole.met_3) +
                     transform(sole.met_5) + transform(sole.toes);
         }
+        public float avgSole(WisewalkSDK.SoleSensor sole)
+        {
+            return sumSole(sole) / Config.NUM_SENSORS;
+        }
         //function that concatenates all sensor pressure in a single line
         public string stringSole(WisewalkSDK.SoleSensor sole)
         {
@@ -313,19 +317,33 @@ namespace insoles.Graphs
             }
             if (numSoles % 2 == 0)
             {
-                //transformPressures(ref soleLeft);
-                float[] sum_left = new float[soleLeft.Count];
-                float[] sum_right = new float[soleRight.Count];
 
-                for (int i = 0; i < Config.NUMPACKETS; i++)
+                //transformPressures(ref soleLeft);
+                float[] metric_left = new float[soleLeft.Count];
+                float[] metric_right = new float[soleRight.Count];
+
+                GraphSumPressures.Metric metric = graph.metricSelected;
+
+                if (metric == GraphSumPressures.Metric.Avg)
                 {
-                    sum_left[i] = sumSole(soleLeft[i]);
-                    sum_right[i] = sumSole(soleRight[i]);
+                    for (int i = 0; i < Config.NUMPACKETS; i++)
+                    {
+                        metric_left[i] = avgSole(soleLeft[i]);
+                        metric_right[i] = avgSole(soleRight[i]);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < Config.NUMPACKETS; i++)
+                    {
+                        metric_left[i] = sumSole(soleLeft[i]);
+                        metric_right[i] = sumSole(soleRight[i]);
+                    }
                 }
 
 
                 //GraphSumPressures graph = new GraphSumPressures(); // Cambiar esto. Iván: esta línea la tengo que quitar para que funcione el gráfico
-                graph.drawData(sum_left, sum_right);
+                graph.drawData(metric_left, metric_right);
 
                 if (virtualToolBar.recordState == RecordState.Recording)
                 {
@@ -333,6 +351,8 @@ namespace insoles.Graphs
                     dataline = "";
                     for (int j = 0; j < Config.NUMPACKETS; j++)
                     {
+                        // He dejado la de release de momento porque sino otras partes no funcionaran bien
+/*
                         string leftSide = $" {4095 - soleLeft[j].arch} {4095 - soleLeft[j].hallux} {4095 - soleLeft[j].heel_L} {4095 - soleLeft[j].heel_R} {4095 - soleLeft[j].met_1} {4095 - soleLeft[j].met_3} {4095 - soleLeft[j].met_5} {4095 - soleLeft[j].toes}";
                         string rightSide = $" {4095 - soleRight[j].arch} {4095 - soleRight[j].hallux} {4095 - soleRight[j].heel_L} {4095 - soleRight[j].heel_R} {4095 - soleRight[j].met_1} {4095 - soleRight[j].met_3} {4095 - soleRight[j].met_5} {4095 - soleRight[j].toes}";
 
@@ -341,6 +361,10 @@ namespace insoles.Graphs
 
                         dataline = "1 " + (fakets).ToString("F2") + " " + (frame).ToString() + " " + leftSide.ToString() + " " + rightSide.ToString() + " " +
                            " " + leftSum.ToString() + " " + rightSum.ToString() + " " +"\n";
+*/
+                        
+                        dataline = "1 " + (fakets).ToString("F2") + " " + (frame).ToString() + " " + stringSole(soleLeft[j]) + " " + stringSole(soleRight[j]) + " " +
+                            metric_left.ToString() + " " + metric_right.ToString() + " " +"\n";
                         fakets += 0.01f;
                         frame += 1;
                         mainWindow.fileSaver.appendCSVManual(dataline);
