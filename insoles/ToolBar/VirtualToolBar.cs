@@ -16,6 +16,8 @@ using System.Windows.Controls;
 using System.Windows.Shapes;
 using Path = System.IO.Path;
 using OpenCvSharp;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace insoles.ToolBar
 {
@@ -309,7 +311,7 @@ namespace insoles.ToolBar
             }
         }
         // Abre los ficheros (csv y avi)
-        public void openClick()
+        public async void openClick()
         {
             double getVideoDuration(string path)
             {
@@ -374,7 +376,7 @@ namespace insoles.ToolBar
                         string file2 = files[1];
                         if(Path.GetExtension(file2) == ".csv" || Path.GetExtension(file2) == ".txt")
                         {
-                            csvData = extractCSV(file2);
+                            csvData = await Task.Run(()=>extractCSV(file2));
                             setTimeLineLimits(csvData, videoPath);
                             graphManager.initReplay(csvData);
                             camaraViewport.initReplay(videoPath);
@@ -392,7 +394,7 @@ namespace insoles.ToolBar
                         if (Path.GetExtension(file2) == ".avi")
                         {
                             string videoPath = file2;
-                            csvData = extractCSV(file1);
+                            csvData = await Task.Run(() => extractCSV(file1));
                             setTimeLineLimits(csvData, videoPath);
                             graphManager.initReplay(csvData);
                             camaraViewport.initReplay(videoPath);
@@ -423,7 +425,7 @@ namespace insoles.ToolBar
                     }
                     else if(extension == ".csv" || extension == ".txt")
                     {
-                        GraphData csvData = extractCSV(file);
+                        GraphData csvData = await Task.Run(() => extractCSV(file));
                         timeLine.model.updateLimits(0, csvData.maxTime);
                         graphManager.initReplay(csvData);
                         fileOpenEvent?.Invoke(this, file, null);

@@ -63,12 +63,12 @@ namespace insoles.CamaraViewport
                 timeLine = mainWindow.timeLine.Content as TimeLine.TimeLine;
             }
         }
-        public void initReplay(string path)
+        public async void initReplay(string path)
         {
             endCameraTask(); // Dejar de usar la camara
             imgViewport.Visibility = Visibility.Collapsed;
             videoViewport.Visibility = Visibility.Visible;
-            videoViewport.Source = new Uri(path);
+            await Dispatcher.BeginInvoke(() => videoViewport.Source = new Uri(path));
             videoViewport.LoadedBehavior = MediaState.Pause;
             videoViewport.ScrubbingEnabled = true;
             timeLine.model.timeEvent -= onUpdateTimeLine;
