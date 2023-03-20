@@ -174,7 +174,7 @@ namespace insoles.Graphs
             }
             public void updateIndex(int index)
             {
-                Trace.WriteLine(index);
+                //Trace.WriteLine(index);
                 index = Math.Min(index, valuesLeft.Length); //Por si acaso
                 maxRenderIndex = index;
 

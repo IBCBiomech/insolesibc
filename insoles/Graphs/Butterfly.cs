@@ -19,7 +19,6 @@ namespace insoles.Graphs
         private FramePressures[] frames;
 
         private GraphButterflyScottplot graph;
-        private GraphsCP graphCP;
         private Foot foot;
         public Butterfly()
         {
@@ -34,17 +33,6 @@ namespace insoles.Graphs
             else
             {
                 graph = mainWindow.graphButterfly.Content as GraphButterflyScottplot;
-            }
-            if (mainWindow.graphCP.Content == null)
-            {
-                mainWindow.graphCP.Navigated += (s, e) =>
-                {
-                    graphCP = mainWindow.graphCP.Content as GraphsCP;
-                };
-            }
-            else
-            {
-                graphCP = mainWindow.graphCP.Content as GraphsCP;
             }
             if (mainWindow.foot == null)
             {
@@ -193,7 +181,6 @@ namespace insoles.Graphs
                 frames[i] = new FramePressures(i, pressure_center_left, pressure_center_right, total_pressure_left, total_pressure_right);
             }
             graph.DrawData(frames);
-            graphCP.DrawData(frames);
         }
     }
     public class FramePressures
