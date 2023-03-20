@@ -29,7 +29,7 @@ namespace insoles.Graphs
         private const double WIDTH = 474;
         private double scale = 1;
 #if PLANTILLA
-        string file = "Assets/bitmap_butterfly.png";
+        string file = "Assets/bitmap_butterfly_white_smoke.png";
 #else
         string file = "bitmap.png";
 #endif
@@ -77,11 +77,11 @@ namespace insoles.Graphs
                     }
                     else
                     {
-                        bitmap.SetPixel(j, i, Color.FromArgb(255, Color.Gray));
+                        bitmap.SetPixel(j, i, Color.FromArgb(255, Color.WhiteSmoke));
                     }
                 }
             }
-            bitmap.Save(Config.INITIAL_PATH + "\\bitmap.png", ImageFormat.Png);
+            bitmap.Save(Config.INITIAL_PATH + "\\bitmap_butterfly_white_smoke.png", ImageFormat.Png);
         }
         public void DrawData(List<double> x_list, List<double> y_list)
         {
@@ -101,7 +101,7 @@ namespace insoles.Graphs
             {
                 y[i] = y_list[i] * qualityMult * scale;
             }
-            cps = plot.Plot.AddScatterLines(x, y, Color.Purple);
+            cps = plot.Plot.AddScatterLines(x, y, Color.Red);
             plot.Refresh();
         }
     }
