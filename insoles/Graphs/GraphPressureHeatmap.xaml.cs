@@ -1,4 +1,6 @@
-﻿using insoles.Common;
+﻿//#define REDUCE_SORT
+
+using insoles.Common;
 using insoles.Graphs.Converters;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.Statistics;
@@ -209,11 +211,26 @@ namespace insoles.Graphs
         }
         public void DrawCPs(List<Tuple<double, double>> left, List<Tuple<double, double>> right)
         {
-            List<Tuple<double, double>> leftReduced = ReduceCPs(left);
-            List<Tuple<double, double>> rightReduced = ReduceCPs(right);
+            void ReduceSorting(ref List<Tuple<double, double>> left, ref List<Tuple<double, double>> right, int NumResult)
+            {
+                left = ReduceCPsSorting(left, NumResult);
+                right = ReduceCPsSorting(right, NumResult);
+            }
+            void ReduceByRanges(ref List<Tuple<double, double>> left, ref List<Tuple<double, double>> right, int range)
+            {
+                left = ReduceCPsByRanges(left, range);
+                right = ReduceCPsByRanges(right, range);
+            }
+#if REDUCE_SORT
+            ReduceByRanges(ref left, ref right, 5);
+            ReduceSorting(ref left, ref right, 50);   
+#else
+            left = ReduceCPsByRanges(left);
+            right = ReduceCPsByRanges(right);
+#endif
             double[] xs;
             double[] ys;
-            CPsToXsYs(leftReduced, rightReduced, out xs, out ys);
+            CPsToXsYs(left, right, out xs, out ys);
             Dispatcher.Invoke(() => model.DrawCenters(xs, ys));
         }
         private void CPsToXsYs(List<Tuple<double, double>> left, List<Tuple<double, double>> right, 
@@ -232,12 +249,45 @@ namespace insoles.Graphs
                 ys[left.Count + i] = right[i].Item2;
             }
         }
-        private List<Tuple<double, double>> ReduceCPs(List<Tuple<double, double>> cps)
+        private List<Tuple<double, double>> ReduceCPsSorting(List<Tuple<double, double>> cps, int NumResult, float minFactor = 0.75f)
+        {
+            cps.Sort((x, y) => y.Item2.CompareTo(x.Item2));
+            List<Tuple<double, double>> cpsReduced = new List<Tuple<double, double>>();
+            int NumAverage = cps.Count / NumResult;
+            if(NumAverage < 1)
+            {
+                NumAverage = 1;
+            }
+            int index = 0;
+            double item1Sum = 0;
+            double item2Sum = 0;
+            foreach (Tuple<double, double> cp in cps)
+            {
+                item1Sum += cp.Item1;
+                item2Sum += cp.Item2;
+                index++;
+                if (index % NumAverage == 0)
+                {
+                    Tuple<double, double> cpReduced = new Tuple<double, double>(item1Sum / NumAverage, item2Sum/NumAverage);
+                    cpsReduced.Add(cpReduced);
+                    item1Sum = 0;
+                    item2Sum = 0;
+                }
+            }
+            int lastNumAverage = index % NumAverage;
+            if (lastNumAverage > NumAverage * minFactor)
+            {
+                Tuple<double, double> cpReduced = new Tuple<double, double>(item1Sum / lastNumAverage, item2Sum / lastNumAverage);
+                cpsReduced.Add(cpReduced);
+            }
+            return cpsReduced;
+        }
+        private List<Tuple<double, double>> ReduceCPsByRanges(List<Tuple<double, double>> cps, int range = 10)
         {
             Dictionary<double, List<double>> cpsToReduce = new Dictionary<double, List<double>>();
             foreach(Tuple<double, double> cp in cps)
             {
-                double key = ReduceFunc(cp);
+                double key = ReduceFunc(cp, range);
                 List<double> xs;
                 if(cpsToReduce.TryGetValue(key, out xs))
                 {
