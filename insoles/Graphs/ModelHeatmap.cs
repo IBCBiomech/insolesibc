@@ -11,6 +11,11 @@ namespace insoles.Graphs
     public class ModelHeatmap
     {
         private WpfPlot plot;
+
+        private Heatmap heatmap;
+        private Colorbar colorbar;
+
+        private ScatterPlot centers;
         public ModelHeatmap(WpfPlot plot)
         {
             this.plot = plot;
@@ -18,13 +23,30 @@ namespace insoles.Graphs
         }
         public void Draw(double?[,] data)
         {
-            plot.Plot.Clear();
-            Heatmap heatmap = plot.Plot.AddHeatmap(data, colormap:Colormap.Amp);
+            if(heatmap != null)
+            {
+                plot.Plot.Clear(heatmap.GetType());
+            }
+            if(colorbar != null)
+            {
+                plot.Plot.Clear(colorbar.GetType());
+            }
+            heatmap = plot.Plot.AddHeatmap(data, colormap:Colormap.Amp);
             heatmap.Update(data, min: 0);
             heatmap.Smooth = true;
-            Colorbar colorbar = plot.Plot.AddColorbar(heatmap);
+            colorbar = plot.Plot.AddColorbar(heatmap);
             plot.Plot.Margins(0, 0);
+            plot.Plot.MoveFirst(heatmap);
             plot.Refresh();
+        }
+        public void DrawCenters(double[] xs, double[] ys)
+        {
+            if (centers != null)
+            {
+                plot.Plot.Clear(centers.GetType());
+            }
+            centers = plot.Plot.AddScatter(xs, ys, lineWidth: 0, color: Color.Green);
+            plot.Plot.MoveLast(centers);
         }
     }
 }
