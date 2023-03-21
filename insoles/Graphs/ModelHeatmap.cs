@@ -31,7 +31,7 @@ namespace insoles.Graphs
             {
                 plot.Plot.Clear(colorbar.GetType());
             }
-            heatmap = plot.Plot.AddHeatmap(data, colormap:Colormap.Amp);
+            heatmap = plot.Plot.AddHeatmap(data, colormap:Colormap.Jet);
             heatmap.Update(data, min: 0);
             heatmap.Smooth = true;
             colorbar = plot.Plot.AddColorbar(heatmap);
@@ -45,7 +45,7 @@ namespace insoles.Graphs
             {
                 plot.Plot.Clear(centers.GetType());
             }
-            centers = plot.Plot.AddScatter(xs, ys, lineWidth: 0, color: Color.Green);
+            centers = plot.Plot.AddScatter(xs, ys, lineWidth: 0, color: Color.White);
             plot.Plot.MoveLast(centers);
         }
     }
