@@ -16,6 +16,8 @@ using static System.Net.WebRequestMethods;
 using System.Windows.Documents;
 using System.Collections.Generic;
 using ScottPlot.Plottable;
+using System.Windows.Resources;
+using System.Windows;
 
 namespace insoles.Graphs
 {
@@ -47,7 +49,10 @@ namespace insoles.Graphs
         }
         private void drawFoot()
         {
-            Bitmap bitmap = new Bitmap(Helpers.GetFilePath(file));
+            Uri uri = new Uri("pack://application:,,,/Assets/bitmap_butterfly_white_smoke.png");
+            StreamResourceInfo sri = Application.GetResourceStream(uri);
+            Stream stream = sri.Stream;
+            Bitmap bitmap = new Bitmap(stream);
             image = plot.Plot.AddImage(bitmap, 0, 0, anchor: Alignment.LowerCenter);
             image.HeightInAxisUnits = HEIGHT * scale;
             image.WidthInAxisUnits = WIDTH * scale;

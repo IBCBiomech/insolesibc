@@ -78,7 +78,7 @@ namespace insoles.Graphs
                 try
                 {
                     Uri uri = new Uri("pack://application:,,,/Assets/inverse_distances_background.mtx");
-                    StreamResourceInfo sri = Application.GetContentStream(uri);
+                    StreamResourceInfo sri = Application.GetResourceStream(uri);
                     Stream stream = sri.Stream;
                     inverse_distances_background = MatrixMarketReader.ReadMatrix<float>(stream);
                 }

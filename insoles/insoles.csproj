@@ -11,6 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\bitmap_butterfly_white_smoke.png" />
+    <None Remove="Assets\bitmap_heatmap_30_closest.png" />
     <None Remove="Assets\inverse_distances_background.mtx" />
     <None Remove="DeviceList\Icons\arrow-icon.png" />
     <None Remove="DeviceList\Icons\camera-blue-icon-small.png" />
@@ -42,9 +44,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Assets\inverse_distances_background.mtx">
+    <Resource Include="Assets\bitmap_butterfly_white_smoke.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </Resource>
+    <Resource Include="Assets\bitmap_heatmap_30_closest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\inverse_distances_background.mtx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
