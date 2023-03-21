@@ -218,6 +218,7 @@ namespace insoles.Common
             colorData |= color.B << 0;
             return colorData;
         }
+        // Bitmap se accede [col, row] y Matrix [row, col] habria que cambiar esto
         public static Matrix<float> ImageToMatrix(Bitmap image)
         {
             Matrix<float> floats = Matrix<float>.Build.Dense(image.Width, image.Height);
