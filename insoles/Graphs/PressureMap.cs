@@ -14,6 +14,8 @@ using System.Diagnostics;
 using System.Linq;
 using MathNet.Numerics.Data.Text;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using System.IO;
+using System.Windows.Resources;
 
 namespace insoles.Graphs
 {
@@ -75,8 +77,10 @@ namespace insoles.Graphs
 #if BAKGROUND_DISTANCES
                 try
                 {
-                    string file = "Assets/inverse_distances_background.mtx";
-                    inverse_distances_background = MatrixMarketReader.ReadMatrix<float>(Helpers.GetFilePath(file));
+                    Uri uri = new Uri("pack://application:,,,/Assets/inverse_distances_background.mtx");
+                    StreamResourceInfo sri = Application.GetContentStream(uri);
+                    Stream stream = sri.Stream;
+                    inverse_distances_background = MatrixMarketReader.ReadMatrix<float>(stream);
                 }
                 catch (System.IO.FileNotFoundException)
                 {

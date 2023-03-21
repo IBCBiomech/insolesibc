@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\inverse_distances_background.mtx" />
     <None Remove="DeviceList\Icons\arrow-icon.png" />
     <None Remove="DeviceList\Icons\camera-blue-icon-small.png" />
     <None Remove="DeviceList\Icons\camera-blue-icon.png" />
@@ -38,6 +39,12 @@
     <None Remove="ToolBar\Icons\record-stop-blue-icon.png" />
     <None Remove="ToolBar\Icons\scan-blue-icon.png" />
     <None Remove="ToolBar\Icons\stop-blue-icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\inverse_distances_background.mtx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

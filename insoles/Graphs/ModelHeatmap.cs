@@ -16,6 +16,8 @@ namespace insoles.Graphs
         private Colorbar colorbar;
 
         private ScatterPlot centers;
+
+        Colormap[] viableColormaps = new Colormap[] {Colormap.Jet, Colormap.Turbo };
         public ModelHeatmap(WpfPlot plot)
         {
             this.plot = plot;
@@ -45,7 +47,7 @@ namespace insoles.Graphs
             {
                 plot.Plot.Clear(centers.GetType());
             }
-            centers = plot.Plot.AddScatter(xs, ys, lineWidth: 0, color: Color.White);
+            centers = plot.Plot.AddScatter(xs, ys, lineWidth: 0, color: Color.WhiteSmoke);
             plot.Plot.MoveLast(centers);
         }
     }
