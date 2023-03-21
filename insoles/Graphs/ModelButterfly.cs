@@ -16,6 +16,8 @@ using static System.Net.WebRequestMethods;
 using System.Windows.Documents;
 using System.Collections.Generic;
 using ScottPlot.Plottable;
+using System.Windows.Resources;
+using System.Windows;
 
 namespace insoles.Graphs
 {
@@ -29,7 +31,7 @@ namespace insoles.Graphs
         private const double WIDTH = 474;
         private double scale = 1;
 #if PLANTILLA
-        string file = "Assets/bitmap_butterfly.png";
+        string file = "Assets/bitmap_butterfly_white_smoke.png";
 #else
         string file = "bitmap.png";
 #endif
@@ -47,7 +49,10 @@ namespace insoles.Graphs
         }
         private void drawFoot()
         {
-            Bitmap bitmap = new Bitmap(Helpers.GetFilePath(file));
+            Uri uri = new Uri("pack://application:,,,/Assets/bitmap_butterfly_white_smoke.png");
+            StreamResourceInfo sri = Application.GetResourceStream(uri);
+            Stream stream = sri.Stream;
+            Bitmap bitmap = new Bitmap(stream);
             image = plot.Plot.AddImage(bitmap, 0, 0, anchor: Alignment.LowerCenter);
             image.HeightInAxisUnits = HEIGHT * scale;
             image.WidthInAxisUnits = WIDTH * scale;
@@ -77,11 +82,11 @@ namespace insoles.Graphs
                     }
                     else
                     {
-                        bitmap.SetPixel(j, i, Color.FromArgb(255, Color.Gray));
+                        bitmap.SetPixel(j, i, Color.FromArgb(255, Color.WhiteSmoke));
                     }
                 }
             }
-            bitmap.Save(Config.INITIAL_PATH + "\\bitmap.png", ImageFormat.Png);
+            bitmap.Save(Config.INITIAL_PATH + "\\bitmap_butterfly_white_smoke.png", ImageFormat.Png);
         }
         public void DrawData(List<double> x_list, List<double> y_list)
         {
@@ -101,7 +106,7 @@ namespace insoles.Graphs
             {
                 y[i] = y_list[i] * qualityMult * scale;
             }
-            cps = plot.Plot.AddScatterLines(x, y, Color.Purple);
+            cps = plot.Plot.AddScatterLines(x, y, Color.Red);
             plot.Refresh();
         }
     }

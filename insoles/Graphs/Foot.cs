@@ -11,6 +11,9 @@ using System.Drawing;
 using System.Numerics;
 using MathNet.Numerics.Data.Text;
 using static insoles.Graphs.Foot;
+using System.IO;
+using System.Windows.Resources;
+using System.Windows;
 
 namespace insoles.Graphs
 {
@@ -33,9 +36,12 @@ namespace insoles.Graphs
             sensor_map = DelimitedReader.Read<float>(path, false, ",", false);
 #else
             //opcion 2 usar bitmap
-            string file = "Assets/bitmap_heatmap_30_closest.png";
-            string path = Helpers.GetFilePath(file);
-            Bitmap bmp = new Bitmap(path);
+            //string file = "Assets/bitmap_heatmap_30_closest.png";
+            //string path = Helpers.GetFilePath(file);
+            Uri uri = new Uri("pack://application:,,,/Assets/bitmap_heatmap_30_closest.png");
+            StreamResourceInfo sri = Application.GetResourceStream(uri);
+            Stream stream = sri.Stream;
+            Bitmap bmp = new Bitmap(stream);
             sensor_map = Helpers.ImageToMatrix(bmp);
 #endif
             codes = new Codes();

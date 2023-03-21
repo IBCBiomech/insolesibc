@@ -13,13 +13,16 @@ namespace insoles.Graphs
         private Dictionary<Sensor, Tuple<double, double>> cp_sensors_left;
         private Dictionary<Sensor, Tuple<double, double>> cp_sensors_right;
 
+        private List<Tuple<double, double>> cps_left;
+        private List<Tuple<double, double>> cps_right;
+
         private Dictionary<Sensor, int> area_sensors_left;
         private Dictionary<Sensor, int> area_sensors_right;
 
         private FramePressures[] frames;
 
         private GraphButterflyScottplot graph;
-        private GraphsCP graphCP;
+        private GraphPressureHeatmap pressureGraph;
         private Foot foot;
         public Butterfly()
         {
@@ -35,16 +38,16 @@ namespace insoles.Graphs
             {
                 graph = mainWindow.graphButterfly.Content as GraphButterflyScottplot;
             }
-            if (mainWindow.graphCP.Content == null)
+            if (mainWindow.graphPressures.Content == null)
             {
-                mainWindow.graphCP.Navigated += (s, e) =>
+                mainWindow.graphPressures.Navigated += (s, e) =>
                 {
-                    graphCP = mainWindow.graphCP.Content as GraphsCP;
+                    pressureGraph = mainWindow.graphPressures.Content as GraphPressureHeatmap;
                 };
             }
             else
             {
-                graphCP = mainWindow.graphCP.Content as GraphsCP;
+                pressureGraph = mainWindow.graphPressures.Content as GraphPressureHeatmap;
             }
             if (mainWindow.foot == null)
             {
@@ -86,6 +89,8 @@ namespace insoles.Graphs
         public void Calculate(GraphData graphData)
         {
             frames = new FramePressures[graphData.length];
+            cps_left = new List<Tuple<double, double>>();
+            cps_right = new List<Tuple<double, double>>();
             for(int i = 0; i < graphData.length; i++)
             {
                 FrameDataInsoles frameData = (FrameDataInsoles)graphData[i];
@@ -160,6 +165,7 @@ namespace insoles.Graphs
                     x_left /= total_pressure_left;
                     y_left /= total_pressure_left;
                     pressure_center_left = new Tuple<double, double>(x_left, y_left);
+                    cps_left.Add(pressure_center_left);
                 }
                 else
                 {
@@ -183,6 +189,7 @@ namespace insoles.Graphs
                     x_right /= total_pressure_right;
                     y_right /= total_pressure_right;
                     pressure_center_right = new Tuple<double, double>(x_right, y_right);
+                    cps_right.Add(pressure_center_right);
                 }
                 else
                 {
@@ -193,7 +200,7 @@ namespace insoles.Graphs
                 frames[i] = new FramePressures(i, pressure_center_left, pressure_center_right, total_pressure_left, total_pressure_right);
             }
             graph.DrawData(frames);
-            graphCP.DrawData(frames);
+            pressureGraph.DrawCPs(cps_left, cps_right);
         }
     }
     public class FramePressures

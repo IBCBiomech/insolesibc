@@ -20,7 +20,7 @@ namespace insoles.Graphs.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             int valueInt = (int)value;
-            Trace.WriteLine(valueInt);
+            //Trace.WriteLine(valueInt);
             if (valueInt == int.MinValue)
             {
                 return string.Empty;

@@ -4,10 +4,12 @@ using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.Statistics;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -204,6 +206,63 @@ namespace insoles.Graphs
             max = (int)filtered.Maximum();
             min = (int)filtered.Minimum();
             graph_visibility = Visibility.Visible;
+        }
+        public void DrawCPs(List<Tuple<double, double>> left, List<Tuple<double, double>> right)
+        {
+            List<Tuple<double, double>> leftReduced = ReduceCPs(left);
+            List<Tuple<double, double>> rightReduced = ReduceCPs(right);
+            double[] xs;
+            double[] ys;
+            CPsToXsYs(leftReduced, rightReduced, out xs, out ys);
+            Dispatcher.Invoke(() => model.DrawCenters(xs, ys));
+        }
+        private void CPsToXsYs(List<Tuple<double, double>> left, List<Tuple<double, double>> right, 
+            out double[] xs, out double[] ys)
+        {
+            xs = new double[left.Count + right.Count];
+            ys = new double[left.Count + right.Count];
+            for (int i = 0; i < left.Count; i++)
+            {
+                xs[i] = left[i].Item1;
+                ys[i] = left[i].Item2;
+            }
+            for (int i = 0; i < right.Count; i++)
+            {
+                xs[left.Count + i] = right[i].Item1;
+                ys[left.Count + i] = right[i].Item2;
+            }
+        }
+        private List<Tuple<double, double>> ReduceCPs(List<Tuple<double, double>> cps)
+        {
+            Dictionary<double, List<double>> cpsToReduce = new Dictionary<double, List<double>>();
+            foreach(Tuple<double, double> cp in cps)
+            {
+                double key = ReduceFunc(cp);
+                List<double> xs;
+                if(cpsToReduce.TryGetValue(key, out xs))
+                {
+                    xs.Add(cp.Item1);
+                }
+                else
+                {
+                    xs=new List<double>();
+                    xs.Add(cp.Item1);
+                    cpsToReduce[key] = xs;
+                }
+            }
+            List<Tuple<double, double>> cpsReduced = new List<Tuple<double, double>>();
+            foreach (double key in cpsToReduce.Keys)
+            {
+                List<double> cpsOfKey = cpsToReduce[key];
+                cpsReduced.Add(new Tuple<double, double>(cpsOfKey.Average(), key));
+            }
+            return cpsReduced;
+        }
+        private double ReduceFunc(Tuple<double, double> cp, int range = 10)
+        {
+            int yInt = (int)Math.Round(cp.Item2);
+            return (yInt / range) * range + (range / 2);
+            // Al hacer la division entera corta por abajo. Para que quede la media de los puntos le sumo la mitad del rango
         }
     }
 }
