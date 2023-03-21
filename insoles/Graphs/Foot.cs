@@ -106,11 +106,11 @@ namespace insoles.Graphs
         }
         public Dictionary<Sensor, List<Tuple<int, int>>> CalculateSensorPositionsLeft()
         {
-            return CalculateSensorPositions(new Tuple<int, int>(0, sensor_map.RowCount / 2));
+            return CalculateSensorPositions(new Tuple<int, int>(sensor_map.RowCount / 2, sensor_map.RowCount));
         }
         public Dictionary<Sensor, List<Tuple<int, int>>> CalculateSensorPositionsRight()
         {
-            return CalculateSensorPositions(new Tuple<int, int>(sensor_map.RowCount / 2, sensor_map.RowCount));
+            return CalculateSensorPositions(new Tuple<int, int>(0, sensor_map.RowCount / 2));
         }
         private Dictionary<Sensor, List<Tuple<int, int>>> CalculateSensorPositions(Tuple<int, int> axis1_range)
         {
