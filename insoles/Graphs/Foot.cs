@@ -115,6 +115,8 @@ namespace insoles.Graphs
         }
         private Dictionary<Sensor, List<Tuple<int, int>>> CalculateSensorPositions(Tuple<int, int> axis1_range)
         {
+            Trace.WriteLine("Columns: " + sensor_map.ColumnCount);
+            Trace.WriteLine("Rows: " + sensor_map.RowCount);
             Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions = new Dictionary<Sensor, List<Tuple<int, int>>>();
             for (int i = axis1_range.Item1; i < axis1_range.Item2; i++)
             {

@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define CENTROS_SEPARADOS
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,6 +48,7 @@ namespace insoles.Graphs
             List<double> x = new List<double>();
             List<double> y = new List<double>();
             int index = 0;
+#if !CENTROS_SEPARADOS
             while (data[index].totalCenter == null)
             {
                 index++;
@@ -63,6 +66,42 @@ namespace insoles.Graphs
                 }
             }
             model.DrawData(x, y);
+#else
+            while (data[index].centerLeft == null)
+            {
+                index++;
+            }
+            Tuple<double, double> firstPoint = data[index].centerLeft;
+            x.Add(firstPoint.Item1);
+            y.Add(firstPoint.Item2);
+            for (int i = index + 1; i < data.Length; i++)
+            {
+                if (data[i].centerLeft != null)
+                {
+                    Tuple<double, double> point = data[i].centerLeft;
+                    x.Add(point.Item1);
+                    y.Add(point.Item2);
+                }
+            }
+            index = 0;
+            while (data[index].centerRight == null)
+            {
+                index++;
+            }
+            firstPoint = data[index].centerRight;
+            x.Add(firstPoint.Item1);
+            y.Add(firstPoint.Item2);
+            for (int i = index + 1; i < data.Length; i++)
+            {
+                if (data[i].centerRight != null)
+                {
+                    Tuple<double, double> point = data[i].centerRight;
+                    x.Add(point.Item1);
+                    y.Add(point.Item2);
+                }
+            }
+            model.DrawData(x, y);
+#endif
         }
     }
 }
