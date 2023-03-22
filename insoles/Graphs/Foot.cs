@@ -107,11 +107,11 @@ namespace insoles.Graphs
         // Esto es al reves por como esta leyendo el bitmap
         public Dictionary<Sensor, List<Tuple<int, int>>> CalculateSensorPositionsLeft()
         {
-            return CalculateSensorPositions(new Tuple<int, int>(sensor_map.RowCount / 2, sensor_map.RowCount));
+            return CalculateSensorPositions(new Tuple<int, int>(0, sensor_map.RowCount / 2));
         }
         public Dictionary<Sensor, List<Tuple<int, int>>> CalculateSensorPositionsRight()
         {
-            return CalculateSensorPositions(new Tuple<int, int>(0, sensor_map.RowCount / 2));
+            return CalculateSensorPositions(new Tuple<int, int>(sensor_map.RowCount / 2, sensor_map.RowCount));
         }
         private Dictionary<Sensor, List<Tuple<int, int>>> CalculateSensorPositions(Tuple<int, int> axis1_range)
         {
