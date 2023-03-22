@@ -1,4 +1,6 @@
 ﻿//#define CENTROS_SEPARADOS
+#define CENTER_LEFT
+#define CENTER_RIGHT
 
 using System;
 using System.Collections.Generic;
@@ -67,6 +69,8 @@ namespace insoles.Graphs
             }
             model.DrawData(x, y);
 #else
+#if CENTER_LEFT
+            index = 0;
             while (data[index].centerLeft == null)
             {
                 index++;
@@ -83,6 +87,8 @@ namespace insoles.Graphs
                     y.Add(point.Item2);
                 }
             }
+#endif
+#if CENTER_RIGHT
             index = 0;
             while (data[index].centerRight == null)
             {
@@ -100,6 +106,7 @@ namespace insoles.Graphs
                     y.Add(point.Item2);
                 }
             }
+#endif
             model.DrawData(x, y);
 #endif
         }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿//#define STATS
+
+using System.Collections.Generic;
 using System;
 using System.Windows;
 using insoles.Common;
@@ -89,62 +91,16 @@ namespace insoles.Graphs
         public void Calculate(GraphData graphData)
         {
             frames = new FramePressures[graphData.length];
+            //frames = new FramePressures[5000];
             cps_left = new List<Tuple<double, double>>();
             cps_right = new List<Tuple<double, double>>();
             for(int i = 0; i < graphData.length; i++)
+            //for (int i = 0; i < 5000; i++)
             {
                 FrameDataInsoles frameData = (FrameDataInsoles)graphData[i];
                 DataInsole pressure_left = frameData.left;
                 DataInsole pressure_right = frameData.right;
-                /*
-                Random random = new Random();
-                DataInsole pressure_left = new DataInsole();
-                pressure_left[Sensor.MET1] = random.Next(0, 4000);
-                DataInsole pressure_right = new DataInsole();
-                pressure_right[Sensor.MET1] = random.Next(0, 4000);
-                pressure_right[Sensor.HALLUX] = random.Next(0, 4000);
-                */
-                /*
-                Vector2? pressure_center_left = null;
-                int total_pressure_left = 0;
-                foreach (Sensor sensor in (Sensor[])Enum.GetValues(typeof(Sensor)))
-                {
-                    total_pressure_left += pressure_left[sensor] * area_sensors_left[sensor];
-                }
-                if (total_pressure_left > 0)
-                {
-                    float x_left = 0;
-                    float y_left = 0;
-                    foreach (Sensor sensor in (Sensor[])Enum.GetValues(typeof(Sensor)))
-                    {
-                        x_left += cp_sensors_left[sensor].X * pressure_left[sensor] * area_sensors_left[sensor];
-                        y_left += cp_sensors_left[sensor].Y * pressure_left[sensor] * area_sensors_left[sensor];
-                    }
-                    x_left /= total_pressure_left;
-                    y_left /= total_pressure_left;
-                    pressure_center_left = new Vector2(x_left, y_left);
-                }
 
-                Vector2? pressure_center_right = null;
-                int total_pressure_right = 0;
-                foreach (Sensor sensor in (Sensor[])Enum.GetValues(typeof(Sensor)))
-                {
-                    total_pressure_right += pressure_right[sensor] * area_sensors_right[sensor];
-                }
-                if (total_pressure_right > 0)
-                {
-                    float x_right = 0;
-                    float y_right = 0;
-                    foreach (Sensor sensor in (Sensor[])Enum.GetValues(typeof(Sensor)))
-                    {
-                        x_right += cp_sensors_right[sensor].X * pressure_right[sensor] * area_sensors_right[sensor];
-                        y_right += cp_sensors_right[sensor].Y * pressure_right[sensor] * area_sensors_right[sensor];
-                    }
-                    x_right /= total_pressure_right;
-                    y_right /= total_pressure_right;
-                    pressure_center_right = new Vector2(x_right, y_right);
-                }
-                */
                 Tuple<double, double>? pressure_center_left;
                 Tuple<double, double>? pressure_center_right;
 
@@ -155,16 +111,16 @@ namespace insoles.Graphs
                 }
                 if (total_pressure_left > 0)
                 {
-                    double x_left = 0;
-                    double y_left = 0;
+                    double row_left = 0;
+                    double col_left = 0;
                     foreach (Sensor sensor in (Sensor[])Enum.GetValues(typeof(Sensor)))
                     {
-                        x_left += cp_sensors_left[sensor].Item1 * pressure_left[sensor] * area_sensors_left[sensor];
-                        y_left += cp_sensors_left[sensor].Item2 * pressure_left[sensor] * area_sensors_left[sensor];
+                        row_left += cp_sensors_left[sensor].Item1 * pressure_left[sensor] * area_sensors_left[sensor];
+                        col_left += cp_sensors_left[sensor].Item2 * pressure_left[sensor] * area_sensors_left[sensor];
                     }
-                    x_left /= total_pressure_left;
-                    y_left /= total_pressure_left;
-                    pressure_center_left = new Tuple<double, double>(x_left, y_left);
+                    row_left /= total_pressure_left;
+                    col_left /= total_pressure_left;
+                    pressure_center_left = new Tuple<double, double>(row_left, col_left);
                     cps_left.Add(pressure_center_left);
                 }
                 else
@@ -179,16 +135,16 @@ namespace insoles.Graphs
                 }
                 if (total_pressure_right > 0)
                 {
-                    double x_right = 0;
-                    double y_right = 0;
+                    double row_right = 0;
+                    double col_right = 0;
                     foreach (Sensor sensor in (Sensor[])Enum.GetValues(typeof(Sensor)))
                     {
-                        x_right += cp_sensors_right[sensor].Item1 * pressure_right[sensor] * area_sensors_right[sensor];
-                        y_right += cp_sensors_right[sensor].Item2 * pressure_right[sensor] * area_sensors_right[sensor];
+                        row_right += cp_sensors_right[sensor].Item1 * pressure_right[sensor] * area_sensors_right[sensor];
+                        col_right += cp_sensors_right[sensor].Item2 * pressure_right[sensor] * area_sensors_right[sensor];
                     }
-                    x_right /= total_pressure_right;
-                    y_right /= total_pressure_right;
-                    pressure_center_right = new Tuple<double, double>(x_right, y_right);
+                    row_right /= total_pressure_right;
+                    col_right /= total_pressure_right;
+                    pressure_center_right = new Tuple<double, double>(row_right, col_right);
                     cps_right.Add(pressure_center_right);
                 }
                 else
@@ -199,12 +155,24 @@ namespace insoles.Graphs
 
                 frames[i] = new FramePressures(i, pressure_center_left, pressure_center_right, total_pressure_left, total_pressure_right);
             }
+#if STATS
+            FramePressures.PrintStats();
+#endif
             graph.DrawData(frames);
             pressureGraph.DrawCPs(cps_left, cps_right);
         }
     }
     public class FramePressures
     {
+#if STATS
+        public static int leftWins = 0;
+        public static int rightWins = 0;
+        public static int leftZeros = 0;
+        public static int rightZeros = 0;
+        public static double totalCenterRow = 0;
+        public static double totalCenterCol = 0;
+        public static int totalCenters = 0;
+#endif
         public int frame { get; private set; }
         public Tuple<double, double>? totalCenter { get; private set; }
         public Tuple<double, double>? centerLeft { get; private set; }
@@ -221,17 +189,51 @@ namespace insoles.Graphs
             else if (centerLeft == null)
             {
                 totalCenter = centerRight;
+#if STATS
+                leftZeros++;
+#endif
             }
             else if (centerRight == null)
             {
                 totalCenter = centerLeft;
+#if STATS
+                rightZeros++;
+#endif
             }
             else
-            {
-                double x = (total_pressure_left * centerLeft.Item1 + total_pressure_right * centerRight.Item1) / (total_pressure_left + total_pressure_right);
-                double y = (total_pressure_left * centerLeft.Item2 + total_pressure_right * centerRight.Item2) / (total_pressure_left + total_pressure_right);
-                totalCenter = new Tuple<double, double>(x, y);
+            {   
+                double row = (total_pressure_left * centerLeft.Item1 + total_pressure_right * centerRight.Item1) / (total_pressure_left + total_pressure_right);
+                double col = (total_pressure_left * centerLeft.Item2 + total_pressure_right * centerRight.Item2) / (total_pressure_left + total_pressure_right);
+                totalCenter = new Tuple<double, double>(row, col);
+#if STATS
+                if (total_pressure_left > total_pressure_right)
+                {
+                    leftWins++;
+                }
+                else
+                {
+                    rightWins++;
+                }
+                totalCenterRow += row;
+                totalCenterCol += col;
+                totalCenters++;
+#endif
             }
         }
+#if STATS
+        public static void PrintStats()
+        {
+            Trace.WriteLine("Left zeros: " + leftZeros);
+            Trace.WriteLine("Right zeros: " + rightZeros);
+            Trace.WriteLine("Left wins: " + leftWins);
+            Trace.WriteLine("Right wins: " + rightWins);
+            Trace.WriteLine("Total Center Row Avg" + totalCenterRow / totalCenters);
+            Trace.WriteLine("Total Center Col Avg" + totalCenterCol / totalCenters);
+            int rows = ((MainWindow)Application.Current.MainWindow).foot.sensor_map.RowCount;
+            int cols = ((MainWindow)Application.Current.MainWindow).foot.sensor_map.ColumnCount;
+            Trace.WriteLine("Total Rows " + rows);
+            Trace.WriteLine("Total Cols " + cols);
+        }
+#endif
     }
 }

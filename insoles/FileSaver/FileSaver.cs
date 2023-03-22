@@ -273,12 +273,12 @@ namespace insoles.FileSaver
         }
         public void saveFakeFile()
         {
-            string stringSole()
+            string stringSole(int min = 0, int max = 4095)
             {
                 IEnumerable<int> randomPressures()
                 {
                     Random random = new Random();
-                    return random.NextInt32Sequence(0, 4095);
+                    return random.NextInt32Sequence(min, max);
                 }
                 IEnumerable<int> pressures = randomPressures();
                 IEnumerator<int> enumerator = pressures.GetEnumerator();
@@ -294,12 +294,12 @@ namespace insoles.FileSaver
             csvFile = fileName() + ".txt";
             csvData = new StringBuilder();
             csvData.Append(Config.csvHeaderInsoles);
-            int n = 100;
+            int n = 1000;
             for(int i = 0; i < n; i++)
             {
                 string dataline = "1 " + (i * 0.01f).ToString("F2") + " " +
-                            (i).ToString() + " " + stringSole() + " " +
-                            stringSole() + "\n";
+                            (i).ToString() + " " + stringSole(0, 1000) + " " +
+                            stringSole(2000, 3000) + "\n";
                 csvData.Append(dataline);
             }
             string filePath = Config.INITIAL_PATH + Path.DirectorySeparatorChar + csvFile;
