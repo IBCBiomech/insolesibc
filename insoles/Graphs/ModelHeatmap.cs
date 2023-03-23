@@ -33,7 +33,7 @@ namespace insoles.Graphs
             {
                 plot.Plot.Clear(colorbar.GetType());
             }
-            heatmap = plot.Plot.AddHeatmap(data, colormap:Colormap.Jet);
+            heatmap = plot.Plot.AddHeatmap(data, colormap:Config.colormap);
             heatmap.Update(data, min: 0);
             heatmap.Smooth = true;
             colorbar = plot.Plot.AddColorbar(heatmap);

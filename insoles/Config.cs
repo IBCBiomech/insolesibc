@@ -1,6 +1,7 @@
 ﻿using insoles.Graphs;
 using OpenCvSharp;
 using OpenCvSharp.Aruco;
+using ScottPlot.Drawing;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -41,6 +42,7 @@ namespace insoles
         public static Color colorW = Color.Orange;
         public const float BACKGROUND = -1;
         public const Quality footQuality = Quality.MID;
+        public static Colormap colormap = Colormap.Jet;
         public static Dictionary<Quality, double> qualitySizes = new Dictionary<Quality, double>() 
         {
             [Quality.HIGH] = 1,

@@ -2,20 +2,12 @@
 #define CENTER_LEFT
 #define CENTER_RIGHT
 
+using ScottPlot.Drawing;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace insoles.Graphs
 {
@@ -49,25 +41,31 @@ namespace insoles.Graphs
         {
             List<double> x = new List<double>();
             List<double> y = new List<double>();
+            List<Color> colors = new List<Color>();
             int index = 0;
+            Colormap colormap = Config.colormap;
 #if !CENTROS_SEPARADOS
             while (data[index].totalCenter == null)
             {
                 index++;
             }
-            Tuple<double, double> firstPoint = data[index].totalCenter;
+            FramePressures firstFrame = data[index];
+            Tuple<double, double> firstPoint = firstFrame.totalCenter;
             x.Add(firstPoint.Item1);
             y.Add(firstPoint.Item2);
+            colors.Add(colormap.GetColor(firstFrame.totalPressure / FramePressures.maxPressure));
             for (int i = index + 1; i < data.Length; i++)
             {
                 if (data[i].totalCenter != null)
                 {
-                    Tuple<double, double> point = data[i].totalCenter;
+                    FramePressures frame = data[i];
+                    Tuple<double, double> point = frame.totalCenter;
                     x.Add(point.Item1);
                     y.Add(point.Item2);
+                    colors.Add(colormap.GetColor(frame.totalPressure / FramePressures.maxPressure));
                 }
             }
-            model.DrawData(x, y);
+            model.DrawData(x, y, colors);
 #else
 #if CENTER_LEFT
             index = 0;

@@ -90,12 +90,11 @@ namespace insoles.Graphs
         }
         public void Calculate(GraphData graphData)
         {
+            FramePressures.Reset();
             frames = new FramePressures[graphData.length];
-            //frames = new FramePressures[5000];
             cps_left = new List<Tuple<double, double>>();
             cps_right = new List<Tuple<double, double>>();
             for(int i = 0; i < graphData.length; i++)
-            //for (int i = 0; i < 5000; i++)
             {
                 FrameDataInsoles frameData = (FrameDataInsoles)graphData[i];
                 DataInsole pressure_left = frameData.left;
@@ -173,15 +172,22 @@ namespace insoles.Graphs
         public static double totalCenterCol = 0;
         public static int totalCenters = 0;
 #endif
+        public static double maxPressure { get; private set; } = 0;
         public int frame { get; private set; }
         public Tuple<double, double>? totalCenter { get; private set; }
         public Tuple<double, double>? centerLeft { get; private set; }
         public Tuple<double, double>? centerRight { get; private set; }
+        public double totalPressure { get; private set; }
         public FramePressures(int frame, Tuple<double, double>? centerLeft, Tuple<double, double>? centerRight, int total_pressure_left, int total_pressure_right)
         {
             this.frame = frame;
             this.centerLeft = centerLeft;
             this.centerRight = centerRight;
+            totalPressure = total_pressure_left + total_pressure_right;
+            if(totalPressure > maxPressure)
+            {
+                maxPressure = totalPressure;
+            }
             if (centerLeft == null && centerRight == null)
             {
                 totalCenter = null;
@@ -219,6 +225,11 @@ namespace insoles.Graphs
                 totalCenters++;
 #endif
             }
+        }
+        // Nuevo fichero
+        public static void Reset()
+        {
+            maxPressure = 0;
         }
 #if STATS
         public static void PrintStats()

@@ -308,5 +308,24 @@ namespace insoles.Common
             }
             return result;
         }
+        public static Color Interpolate(Color color1, Color color2)
+        {
+            const float ratio = 0.5f;
+            return Color.FromArgb(
+                (int)(color1.R * ratio + color2.R * ratio),
+                (int)(color1.G * ratio + color2.G * ratio),
+                (int)(color1.B * ratio + color2.B * ratio)
+            );
+        }
+        public static Color Interpolate(Color color1, Color color2, int alpha)
+        {
+            const float ratio = 0.5f;
+            return Color.FromArgb(
+                alpha,
+                (int)(color1.R * ratio + color2.R * ratio),
+                (int)(color1.G * ratio + color2.G * ratio),
+                (int)(color1.B * ratio + color2.B * ratio)
+            );
+        }
     }
 }

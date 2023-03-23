@@ -1,4 +1,5 @@
 ﻿#define PLANTILLA
+#define ALPHA //Incrementa alpha a medida que añade nuevos puntos al butterfly. Asi los puntos mas nuevos se ven por encima
 
 using ScottPlot;
 using Style = ScottPlot.Style;
@@ -88,8 +89,13 @@ namespace insoles.Graphs
             }
             bitmap.Save(Config.INITIAL_PATH + "\\bitmap_butterfly_white_smoke.png", ImageFormat.Png);
         }
-        public void DrawData(List<double> x_list, List<double> y_list)
+        public void DrawData(List<double> x_list, List<double> y_list, List<Color> colors)
         {
+            int calculateAlpha(int i, int length, int min = 128)
+            {
+                float percent = (float)i / length;
+                return Math.Max(min, (int)(percent * byte.MaxValue));
+            }
             plot.Plot.Clear(typeof(ScatterPlot));
             double[] x = new double[x_list.Count];
             double[] y = new double[y_list.Count];
@@ -106,7 +112,16 @@ namespace insoles.Graphs
             {
                 y[i] = y_list[i] * qualityMult * scale;
             }
-            cps = plot.Plot.AddScatterLines(x, y, Color.Red);
+            for(int i = 0; i < Math.Min(x.Length, y.Length) - 1; i++)
+            {
+#if ALPHA
+                Color color = Helpers.Interpolate(colors[i], colors[i + 1], calculateAlpha(i, colors.Count));
+#else
+                Color color = Helpers.Interpolate(colors[i], colors[i + 1]);
+#endif
+                plot.Plot.AddScatterLines(new double[] { x[i], x[i + 1] }, new double[] { y[i], y[i + 1] },
+                    color);
+            }
             plot.Refresh();
         }
     }
