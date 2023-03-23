@@ -1,4 +1,4 @@
-﻿//#define REDUCE_SORT
+﻿#define REDUCE_SORT
 
 using insoles.Common;
 using insoles.Graphs.Converters;
@@ -222,7 +222,7 @@ namespace insoles.Graphs
                 right = ReduceCPsByRanges(right, range);
             }
 #if REDUCE_SORT
-            ReduceByRanges(ref left, ref right, 5);
+            ReduceByRanges(ref left, ref right, 1);
             ReduceSorting(ref left, ref right, 50);   
 #else
             left = ReduceCPsByRanges(left);
