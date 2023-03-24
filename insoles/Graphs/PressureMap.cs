@@ -123,29 +123,6 @@ namespace insoles.Graphs
                 });
             }
         }
-        private void drawSensorMap()
-        {
-            Matrix<float> pressureMap = foot.sensor_map.Map((value) =>
-            {
-                if(value == 10 || value == 30 || value == 50 || value == 70)
-                {
-                    return 1000;
-                }
-                if(value == 20 || value == 40 || value == 80)
-                {
-                    //return 1000;
-                }
-                if (value < 100)
-                {
-                    return value * 2.5f;
-                }
-                else
-                {
-                    return value;
-                }
-            });
-            graph.DrawData(pressureMap);
-        }
         private Dictionary<SensorReduced, T> ReduceSensors<T>(Dictionary<Sensor, T> centers, Func<List<T>, T> transformFuncion)
         {
             Dictionary<SensorReduced, T> centersReduced = new Dictionary<SensorReduced, T>();
@@ -258,6 +235,7 @@ namespace insoles.Graphs
             MatrixMarketWriter.WriteMatrix(Config.INITIAL_PATH + "\\inverse_distances_background.mtx", inverse_distances);
             return inverse_distances;
         }
+        // Esto se usa si los sensores ocupan mas de 1 pixel
         private void CalculateMinDistances()
         {
             Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_left = foot.CalculateSensorPositionsLeft();
@@ -304,8 +282,6 @@ namespace insoles.Graphs
         }
         public void Calculate(GraphData graphData)
         {
-            //drawSensorMap();
-            //return;
             void CalculateAll()
             {
                 void CalculateOne(GraphData graphData, ActionRef<GraphData, DataInsole, DataInsole> func, Metric metric)
@@ -379,6 +355,7 @@ namespace insoles.Graphs
 
             return pressure_map;
         }
+        // Esto se usa si los sensores ocupan mas de 1 pixel
         private Matrix<float> Calculate_(DataInsole left, DataInsole right)
         {
             Matrix<float> pressure_map = foot.sensor_map.MapIndexed((row, col, code) => {

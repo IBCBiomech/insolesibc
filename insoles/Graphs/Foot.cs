@@ -1,7 +1,4 @@
-﻿#define PLANTILLA //Comentar esto para usar el pie
-//#define CSV //Comentar para usar bitmap en vez del modelo csv
-
-using DirectShowLib;
+﻿using DirectShowLib;
 using insoles.Common;
 using MathNet.Numerics.LinearAlgebra;
 using System.Collections.Generic;
@@ -28,77 +25,15 @@ namespace insoles.Graphs
         private Dictionary<Quality, string> resolutions = new Dictionary<Quality, string>();
         public Foot()
         {
-#if PLANTILLA
-#if CSV
-            //opcion 1 usar csv
-            string file = "Assets/model_heatmap_30_closest.csv";
-            string path = Helpers.GetFilePath(file);
-            sensor_map = DelimitedReader.Read<float>(path, false, ",", false);
-#else
-            //opcion 2 usar bitmap
-            //string file = "Assets/bitmap_heatmap_30_closest.png";
-            //string path = Helpers.GetFilePath(file);
             Uri uri = new Uri("pack://application:,,,/Assets/bitmap_heatmap_30_closest.png");
             StreamResourceInfo sri = Application.GetResourceStream(uri);
             Stream stream = sri.Stream;
             Bitmap bmp = new Bitmap(stream);
             sensor_map = Helpers.ImageToMatrix(bmp);
-#endif
+
             codes = new Codes();
             length[0] = sensor_map.RowCount;
             length[1] = sensor_map.ColumnCount;
-#else
-            resolutions[Quality.HIGH] = "foot_preprocess.png";
-            resolutions[Quality.MID] = "foot2q_preprocess.png";
-            resolutions[Quality.LOW] = "foot4q_preprocess.png";
-            Quality quality = Config.footQuality;
-            string file = resolutions[quality];
-            string path = Helpers.GetFilePath(file);
-            Bitmap bmp = new Bitmap(path);
-            sensor_map = Helpers.ImageToMatrix(bmp);
-            length[0] = sensor_map.RowCount;
-            length[1] = sensor_map.ColumnCount;
-            (float, int)[] frequences = Helpers.CountFrequences(sensor_map);
-            codes = new Codes(frequences);
-#endif
-        }
-        public int[] getImage()
-        {
-            int[] image = new int[sensor_map.RowCount * sensor_map.ColumnCount];
-            for (int i = 0; i < sensor_map.ColumnCount; i++)
-            {
-                for (int j = 0; j < sensor_map.RowCount; j++)
-                {
-                    if (sensor_map[j, i] == codes.Background())
-                    {
-                        image[i * sensor_map.RowCount + j] = Helpers.ColorToInt(Color.White);
-                    }
-                    else
-                    {
-                        image[i * sensor_map.RowCount + j] = Helpers.ColorToInt(Color.Gray);
-                    }
-                }
-            }
-            return image;
-        }
-        public byte[] getImageB()
-        {
-            byte[] image = new byte[sensor_map.RowCount * sensor_map.ColumnCount];
-            for (int i = 0; i < sensor_map.ColumnCount; i++)
-            {
-                for (int j = 0; j < sensor_map.RowCount; j++)
-                {
-                    if (sensor_map[j, i] == codes.Background())
-                    {
-                        image[i * sensor_map.RowCount + j] = Helpers.ColorToByte(Color.White);
-                    }
-                    else
-                    {
-                        image[i * sensor_map.RowCount + j] = Helpers.ColorToByte(Color.Gray);
-                    }
-                }
-            }
-            return image;
         }
         public int getLength(int index)
         {
