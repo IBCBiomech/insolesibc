@@ -198,28 +198,8 @@ namespace insoles.Graphs
             get { return pressures[sensor]; }
             set { pressures[sensor] = value; }
         }
-        /*
-        public int arch { get; set; }
-        public int hallux { get; set; }
-        public int heel_L { get; set; }
-        public int heel_R { get; set; }
-        public int met_1 { get; set; }
-        public int met_3 { get; set; }
-        public int met_5 { get; set; }
-        public int toes { get; set; }
-        */
         public DataInsole(string[] values, int firstIndex)
         {
-            /*
-            arch = int.Parse(values[firstIndex]);
-            hallux = int.Parse(values[firstIndex + 1]);
-            heel_L = int.Parse(values[firstIndex + 2]);
-            heel_R = int.Parse(values[firstIndex + 3]);
-            met_1 = int.Parse(values[firstIndex + 4]);
-            met_3 = int.Parse(values[firstIndex + 5]);
-            met_5 = int.Parse(values[firstIndex + 6]);
-            toes = int.Parse(values[firstIndex + 7]);
-            */
             pressures[Sensor.ARCH] = int.Parse(values[firstIndex]);
             pressures[Sensor.HALLUX] = int.Parse(values[firstIndex + 1]);
             pressures[Sensor.HEEL_L] = int.Parse(values[firstIndex + 2]);

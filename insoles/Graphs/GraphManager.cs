@@ -187,13 +187,6 @@ namespace insoles.Graphs
                     virtualToolBar.stopEvent += onStop;
                 });
             }
-            /*
-            mainWindow.api.StopStream(out error);
-            if (virtualToolBar.pauseState == PauseState.Play)
-            {
-                mainWindow.startActiveDevices();
-            }
-            */
             //datos falsos
             /*
             fakeTimer = new System.Timers.Timer();
@@ -229,18 +222,6 @@ namespace insoles.Graphs
                 */
             }
         }
-        // Se ejecuta al clicar pause
-        void onPause(object sender, PauseState pauseState)
-        {
-            if (pauseState == PauseState.Pause)
-            {
-                //timerRender.Stop();
-            }
-            else if (pauseState == PauseState.Play)
-            {
-                //timerRender.Start();
-            }
-        }
         // Se ejecuta al clicar stop
         void onStop(object sender)
         {
@@ -253,23 +234,6 @@ namespace insoles.Graphs
             fakets = 0.00f;
             frame = 0;
         }
-
-        //private void Fake_dataReceived()
-        //{
-        //    int n = 4;
-        //    Random random = new Random();
-        //    float[] sum_left = new float[n];
-        //    for (int i = 0; i < n; i++)
-        //    {
-        //        sum_left[i] = random.Next(10000);
-        //    }
-        //    float[] sum_right = new float[n];
-        //    for (int i = 0; i < n; i++)
-        //    {
-        //        sum_right[i] = random.Next(10000);
-        //    }
-        //    graph.drawData(sum_left, sum_right);
-        //}
 
         //Begin Wise
         //Callback para recoger datas del IMU
