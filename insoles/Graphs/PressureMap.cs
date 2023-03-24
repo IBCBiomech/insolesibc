@@ -1,4 +1,4 @@
-﻿//#define CENTER_SENSORS
+﻿#define CENTER_SENSORS
 #define REDUCE_SENSORS //Comentar esto para que no haga la media de MET y HEEL
 #define BAKGROUND_DISTANCES //Comentar esto para no usar las distancias al borde
 
@@ -17,6 +17,7 @@ using MathNet.Numerics.Data.Text;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using System.IO;
 using System.Windows.Resources;
+using MathNet.Numerics.Interpolation;
 
 namespace insoles.Graphs
 {
