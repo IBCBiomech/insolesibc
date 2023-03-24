@@ -1,4 +1,5 @@
-﻿#define REDUCE_SENSORS //Comentar esto para que no haga la media de MET y HEEL
+﻿//#define CENTER_SENSORS
+#define REDUCE_SENSORS //Comentar esto para que no haga la media de MET y HEEL
 #define BAKGROUND_DISTANCES //Comentar esto para no usar las distancias al borde
 
 using System;
@@ -66,6 +67,7 @@ namespace insoles.Graphs
                     }
                     return (sum1 / centers.Count, sum2 / centers.Count);
                 }
+#if CENTER_SENSORS
                 CalculateCenters();
 #if REDUCE_SENSORS
                 centersLeftReduced = ReduceSensors(centersLeft, reduceSensorsFunc);
@@ -73,6 +75,11 @@ namespace insoles.Graphs
                 inverse_reduced_distances = CalculateMinDistances(centersLeftReduced, centersRightReduced);
 #else
                 inverse_distances = CalculateMinDistances(centersLeft, centersRight);
+#endif
+#else
+                Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_left = foot.CalculateSensorPositionsLeft();
+                Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_right = foot.CalculateSensorPositionsRight();
+                inverse_distances = CalculateMinDistances(sensor_positions_left, sensor_positions_right);
 #endif
 #if BAKGROUND_DISTANCES
                 try
@@ -280,6 +287,61 @@ namespace insoles.Graphs
                 });
             }
         }
+        private Dictionary<Sensor, Matrix<float>> CalculateMinDistances(Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_left,
+            Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_right)
+        {
+            Dictionary<Sensor, Matrix<float>> inverse_distances = new Dictionary<Sensor, Matrix<float>>();
+            foreach (Sensor sensor in (Sensor[])Enum.GetValues(typeof(Sensor)))
+            {
+                inverse_distances[sensor] = foot.sensor_map.MapIndexed((row, col, code) =>
+                {
+                    if(code == foot.codes.Background())
+                    {
+                        return 0.0f;
+                    }
+                    else
+                    {
+                        if (row < foot.sensor_map.RowCount / 2)
+                        {
+                            int min_distance = foot.sensor_map.RowCount * foot.sensor_map.RowCount + foot.sensor_map.ColumnCount * foot.sensor_map.ColumnCount;
+                            foreach (Tuple<int, int> point in sensor_positions_left[sensor])
+                            {
+                                int distance = Helpers.SquareDistance(row, col, point.Item1, point.Item2);
+                                if (distance < min_distance)
+                                {
+                                    if(distance <= 1)
+                                    {
+                                        distance = 1;
+                                        break;
+                                    }
+                                    min_distance = distance;
+                                }
+                            }
+                            return 1.0f / min_distance;
+                        }
+                        else
+                        {
+                            int min_distance = foot.sensor_map.RowCount * foot.sensor_map.RowCount + foot.sensor_map.ColumnCount * foot.sensor_map.ColumnCount;
+                            foreach (Tuple<int, int> point in sensor_positions_right[sensor])
+                            {
+                                int distance = Helpers.SquareDistance(row, col, point.Item1, point.Item2);
+                                if (distance < min_distance)
+                                {
+                                    if (distance <= 1)
+                                    {
+                                        distance = 1;
+                                        break;
+                                    }
+                                    min_distance = distance;
+                                }
+                            }
+                            return 1.0f / min_distance;
+                        }
+                    }
+                });
+            }
+            return inverse_distances;
+        }
         public void Calculate(GraphData graphData)
         {
             void CalculateAll()
@@ -295,10 +357,14 @@ namespace insoles.Graphs
                     func(graphData, ref leftInsole, ref rightInsole);
                     Dictionary<Sensor, int> pressuresLeft = leftInsole.pressures;
                     Dictionary<Sensor, int> pressuresRight = rightInsole.pressures;
+#if CENTER_SENSORS
 #if REDUCE_SENSORS
                     Dictionary<SensorReduced, int> pressuresLeftReduced = ReduceSensors(pressuresLeft, reduceFunc);
                     Dictionary<SensorReduced, int> pressuresRightReduced = ReduceSensors(pressuresRight, reduceFunc);
                     pressureMaps[metric] = CalculateFromPoint(pressuresLeftReduced, pressuresRightReduced, inverse_reduced_distances);
+#else
+                    pressureMaps[metric] = CalculateFromPoint(pressuresLeft, pressuresRight, inverse_distances);
+#endif
 #else
                     pressureMaps[metric] = CalculateFromPoint(pressuresLeft, pressuresRight, inverse_distances);
 #endif
