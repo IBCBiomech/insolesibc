@@ -76,9 +76,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="alglib320hpc_net5">
-      <HintPath>alglib320hpc_net5.dll</HintPath>
-    </Reference>
     <Reference Include="WisewalkSDK">
       <HintPath>WisewalkSDK.dll</HintPath>
     </Reference>
