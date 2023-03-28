@@ -297,9 +297,12 @@ namespace insoles.Graphs
             if (isInitialized)
             {
                 graph.calculating = true;
-                CalculateAll();
-                graph.DrawData(pressureMaps[metric]);
-                graph.calculating = false;
+                Task.Run(() =>
+                {
+                    CalculateAll();
+                    graph.DrawData(pressureMaps[metric]);
+                    graph.calculating = false;
+                });
             }
             else
             {
