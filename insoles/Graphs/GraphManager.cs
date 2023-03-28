@@ -339,6 +339,7 @@ namespace insoles.Graphs
         private TimeLine.TimeLine timeLine;
         private Butterfly butterfly;
         private PressureMap pressureMap;
+        private AlgLib algLib;
         private GraphSumPressures sumPressures;
 
         private GraphData graphData;
@@ -368,6 +369,7 @@ namespace insoles.Graphs
             {
                 butterfly = mainWindow.butterfly;
             }
+            /*
             if (mainWindow.pressureMap == null)
             {
                 mainWindow.initialized += (s, e) =>
@@ -378,6 +380,18 @@ namespace insoles.Graphs
             else
             {
                 pressureMap = mainWindow.pressureMap;
+            }
+            */
+            if (mainWindow.algLib == null)
+            {
+                mainWindow.initialized += (s, e) =>
+                {
+                    algLib = mainWindow.algLib;
+                };
+            }
+            else
+            {
+                algLib = mainWindow.algLib;
             }
             if (mainWindow.graphSumPressures.Content == null)
             {
@@ -398,7 +412,8 @@ namespace insoles.Graphs
                 active = true;
                 this.graphData = graphData;
                 butterfly.Calculate(graphData);
-                pressureMap.Calculate(graphData);
+                //pressureMap.Calculate(graphData);
+                algLib.Calculate(graphData);
                 sumPressures.drawData(graphData);
                 frameEvent += sumPressures.onUpdateTimeLine;
                 timeLine.model.timeEvent += onUpdateTimeLine;
@@ -422,7 +437,8 @@ namespace insoles.Graphs
             {
                 this.graphData = graphData;
                 butterfly.Calculate(graphData);
-                pressureMap.Calculate(graphData);
+                //pressureMap.Calculate(graphData);
+                algLib.Calculate(graphData);
                 sumPressures.clearData();
                 sumPressures.drawData(graphData);
             }

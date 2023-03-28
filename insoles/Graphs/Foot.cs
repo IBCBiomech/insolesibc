@@ -75,5 +75,31 @@ namespace insoles.Graphs
             }
             return sensor_positions;
         }
+        public List<Tuple<int, int>> CalculateFootPositionsLeft()
+        {
+            return CalculateFootPositions(new Tuple<int, int>(0, sensor_map.RowCount / 2));
+        }
+        public List<Tuple<int, int>> CalculateFootPositionsRight()
+        {
+            return CalculateFootPositions(new Tuple<int, int>(sensor_map.RowCount / 2, sensor_map.RowCount));
+        }
+        private List<Tuple<int, int>> CalculateFootPositions(Tuple<int, int> axis1_range)
+        {
+            Trace.WriteLine("Columns: " + sensor_map.ColumnCount);
+            Trace.WriteLine("Rows: " + sensor_map.RowCount);
+            List<Tuple<int, int>> foot_positions = new List<Tuple<int, int>>();
+            for (int i = axis1_range.Item1; i < axis1_range.Item2; i++)
+            {
+                for (int j = 0; j < sensor_map.ColumnCount; j++)
+                {
+                    float code = sensor_map[i, j];
+                    if (codes.Foot() == code)
+                    {
+                        foot_positions.Add(new Tuple<int, int>(i, j));
+                    }
+                }
+            }
+            return foot_positions;
+        }
     }
 }

@@ -30,6 +30,7 @@ namespace insoles.Graphs
     {
         private Foot foot;
         private PressureMap pressureMap;
+        private AlgLib algLib;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -140,6 +141,7 @@ namespace insoles.Graphs
             {
                 foot = mainWindow.foot;
             }
+            /*
             if (mainWindow.pressureMap == null)
             {
                 mainWindow.initialized += (s, e) =>
@@ -150,6 +152,18 @@ namespace insoles.Graphs
             else
             {
                 pressureMap = mainWindow.pressureMap;
+            }
+            */
+            if (mainWindow.algLib == null)
+            {
+                mainWindow.initialized += (s, e) =>
+                {
+                    algLib = mainWindow.algLib;
+                };
+            }
+            else
+            {
+                algLib = mainWindow.algLib;
             }
             metric.SelectionChanged += (s, e) =>
             {
