@@ -71,14 +71,14 @@ public partial class GraphSumPressures : Page
                 right[i] /= Config.NUM_SENSORS;
             }
         }
-        await Application.Current.Dispatcher.BeginInvoke(UPDATE_PRIORITY, () =>
+        await Application.Current.Dispatcher.BeginInvoke(() =>
         {
             model.updateData(left, right);
         });
     }
     public async void onUpdateTimeLine(object sender, int frame)
     {
-        await Application.Current.Dispatcher.BeginInvoke(UPDATE_PRIORITY, () =>
+        await Application.Current.Dispatcher.BeginInvoke(() =>
         {
             model.updateIndex(frame);
         });

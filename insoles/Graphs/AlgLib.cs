@@ -173,9 +173,9 @@ namespace insoles.Graphs
                                 i++;
                             }
                         }
-                        rbfsetpoints(model, points);
+                        rbfsetpoints(model, points, alglib.parallel);
                         rbfreport report;
-                        rbfbuildmodel(model, out report);
+                        rbfbuildmodel(model, out report, alglib.parallel);
                         return model;
                     }
                     DataInsole leftInsole = new DataInsole();
@@ -235,9 +235,9 @@ namespace insoles.Graphs
                             points[i, 2] = value;
                             i++;
                         }
-                        rbfsetpoints(model, points);
+                        rbfsetpoints(model, points, alglib.parallel);
                         rbfreport report;
-                        rbfbuildmodel(model, out report);
+                        rbfbuildmodel(model, out report, alglib.parallel);
                         Trace.WriteLine(report);
                         return model;
                     }
@@ -290,9 +290,9 @@ namespace insoles.Graphs
                     Trace.WriteLine("right foot " + stopwatch.Elapsed.TotalSeconds);
                     pressureMaps[metric] = data;
                 }
-                CalculateOneFromCenters(graphData, average, Metric.Avg);
-                CalculateOneFromCenters(graphData, max, Metric.Max);
-                CalculateOneFromCenters(graphData, min, Metric.Min);
+                CalculateOne(graphData, average, Metric.Avg);
+                //CalculateOne(graphData, max, Metric.Max);
+                //CalculateOneFromCenters(graphData, min, Metric.Min);
             }
             if (isInitialized)
             {

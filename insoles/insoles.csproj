@@ -56,7 +56,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="alglib.net" Version="3.19.0" />
     <PackageReference Include="DirectShowLib" Version="1.0.0" />
     <PackageReference Include="DirectShowLib.Standard" Version="2.1.0" />
     <PackageReference Include="Dirkster.AvalonDock" Version="4.71.1" />
@@ -77,6 +76,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="alglib320hpc_net5">
+      <HintPath>alglib320hpc_net5.dll</HintPath>
+    </Reference>
     <Reference Include="WisewalkSDK">
       <HintPath>WisewalkSDK.dll</HintPath>
     </Reference>
