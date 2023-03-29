@@ -129,6 +129,15 @@ namespace insoles.Common
                 Trace.WriteLine(temp);
             }
         }
+        public static void printList(List<Tuple<int, int>> list)
+        {
+            Trace.WriteLine("list");
+            foreach(var item in list)
+            {
+                Trace.Write(item + " ");
+            }
+            Trace.WriteLine("");
+        }
         public static bool NearlyEqual(float a, float b, float epsilon = 0.1f)
         {
             float absA = Math.Abs(a);

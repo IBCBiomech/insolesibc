@@ -1,4 +1,5 @@
-﻿using insoles.TimeLine;
+﻿using insoles.Common;
+using insoles.TimeLine;
 using MathNet.Numerics.LinearAlgebra;
 using OpenCvSharp;
 using System;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using static alglib;
 using static insoles.Graphs.GraphSumPressures;
 using static ScottPlot.Plottable.PopulationPlot;
@@ -32,14 +34,22 @@ namespace insoles.Graphs
         private Dictionary<Sensor, List<Tuple<int, int>>> sensorPositionsLeft;
         private Dictionary<Sensor, List<Tuple<int, int>>> sensorPositionsRight;
 
+        private Dictionary<Sensor, List<Tuple<int, int>>> sensorPositionsLeftReduced;
+        private Dictionary<Sensor, List<Tuple<int, int>>> sensorPositionsRightReduced;
+
         private Dictionary<Sensor, (float, float)> centersLeft = new Dictionary<Sensor, (float, float)>();
         private Dictionary<Sensor, (float, float)> centersRight = new Dictionary<Sensor, (float, float)>();
 
         private int numLeftSensorPoints;
         private int numRightSensorPoints;
 
+        private int numLeftSensorPointsReduced;
+        private int numRightSensorPointsReduced;
+
         private int numLeftFootPoints;
         private int numRightFootPoints;
+
+        private const int REDUCTION_FACTOR = 40;
 
         private Dictionary<Metric, Matrix<float>> pressureMaps = new Dictionary<Metric, Matrix<float>>();
         public AlgLib()
@@ -84,12 +94,29 @@ namespace insoles.Graphs
                     }
                     return N;
                 }
+                Dictionary<Sensor, List<Tuple<int, int>>> reduceSensorPoints(Dictionary<Sensor, List<Tuple<int, int>>> sensorPositions, int factor)
+                {
+                    Random random = new Random();
+                    Dictionary<Sensor, List<Tuple<int, int>>> reducedSensorPositions = new Dictionary<Sensor, List<Tuple<int, int>>>();
+                    foreach (Sensor sensor in sensorPositions.Keys)
+                    {
+                        List<Tuple<int, int>> concreteSensorPositions = sensorPositions[sensor];
+                        int N = concreteSensorPositions.Count;
+                        Trace.WriteLine(N);
+                        int resN = N / factor;
+                        Trace.WriteLine(resN);
+                        reducedSensorPositions[sensor] = concreteSensorPositions.OrderBy(x => random.Next()).Take(resN).ToList();
+                    }
+                    return reducedSensorPositions;
+                }
                 sensorPositionsLeft = foot.CalculateSensorPositionsLeft();
                 sensorPositionsRight = foot.CalculateSensorPositionsRight();
+                sensorPositionsLeftReduced = reduceSensorPoints(sensorPositionsLeft, REDUCTION_FACTOR);
+                sensorPositionsRightReduced = reduceSensorPoints(sensorPositionsRight, REDUCTION_FACTOR);
                 numLeftSensorPoints = countSensorPoints(sensorPositionsLeft);
                 numRightSensorPoints = countSensorPoints(sensorPositionsRight);
-                rbfcreate(2, 1, out leftModel);
-                rbfcreate(2, 1, out rightModel);
+                numLeftSensorPointsReduced = countSensorPoints(sensorPositionsLeftReduced);
+                numRightSensorPointsReduced = countSensorPoints(sensorPositionsRightReduced);
                 CalculateCenters();
                 isInitialized = true;
                 initialized?.Invoke(this, EventArgs.Empty);
@@ -218,6 +245,79 @@ namespace insoles.Graphs
                     Trace.WriteLine("right foot " + stopwatch.Elapsed.TotalSeconds);
                     pressureMaps[metric] = data;
                 }
+                void CalculateOneFromReduced(GraphData graphData, ActionRef<GraphData, DataInsole, DataInsole> func, Metric metric)
+                {
+                    rbfmodel CalculateModel(Dictionary<Sensor, int> pressures,
+                        Dictionary<Sensor, List<Tuple<int, int>>> sensorPositions, int numSensorPoints)
+                    {
+                        rbfmodel model;
+                        rbfcreate(2, 1, out model);
+                        double[,] points = new double[numSensorPoints, 3];
+                        int i = 0;
+                        foreach (Sensor sensor in sensorPositions.Keys)
+                        {
+                            double value = pressures[sensor];
+                            foreach (Tuple<int, int> position in sensorPositions[sensor])
+                            {
+                                points[i, 0] = position.Item1;
+                                points[i, 1] = position.Item2;
+                                points[i, 2] = value;
+                                i++;
+                            }
+                        }
+                        rbfsetpoints(model, points, alglib.parallel);
+                        rbfreport report;
+                        rbfbuildmodel(model, out report, alglib.parallel);
+                        return model;
+                    }
+                    DataInsole leftInsole = new DataInsole();
+                    DataInsole rightInsole = new DataInsole();
+                    func(graphData, ref leftInsole, ref rightInsole);
+                    Dictionary<Sensor, int> pressuresLeft = leftInsole.pressures;
+                    Dictionary<Sensor, int> pressuresRight = rightInsole.pressures;
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.Restart();
+                    rbfmodel modelLeft = CalculateModel(pressuresLeft, sensorPositionsLeftReduced, numLeftSensorPointsReduced);
+                    Trace.WriteLine("model left " + stopwatch.Elapsed.TotalSeconds);
+                    stopwatch.Restart();
+                    rbfmodel modelRight = CalculateModel(pressuresRight, sensorPositionsRightReduced, numRightSensorPointsReduced);
+                    Trace.WriteLine("model right " + stopwatch.Elapsed.TotalSeconds);
+                    Matrix<float> data = foot.sensor_map.Clone();
+                    float background = foot.codes.Background();
+                    stopwatch.Restart();
+                    for (int i = 0; i < data.RowCount / 2; i++)
+                    {
+                        for (int j = 0; j < data.ColumnCount; j++)
+                        {
+                            if (data[i, j] == background)
+                            {
+                                data[i, j] = Config.BACKGROUND;
+                            }
+                            else
+                            {
+                                data[i, j] = (float)rbfcalc2(modelLeft, i, j);
+                            }
+                        }
+                    }
+                    Trace.WriteLine("left foot " + stopwatch.Elapsed.TotalSeconds);
+                    stopwatch.Restart();
+                    for (int i = data.RowCount / 2; i < data.RowCount; i++)
+                    {
+                        for (int j = 0; j < data.ColumnCount; j++)
+                        {
+                            if (data[i, j] == background)
+                            {
+                                data[i, j] = Config.BACKGROUND;
+                            }
+                            else
+                            {
+                                data[i, j] = (float)rbfcalc2(modelRight, i, j);
+                            }
+                        }
+                    }
+                    Trace.WriteLine("right foot " + stopwatch.Elapsed.TotalSeconds);
+                    pressureMaps[metric] = data;
+                }
                 void CalculateOneFromCenters(GraphData graphData, ActionRef<GraphData, DataInsole, DataInsole> func, Metric metric)
                 {
                     rbfmodel CalculateModel(Dictionary<Sensor, int> pressures,
@@ -290,9 +390,9 @@ namespace insoles.Graphs
                     Trace.WriteLine("right foot " + stopwatch.Elapsed.TotalSeconds);
                     pressureMaps[metric] = data;
                 }
-                CalculateOne(graphData, average, Metric.Avg);
-                //CalculateOne(graphData, max, Metric.Max);
-                //CalculateOneFromCenters(graphData, min, Metric.Min);
+                CalculateOneFromReduced(graphData, average, Metric.Avg);
+                CalculateOneFromReduced(graphData, max, Metric.Max);
+                CalculateOneFromReduced(graphData, min, Metric.Min);
             }
             if (isInitialized)
             {
