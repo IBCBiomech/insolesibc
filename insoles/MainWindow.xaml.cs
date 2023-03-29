@@ -73,10 +73,37 @@ namespace insoles
 
             initToolBarHandlers();
 
+            initCameraAnchorables();
+
             initialized?.Invoke(this, EventArgs.Empty);
 
             //fileSaver.saveFakeFile();
             //virtualToolBar.transformFiles();
+        }
+        private void initCameraAnchorables()
+        {
+            if (camaraViewport1.Content == null)
+            {
+                camaraViewport1.Navigated += delegate (object sender, NavigationEventArgs e)
+                {
+                    ((CamaraViewport.CamaraViewport)camaraViewport1.Content).layoutAnchorable = camaraAnchorable1;
+                };
+            }
+            else
+            {
+                ((CamaraViewport.CamaraViewport)camaraViewport1.Content).layoutAnchorable = camaraAnchorable1;
+            }
+            if (camaraViewport2.Content == null)
+            {
+                camaraViewport2.Navigated += delegate (object sender, NavigationEventArgs e)
+                {
+                    ((CamaraViewport.CamaraViewport)camaraViewport2.Content).layoutAnchorable = camaraAnchorable2;
+                };
+            }
+            else
+            {
+                ((CamaraViewport.CamaraViewport)camaraViewport2.Content).layoutAnchorable = camaraAnchorable2;
+            }
         }
         // Conecta los botones de la ToolBar
         private void initToolBarHandlers()
@@ -295,6 +322,8 @@ namespace insoles
             {
                 DeviceList.DeviceList deviceListClass = deviceList.Content as DeviceList.DeviceList;
                 IList<object> selectedItems = (IList<object>)deviceListClass.treeView.SelectedItems;
+                List<Frame> camaraViewportFrames = new List<Frame>() { camaraViewport1, camaraViewport2 };
+                int frameIndex = 0;
                 foreach (object selected in selectedItems)
                 {
                     if (selected != null && selected is CameraInfo)
@@ -302,13 +331,17 @@ namespace insoles
                         MultiSelectTreeViewItem treeViewItem = (MultiSelectTreeViewItem)deviceListClass.cameras.ItemContainerGenerator.ContainerFromItem(selected);
                         CameraInfo cameraInfo = treeViewItem.DataContext as CameraInfo;
                         int id = cameraInfo.number; //Id de la camara
-                        CamaraViewport.CamaraViewport camaraViewportClass = camaraViewport.Content as CamaraViewport.CamaraViewport;
-                        if (!camaraViewportClass.someCameraOpened())
+                        while(frameIndex < camaraViewportFrames.Count)
                         {
-                            camaraViewportClass.Title = cameraInfo.name + " CAM " + id;
-                            camaraViewportClass.initializeCamara(id);
+                            CamaraViewport.CamaraViewport camaraViewportClass = camaraViewportFrames[frameIndex].Content as CamaraViewport.CamaraViewport;
+                            frameIndex++;
+                            if (!camaraViewportClass.someCameraOpened())
+                            {
+                                //camaraViewportClass.Title = cameraInfo.name + " CAM " + id;
+                                camaraViewportClass.initializeCamara(id);
+                                break;
+                            }
                         }
-                        break;
                     }
                 }
             }

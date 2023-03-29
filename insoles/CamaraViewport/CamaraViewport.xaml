@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:insoles.CamaraViewport"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="CamaraViewport">
+      Title="{Binding title}">
 
     <Grid>
         <Grid.RowDefinitions>

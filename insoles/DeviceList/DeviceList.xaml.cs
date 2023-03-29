@@ -51,6 +51,18 @@ namespace insoles.DeviceList
         {
             return VM.cameras;
         }
+        public CameraInfo? getCamera(int number)
+        {
+            try
+            {
+                return VM.cameras.Where((ci) => ci.number == number).First();
+            }
+            catch(ArgumentNullException)
+            {
+                Trace.WriteLine("camera " + number + " not found");
+                return null;
+            }
+        }
         public void setCameras(ObservableCollection<CameraInfo> cameras)
         {
             VM.cameras = cameras;

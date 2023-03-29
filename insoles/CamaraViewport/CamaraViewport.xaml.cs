@@ -7,6 +7,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using System.Windows.Navigation;
+using insoles.DeviceList.TreeClasses;
+using insoles.DeviceList.Enums;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using AvalonDock.Layout;
 
 namespace insoles.CamaraViewport
 {
@@ -27,6 +32,11 @@ namespace insoles.CamaraViewport
         public event EventHandler cameraChanged;
 
         private Mat _currentFrame;
+
+        private DeviceList.DeviceList deviceList;
+
+        public LayoutAnchorable layoutAnchorable { get; set; }
+        public int? index { get; private set; } = null;
         public Mat currentFrame
         {
             get
@@ -41,6 +51,45 @@ namespace insoles.CamaraViewport
                 lock (_currentFrame)
                 {
                     _currentFrame = value;
+                }
+            }
+        }
+        private string titleFromPosition(Position position)
+        {
+            switch (position)
+            {
+                case Position.Foot:
+                    return "Foot Cam";
+                case Position.Body:
+                    return "Body Cam";
+                default:
+                    return "Unknow position";
+            }
+        }
+        private string getTitle()
+        {
+            if (index == null)
+            {
+                return "Uninitialized camera";
+            }
+            else
+            {
+                CameraInfo? cameraInfo = deviceList.getCamera(index.Value);
+                if(cameraInfo == null)
+                {
+                    return "Uninitialized camera";
+                }
+                else
+                {
+                    Position? position = cameraInfo.position;
+                    if(position == null)
+                    {
+                        return cameraInfo.name;
+                    }
+                    else
+                    {
+                        return titleFromPosition(position.Value);
+                    }
                 }
             }
         }
@@ -62,6 +111,18 @@ namespace insoles.CamaraViewport
             {
                 timeLine = mainWindow.timeLine.Content as TimeLine.TimeLine;
             }
+            if (mainWindow.deviceList.Content == null)
+            {
+                mainWindow.deviceList.Navigated += delegate (object sender, NavigationEventArgs e)
+                {
+                    deviceList = mainWindow.deviceList.Content as DeviceList.DeviceList;
+                };
+            }
+            else
+            {
+                deviceList = mainWindow.deviceList.Content as DeviceList.DeviceList;
+            }
+            CameraInfo.positionChanged += (s,e) => { layoutAnchorable.Title = getTitle(); };
         }
         public async void initReplay(string path)
         {
@@ -108,6 +169,7 @@ namespace insoles.CamaraViewport
         public void initializeCamara(int index)
         {
             // Quitar la imagen de la grabacion anterior
+            this.index = index;
             currentFrame = getBlackImage();
             imgViewport.Source = BitmapSourceConverter.ToBitmapSource(currentFrame);
             
@@ -118,6 +180,7 @@ namespace insoles.CamaraViewport
             videoCapture = new VideoCapture(index, VideoCaptureAPIs.DSHOW);
             displayTask = displayCameraCallback();
             cameraChanged?.Invoke(this, EventArgs.Empty);
+            layoutAnchorable.Title = getTitle();
         }
         // Cierra la camara y la ventana
         private void onClose(object sender, RoutedEventArgs e)

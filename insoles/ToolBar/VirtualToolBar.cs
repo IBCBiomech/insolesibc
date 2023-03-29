@@ -126,16 +126,16 @@ namespace insoles.ToolBar
                     saveMenu = toolBar.savingMenu.Content as SavingMenu;
                 }
             }
-            if(mainWindow.camaraViewport.Content == null)
+            if(mainWindow.camaraViewport1.Content == null)
             {
-                mainWindow.camaraViewport.Navigated += delegate (object sender, NavigationEventArgs e)
+                mainWindow.camaraViewport1.Navigated += delegate (object sender, NavigationEventArgs e)
                 {
-                    camaraViewport = mainWindow.camaraViewport.Content as CamaraViewport.CamaraViewport;
+                    camaraViewport = mainWindow.camaraViewport1.Content as CamaraViewport.CamaraViewport;
                 };
             }
             else
             {
-                camaraViewport = mainWindow.camaraViewport.Content as CamaraViewport.CamaraViewport;
+                camaraViewport = mainWindow.camaraViewport1.Content as CamaraViewport.CamaraViewport;
             }
             if (mainWindow.timeLine.Content == null)
             {

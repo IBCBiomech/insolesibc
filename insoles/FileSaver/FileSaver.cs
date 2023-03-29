@@ -48,16 +48,16 @@ namespace insoles.FileSaver
         private void finishInit()
         {
             MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
-            if (mainWindow.camaraViewport.Content == null)
+            if (mainWindow.camaraViewport1.Content == null)
             {
-                mainWindow.camaraViewport.Navigated += delegate (object sender, NavigationEventArgs e)
+                mainWindow.camaraViewport1.Navigated += delegate (object sender, NavigationEventArgs e)
                 {
-                    camaraViewport = mainWindow.camaraViewport.Content as CamaraViewport.CamaraViewport;
+                    camaraViewport = mainWindow.camaraViewport1.Content as CamaraViewport.CamaraViewport;
                 };
             }
             else
             {
-                camaraViewport = mainWindow.camaraViewport.Content as CamaraViewport.CamaraViewport;
+                camaraViewport = mainWindow.camaraViewport1.Content as CamaraViewport.CamaraViewport;
             }
             if (mainWindow.timeLine.Content == null)
             {

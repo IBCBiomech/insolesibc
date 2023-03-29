@@ -49,7 +49,7 @@ namespace insoles.Graphs
         private int numLeftFootPoints;
         private int numRightFootPoints;
 
-        private const int REDUCTION_FACTOR = 40;
+        private const int REDUCTION_FACTOR = 5;
 
         private Dictionary<Metric, Matrix<float>> pressureMaps = new Dictionary<Metric, Matrix<float>>();
         public AlgLib()
@@ -224,7 +224,11 @@ namespace insoles.Graphs
                     {
                         for(int j = 0; j < data.ColumnCount; j++)
                         {
-                            if(data[i, j] != background)
+                            if (data[i, j] == background)
+                            {
+                                data[i, j] = Config.BACKGROUND;
+                            }
+                            else
                             {
                                 data[i, j] = (float)rbfcalc2(modelLeft, i, j);
                             }
@@ -236,7 +240,11 @@ namespace insoles.Graphs
                     {
                         for (int j = 0; j < data.ColumnCount; j++)
                         {
-                            if (data[i, j] != background)
+                            if (data[i, j] == background)
+                            {
+                                data[i, j] = Config.BACKGROUND;
+                            }
+                            else
                             {
                                 data[i, j] = (float)rbfcalc2(modelRight, i, j);
                             }
@@ -390,9 +398,9 @@ namespace insoles.Graphs
                     Trace.WriteLine("right foot " + stopwatch.Elapsed.TotalSeconds);
                     pressureMaps[metric] = data;
                 }
-                CalculateOneFromReduced(graphData, average, Metric.Avg);
-                CalculateOneFromReduced(graphData, max, Metric.Max);
-                CalculateOneFromReduced(graphData, min, Metric.Min);
+                CalculateOne(graphData, average, Metric.Avg);
+                //CalculateOneFromReduced(graphData, max, Metric.Max);
+                //CalculateOneFromReduced(graphData, min, Metric.Min);
             }
             if (isInitialized)
             {
