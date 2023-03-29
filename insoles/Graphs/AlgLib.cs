@@ -49,7 +49,7 @@ namespace insoles.Graphs
         private int numLeftFootPoints;
         private int numRightFootPoints;
 
-        private const int REDUCTION_FACTOR = 5;
+        private const int REDUCTION_FACTOR = 10;
 
         private Dictionary<Metric, Matrix<float>> pressureMaps = new Dictionary<Metric, Matrix<float>>();
         public AlgLib()
@@ -398,7 +398,7 @@ namespace insoles.Graphs
                     Trace.WriteLine("right foot " + stopwatch.Elapsed.TotalSeconds);
                     pressureMaps[metric] = data;
                 }
-                CalculateOne(graphData, average, Metric.Avg);
+                CalculateOneFromReduced(graphData, average, Metric.Avg);
                 //CalculateOneFromReduced(graphData, max, Metric.Max);
                 //CalculateOneFromReduced(graphData, min, Metric.Min);
             }

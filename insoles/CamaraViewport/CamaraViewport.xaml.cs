@@ -166,7 +166,7 @@ namespace insoles.CamaraViewport
             return frame;
         }
         // Empieza a grabar la camara
-        public void initializeCamara(int index)
+        public async void initializeCamara(int index)
         {
             // Quitar la imagen de la grabacion anterior
             this.index = index;
@@ -178,9 +178,9 @@ namespace insoles.CamaraViewport
             cancellationTokenSourceDisplay = new CancellationTokenSource();
             cancellationTokenDisplay = cancellationTokenSourceDisplay.Token;
             videoCapture = new VideoCapture(index, VideoCaptureAPIs.DSHOW);
-            displayTask = displayCameraCallback();
             cameraChanged?.Invoke(this, EventArgs.Empty);
             layoutAnchorable.Title = getTitle();
+            await Task.Run(() => displayCameraCallback());
         }
         // Cierra la camara y la ventana
         private void onClose(object sender, RoutedEventArgs e)
