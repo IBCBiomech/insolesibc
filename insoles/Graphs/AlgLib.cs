@@ -10,9 +10,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Markup;
 using static alglib;
 using static insoles.Graphs.GraphSumPressures;
 using static ScottPlot.Plottable.PopulationPlot;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 
 namespace insoles.Graphs
 {
@@ -25,6 +27,8 @@ namespace insoles.Graphs
         private double[,] pointsRight;
         private Foot foot;
         private GraphPressureHeatmap graph;
+
+        private AlglibParameters alglibParameters;
 
         private bool isInitialized = false;
         public event EventHandler initialized;
@@ -117,6 +121,7 @@ namespace insoles.Graphs
                 numRightSensorPoints = countSensorPoints(sensorPositionsRight);
                 numLeftSensorPointsReduced = countSensorPoints(sensorPositionsLeftReduced);
                 numRightSensorPointsReduced = countSensorPoints(sensorPositionsRightReduced);
+                alglibParameters = new AlglibParameters(foot);
                 CalculateCenters();
                 isInitialized = true;
                 initialized?.Invoke(this, EventArgs.Empty);
@@ -180,6 +185,7 @@ namespace insoles.Graphs
         {
             void CalculateAll()
             {
+                [Obsolete("CalculateOne is deprecated, please use CalculateOneFromReducedAlglib instead.")]
                 void CalculateOne(GraphData graphData, ActionRef<GraphData, DataInsole, DataInsole> func, Metric metric)
                 {
                     rbfmodel CalculateModel(Dictionary<Sensor, int> pressures, 
@@ -253,6 +259,7 @@ namespace insoles.Graphs
                     Trace.WriteLine("right foot " + stopwatch.Elapsed.TotalSeconds);
                     pressureMaps[metric] = data;
                 }
+                [Obsolete("CalculateOneFromReduced is deprecated, please use CalculateOneFromReducedAlglib instead.")]
                 void CalculateOneFromReduced(GraphData graphData, ActionRef<GraphData, DataInsole, DataInsole> func, Metric metric)
                 {
                     rbfmodel CalculateModel(Dictionary<Sensor, int> pressures,
@@ -326,6 +333,88 @@ namespace insoles.Graphs
                     Trace.WriteLine("right foot " + stopwatch.Elapsed.TotalSeconds);
                     pressureMaps[metric] = data;
                 }
+                void CalculateOneFromReducedAlglib(GraphData graphData, ActionRef<GraphData, DataInsole, DataInsole> func, Metric metric)
+                {
+                    rbfmodel CalculateModel(Dictionary<Sensor, int> pressures,
+                        Dictionary<Sensor, List<Tuple<int, int>>> sensorPositions, int numSensorPoints)
+                    {
+                        rbfmodel model;
+                        rbfcreate(2, 1, out model);
+                        double[,] points = new double[numSensorPoints, 3];
+                        int i = 0;
+                        foreach (Sensor sensor in sensorPositions.Keys)
+                        {
+                            double value = pressures[sensor];
+                            foreach (Tuple<int, int> position in sensorPositions[sensor])
+                            {
+                                points[i, 0] = position.Item1;
+                                points[i, 1] = position.Item2;
+                                points[i, 2] = value;
+                                i++;
+                            }
+                        }
+                        rbfsetpoints(model, points, alglib.parallel);
+                        rbfreport report;
+                        rbfbuildmodel(model, out report, alglib.parallel);
+                        return model;
+                    }
+                    DataInsole leftInsole = new DataInsole();
+                    DataInsole rightInsole = new DataInsole();
+                    func(graphData, ref leftInsole, ref rightInsole);
+                    Dictionary<Sensor, int> pressuresLeft = leftInsole.pressures;
+                    Dictionary<Sensor, int> pressuresRight = rightInsole.pressures;
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.Restart();
+                    rbfmodel modelLeft = CalculateModel(pressuresLeft, sensorPositionsLeftReduced, numLeftSensorPointsReduced);
+                    Trace.WriteLine("model left " + stopwatch.Elapsed.TotalSeconds);
+                    stopwatch.Restart();
+                    rbfmodel modelRight = CalculateModel(pressuresRight, sensorPositionsRightReduced, numRightSensorPointsReduced);
+                    Trace.WriteLine("model right " + stopwatch.Elapsed.TotalSeconds);
+                    Matrix<float> data = foot.sensor_map.Clone();
+                    float background = foot.codes.Background();
+                    stopwatch.Restart();
+                    FootParameters left = alglibParameters.left;
+                    double[] Yl;
+                    rbfgridcalc2vsubset(modelLeft, left.X0, left.X0.Length, left.X1, left.X1.Length,
+                        left.FlagY, out Yl, parallel);
+                    for (int i = 0; i < left.X0.Length; i++)
+                    {
+                        for (int j = 0; j < left.X1.Length; j++)
+                        {
+                            if (data[i, j] == background)
+                            {
+                                data[i, j] = Config.BACKGROUND;
+                            }
+                            else
+                            {
+                                data[i, j] = (float)Yl[i + j * left.X0.Length];
+                            }
+                        }
+                    }
+                    Trace.WriteLine("left foot" + stopwatch.Elapsed.TotalSeconds);
+                    stopwatch.Restart();
+                    FootParameters right = alglibParameters.right;
+                    double[] Yr;
+                    rbfgridcalc2vsubset(modelRight, right.X0, right.X0.Length, right.X1, right.X1.Length,
+                        right.FlagY, out Yr, parallel);
+                    for (int i = 0; i < right.X0.Length; i++)
+                    {
+                        for (int j = 0; j < right.X1.Length; j++)
+                        {
+                            if (data[data.RowCount / 2 + i, j] == background)
+                            {
+                                data[data.RowCount / 2 + i, j] = Config.BACKGROUND;
+                            }
+                            else
+                            {
+                                data[data.RowCount / 2 + i, j] = (float)Yr[i + j * right.X0.Length];
+                            }
+                        }
+                    }
+                    Trace.WriteLine("right foot " + stopwatch.Elapsed.TotalSeconds);
+                    pressureMaps[metric] = data;
+                }
+                [Obsolete("CalculateOneFromCenters is deprecated, please use CalculateOneFromReducedAlglib instead.")]
                 void CalculateOneFromCenters(GraphData graphData, ActionRef<GraphData, DataInsole, DataInsole> func, Metric metric)
                 {
                     rbfmodel CalculateModel(Dictionary<Sensor, int> pressures,
@@ -364,7 +453,6 @@ namespace insoles.Graphs
                     Trace.WriteLine("model right " + stopwatch.Elapsed.TotalSeconds);
                     Matrix<float> data = foot.sensor_map.Clone();
                     float background = foot.codes.Background();
-                    stopwatch.Restart();
                     for (int i = 0; i < data.RowCount / 2; i++)
                     {
                         for (int j = 0; j < data.ColumnCount; j++)
@@ -398,9 +486,9 @@ namespace insoles.Graphs
                     Trace.WriteLine("right foot " + stopwatch.Elapsed.TotalSeconds);
                     pressureMaps[metric] = data;
                 }
-                CalculateOneFromReduced(graphData, average, Metric.Avg);
-                //CalculateOneFromReduced(graphData, max, Metric.Max);
-                //CalculateOneFromReduced(graphData, min, Metric.Min);
+                CalculateOneFromReducedAlglib(graphData, average, Metric.Avg);
+                CalculateOneFromReducedAlglib(graphData, max, Metric.Max);
+                CalculateOneFromReducedAlglib(graphData, min, Metric.Min);
             }
             if (isInitialized)
             {
@@ -492,6 +580,82 @@ namespace insoles.Graphs
             if (pressureMaps.ContainsKey(metric) && !graph.calculating)
             {
                 graph.DrawData(pressureMaps[metric]);
+            }
+        }
+        class AlglibParameters
+        {
+            public FootParameters left { get; private set; }
+            public FootParameters right { get; private set; }
+            public AlglibParameters(Foot foot)
+            {
+                Matrix<float> data = foot.sensor_map;
+                float background = foot.codes.Background();
+
+                double[] X0 = new double[data.RowCount / 2];
+                for (int i = 0; i < X0.Length; i++)
+                {
+                    X0[i] = i;
+                }
+                double[] X1 = new double[data.ColumnCount];
+                for (int i = 0; i < X1.Length; i++)
+                {
+                    X1[i] = i;
+                }
+                bool[] FlagY = new bool[X0.Length * X1.Length];
+                for (int i = 0; i < X0.Length; i++)
+                {
+                    for (int j = 0; j < X1.Length; j++)
+                    {
+                        if (data[i, j] == background)
+                        {
+                            FlagY[i + j * X0.Length] = false;
+                        }
+                        else
+                        {
+                            FlagY[i + j * X0.Length] = true;
+                        }
+                    }
+                }
+                left = new FootParameters(X0, X1, FlagY);
+
+                X0 = new double[data.RowCount - data.RowCount / 2];
+                for (int i = 0; i < X0.Length; i++)
+                {
+                    X0[i] = data.RowCount / 2 + i;
+                }
+                X1 = new double[data.ColumnCount];
+                for (int i = 0; i < X1.Length; i++)
+                {
+                    X1[i] = i;
+                }
+                FlagY = new bool[X0.Length * X1.Length];
+                for (int i = 0; i < X0.Length; i++)
+                {
+                    for (int j = 0; j < X1.Length; j++)
+                    {
+                        if (data[data.RowCount / 2 + i, j] == background)
+                        {
+                            FlagY[i + j * X0.Length] = false;
+                        }
+                        else
+                        {
+                            FlagY[i + j * X0.Length] = true;
+                        }
+                    }
+                }
+                right = new FootParameters(X0, X1, FlagY);
+            }
+        }
+        class FootParameters
+        {
+            public double[] X0 { get; private set; }
+            public double[] X1 { get; private set; }
+            public bool[] FlagY { get; private set; }
+            public FootParameters(double[] X0, double[] X1, bool[] FlagY)
+            {
+                this.X0 = X0;
+                this.X1 = X1;
+                this.FlagY = FlagY;
             }
         }
     }
