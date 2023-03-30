@@ -12,6 +12,7 @@ using insoles.DeviceList.Enums;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using AvalonDock.Layout;
+using System.Collections.Generic;
 
 namespace insoles.CamaraViewport
 {
@@ -92,6 +93,18 @@ namespace insoles.CamaraViewport
                     }
                 }
             }
+        }
+        public Position? position 
+        { 
+            get
+            {
+                CameraInfo? cameraInfo = deviceList.getCamera(index.Value);
+                if (cameraInfo == null)
+                {
+                    throw new KeyNotFoundException();
+                }
+                return cameraInfo.position;
+            } 
         }
 
         public CamaraViewport()
