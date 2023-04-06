@@ -86,7 +86,7 @@
                             <TextBlock Text="{Binding Path=number}" Grid.Column="3" TextAlignment="Center"/>
                             <ComboBox ItemsSource="{Binding Source={StaticResource dataFromPosition}}"
                                       SelectedItem="{Binding Path=position}" Grid.Column="4"/>
-                            <TextBlock Text="{Binding Path=fps}" Grid.Column="5" TextAlignment="Center"/>
+                            <ComboBox ItemsSource="{Binding Path=fpsAvailable}" SelectedValue="{Binding Path=fps}" SelectedIndex="0" Grid.Column="5" HorizontalContentAlignment="Center"/>
                         </Grid>
                     </DataTemplate>
                 </controls:MultiSelectTreeViewItem.ItemTemplate>

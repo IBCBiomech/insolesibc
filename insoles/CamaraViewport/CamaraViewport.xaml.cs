@@ -38,6 +38,8 @@ namespace insoles.CamaraViewport
 
         public LayoutAnchorable layoutAnchorable { get; set; }
         public int? index { get; private set; } = null;
+
+        public int fps { get; private set; }
         public Mat currentFrame
         {
             get
@@ -179,8 +181,9 @@ namespace insoles.CamaraViewport
             return frame;
         }
         // Empieza a grabar la camara
-        public async void initializeCamara(int index)
+        public async void initializeCamara(int index, int fps)
         {
+            this.fps = fps;
             // Quitar la imagen de la grabacion anterior
             this.index = index;
             currentFrame = getBlackImage();
@@ -191,6 +194,7 @@ namespace insoles.CamaraViewport
             cancellationTokenSourceDisplay = new CancellationTokenSource();
             cancellationTokenDisplay = cancellationTokenSourceDisplay.Token;
             videoCapture = new VideoCapture(index, VideoCaptureAPIs.DSHOW);
+            videoCapture.Set(VideoCaptureProperties.Fps, this.fps);
             cameraChanged?.Invoke(this, EventArgs.Empty);
             layoutAnchorable.Title = getTitle();
             await Task.Run(() => displayCameraCallback());
@@ -236,7 +240,7 @@ namespace insoles.CamaraViewport
                     }
                     );
                 }
-                await Task.Delay(1000 / Config.VIDEO_FPS);
+                await Task.Delay(1000 / fps);
             }
         }
         // Cierra la camara y el video writer al cerrar la aplicacion

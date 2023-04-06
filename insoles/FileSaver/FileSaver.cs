@@ -17,7 +17,6 @@ namespace insoles.FileSaver
     public class FileSaver
     {
         private const int RECORD_CSV_MS = 10;
-        private const int RECORD_VIDEO_MS = 1000 / Config.VIDEO_FPS_SAVE;
         private System.Timers.Timer timerCsv;
         private Stopwatch stopwatchCSV;
         private int frameCsv;
@@ -268,9 +267,9 @@ namespace insoles.FileSaver
                 this.camaraViewport = camaraViewport;
                 this.filename = filename;
                 videoWriter = new VideoWriter(path + Path.DirectorySeparatorChar + filename, FourCC.DIVX, 
-                    Config.VIDEO_FPS_SAVE, new OpenCvSharp.Size(Config.FRAME_WIDTH, Config.FRAME_HEIGHT));
+                    camaraViewport.fps, new OpenCvSharp.Size(Config.FRAME_WIDTH, Config.FRAME_HEIGHT));
                 timerVideo = new System.Timers.Timer();
-                timerVideo.Interval = RECORD_VIDEO_MS;
+                timerVideo.Interval = 1000 / camaraViewport.fps;
                 timerVideo.Elapsed += (sender, e) => appendVideo();
 
                 VirtualToolBar virtualToolBar = ((MainWindow)Application.Current.MainWindow).virtualToolBar;

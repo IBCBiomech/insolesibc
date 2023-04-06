@@ -61,16 +61,21 @@ namespace insoles.DeviceList.TreeClasses
             get { return GetValue<int>("number"); }
             set { SetValue("number", value); }
         }
-        public int? fps
+        public List<int> fpsAvailable
         {
-            get { return GetValue<int?>("fps"); }
+            get { return GetValue<List<int>>("fpsAvailable"); }
+            set { SetValue("fpsAvailable", value); }
+        }
+        public int fps
+        {
+            get { return GetValue<int>("fps"); }
             set { SetValue("fps", value); }
         }
-        public CameraInfo(int number, string name)
+        public CameraInfo(int number, string name, List<int> fpsAvailable)
         {
             this.number = number;
             this.name = name;
-            this.fps = null;
+            this.fpsAvailable = fpsAvailable;
             this.position = null;
         }
     }
