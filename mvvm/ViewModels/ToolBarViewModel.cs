@@ -73,7 +73,8 @@ namespace mvvm.ViewModels
                         cameras.Add(new CameraScanMessage(i, names[i]));
                     }
                 }
-                WeakReferenceMessenger.Default.Send(cameras);
+                ScanMessage message = new ScanMessage(cameras);
+                WeakReferenceMessenger.Default.Send(message);
             }
             Task.Run(() => scanCameras());
         }
@@ -86,6 +87,8 @@ namespace mvvm.ViewModels
         private void OnOpenCamera()
         {
             Trace.WriteLine("openCamera");
+            OpenCameraMessage message = new OpenCameraMessage();
+            WeakReferenceMessenger.Default.Send(message);
         }
     }
 }

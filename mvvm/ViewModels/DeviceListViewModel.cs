@@ -4,6 +4,7 @@ using mvvm.Messages;
 using mvvm.Models;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Windows.Controls;
 using Wpf.Ui.Common.Interfaces;
 
 namespace mvvm.ViewModels
@@ -16,6 +17,8 @@ namespace mvvm.ViewModels
         [ObservableProperty]
         private IEnumerable<CameraInfo> _cameras;
 
+        [ObservableProperty]
+        private IEnumerable<object> _itemsSelected;
         public void OnNavigatedFrom()
         {
             
@@ -29,15 +32,17 @@ namespace mvvm.ViewModels
 
         private void InitializeViewModel()
         {
-            WeakReferenceMessenger.Default.Register<List<CameraScanMessage>>(this, onCameraScanMessageReceived);
+            WeakReferenceMessenger.Default.Register<ScanMessage>(this, onScanMessageReceived);
+            WeakReferenceMessenger.Default.Register<OpenCameraMessage>(this, onOpenCameraMessageReceived);
 
             _isInitialized = true;
         }
-        private void onCameraScanMessageReceived(object sender, List<CameraScanMessage> args)
+        private void onScanMessageReceived(object sender, ScanMessage args)
         {
             Trace.WriteLine("onCameraScanMessageReceived");
             var camerasCollection = new List<CameraInfo>();
-            foreach (var c in args)
+            var camerasMessage = args.cameras;
+            foreach (var c in camerasMessage)
             {
                 camerasCollection.Add(new CameraInfo(
                 c
@@ -45,6 +50,20 @@ namespace mvvm.ViewModels
                 Trace.WriteLine(c.number + " " + c.name);
             }
             Cameras = camerasCollection;
+        }
+        private void onOpenCameraMessageReceived(object sender, OpenCameraMessage args)
+        {
+            Trace.WriteLine("onOpenCameraMessageReceived");
+            int id = -1;
+            foreach (var cameraInfo in Cameras)
+            {
+                if (cameraInfo.IsSelected)
+                {
+                    id = cameraInfo.number; //Id de la camara
+                    break;
+                }
+            }
+            Trace.WriteLine(id);
         }
     }
 }

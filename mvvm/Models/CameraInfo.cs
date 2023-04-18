@@ -9,6 +9,7 @@ namespace mvvm.Models
 {
     public class CameraInfo
     {
+        public bool IsSelected { get; set; }
         public string name { get;set; }
         public int number { get; set; }
         public int? fps { get; set; }
@@ -17,12 +18,14 @@ namespace mvvm.Models
             this.number = number;
             this.name = name;
             this.fps = null;
+            this.IsSelected = false;
         }
         public CameraInfo(CameraScanMessage c)
         {
-            this.number = c.number;
-            this.name = c.name;
-            this.fps = null;
+            number = c.number;
+            name = c.name;
+            fps = null;
+            IsSelected = false;
         }
     }
 }

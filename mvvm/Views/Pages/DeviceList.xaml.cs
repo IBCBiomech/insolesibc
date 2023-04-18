@@ -28,7 +28,6 @@ namespace mvvm.Views.Pages
         public DeviceListPage(ViewModels.DeviceListViewModel viewModel)
         {
             ViewModel = viewModel;
-
             InitializeComponent();
         }
     }
