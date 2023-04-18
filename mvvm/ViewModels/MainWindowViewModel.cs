@@ -24,6 +24,9 @@ namespace mvvm.ViewModels
         [ObservableProperty]
         private ObservableCollection<MenuItem> _trayMenuItems = new();
 
+        [ObservableProperty]
+        private System.Windows.Controls.UserControl _toolBar = new();
+
         public MainWindowViewModel(INavigationService navigationService)
         {
             if (!_isInitialized)
@@ -50,6 +53,7 @@ namespace mvvm.ViewModels
                     Icon = SymbolRegular.DataHistogram24,
                     PageType = typeof(Views.Pages.DataPage)
                 },
+                /*
                 new NavigationItem()
                 {
                     Content="ToolBar",
@@ -57,6 +61,7 @@ namespace mvvm.ViewModels
                     Icon = SymbolRegular.Accessibility24,
                     PageType = typeof(Views.Pages.ToolBarPage)
                 },
+                */
                 new NavigationItem()
                 {
                     Content="Device List",
@@ -85,6 +90,8 @@ namespace mvvm.ViewModels
                     Tag = "tray_home"
                 }
             };
+
+            ToolBar = new Views.UserControls.ToolBarUserControl(new ToolBarViewModel());
 
             _isInitialized = true;
         }

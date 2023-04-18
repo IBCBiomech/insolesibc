@@ -14,15 +14,11 @@ using Wpf.Ui.Common.Interfaces;
 
 namespace mvvm.ViewModels
 {
-    public partial class ToolBarViewModel : ObservableObject, INavigationAware
+    public partial class ToolBarViewModel : ObservableObject
     {
         private bool _isInitialized = false;
-        public void OnNavigatedFrom()
-        {
-            
-        }
 
-        public void OnNavigatedTo()
+        public ToolBarViewModel()
         {
             if (!_isInitialized)
                 InitializeViewModel();
@@ -34,6 +30,7 @@ namespace mvvm.ViewModels
         [RelayCommand]
         private void OnScan()
         {
+            Trace.WriteLine("scan");
             async void scanCameras()
             {
                 // Devuelve el nombre de todas las camaras conectadas
