@@ -55,7 +55,6 @@ namespace mvvm
                 services.AddScoped<Views.Pages.SettingsPage>();
                 services.AddScoped<ViewModels.SettingsViewModel>();
 
-                services.AddScoped<Views.Pages.ToolBarPage>();
                 services.AddScoped<ViewModels.ToolBarViewModel>();
                 services.AddScoped<Views.Pages.DeviceListPage>();
                 services.AddScoped<ViewModels.DeviceListViewModel>();

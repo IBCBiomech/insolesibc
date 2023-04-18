@@ -10,9 +10,6 @@
     <Compile Update="Views\Pages\DeviceList.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Pages\ToolBarPage.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Views\UserControls\ToolBarUserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -28,9 +25,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Pages\SettingsPage.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\Pages\ToolBarPage.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\UserControls\ToolBarUserControl.xaml">
