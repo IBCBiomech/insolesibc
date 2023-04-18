@@ -20,7 +20,7 @@
             <controls:MultiSelectTreeViewItem.Header>
                 <TextBlock>INSOLES IBC</TextBlock>
             </controls:MultiSelectTreeViewItem.Header>
-            <controls:MultiSelectTreeViewItem ItemsSource="{Binding ViewModel.Cameras}" Visibility="Collapsed" x:Name="cameras" Padding="0 10 0 2.5">
+            <controls:MultiSelectTreeViewItem ItemsSource="{Binding ViewModel.Cameras}" Visibility="Visible" Padding="0 10 0 2.5">
                 <controls:MultiSelectTreeViewItem.Header>
                     <Grid Width="280">
                         <Grid.ColumnDefinitions>
