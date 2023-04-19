@@ -70,7 +70,7 @@ namespace insoles.Graphs
                     switch (output)
                     {
                         case Units.mbar:
-                            return (N) => N;
+                            return (N) => VALUE_mbar_from_N(N);
                         case Units.N:
                             return (N) => N;
                     }

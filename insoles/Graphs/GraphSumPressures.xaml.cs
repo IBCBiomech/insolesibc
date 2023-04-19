@@ -111,6 +111,8 @@ public partial class GraphSumPressures : Page
     private void mbar_Checked(object sender, RoutedEventArgs e)
     {
         graphManager.unit = Common.Helpers.Units.mbar;
+        model.plot.Plot.YLabel("mbar");
+        model.plot.Refresh();
         if (N.IsChecked.Value)
         {
             N.IsChecked = false;
@@ -120,6 +122,8 @@ public partial class GraphSumPressures : Page
     private void N_Checked(object sender, RoutedEventArgs e)
     {
         graphManager.unit = Common.Helpers.Units.N;
+        model.plot.Plot.YLabel("N");
+        model.plot.Refresh();
         if (mbar.IsChecked.Value)
         {
             mbar.IsChecked = false;

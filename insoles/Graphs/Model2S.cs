@@ -23,7 +23,7 @@ namespace insoles.Graphs
         SignalPlot signalPlotRight;
 
         private int nextIndex = 0;
-        private WpfPlot plot;
+        public WpfPlot plot { get; private set; }
 
         private double minY;
         private double maxY;
