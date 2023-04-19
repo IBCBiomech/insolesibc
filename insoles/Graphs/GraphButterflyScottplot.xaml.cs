@@ -8,14 +8,42 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
+using static insoles.Common.Helpers;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace insoles.Graphs
 {
     /// <summary>
     /// Lógica de interacción para GraphButterflyScottplot.xaml
     /// </summary>
-    public partial class GraphButterflyScottplot : Page
+    public partial class GraphButterflyScottplot : System.Windows.Controls.Page
     {
+        public Units[] UnitsValues
+        {
+            get { return (Units[])Enum.GetValues(typeof(Units)); }
+        }
+        public Units SelectedUnitsValue
+        {
+            get { return GraphsConfig.SelectedDisplayUnitsValue; }
+            set
+            {
+                GraphsConfig.SelectedDisplayUnitsValue = value;
+                // Add any additional logic or functionality here
+            }
+        }
+        public AllUnits[] AllUnitsValues
+        {
+            get { return (AllUnits[])Enum.GetValues(typeof(AllUnits)); }
+        }
+        public AllUnits SelectedAllUnitsValue
+        {
+            get { return GraphsConfig.SelectedCSVUnitsValue; }
+            set
+            {
+                GraphsConfig.SelectedCSVUnitsValue = value;
+                // Add any additional logic or functionality here
+            }
+        }
         private Foot foot;
         public ModelButterfly model { get; private set; }
         public GraphButterflyScottplot()
@@ -36,6 +64,12 @@ namespace insoles.Graphs
                 model = new ModelButterfly(plot, foot);
             }
             DataContext = this;
+            //Si no tira error
+            csvUnits.SelectedIndex = 0;
+            displayUnits.SelectedIndex = 0;
+            GraphsConfig.transformFunc = GraphsConfig.getTransformFunc
+                (GraphsConfig.SelectedCSVUnitsValue, GraphsConfig.SelectedDisplayUnitsValue);
+            //
         }
         public void DrawData(FramePressures[] data)
         {

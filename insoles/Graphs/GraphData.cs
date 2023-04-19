@@ -133,13 +133,13 @@ namespace insoles.Graphs
             double result = double.Parse(s_point, CultureInfo.InvariantCulture);
             return result;
         }
-        protected float parseFloat(string s)
+        private static float parseFloat(string s)
         {
             string s_point = s.Replace(",", ".");
             float result = float.Parse(s_point, CultureInfo.InvariantCulture);
             return result;
         }
-        protected float getFloat(string[] values, int index)
+        public static float getFloat(string[] values, int index)
         {
             if(index < values.Length)
             {
@@ -182,8 +182,9 @@ namespace insoles.Graphs
             string[] values = System.Text.RegularExpressions.Regex.Split(csvLine, @"\s+");
             time = getDouble(values, 1);
             frame = getInt(values, 2);
-            left = new DataInsole(values, 3);
-            right = new DataInsole(values, 11);
+            Func<float, float> transformFunc = GraphsConfig.transformFunc;
+            left = new DataInsole(values, 3, transformFunc);
+            right = new DataInsole(values, 11, transformFunc);
         }
     }
     public class DataInsole
@@ -208,6 +209,17 @@ namespace insoles.Graphs
             pressures[Sensor.MET3] = int.Parse(values[firstIndex + 5]);
             pressures[Sensor.MET5] = int.Parse(values[firstIndex + 6]);
             pressures[Sensor.TOES] = int.Parse(values[firstIndex + 7]);
+        }
+        public DataInsole(string[] values, int firstIndex, Func<float, float> transformFunc)
+        {
+            pressures[Sensor.ARCH] = (int)transformFunc(FrameData.getFloat(values, firstIndex));
+            pressures[Sensor.HALLUX] = (int)transformFunc(FrameData.getFloat(values, firstIndex + 1));
+            pressures[Sensor.HEEL_L] = (int)transformFunc(FrameData.getFloat(values, firstIndex + 2));
+            pressures[Sensor.HEEL_R] = (int)transformFunc(FrameData.getFloat(values, firstIndex + 3));
+            pressures[Sensor.MET1] = (int)transformFunc(FrameData.getFloat(values, firstIndex + 4));
+            pressures[Sensor.MET3] = (int)transformFunc(FrameData.getFloat(values, firstIndex + 5));
+            pressures[Sensor.MET5] = (int)transformFunc(FrameData.getFloat(values, firstIndex + 6));
+            pressures[Sensor.TOES] = (int)transformFunc(FrameData.getFloat(values, firstIndex + 7));
         }
         public DataInsole()
         {

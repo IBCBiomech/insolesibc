@@ -348,6 +348,7 @@ namespace insoles.Common
         {
             return (VALUE_mbar * 100) * (float)(435 / Math.Pow(10, 6));
         }
+        public enum AllUnits { digital, adc_neg, mbar, N}
         public enum Units { mbar, N}
     }
 }
