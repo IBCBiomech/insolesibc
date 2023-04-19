@@ -87,7 +87,7 @@ namespace mvvm.ViewModels
         private void OnOpenCamera()
         {
             Trace.WriteLine("openCamera");
-            OpenCameraMessage message = new OpenCameraMessage();
+            OpenCameraClickMessage message = new OpenCameraClickMessage();
             WeakReferenceMessenger.Default.Send(message);
         }
     }

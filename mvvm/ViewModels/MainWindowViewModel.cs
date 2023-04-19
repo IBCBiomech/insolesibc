@@ -53,21 +53,19 @@ namespace mvvm.ViewModels
                     Icon = SymbolRegular.DataHistogram24,
                     PageType = typeof(Views.Pages.DataPage)
                 },
-                /*
-                new NavigationItem()
-                {
-                    Content="ToolBar",
-                    PageTag="toolbar",
-                    Icon = SymbolRegular.Accessibility24,
-                    PageType = typeof(Views.Pages.ToolBarPage)
-                },
-                */
                 new NavigationItem()
                 {
                     Content="Device List",
                     PageTag="device list",
                     Icon = SymbolRegular.Add24,
                     PageType = typeof(Views.Pages.DeviceListPage)
+                },
+                new NavigationItem()
+                {
+                    Content="Camara",
+                    PageTag="camara",
+                    Icon = SymbolRegular.Camera24,
+                    PageType = typeof(Views.Pages.CamaraPage)
                 }
             };
 

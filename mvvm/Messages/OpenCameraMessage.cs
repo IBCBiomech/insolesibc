@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace mvvm.Messages
+﻿namespace mvvm.Messages
 {
     public class OpenCameraMessage : Message
     {
+        public OpenCameraMessage(int index)
+        {
+            this.index = index;
+        }
+        public int index { get; set; }
     }
 }

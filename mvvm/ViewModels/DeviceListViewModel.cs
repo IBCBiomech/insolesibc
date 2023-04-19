@@ -33,7 +33,7 @@ namespace mvvm.ViewModels
         private void InitializeViewModel()
         {
             WeakReferenceMessenger.Default.Register<ScanMessage>(this, onScanMessageReceived);
-            WeakReferenceMessenger.Default.Register<OpenCameraMessage>(this, onOpenCameraMessageReceived);
+            WeakReferenceMessenger.Default.Register<OpenCameraClickMessage>(this, onOpenCameraClickMessageReceived);
 
             _isInitialized = true;
         }
@@ -51,9 +51,9 @@ namespace mvvm.ViewModels
             }
             Cameras = camerasCollection;
         }
-        private void onOpenCameraMessageReceived(object sender, OpenCameraMessage args)
+        private void onOpenCameraClickMessageReceived(object sender, OpenCameraClickMessage args)
         {
-            Trace.WriteLine("onOpenCameraMessageReceived");
+            Trace.WriteLine("onOpenCameraClickMessageReceived");
             int id = -1;
             foreach (var cameraInfo in Cameras)
             {
@@ -64,6 +64,8 @@ namespace mvvm.ViewModels
                 }
             }
             Trace.WriteLine(id);
+            OpenCameraMessage message = new OpenCameraMessage(id);
+            WeakReferenceMessenger.Default.Send(message);
         }
     }
 }

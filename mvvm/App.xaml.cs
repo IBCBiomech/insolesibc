@@ -58,6 +58,8 @@ namespace mvvm
                 services.AddScoped<ViewModels.ToolBarViewModel>();
                 services.AddScoped<Views.Pages.DeviceListPage>();
                 services.AddScoped<ViewModels.DeviceListViewModel>();
+                services.AddScoped<Views.Pages.CamaraPage>();
+                services.AddScoped<ViewModels.CamaraViewModel>();
 
                 // Configuration
                 services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));
