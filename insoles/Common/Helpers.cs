@@ -336,5 +336,18 @@ namespace insoles.Common
                 (int)(color1.B * ratio + color2.B * ratio)
             );
         }
+        public static int ADC_neg(int VALUE_digital)
+        {
+            return 4095 - VALUE_digital;
+        }
+        public static float VALUE_mbar(int ADC_neg)
+        {
+            return MathF.Round(0.0006f * (ADC_neg * ADC_neg) + 0.6975f * ADC_neg, 3);
+        }
+        public static float N(float VALUE_mbar)
+        {
+            return (VALUE_mbar * 100) * (float)(435 / Math.Pow(10, 6));
+        }
+        public enum Units { mbar, N}
     }
 }

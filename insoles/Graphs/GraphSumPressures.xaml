@@ -9,11 +9,25 @@
       Title="GraphWindow">
 
     <Grid>
-        <WpfPlot  x:Name="plot"/>
-        <ComboBox Name="metric" SelectedValuePath="Content" VerticalAlignment="Top" HorizontalAlignment="Left">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <WpfPlot Grid.Row="1"  x:Name="plot"/>
+        <ComboBox Grid.Row="0" Name="metric" SelectedValuePath="Content" VerticalAlignment="Top" HorizontalAlignment="Left">
             <ComboBoxItem Content="avg"></ComboBoxItem>
             <ComboBoxItem Content="sum"></ComboBoxItem>
         </ComboBox>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center">mbar</TextBlock>
+                <CheckBox x:Name="mbar" Checked="mbar_Checked" Unchecked="mbar_Unchecked" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center">N</TextBlock>
+                <CheckBox x:Name="N" Checked="N_Checked" Unchecked="N_Unchecked" VerticalAlignment="Center"/>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Page>
 

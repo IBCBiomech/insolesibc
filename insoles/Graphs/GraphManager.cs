@@ -1,4 +1,5 @@
-﻿using insoles.DeviceList.Enums;
+﻿using insoles.Common;
+using insoles.DeviceList.Enums;
 using insoles.TimeLine;
 using insoles.ToolBar;
 using insoles.ToolBar.Enums;
@@ -13,6 +14,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
 using WisewalkSDK;
+using static insoles.Common.Helpers;
 
 
 namespace insoles.Graphs
@@ -24,6 +26,17 @@ namespace insoles.Graphs
         public ReplayManager replayManager;
 
 
+        public Units unit { 
+            set
+            {
+                captureManager.unit = value;
+                Trace.WriteLine(captureManager.unit);
+            }
+            get
+            {
+                return captureManager.unit;
+            }
+        }
         public GraphManager()
         {
             MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
@@ -125,6 +138,7 @@ namespace insoles.Graphs
 
         System.Timers.Timer fakeTimer;
 
+        public Units unit = Units.mbar;
         //End Wise
         public CaptureManager(VirtualToolBar virtualToolBar, DeviceList.DeviceList deviceList)
         {
@@ -244,6 +258,12 @@ namespace insoles.Graphs
             return (4095 - value);
         }
 
+        public float sumTransformSole(SoleSensor sole, Func<int, float> func)
+        {
+            return func(sole.arch) + func(sole.hallux) + func(sole.heel_R) +
+                    func(sole.heel_L) + func(sole.met_1) + func(sole.met_3) +
+                    func(sole.met_5) + func(sole.toes);
+        }
         //function that sums all sensor pressures
         public float sumSole(WisewalkSDK.SoleSensor sole)
         {
@@ -254,6 +274,13 @@ namespace insoles.Graphs
         public float avgSole(WisewalkSDK.SoleSensor sole)
         {
             return sumSole(sole) / Config.NUM_SENSORS;
+        }
+        public string stringTransformSole(SoleSensor sole, Func<int, float> func)
+        {
+            return func(sole.arch).ToString() + " " + func(sole.hallux).ToString() + " " +
+                func(sole.heel_R).ToString() + " " + func(sole.heel_L).ToString() + " " +
+                func(sole.met_1).ToString() + " " + func(sole.met_3).ToString() + " " +
+                func(sole.met_5).ToString() + " " + func(sole.toes).ToString();
         }
         //function that concatenates all sensor pressure in a single line
         public string stringSole(WisewalkSDK.SoleSensor sole)
@@ -288,7 +315,19 @@ namespace insoles.Graphs
 
                 GraphSumPressures.Metric metric = graph.metricSelected;
 
-                if (metric == GraphSumPressures.Metric.Avg)
+                Func<int, float> transformFunc;
+                switch (unit)
+                {
+                    case Units.mbar:
+                        transformFunc = (VALUE_digital) => VALUE_mbar(ADC_neg(VALUE_digital));
+                        break;
+                    case Units.N:
+                        transformFunc = (VALUE_digital) => VALUE_mbar(ADC_neg(VALUE_digital));
+                        break;
+                    default:
+                        throw new Exception("ninguna unidad seleccionada");
+                }
+                if (metric == GraphSumPressures.Metric.Avg) 
                 {
                     for (int i = 0; i < Config.NUMPACKETS; i++)
                     {
@@ -300,8 +339,8 @@ namespace insoles.Graphs
                 {
                     for (int i = 0; i < Config.NUMPACKETS; i++)
                     {
-                        metric_left[i] = sumSole(soleLeft[i]);
-                        metric_right[i] = sumSole(soleRight[i]);
+                        metric_left[i] = sumTransformSole(soleLeft[i], transformFunc);
+                        metric_right[i] = sumTransformSole(soleRight[i], transformFunc);
                     }
                 }
 
@@ -316,7 +355,9 @@ namespace insoles.Graphs
                     for (int j = 0; j < Config.NUMPACKETS; j++)
                     {
                         
-                        dataline = "1 " + (fakets).ToString("F2") + " " + (frame).ToString() + " " + stringSole(soleLeft[j]) + " " + stringSole(soleRight[j]) + " " +
+                        dataline = "1 " + (fakets).ToString("F2") + " " + (frame).ToString() + " " + 
+                            stringTransformSole(soleLeft[j], transformFunc) + " " + 
+                            stringTransformSole(soleRight[j], transformFunc) + " " +
                             metric_left.ToString() + " " + metric_right.ToString() + " " +"\n";
                         fakets += 0.01f;
                         frame += 1;

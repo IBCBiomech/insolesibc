@@ -15,6 +15,8 @@ public partial class GraphSumPressures : Page
     public Metric metricSelected { get; private set; }
 
     public Model2S model { get; private set; }
+
+    private GraphManager graphManager;
     public GraphSumPressures()
     {
         InitializeComponent();
@@ -26,6 +28,20 @@ public partial class GraphSumPressures : Page
             selectionChanged();
         };
         metric.SelectedIndex = 0;
+        if(mainWindow.graphManager != null)
+        {
+            graphManager = mainWindow.graphManager;
+            mbar.IsChecked = true;
+        }
+        else
+        {
+            mainWindow.initialized += (s, e) =>
+            {
+                graphManager = mainWindow.graphManager;
+                mbar.IsChecked = true;
+            };
+        }
+        metric.SelectedIndex = 1;
         //this.plot.Plot.XLabel("Frames");
         //this.plot.Plot.YLabel("m/s\xB2");
     }
@@ -90,5 +106,39 @@ public partial class GraphSumPressures : Page
         {
             model.clear();
         });
+    }
+
+    private void mbar_Checked(object sender, RoutedEventArgs e)
+    {
+        graphManager.unit = Common.Helpers.Units.mbar;
+        if (N.IsChecked.Value)
+        {
+            N.IsChecked = false;
+        }
+    }
+
+    private void N_Checked(object sender, RoutedEventArgs e)
+    {
+        graphManager.unit = Common.Helpers.Units.N;
+        if (mbar.IsChecked.Value)
+        {
+            mbar.IsChecked = false;
+        }
+    }
+
+    private void mbar_Unchecked(object sender, RoutedEventArgs e)
+    {
+        if (!N.IsChecked.Value)
+        {
+            N.IsChecked = true;
+        }
+    }
+
+    private void N_Unchecked(object sender, RoutedEventArgs e)
+    {
+        if (!mbar.IsChecked.Value)
+        {
+            mbar.IsChecked = true;
+        }
     }
 }
