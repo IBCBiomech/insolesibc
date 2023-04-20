@@ -7,6 +7,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using System.Windows.Navigation;
+using insoles.DeviceList.TreeClasses;
+using insoles.DeviceList.Enums;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using AvalonDock.Layout;
+using System.Collections.Generic;
 
 namespace insoles.CamaraViewport
 {
@@ -27,6 +33,13 @@ namespace insoles.CamaraViewport
         public event EventHandler cameraChanged;
 
         private Mat _currentFrame;
+
+        private DeviceList.DeviceList deviceList;
+
+        public LayoutAnchorable layoutAnchorable { get; set; }
+        public int? index { get; private set; } = null;
+
+        public int fps { get; private set; }
         public Mat currentFrame
         {
             get
@@ -43,6 +56,57 @@ namespace insoles.CamaraViewport
                     _currentFrame = value;
                 }
             }
+        }
+        private string titleFromPosition(Position position)
+        {
+            switch (position)
+            {
+                case Position.Foot:
+                    return "Foot Cam";
+                case Position.Body:
+                    return "Body Cam";
+                default:
+                    return "Unknow position";
+            }
+        }
+        private string getTitle()
+        {
+            if (index == null)
+            {
+                return "Uninitialized camera";
+            }
+            else
+            {
+                CameraInfo? cameraInfo = deviceList.getCamera(index.Value);
+                if(cameraInfo == null)
+                {
+                    return "Uninitialized camera";
+                }
+                else
+                {
+                    Position? position = cameraInfo.position;
+                    if(position == null)
+                    {
+                        return cameraInfo.name;
+                    }
+                    else
+                    {
+                        return titleFromPosition(position.Value);
+                    }
+                }
+            }
+        }
+        public Position? position 
+        { 
+            get
+            {
+                CameraInfo? cameraInfo = deviceList.getCamera(index.Value);
+                if (cameraInfo == null)
+                {
+                    throw new KeyNotFoundException();
+                }
+                return cameraInfo.position;
+            } 
         }
 
         public CamaraViewport()
@@ -62,6 +126,18 @@ namespace insoles.CamaraViewport
             {
                 timeLine = mainWindow.timeLine.Content as TimeLine.TimeLine;
             }
+            if (mainWindow.deviceList.Content == null)
+            {
+                mainWindow.deviceList.Navigated += delegate (object sender, NavigationEventArgs e)
+                {
+                    deviceList = mainWindow.deviceList.Content as DeviceList.DeviceList;
+                };
+            }
+            else
+            {
+                deviceList = mainWindow.deviceList.Content as DeviceList.DeviceList;
+            }
+            CameraInfo.positionChanged += (s,e) => { layoutAnchorable.Title = getTitle(); };
         }
         public async void initReplay(string path)
         {
@@ -105,9 +181,11 @@ namespace insoles.CamaraViewport
             return frame;
         }
         // Empieza a grabar la camara
-        public void initializeCamara(int index)
+        public async void initializeCamara(int index, int fps)
         {
+            this.fps = fps;
             // Quitar la imagen de la grabacion anterior
+            this.index = index;
             currentFrame = getBlackImage();
             imgViewport.Source = BitmapSourceConverter.ToBitmapSource(currentFrame);
             
@@ -116,8 +194,10 @@ namespace insoles.CamaraViewport
             cancellationTokenSourceDisplay = new CancellationTokenSource();
             cancellationTokenDisplay = cancellationTokenSourceDisplay.Token;
             videoCapture = new VideoCapture(index, VideoCaptureAPIs.DSHOW);
-            displayTask = displayCameraCallback();
+            videoCapture.Set(VideoCaptureProperties.Fps, this.fps);
             cameraChanged?.Invoke(this, EventArgs.Empty);
+            layoutAnchorable.Title = getTitle();
+            await Task.Run(() => displayCameraCallback());
         }
         // Cierra la camara y la ventana
         private void onClose(object sender, RoutedEventArgs e)
@@ -160,7 +240,7 @@ namespace insoles.CamaraViewport
                     }
                     );
                 }
-                await Task.Delay(1000 / Config.VIDEO_FPS);
+                await Task.Delay(1000 / fps);
             }
         }
         // Cierra la camara y el video writer al cerrar la aplicacion

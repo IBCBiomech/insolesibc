@@ -129,6 +129,15 @@ namespace insoles.Common
                 Trace.WriteLine(temp);
             }
         }
+        public static void printList(List<Tuple<int, int>> list)
+        {
+            Trace.WriteLine("list");
+            foreach(var item in list)
+            {
+                Trace.Write(item + " ");
+            }
+            Trace.WriteLine("");
+        }
         public static bool NearlyEqual(float a, float b, float epsilon = 0.1f)
         {
             float absA = Math.Abs(a);
@@ -218,6 +227,7 @@ namespace insoles.Common
             colorData |= color.B << 0;
             return colorData;
         }
+        // Bitmap se accede [col, row] y Matrix [row, col] habria que cambiar esto
         public static Matrix<float> ImageToMatrix(Bitmap image)
         {
             Matrix<float> floats = Matrix<float>.Build.Dense(image.Width, image.Height);
@@ -307,5 +317,43 @@ namespace insoles.Common
             }
             return result;
         }
+        public static Color Interpolate(Color color1, Color color2)
+        {
+            const float ratio = 0.5f;
+            return Color.FromArgb(
+                (int)(color1.R * ratio + color2.R * ratio),
+                (int)(color1.G * ratio + color2.G * ratio),
+                (int)(color1.B * ratio + color2.B * ratio)
+            );
+        }
+        public static Color Interpolate(Color color1, Color color2, int alpha)
+        {
+            const float ratio = 0.5f;
+            return Color.FromArgb(
+                alpha,
+                (int)(color1.R * ratio + color2.R * ratio),
+                (int)(color1.G * ratio + color2.G * ratio),
+                (int)(color1.B * ratio + color2.B * ratio)
+            );
+        }
+        public static int ADC_neg(int VALUE_digital)
+        {
+            return 4095 - VALUE_digital;
+        }
+        public static float VALUE_mbar(int ADC_neg)
+        {
+            return MathF.Round(0.0006f * (ADC_neg * ADC_neg) + 0.6975f * ADC_neg, 3);
+        }
+        public static float N(float VALUE_mbar)
+        {
+            return (VALUE_mbar * 100) * (float)(435 / Math.Pow(10, 6));
+        }
+        public static float VALUE_mbar_from_N(float N)
+        {
+            return N / (float)(435 / Math.Pow(10, 6)) / 100;
+        }
+
+        public enum AllUnits { digital, adc_neg, mbar, N}
+        public enum Units { mbar, N}
     }
 }

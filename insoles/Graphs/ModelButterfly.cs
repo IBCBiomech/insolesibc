@@ -1,4 +1,5 @@
 ﻿#define PLANTILLA
+#define ALPHA //Incrementa alpha a medida que añade nuevos puntos al butterfly. Asi los puntos mas nuevos se ven por encima
 
 using ScottPlot;
 using Style = ScottPlot.Style;
@@ -16,6 +17,8 @@ using static System.Net.WebRequestMethods;
 using System.Windows.Documents;
 using System.Collections.Generic;
 using ScottPlot.Plottable;
+using System.Windows.Resources;
+using System.Windows;
 
 namespace insoles.Graphs
 {
@@ -29,7 +32,7 @@ namespace insoles.Graphs
         private const double WIDTH = 474;
         private double scale = 1;
 #if PLANTILLA
-        string file = "Assets/bitmap_butterfly.png";
+        string file = "Assets/bitmap_butterfly_white_smoke.png";
 #else
         string file = "bitmap.png";
 #endif
@@ -47,7 +50,10 @@ namespace insoles.Graphs
         }
         private void drawFoot()
         {
-            Bitmap bitmap = new Bitmap(Helpers.GetFilePath(file));
+            Uri uri = new Uri("pack://application:,,,/Assets/bitmap_butterfly_white_smoke.png");
+            StreamResourceInfo sri = Application.GetResourceStream(uri);
+            Stream stream = sri.Stream;
+            Bitmap bitmap = new Bitmap(stream);
             image = plot.Plot.AddImage(bitmap, 0, 0, anchor: Alignment.LowerCenter);
             image.HeightInAxisUnits = HEIGHT * scale;
             image.WidthInAxisUnits = WIDTH * scale;
@@ -77,14 +83,19 @@ namespace insoles.Graphs
                     }
                     else
                     {
-                        bitmap.SetPixel(j, i, Color.FromArgb(255, Color.Gray));
+                        bitmap.SetPixel(j, i, Color.FromArgb(255, Color.WhiteSmoke));
                     }
                 }
             }
-            bitmap.Save(Config.INITIAL_PATH + "\\bitmap.png", ImageFormat.Png);
+            bitmap.Save(Config.INITIAL_PATH + "\\bitmap_butterfly_white_smoke.png", ImageFormat.Png);
         }
-        public void DrawData(List<double> x_list, List<double> y_list)
+        public void DrawData(List<double> x_list, List<double> y_list, List<Color> colors)
         {
+            int calculateAlpha(int i, int length, int min = 128)
+            {
+                float percent = (float)i / length;
+                return Math.Max(min, (int)(percent * byte.MaxValue));
+            }
             plot.Plot.Clear(typeof(ScatterPlot));
             double[] x = new double[x_list.Count];
             double[] y = new double[y_list.Count];
@@ -101,7 +112,16 @@ namespace insoles.Graphs
             {
                 y[i] = y_list[i] * qualityMult * scale;
             }
-            cps = plot.Plot.AddScatterLines(x, y, Color.Purple);
+            for(int i = 0; i < Math.Min(x.Length, y.Length) - 1; i++)
+            {
+#if ALPHA
+                Color color = Helpers.Interpolate(colors[i], colors[i + 1], calculateAlpha(i, colors.Count));
+#else
+                Color color = Helpers.Interpolate(colors[i], colors[i + 1]);
+#endif
+                plot.Plot.AddScatterLines(new double[] { x[i], x[i + 1] }, new double[] { y[i], y[i + 1] },
+                    color);
+            }
             plot.Refresh();
         }
     }

@@ -1,4 +1,5 @@
-﻿using insoles.ToolBar;
+﻿using insoles.DeviceList.Enums;
+using insoles.ToolBar;
 using insoles.ToolBar.Enums;
 using MathNet.Numerics.Random;
 using OpenCvSharp;
@@ -16,13 +17,13 @@ namespace insoles.FileSaver
     public class FileSaver
     {
         private const int RECORD_CSV_MS = 10;
-        private const int RECORD_VIDEO_MS = 1000 / Config.VIDEO_FPS_SAVE;
         private System.Timers.Timer timerCsv;
         private Stopwatch stopwatchCSV;
         private int frameCsv;
         private System.Timers.Timer timerVideo;
 
-        private CamaraViewport.CamaraViewport camaraViewport;
+        private List<RecordingActive> activeRecordings;
+        private List<CamaraViewport.CamaraViewport> camaraViewports;
         private TimeLine.TimeLine timeLine;
         private VirtualToolBar virtualToolBar;
         private VideoWriter? videoWriter;
@@ -41,6 +42,7 @@ namespace insoles.FileSaver
         {
             recordCSV = false;
             recordVideo = false;
+            camaraViewports = new List<CamaraViewport.CamaraViewport>();
             MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
             mainWindow.initialized += (sender, args) => finishInit();
         }
@@ -48,16 +50,21 @@ namespace insoles.FileSaver
         private void finishInit()
         {
             MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
-            if (mainWindow.camaraViewport.Content == null)
+            activeRecordings = new List<RecordingActive>();
+            List<Frame> camaraViewportFrames = new List<Frame> { mainWindow.camaraViewport1, mainWindow.camaraViewport2 };
+            foreach(Frame frame in camaraViewportFrames)
             {
-                mainWindow.camaraViewport.Navigated += delegate (object sender, NavigationEventArgs e)
+                if (frame.Content == null)
                 {
-                    camaraViewport = mainWindow.camaraViewport.Content as CamaraViewport.CamaraViewport;
-                };
-            }
-            else
-            {
-                camaraViewport = mainWindow.camaraViewport.Content as CamaraViewport.CamaraViewport;
+                    frame.Navigated += delegate (object sender, NavigationEventArgs e)
+                    {
+                        camaraViewports.Add(frame.Content as CamaraViewport.CamaraViewport);
+                    };
+                }
+                else
+                {
+                    camaraViewports.Add(frame.Content as CamaraViewport.CamaraViewport);
+                }
             }
             if (mainWindow.timeLine.Content == null)
             {
@@ -85,66 +92,6 @@ namespace insoles.FileSaver
             mainWindow.virtualToolBar.saveEvent += onSaveInfo;
             mainWindow.virtualToolBar.stopEvent += onStopRecording;
         }
-        private void onPauseCsv(object sender, PauseState pauseState)
-        {
-            if (pauseState == PauseState.Pause)
-            {
-                timerCsv.Stop();
-                stopwatchCSV.Stop();
-            }
-            else if (pauseState == PauseState.Play)
-            {
-                timerCsv.Start();
-                stopwatchCSV.Start();
-            }
-        }
-        private void onPauseVideo(object sender, PauseState pauseState)
-        {
-            if (pauseState == PauseState.Pause)
-            {
-                timerVideo.Stop();
-            }
-            else if (pauseState == PauseState.Play)
-            {
-                timerVideo.Start();
-            }
-        }
-        // Inicializa el timer para grabar CSV
-        private void initRecordCsv()
-        {
-            timerCsv = new System.Timers.Timer();
-
-            //Eliminar estas líneas para grabar manualmente
-            //timerCsv.Interval = RECORD_CSV_MS;
-            //timerCsv.Elapsed += (sender, e) => appendCSV();
-
-            virtualToolBar.pauseEvent += onPauseCsv;
-
-            if(stopwatchCSV == null)
-            {
-                stopwatchCSV = new Stopwatch();
-            }
-            if (virtualToolBar.pauseState == PauseState.Play)
-            {
-                timerCsv.Start();
-                stopwatchCSV.Restart();
-            }
-            frameCsv = 0;
-        }
-        // Inicializa el timer para grabar video
-        private void initRecordVideo()
-        {
-            timerVideo = new System.Timers.Timer();
-            timerVideo.Interval = RECORD_VIDEO_MS;
-            timerVideo.Elapsed += (sender, e) => appendVideo();
-
-            virtualToolBar.pauseEvent += onPauseVideo;
-
-            if (virtualToolBar.pauseState == PauseState.Play)
-            {
-                timerVideo.Start();
-            }
-        }
         // Acciones para terminar de grabar
         private void onStopRecording(object sender)
         {
@@ -165,16 +112,15 @@ namespace insoles.FileSaver
             }
             if (recordVideo)
             {
-                timerVideo.Stop();
-                timerVideo = null;
-                mainWindow.virtualToolBar.pauseEvent -= onPauseVideo;
-                videoWriter.Release();
-                videoWriter = null;
-
+                foreach(RecordingActive recording in activeRecordings)
+                {
+                    recording.stopRecording();
+                    message += "Video grabado en " + recording.filename + ".\n";
+                    files.Add(path + Path.DirectorySeparatorChar + recording.filename);
+                }
+                show = true;
                 recordVideo = false;
-                message += "Video grabado en " + videoFile + ".\n";
-                show=true;
-                files.Add(path + Path.DirectorySeparatorChar + videoFile);
+                activeRecordings.Clear();
             }
             if (show)
             {
@@ -198,6 +144,19 @@ namespace insoles.FileSaver
         // inicializa los ficheros para guardar csv y video
         private void initFiles()
         {
+            int undefinedIndex = 0;
+            string videoFilename(string baseFilename, Position? position)
+            {
+                switch (position)
+                {
+                    case Position.Body:
+                        return baseFilename + "_body.avi";
+                    case Position.Foot:
+                        return baseFilename + "_foot.avi";
+                    default:
+                        return baseFilename + "_undefined"+ (undefinedIndex++) +".avi";
+                }
+            }
             string baseFilename = fileName();
             if (recordCSV)
             {
@@ -205,12 +164,24 @@ namespace insoles.FileSaver
                 csvData = new StringBuilder();
                 csvData.Append(Config.csvHeaderInsoles);
             }
+            activeRecordings.Clear();
             if (recordVideo)
             {
-                videoFile = baseFilename + ".avi";
-                string pathVideoFile = path + Path.DirectorySeparatorChar + videoFile;
-                videoWriter = new VideoWriter(pathVideoFile, FourCC.DIVX, Config.VIDEO_FPS_SAVE, new OpenCvSharp.Size(Config.FRAME_WIDTH, Config.FRAME_HEIGHT));
-                initRecordVideo();
+                foreach(CamaraViewport.CamaraViewport camaraViewport in camaraViewports)
+                {
+                    if (camaraViewport.record.IsChecked.Value)
+                    {
+                        try
+                        {
+                            string filename = videoFilename(baseFilename, camaraViewport.position);
+                            activeRecordings.Add(new RecordingActive(camaraViewport, path, filename));
+                        }
+                        catch (KeyNotFoundException)
+                        {
+                            Trace.WriteLine("Camara not asigned");
+                        }
+                    }
+                }
             }
         }
 
@@ -220,27 +191,6 @@ namespace insoles.FileSaver
         {
            csvData.Append(dataline);
            
-        }
-
-        private void appendVideo()
-        {
-            if (videoWriter != null)
-            {
-                Mat frame = camaraViewport.currentFrame;
-                if(Config.MAT_TYPE == null)
-                {
-                    Config.MAT_TYPE = Config.DEFAULT_MAT_TYPE;
-                }
-                if(frame.Type() != Config.MAT_TYPE)
-                {
-                    frame.ConvertTo(frame, (MatType)Config.MAT_TYPE);
-                }
-                Mat frameResized = frame.Resize(new OpenCvSharp.Size(Config.FRAME_WIDTH, Config.FRAME_HEIGHT));
-                if (videoWriter != null)
-                {
-                    videoWriter.Write(frameResized);
-                }
-            }
         }
         // Guarda el csv
         private async void saveCsvFile()
@@ -266,19 +216,20 @@ namespace insoles.FileSaver
             }
             if (recordVideo)
             {
-                timerVideo.Stop();
-                videoWriter.Dispose();
-                videoWriter = null;
+                foreach(RecordingActive recording in activeRecordings)
+                {
+                    recording.onCloseApplication();
+                }
             }
         }
         public void saveFakeFile()
         {
-            string stringSole()
+            string stringSole(int min = 0, int max = 4095)
             {
                 IEnumerable<int> randomPressures()
                 {
                     Random random = new Random();
-                    return random.NextInt32Sequence(0, 4095);
+                    return random.NextInt32Sequence(min, max);
                 }
                 IEnumerable<int> pressures = randomPressures();
                 IEnumerator<int> enumerator = pressures.GetEnumerator();
@@ -294,16 +245,97 @@ namespace insoles.FileSaver
             csvFile = fileName() + ".txt";
             csvData = new StringBuilder();
             csvData.Append(Config.csvHeaderInsoles);
-            int n = 100;
+            int n = 1000;
             for(int i = 0; i < n; i++)
             {
                 string dataline = "1 " + (i * 0.01f).ToString("F2") + " " +
-                            (i).ToString() + " " + stringSole() + " " +
-                            stringSole() + "\n";
+                            (i).ToString() + " " + stringSole(0, 1000) + " " +
+                            stringSole(2000, 3000) + "\n";
                 csvData.Append(dataline);
             }
             string filePath = Config.INITIAL_PATH + Path.DirectorySeparatorChar + csvFile;
             File.WriteAllTextAsync(filePath, csvData.ToString());
+        }
+        class RecordingActive
+        {
+            private VideoWriter videoWriter;
+            private CamaraViewport.CamaraViewport camaraViewport;
+            private System.Timers.Timer timerVideo;
+            public string filename { get; private set; }
+            public RecordingActive(CamaraViewport.CamaraViewport camaraViewport, string path, string filename)
+            {
+                this.camaraViewport = camaraViewport;
+                this.filename = filename;
+                videoWriter = new VideoWriter(path + Path.DirectorySeparatorChar + filename, FourCC.DIVX, 
+                    camaraViewport.fps, new OpenCvSharp.Size(Config.FRAME_WIDTH, Config.FRAME_HEIGHT));
+                timerVideo = new System.Timers.Timer();
+                timerVideo.Interval = 1000 / camaraViewport.fps;
+                timerVideo.Elapsed += (sender, e) => appendVideo();
+
+                VirtualToolBar virtualToolBar = ((MainWindow)Application.Current.MainWindow).virtualToolBar;
+                virtualToolBar.pauseEvent += onPauseVideo;
+
+                if (virtualToolBar.pauseState == PauseState.Play)
+                {
+                    timerVideo.Start();
+                }
+                else
+                {
+                    Trace.WriteLine("record paused");
+                }
+            }
+            private void appendVideo()
+            {
+                Trace.WriteLine("appendVideo");
+                if (videoWriter != null)
+                {
+                    Mat frame = camaraViewport.currentFrame;
+                    if (Config.MAT_TYPE == null)
+                    {
+                        Config.MAT_TYPE = Config.DEFAULT_MAT_TYPE;
+                    }
+                    if (frame.Type() != Config.MAT_TYPE)
+                    {
+                        frame.ConvertTo(frame, (MatType)Config.MAT_TYPE);
+                    }
+                    Mat frameResized = frame.Resize(new OpenCvSharp.Size(Config.FRAME_WIDTH, Config.FRAME_HEIGHT));
+                    if (videoWriter != null)
+                    {
+                        videoWriter.Write(frameResized);
+                        Trace.WriteLine("write frame");
+                    }
+                }
+                else
+                {
+                    Trace.WriteLine("video writer null");
+                }
+            }
+            private void onPauseVideo(object sender, PauseState pauseState)
+            {
+                if (pauseState == PauseState.Pause)
+                {
+                    timerVideo.Stop();
+                }
+                else if (pauseState == PauseState.Play)
+                {
+                    timerVideo.Start();
+                }
+            }
+            public void stopRecording()
+            {
+                VirtualToolBar virtualToolBar = ((MainWindow)Application.Current.MainWindow).virtualToolBar;
+                timerVideo.Stop();
+                timerVideo = null;
+                virtualToolBar.pauseEvent -= onPauseVideo;
+                videoWriter.Release();
+                videoWriter = null;
+            }
+            public void onCloseApplication()
+            {
+                timerVideo.Stop();
+                videoWriter.Dispose();
+                videoWriter = null;
+            }
         }
     }
 }

@@ -51,6 +51,18 @@ namespace insoles.DeviceList
         {
             return VM.cameras;
         }
+        public CameraInfo? getCamera(int number)
+        {
+            try
+            {
+                return VM.cameras.Where((ci) => ci.number == number).First();
+            }
+            catch(ArgumentNullException)
+            {
+                Trace.WriteLine("camera " + number + " not found");
+                return null;
+            }
+        }
         public void setCameras(ObservableCollection<CameraInfo> cameras)
         {
             VM.cameras = cameras;
@@ -174,16 +186,6 @@ namespace insoles.DeviceList
             //connectCamera((MultiSelectTreeViewItem)sender);
         }
         #endregion
-        // Funcion que se llama al conectar una camara (doble click o boton connect) para cambiar el TreeView
-        public void connectCamera(MultiSelectTreeViewItem treeViewItem)
-        {
-            int calculateFps(int number)
-            {
-                return 120;
-            }
-            CameraInfo cameraInfo = treeViewItem.DataContext as CameraInfo;
-            cameraInfo.fps = calculateFps(cameraInfo.number);
-        }
         public void connectInsole(string mac, byte handler)
         {
             InsolesInfo imuInfo = VM.insoles.Where((insole) => insole.address == mac).First();

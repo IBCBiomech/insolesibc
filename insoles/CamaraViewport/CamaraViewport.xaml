@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:insoles.CamaraViewport"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="CamaraViewport">
+      Title="{Binding title}">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -19,7 +19,10 @@
                 <Setter Property="Width" Value="60"/>
             </Style>
         </Grid.Resources>
-        <Button Grid.Row="0" Click="onClose">Close</Button>
+        <Grid Grid.Row="0">
+            <Button Click="onClose" HorizontalAlignment="Center">Close</Button>
+            <CheckBox x:Name="record" HorizontalAlignment="Right" Padding="0 0 50 0">Record</CheckBox>
+        </Grid>
         <Image Grid.Row="1" Name="imgViewport" Stretch="Uniform" Visibility="Visible"/>
         <MediaElement Grid.Row="1" Name="videoViewport" Stretch="Uniform" Visibility="Collapsed"/>
     </Grid>

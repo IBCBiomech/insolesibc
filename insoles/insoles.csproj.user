@@ -9,22 +9,13 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Graphs\GraphButterfly.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Graphs\GraphButterflyScottplot.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Graphs\GraphPressureHeatmap.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Graphs\GraphPressureMap.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Graphs\GraphsCP.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Graphs\GraphSumPressuresLive.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="SplashScreen.xaml.cs">
@@ -44,25 +35,16 @@
     <Page Update="FileBrowser\FileBrowser.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Graphs\GraphButterfly.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Graphs\GraphButterflyScottplot.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Graphs\GraphPressureHeatmap.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Graphs\GraphPressureMap.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Graphs\GraphsCP.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Graphs\GraphSumPressures.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Graphs\GraphSumPressuresLive.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">

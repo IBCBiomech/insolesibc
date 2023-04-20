@@ -11,6 +11,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\bitmap_butterfly_white_smoke.png" />
+    <None Remove="Assets\bitmap_heatmap_30_closest.png" />
+    <None Remove="Assets\inverse_distances_background.mtx" />
     <None Remove="DeviceList\Icons\arrow-icon.png" />
     <None Remove="DeviceList\Icons\camera-blue-icon-small.png" />
     <None Remove="DeviceList\Icons\camera-blue-icon.png" />
@@ -41,6 +44,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\bitmap_butterfly_white_smoke.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\bitmap_heatmap_30_closest.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\inverse_distances_background.mtx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AForge.Video.DirectShow" Version="2.2.5" />
     <PackageReference Include="DirectShowLib" Version="1.0.0" />
     <PackageReference Include="DirectShowLib.Standard" Version="2.1.0" />
     <PackageReference Include="Dirkster.AvalonDock" Version="4.71.1" />

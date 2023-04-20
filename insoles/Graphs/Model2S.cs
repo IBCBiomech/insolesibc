@@ -23,7 +23,7 @@ namespace insoles.Graphs
         SignalPlot signalPlotRight;
 
         private int nextIndex = 0;
-        private WpfPlot plot;
+        public WpfPlot plot { get; private set; }
 
         private double minY;
         private double maxY;
@@ -43,6 +43,8 @@ namespace insoles.Graphs
 
         private CaptureModel captureModel;
         private ReplayModel replayModel;
+
+        public double displacement { get; set; } = 0;
 
         public Model2S(WpfPlot plot, double minY, double maxY)
         {
@@ -66,7 +68,7 @@ namespace insoles.Graphs
 
             plot.Refresh();
         }
-        static string customFormatter(double position)
+        static string customFormatter(double position, double displacement)
         {
             if (position == 0)
                 return "zero";
@@ -75,9 +77,14 @@ namespace insoles.Graphs
             else
                 return $"({Math.Abs(position):F2})";
         }
+        private string displacementFormatter(double position)
+        {
+            return $"{(position + displacement):F0}";
+        }
         public void initCapture()
         {
             clear();
+            plot.Plot.XAxis.AutomaticTickPositions();
             captureModel.initCapture();
         }
         #region Replay
@@ -85,6 +92,7 @@ namespace insoles.Graphs
         public void updateData(double[] left, double[] right)
         {
             clear();
+            plot.Plot.XAxis.TickLabelFormat(displacementFormatter);
             replayModel.updateData(left, right);
         }
         // Cambia los datos a mostrar
@@ -152,36 +160,61 @@ namespace insoles.Graphs
         class ReplayModel
         {
             Model2S model;
+            double[] bufferLeft;
+            double[] bufferRight;
             double[] valuesLeft;
             double[] valuesRight;
             SignalPlot signalPlotLeft;
             SignalPlot signalPlotRight;
+            private const int CAPACITY = 200;
+            private const float EXTRA_SPACE = 0.1f;
             public ReplayModel(Model2S model)
             {
                 this.model = model;
             }
             public void updateData(double[] left, double[] right)
             {
-                valuesLeft = left;
-                valuesRight = right;
+                bufferLeft = left;
+                bufferRight = right;
+                valuesLeft = new double[CAPACITY];
+                valuesRight = new double[CAPACITY];
                 signalPlotLeft = model.plot.Plot.AddSignal(valuesLeft, color: model.leftColor, label: "X");
                 signalPlotRight = model.plot.Plot.AddSignal(valuesRight, color: model.rightColor, label: "Y");
                 signalPlotLeft.MarkerSize = 0;
                 signalPlotRight.MarkerSize = 0;
                 maxRenderIndex = 0;
-                model.plot.Plot.SetAxisLimitsX(xMin: 0, xMax: valuesLeft.Length);
+                model.plot.Plot.SetAxisLimitsX(xMin: 0, xMax: valuesLeft.Length + valuesLeft.Length * EXTRA_SPACE);
                 model.plot.Render();
             }
             public void updateIndex(int index)
             {
-                Trace.WriteLine(index);
-                index = Math.Min(index, valuesLeft.Length); //Por si acaso
-                maxRenderIndex = index;
+                if (index < CAPACITY)
+                {
+                    Array.Copy(bufferLeft, 0, valuesLeft, 0, index);
+                    Array.Copy(bufferRight, 0, valuesRight, 0, index);
 
-                signalPlotLeft.Label = labelLeft + "= " + valuesLeft[index].ToString("0.##");
-                signalPlotRight.Label = labelRight + "= " + valuesRight[index].ToString("0.##");
+                    signalPlotLeft.Label = labelLeft + "= " + bufferLeft[index].ToString("0.##");
+                    signalPlotRight.Label = labelRight + "= " + bufferRight[index].ToString("0.##");
 
-                model.plot.Render();
+                    maxRenderIndex = index;
+
+                    model.displacement = 0;
+                    model.plot.Render();
+                }
+                else
+                {
+                    int startIndex = index - CAPACITY;
+                    Array.Copy(bufferLeft, startIndex, valuesLeft, 0, CAPACITY);
+                    Array.Copy(bufferRight, startIndex, valuesRight, 0, CAPACITY);
+
+                    maxRenderIndex = CAPACITY - 1;
+
+                    signalPlotLeft.Label = labelLeft + "= " + bufferLeft[index].ToString("0.##");
+                    signalPlotRight.Label = labelRight + "= " + bufferRight[index].ToString("0.##");
+
+                    model.displacement = startIndex;
+                    model.plot.Render();
+                }
             }
             private int maxRenderIndex
             {

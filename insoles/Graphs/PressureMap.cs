@@ -1,4 +1,5 @@
-﻿#define REDUCE_SENSORS //Comentar esto para que no haga la media de MET y HEEL
+﻿#define CENTER_SENSORS
+#define REDUCE_SENSORS //Comentar esto para que no haga la media de MET y HEEL
 #define BAKGROUND_DISTANCES //Comentar esto para no usar las distancias al borde
 
 using System;
@@ -14,6 +15,9 @@ using System.Diagnostics;
 using System.Linq;
 using MathNet.Numerics.Data.Text;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+using System.IO;
+using System.Windows.Resources;
+using MathNet.Numerics.Interpolation;
 
 namespace insoles.Graphs
 {
@@ -64,6 +68,7 @@ namespace insoles.Graphs
                     }
                     return (sum1 / centers.Count, sum2 / centers.Count);
                 }
+#if CENTER_SENSORS
                 CalculateCenters();
 #if REDUCE_SENSORS
                 centersLeftReduced = ReduceSensors(centersLeft, reduceSensorsFunc);
@@ -72,11 +77,18 @@ namespace insoles.Graphs
 #else
                 inverse_distances = CalculateMinDistances(centersLeft, centersRight);
 #endif
+#else
+                Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_left = foot.CalculateSensorPositionsLeft();
+                Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_right = foot.CalculateSensorPositionsRight();
+                inverse_distances = CalculateMinDistances(sensor_positions_left, sensor_positions_right);
+#endif
 #if BAKGROUND_DISTANCES
                 try
                 {
-                    string file = "Assets/inverse_distances_background.mtx";
-                    inverse_distances_background = MatrixMarketReader.ReadMatrix<float>(Helpers.GetFilePath(file));
+                    Uri uri = new Uri("pack://application:,,,/Assets/inverse_distances_background.mtx");
+                    StreamResourceInfo sri = Application.GetResourceStream(uri);
+                    Stream stream = sri.Stream;
+                    inverse_distances_background = MatrixMarketReader.ReadMatrix<float>(stream);
                 }
                 catch (System.IO.FileNotFoundException)
                 {
@@ -118,29 +130,6 @@ namespace insoles.Graphs
                     initFunc();
                 });
             }
-        }
-        private void drawSensorMap()
-        {
-            Matrix<float> pressureMap = foot.sensor_map.Map((value) =>
-            {
-                if(value == 10 || value == 30 || value == 50 || value == 70)
-                {
-                    return 1000;
-                }
-                if(value == 20 || value == 40 || value == 80)
-                {
-                    //return 1000;
-                }
-                if (value < 100)
-                {
-                    return value * 2.5f;
-                }
-                else
-                {
-                    return value;
-                }
-            });
-            graph.DrawData(pressureMap);
         }
         private Dictionary<SensorReduced, T> ReduceSensors<T>(Dictionary<Sensor, T> centers, Func<List<T>, T> transformFuncion)
         {
@@ -254,6 +243,7 @@ namespace insoles.Graphs
             MatrixMarketWriter.WriteMatrix(Config.INITIAL_PATH + "\\inverse_distances_background.mtx", inverse_distances);
             return inverse_distances;
         }
+        // Esto se usa si los sensores ocupan mas de 1 pixel
         private void CalculateMinDistances()
         {
             Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_left = foot.CalculateSensorPositionsLeft();
@@ -298,10 +288,63 @@ namespace insoles.Graphs
                 });
             }
         }
+        private Dictionary<Sensor, Matrix<float>> CalculateMinDistances(Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_left,
+            Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_right)
+        {
+            Dictionary<Sensor, Matrix<float>> inverse_distances = new Dictionary<Sensor, Matrix<float>>();
+            foreach (Sensor sensor in (Sensor[])Enum.GetValues(typeof(Sensor)))
+            {
+                inverse_distances[sensor] = foot.sensor_map.MapIndexed((row, col, code) =>
+                {
+                    if(code == foot.codes.Background())
+                    {
+                        return 0.0f;
+                    }
+                    else
+                    {
+                        if (row < foot.sensor_map.RowCount / 2)
+                        {
+                            int min_distance = foot.sensor_map.RowCount * foot.sensor_map.RowCount + foot.sensor_map.ColumnCount * foot.sensor_map.ColumnCount;
+                            foreach (Tuple<int, int> point in sensor_positions_left[sensor])
+                            {
+                                int distance = Helpers.SquareDistance(row, col, point.Item1, point.Item2);
+                                if (distance < min_distance)
+                                {
+                                    if(distance <= 1)
+                                    {
+                                        distance = 1;
+                                        break;
+                                    }
+                                    min_distance = distance;
+                                }
+                            }
+                            return 1.0f / min_distance;
+                        }
+                        else
+                        {
+                            int min_distance = foot.sensor_map.RowCount * foot.sensor_map.RowCount + foot.sensor_map.ColumnCount * foot.sensor_map.ColumnCount;
+                            foreach (Tuple<int, int> point in sensor_positions_right[sensor])
+                            {
+                                int distance = Helpers.SquareDistance(row, col, point.Item1, point.Item2);
+                                if (distance < min_distance)
+                                {
+                                    if (distance <= 1)
+                                    {
+                                        distance = 1;
+                                        break;
+                                    }
+                                    min_distance = distance;
+                                }
+                            }
+                            return 1.0f / min_distance;
+                        }
+                    }
+                });
+            }
+            return inverse_distances;
+        }
         public void Calculate(GraphData graphData)
         {
-            //drawSensorMap();
-            //return;
             void CalculateAll()
             {
                 void CalculateOne(GraphData graphData, ActionRef<GraphData, DataInsole, DataInsole> func, Metric metric)
@@ -315,6 +358,7 @@ namespace insoles.Graphs
                     func(graphData, ref leftInsole, ref rightInsole);
                     Dictionary<Sensor, int> pressuresLeft = leftInsole.pressures;
                     Dictionary<Sensor, int> pressuresRight = rightInsole.pressures;
+#if CENTER_SENSORS
 #if REDUCE_SENSORS
                     Dictionary<SensorReduced, int> pressuresLeftReduced = ReduceSensors(pressuresLeft, reduceFunc);
                     Dictionary<SensorReduced, int> pressuresRightReduced = ReduceSensors(pressuresRight, reduceFunc);
@@ -322,10 +366,13 @@ namespace insoles.Graphs
 #else
                     pressureMaps[metric] = CalculateFromPoint(pressuresLeft, pressuresRight, inverse_distances);
 #endif
+#else
+                    pressureMaps[metric] = CalculateFromPoint(pressuresLeft, pressuresRight, inverse_distances);
+#endif
                 }
                 CalculateOne(graphData, average, Metric.Avg);
-                CalculateOne(graphData, average, Metric.Max);
-                CalculateOne(graphData, average, Metric.Min);
+                CalculateOne(graphData, max, Metric.Max);
+                CalculateOne(graphData, min, Metric.Min);
             }
             if (isInitialized)
             {
@@ -375,6 +422,7 @@ namespace insoles.Graphs
 
             return pressure_map;
         }
+        // Esto se usa si los sensores ocupan mas de 1 pixel
         private Matrix<float> Calculate_(DataInsole left, DataInsole right)
         {
             Matrix<float> pressure_map = foot.sensor_map.MapIndexed((row, col, code) => {

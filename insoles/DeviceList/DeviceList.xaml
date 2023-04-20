@@ -17,10 +17,16 @@
     <Page.Resources>
         <converter:ConnectedConverter x:Key="connectedConverter"/>
         <converter:BatteryConverter x:Key="batteryConverter"/>
-        <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
+        <ObjectDataProvider x:Key="dataFromSide" MethodName="GetValues"
                             ObjectType="{x:Type System:Enum}">
             <ObjectDataProvider.MethodParameters>
                 <x:Type TypeName="enum:Side"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="dataFromPosition" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="enum:Position"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
         <Style x:Key="TreeViewItemStyle" TargetType="controls:MultiSelectTreeViewItem">
@@ -46,10 +52,11 @@
                     </Style>
                 </controls:MultiSelectTreeViewItem.ItemContainerStyle>
                 <controls:MultiSelectTreeViewItem.Header>
-                    <Grid Width="280">
+                    <Grid Width="340">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="30"/>
                             <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -57,13 +64,14 @@
                         <Image Grid.Column="0" Source="pack://application:,,,/DeviceList/Icons/camera-blue-icon-small.png" Height="20" Width="20"/>
                         <TextBlock Text="Cameras" Grid.Column="1" TextAlignment="Center"/>
                         <TextBlock Text="Device Number" Grid.Column="2" TextAlignment="Center" TextWrapping="Wrap"/>
-                        <TextBlock Text="FPS" Grid.Column="3" TextAlignment="Center"/>
-                        <TextBlock Text="" Grid.Column="4" TextAlignment="Center"/>
+                        <TextBlock Text="Position" Grid.Column="3" TextAlignment="Center"/>
+                        <TextBlock Text="FPS" Grid.Column="4" TextAlignment="Center"/>
+                        <TextBlock Text="" Grid.Column="5" TextAlignment="Center"/>
                     </Grid>
                 </controls:MultiSelectTreeViewItem.Header>
                 <controls:MultiSelectTreeViewItem.ItemTemplate>
                     <DataTemplate DataType="{x:Type class:CameraInfo}">
-                        <Grid Margin="-19,0,0,0" Width="280">
+                        <Grid Margin="-19,0,0,0" Width="340">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="15"/>
                                 <ColumnDefinition Width="15"/>
@@ -71,11 +79,14 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Image Grid.Column="1" Height="15" Width="15" Source="pack://application:,,,/DeviceList/Icons/arrow-icon.png"/>
                             <TextBlock Text="{Binding Path=name}" Grid.Column="2" TextAlignment="Center"/>
                             <TextBlock Text="{Binding Path=number}" Grid.Column="3" TextAlignment="Center"/>
-                            <TextBlock Text="{Binding Path=fps}" Grid.Column="4" TextAlignment="Center"/>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource dataFromPosition}}"
+                                      SelectedItem="{Binding Path=position}" Grid.Column="4"/>
+                            <ComboBox ItemsSource="{Binding Path=fpsAvailable}" SelectedValue="{Binding Path=fps}" SelectedIndex="0" Grid.Column="5" HorizontalContentAlignment="Center"/>
                         </Grid>
                     </DataTemplate>
                 </controls:MultiSelectTreeViewItem.ItemTemplate>
@@ -121,7 +132,7 @@
                             <Image Grid.Column="2" Height="15" Width="15" Source="{Binding Path=connected, Converter={StaticResource connectedConverter}}"/>
                             <TextBlock Text="{Binding Path=id}" Grid.Column="3" TextAlignment="Center"/>
                             <TextBlock Text="{Binding Path=name}" Grid.Column="4" TextAlignment="Center"/>
-                            <ComboBox ItemsSource="{Binding Source={StaticResource dataFromEnum}}"
+                            <ComboBox ItemsSource="{Binding Source={StaticResource dataFromSide}}"
                                       SelectedItem="{Binding Path=side}" Grid.Column="5"/>
                             <TextBlock Text="{Binding Path=address}" Grid.Column="6" TextAlignment="Center"/>
                             <TextBlock Text="{Binding Path=battery, Converter={StaticResource batteryConverter}}" Grid.Column="7" TextAlignment="Center"/>

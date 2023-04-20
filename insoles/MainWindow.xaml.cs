@@ -18,6 +18,11 @@ using System.Windows.Navigation;
 using System.Xml.Linq;
 using WisewalkSDK;
 using static WisewalkSDK.Wisewalk;
+using System.Runtime.InteropServices;
+using MathNet.Numerics.LinearAlgebra.Solvers;
+
+using AForge.Video.DirectShow;
+using FilterCategory = DirectShowLib.FilterCategory;
 
 namespace insoles
 {
@@ -36,6 +41,7 @@ namespace insoles
         public Foot foot;
         public Butterfly butterfly;
         public PressureMap pressureMap;
+        public AlgLib algLib;
 
         private List<Wisewalk.ComPort> ports = new List<Wisewalk.ComPort>();
         private List<Wisewalk.Dev> scanDevices = new List<Wisewalk.Dev>();
@@ -54,12 +60,14 @@ namespace insoles
             //Transformers.transformImageHeatmap();
             //Transformers.transformImageButterfly();
             InitializeComponent();
+
             Application.Current.MainWindow = this;
             virtualToolBar = new VirtualToolBar();
             fileSaver = new FileSaver.FileSaver();
             graphManager = new GraphManager();
             butterfly = new Butterfly();
-            pressureMap = new PressureMap();
+            //pressureMap = new PressureMap();
+            algLib = new AlgLib();
             foot = new Foot();
 
             api = new Wisewalk();
@@ -70,10 +78,37 @@ namespace insoles
 
             initToolBarHandlers();
 
+            initCameraAnchorables();
+
             initialized?.Invoke(this, EventArgs.Empty);
 
             //fileSaver.saveFakeFile();
             //virtualToolBar.transformFiles();
+        }
+        private void initCameraAnchorables()
+        {
+            if (camaraViewport1.Content == null)
+            {
+                camaraViewport1.Navigated += delegate (object sender, NavigationEventArgs e)
+                {
+                    ((CamaraViewport.CamaraViewport)camaraViewport1.Content).layoutAnchorable = camaraAnchorable1;
+                };
+            }
+            else
+            {
+                ((CamaraViewport.CamaraViewport)camaraViewport1.Content).layoutAnchorable = camaraAnchorable1;
+            }
+            if (camaraViewport2.Content == null)
+            {
+                camaraViewport2.Navigated += delegate (object sender, NavigationEventArgs e)
+                {
+                    ((CamaraViewport.CamaraViewport)camaraViewport2.Content).layoutAnchorable = camaraAnchorable2;
+                };
+            }
+            else
+            {
+                ((CamaraViewport.CamaraViewport)camaraViewport2.Content).layoutAnchorable = camaraAnchorable2;
+            }
         }
         // Conecta los botones de la ToolBar
         private void initToolBarHandlers()
@@ -132,10 +167,55 @@ namespace insoles
                 // Añade las camaras al TreeView
                 async void addCameras(DeviceList.DeviceList deviceListClass)
                 {
+                    List<int>[] cameraFps()
+                    {
+                        Stopwatch stopwatch = Stopwatch.StartNew();
+                        var devices = new FilterInfoCollection(AForge.Video.DirectShow.FilterCategory.VideoInputDevice);
+                        List<int>[] cameraFps = new List<int>[devices.Count];
+                        for (int i = 0; i < devices.Count; i++)
+                        {
+
+                            cameraFps[i] = new List<int>();
+                            var captureDevice = new VideoCaptureDevice(devices[i].MonikerString);
+                            foreach (var capability in captureDevice.VideoCapabilities)
+                            {
+                                if (!cameraFps[i].Contains(capability.AverageFrameRate))
+                                {
+                                    cameraFps[i].Add(capability.AverageFrameRate);
+                                }
+                            }
+                            cameraFps[i].Add(60);
+                        }
+                        Trace.WriteLine(stopwatch.Elapsed.TotalSeconds);
+                        return cameraFps;
+                    }
+                    Dictionary<int, int> DirectshowAforgeMap()
+                    {
+                        var aforgeDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+
+                        var directshowDevices = DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice);
+
+                        var deviceMap = new Dictionary<int, int>();
+
+                        for (int ai = 0; ai < aforgeDevices.Count; ai++)
+                        {
+                            for (int dsi = 0; dsi < directshowDevices.Count(); dsi++)
+                            {
+                                string monikerDs;
+                                directshowDevices[dsi].Mon.GetDisplayName(null, null, out monikerDs);
+                                if (aforgeDevices[ai].MonikerString == monikerDs)
+                                {
+                                    deviceMap.Add(dsi, ai);
+                                    break;
+                                }
+                            }
+                        }
+                        return deviceMap;
+                    }
                     // Devuelve el nombre de todas las camaras conectadas
                     List<string> cameraNames()
                     {
-                        List<DsDevice> devices = new List<DsDevice>(DsDevice.GetDevicesOfCat(FilterCategory.VideoInputDevice));
+                        List<DsDevice> devices = new List<DsDevice>(DsDevice.GetDevicesOfCat(DirectShowLib.FilterCategory.VideoInputDevice));
                         List<string> cameraNames = new List<string>();
                         foreach (DsDevice device in devices)
                         {
@@ -160,7 +240,8 @@ namespace insoles
                         return indices;
                     }
                     List<string> names = await Task.Run(() => cameraNames());
-                    //names.ForEach(n => Trace.WriteLine(n));
+                    List<int>[] fps = await Task.Run(() => cameraFps());
+                    Dictionary<int, int> directshowToAforge = await Task.Run(() => DirectshowAforgeMap());
                     List<int> indices = await Task.Run(() => cameraIndices(names.Count));
                     //indices.ForEach(i => Trace.WriteLine(i));
                     await Task.Run(() => getInsoles()); //necesario para escanear IMUs
@@ -168,9 +249,13 @@ namespace insoles
                     List<CameraInfo> cameras = new List<CameraInfo>();
                     for (int i = 0; i < names.Count; i++)
                     {
+                        Trace.WriteLine("i = " + i);
                         if (indices.Contains(i))
                         {
-                            cameras.Add(new CameraInfo(i, names[i]));
+                            Trace.WriteLine("indices.Contains " + i);
+                            List<int> camFps = fps[directshowToAforge[i]];
+                            Trace.WriteLine("List<double> fps = await Task.Run(() => fpsValues(i)); i = " + i);
+                            cameras.Add(new CameraInfo(i, names[i], camFps));
                         }
                     }
                     deviceListClass.setCameras(cameras);
@@ -294,6 +379,8 @@ namespace insoles
             {
                 DeviceList.DeviceList deviceListClass = deviceList.Content as DeviceList.DeviceList;
                 IList<object> selectedItems = (IList<object>)deviceListClass.treeView.SelectedItems;
+                List<Frame> camaraViewportFrames = new List<Frame>() { camaraViewport1, camaraViewport2 };
+                int frameIndex = 0;
                 foreach (object selected in selectedItems)
                 {
                     if (selected != null && selected is CameraInfo)
@@ -301,13 +388,18 @@ namespace insoles
                         MultiSelectTreeViewItem treeViewItem = (MultiSelectTreeViewItem)deviceListClass.cameras.ItemContainerGenerator.ContainerFromItem(selected);
                         CameraInfo cameraInfo = treeViewItem.DataContext as CameraInfo;
                         int id = cameraInfo.number; //Id de la camara
-                        CamaraViewport.CamaraViewport camaraViewportClass = camaraViewport.Content as CamaraViewport.CamaraViewport;
-                        if (!camaraViewportClass.someCameraOpened())
+                        int fps = cameraInfo.fps;
+                        while (frameIndex < camaraViewportFrames.Count)
                         {
-                            camaraViewportClass.Title = cameraInfo.name + " CAM " + id;
-                            camaraViewportClass.initializeCamara(id);
+                            CamaraViewport.CamaraViewport camaraViewportClass = camaraViewportFrames[frameIndex].Content as CamaraViewport.CamaraViewport;
+                            frameIndex++;
+                            if (!camaraViewportClass.someCameraOpened())
+                            {
+                                //camaraViewportClass.Title = cameraInfo.name + " CAM " + id;
+                                camaraViewportClass.initializeCamara(id, fps);
+                                break;
+                            }
                         }
-                        break;
                     }
                 }
             }
