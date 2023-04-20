@@ -414,7 +414,6 @@ namespace insoles.Graphs
                     Trace.WriteLine("right foot " + stopwatch.Elapsed.TotalSeconds);
                     pressureMaps[metric] = data;
                 }
-                [Obsolete("CalculateOneFromCenters is deprecated, please use CalculateOneFromReducedAlglib instead.")]
                 void CalculateOneFromCenters(GraphData graphData, ActionRef<GraphData, DataInsole, DataInsole> func, Metric metric)
                 {
                     rbfmodel CalculateModel(Dictionary<Sensor, int> pressures,
@@ -486,9 +485,9 @@ namespace insoles.Graphs
                     Trace.WriteLine("right foot " + stopwatch.Elapsed.TotalSeconds);
                     pressureMaps[metric] = data;
                 }
-                CalculateOneFromReducedAlglib(graphData, average, Metric.Avg);
-                CalculateOneFromReducedAlglib(graphData, max, Metric.Max);
-                CalculateOneFromReducedAlglib(graphData, min, Metric.Min);
+                CalculateOneFromCenters(graphData, average, Metric.Avg);
+                CalculateOneFromCenters(graphData, max, Metric.Max);
+                CalculateOneFromCenters(graphData, min, Metric.Min);
             }
             if (isInitialized)
             {
