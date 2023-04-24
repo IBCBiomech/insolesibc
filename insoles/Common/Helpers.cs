@@ -317,13 +317,13 @@ namespace insoles.Common
             }
             return result;
         }
-        public static Color Interpolate(Color color1, Color color2)
+        public static Color Interpolate(Color color1, Color color2, float ratio = 0.5f)
         {
-            const float ratio = 0.5f;
+            float ratio2 = 1 - ratio;
             return Color.FromArgb(
-                (int)(color1.R * ratio + color2.R * ratio),
-                (int)(color1.G * ratio + color2.G * ratio),
-                (int)(color1.B * ratio + color2.B * ratio)
+                (int)(color1.R * ratio + color2.R * ratio2),
+                (int)(color1.G * ratio + color2.G * ratio2),
+                (int)(color1.B * ratio + color2.B * ratio2)
             );
         }
         public static Color Interpolate(Color color1, Color color2, int alpha)
@@ -335,6 +335,19 @@ namespace insoles.Common
                 (int)(color1.G * ratio + color2.G * ratio),
                 (int)(color1.B * ratio + color2.B * ratio)
             );
+        }
+        public static Func<Color, Color, float, Color> CustomInterpolate(Func<float, float> ratioConverter)
+        {
+            return (color1, color2, ratio) =>
+            {
+                ratio = ratioConverter(ratio);
+                float ratio2 = 1 - ratio;
+                return Color.FromArgb(
+                    (int)(color1.R * ratio + color2.R * ratio2),
+                    (int)(color1.G * ratio + color2.G * ratio2),
+                    (int)(color1.B * ratio + color2.B * ratio2)
+                );
+            };
         }
         public static int ADC_neg(int VALUE_digital)
         {
