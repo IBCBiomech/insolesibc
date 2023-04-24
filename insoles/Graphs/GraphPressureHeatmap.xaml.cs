@@ -141,29 +141,33 @@ namespace insoles.Graphs
             {
                 foot = mainWindow.foot;
             }
-            /*
-            if (mainWindow.pressureMap == null)
+            if (Config.HeatmapMethodUsed == Config.HeatmapMethod.Alglib)
             {
-                mainWindow.initialized += (s, e) =>
+                if (mainWindow.algLib == null)
                 {
-                    pressureMap = mainWindow.pressureMap;
-                };
-            }
-            else
-            {
-                pressureMap = mainWindow.pressureMap;
-            }
-            */
-            if (mainWindow.algLib == null)
-            {
-                mainWindow.initialized += (s, e) =>
+                    mainWindow.initialized += (s, e) =>
+                    {
+                        algLib = mainWindow.algLib;
+                    };
+                }
+                else
                 {
                     algLib = mainWindow.algLib;
-                };
+                }
             }
-            else
+            else if(Config.HeatmapMethodUsed == Config.HeatmapMethod.IDW)
             {
-                algLib = mainWindow.algLib;
+                if (mainWindow.pressureMap == null)
+                {
+                    mainWindow.initialized += (s, e) =>
+                    {
+                        pressureMap = mainWindow.pressureMap;
+                    };
+                }
+                else
+                {
+                    pressureMap = mainWindow.pressureMap;
+                }
             }
             metric.SelectionChanged += (s, e) =>
             {

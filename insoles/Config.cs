@@ -50,5 +50,7 @@ namespace insoles
             [Quality.LOW] = 0.25
         };
         public const int NUM_SENSORS = 8;
+        public enum HeatmapMethod { Alglib, IDW}
+        public static HeatmapMethod HeatmapMethodUsed = HeatmapMethod.IDW;
     }
 }
