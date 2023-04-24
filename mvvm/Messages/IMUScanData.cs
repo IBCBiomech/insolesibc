@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace mvvm.Messages
 {
-    public class CameraScanMessage
+    public class IMUScanData
     {
         public string name { get; set; }
-        public int number { get; set; }
-        public CameraScanMessage(int number, string name)
+        public string MAC { get; set; }
+        public IMUScanData(string name, string MAC) 
         {
-            this.number = number;
             this.name = name;
+            this.MAC = MAC;
         }
     }
 }

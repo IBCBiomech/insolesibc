@@ -32,6 +32,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="WisewalkSDK">
+      <HintPath>WisewalkSDK.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Assets\applicationIcon-1024.png" />
     <Resource Include="Assets\applicationIcon-256.png" />
   </ItemGroup>

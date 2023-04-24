@@ -9,8 +9,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Wpf.Ui.Common.Interfaces;
+using Wpf.Ui.Dpi;
+
+using WisewalkSDK;
+using static WisewalkSDK.Protocol_v3;
+using System.Text.RegularExpressions;
 
 namespace mvvm.ViewModels
 {
@@ -65,15 +71,15 @@ namespace mvvm.ViewModels
                 List<int> indices = await Task.Run(() => cameraIndices(names.Count));
                 foreach (int index in indices) { Trace.WriteLine(index); }
 
-                List<CameraScanMessage> cameras = new List<CameraScanMessage>();
+                List<CameraScanData> cameras = new List<CameraScanData>();
                 for (int i = 0; i < names.Count; i++)
                 {
                     if (indices.Contains(i))
                     {
-                        cameras.Add(new CameraScanMessage(i, names[i]));
+                        cameras.Add(new CameraScanData(i, names[i]));
                     }
                 }
-                ScanMessage message = new ScanMessage(cameras);
+                ScanMessageCameras message = new ScanMessageCameras(cameras);
                 WeakReferenceMessenger.Default.Send(message);
             }
             Task.Run(() => scanCameras());

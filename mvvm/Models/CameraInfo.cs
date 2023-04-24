@@ -20,7 +20,7 @@ namespace mvvm.Models
             this.fps = null;
             this.IsSelected = false;
         }
-        public CameraInfo(CameraScanMessage c)
+        public CameraInfo(CameraScanData c)
         {
             number = c.number;
             name = c.name;

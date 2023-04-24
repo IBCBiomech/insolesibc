@@ -32,12 +32,12 @@ namespace mvvm.ViewModels
 
         private void InitializeViewModel()
         {
-            WeakReferenceMessenger.Default.Register<ScanMessage>(this, onScanMessageReceived);
+            WeakReferenceMessenger.Default.Register<ScanMessageCameras>(this, onScanMessageReceived);
             WeakReferenceMessenger.Default.Register<OpenCameraClickMessage>(this, onOpenCameraClickMessageReceived);
 
             _isInitialized = true;
         }
-        private void onScanMessageReceived(object sender, ScanMessage args)
+        private void onScanMessageReceived(object sender, ScanMessageCameras args)
         {
             Trace.WriteLine("onCameraScanMessageReceived");
             var camerasCollection = new List<CameraInfo>();
