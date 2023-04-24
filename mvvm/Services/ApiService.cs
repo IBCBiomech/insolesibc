@@ -11,19 +11,19 @@ using static WisewalkSDK.Protocol_v3;
 
 namespace mvvm.Services
 {
-    public static class ApiService
+    public class ApiService: IApiService
     {
-        public static Wisewalk api { get; private set; }
-        public static string? port_selected;
-        public static string? error;
+        public Wisewalk api { get; private set; }
+        public string? port_selected;
+        public string? error;
 
         //private static List<Wisewalk.Dev> scanDevices = new List<Wisewalk.Dev>();
-        static ApiService()
+        public ApiService()
         {
             api = new Wisewalk();
             api.scanFinished += Api_scanFinished;
         }
-        public static void ShowPorts()
+        public void ShowPorts()
         {
             var ports = api.GetUsbDongles();
             foreach (Wisewalk.ComPort port in ports)
@@ -37,8 +37,10 @@ namespace mvvm.Services
             }
             throw new Exception("No port found");
         }
-        public static void ScanDevices()
+        public void ScanDevices()
         {
+            ShowPorts();
+            api.Open(port_selected, out error);
             if (!api.ScanDevices(out error))
             {
                 // Error
@@ -49,13 +51,13 @@ namespace mvvm.Services
                 Thread.Sleep(2000);
             }
         }
-        private static void Api_scanFinished(List<Wisewalk.Dev> devices)
+        private void Api_scanFinished(List<Wisewalk.Dev> devices)
         {
             var scanDevices = devices;
             Trace.WriteLine("# of devices: " + devices.Count);
             ShowScanList(scanDevices);
         }
-        private static void ShowScanList(List<Wisewalk.Dev> devices)
+        private void ShowScanList(List<Wisewalk.Dev> devices)
         {
             for (int idx = 0; idx < devices.Count; idx++)
             {
@@ -65,6 +67,17 @@ namespace mvvm.Services
 
                 Trace.WriteLine("MacAddress: ", " * " + macAddress);
             }
+        }
+
+        public async void Scan()
+        {
+            Trace.WriteLine("Scan from ApiService");
+            await Task.Run(() => ScanDevices());
+        }
+
+        public void Connect()
+        {
+            throw new NotImplementedException();
         }
     }
 }

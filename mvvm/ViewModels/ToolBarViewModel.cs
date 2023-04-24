@@ -17,6 +17,7 @@ using Wpf.Ui.Dpi;
 using WisewalkSDK;
 using static WisewalkSDK.Protocol_v3;
 using System.Text.RegularExpressions;
+using mvvm.Services;
 
 namespace mvvm.ViewModels
 {
@@ -82,6 +83,7 @@ namespace mvvm.ViewModels
                 ScanMessageCameras message = new ScanMessageCameras(cameras);
                 WeakReferenceMessenger.Default.Send(message);
             }
+            App.GetService<IApiService>().Scan();
             Task.Run(() => scanCameras());
         }
         [RelayCommand]
