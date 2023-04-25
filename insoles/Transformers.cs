@@ -22,7 +22,7 @@ namespace insoles
         #region HEATMAP
         public static void transformImageHeatmap()
         {
-            string file = "plantilla.png";
+            string file = "plantilla2.png";
             string path = Helpers.GetFilePath(file);
             Bitmap bmp = new Bitmap(path);
             Matrix<float> sensor_map = Helpers.ImageToMatrix(bmp);
@@ -267,7 +267,7 @@ namespace insoles
         #region BUTTERFLY
         public static void transformImageButterfly()
         {
-            string file = "plantilla.png";
+            string file = "plantilla2.png";
             string path = Helpers.GetFilePath(file);
             Bitmap bmp = new Bitmap(path);
             Matrix<float> sensor_map = Helpers.ImageToMatrix(bmp);

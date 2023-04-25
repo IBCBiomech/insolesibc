@@ -90,7 +90,7 @@ namespace insoles.Graphs
                     Stream stream = sri.Stream;
                     inverse_distances_background = MatrixMarketReader.ReadMatrix<float>(stream);
                 }
-                catch (System.IO.FileNotFoundException)
+                catch (System.IO.IOException)
                 {
                     MessageBox.Show("No se ha encontrado el fichero de la matrix\nSe va a proceder a recalcularla", "inverse_distances_background.mtx not found", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.Yes);
                     inverse_distances_background = CalculateMinDistancesBackground();

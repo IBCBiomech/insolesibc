@@ -28,8 +28,8 @@ namespace insoles.Graphs
         private Foot foot;
         private ScottPlot.Plottable.Image image;
         private ScatterPlot cps;
-        private const double HEIGHT = 605;
-        private const double WIDTH = 474;
+        private const double HEIGHT = 445;
+        private const double WIDTH = 615;
         private double scale = 1;
 #if PLANTILLA
         string file = "Assets/bitmap_butterfly_white_smoke.png";
