@@ -43,7 +43,7 @@ namespace insoles.Graphs
             plot.Plot.YAxis2.IsVisible = false;
             plot.Plot.XAxis.Label("Xcp(combo)(mm)");
             plot.Plot.YAxis.Label("Ycp(combo)(mm)");
-            //saveBitmap(foot);
+            saveBitmap(foot);
             drawFoot();
         }
         private void drawFoot()

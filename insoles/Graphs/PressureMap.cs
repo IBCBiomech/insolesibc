@@ -388,7 +388,7 @@ namespace insoles.Graphs
 #if CENTER_SENSORS
                     Dictionary<SensorHeelReduced, int> pressuresLeftReduced = ReduceSensorsHeel(pressuresLeft, reduceFunc);
                     Dictionary<SensorHeelReduced, int> pressuresRightReduced = ReduceSensorsHeel(pressuresRight, reduceFunc);
-                     //Testear sensores individualmente
+                    /* //Testear sensores individualmente
                     foreach (SensorHeelReduced sensor in pressuresLeftReduced.Keys)
                     {
                         pressuresLeftReduced[sensor] = 0;
@@ -397,6 +397,7 @@ namespace insoles.Graphs
                     SensorHeelReduced sensorToTest = SensorHeelReduced.MET1;
                     pressuresLeftReduced[sensorToTest] = 1000;
                     pressuresRightReduced[sensorToTest] = 1000;
+                    */
                     
                     pressureMaps[metric] = CalculateFromPoint(pressuresLeftReduced, pressuresRightReduced, inverse_reduced_distances);
 #else
