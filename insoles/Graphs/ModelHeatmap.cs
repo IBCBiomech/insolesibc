@@ -39,9 +39,8 @@ namespace insoles.Graphs
                 plot.Plot.Clear(colorbar.GetType());
             }
             //IColormap colormap = extendColormap(Colormap.Jet, Color.LightGray, Helpers.Interpolate, extendSize:25, totalSize:256);
-            //IColormap colormap = extendColormap(Colormap.Jet, Color.LightGray, noInterpolate, extendSize:25, totalSize:256);
-            IColormap colormap = extendColormap(Colormap.Jet, Color.LightGray, 
-                Helpers.CustomInterpolate((ratio) => (float)Math.Pow(ratio, 3)), extendSize:25, totalSize:256);
+            IColormap colormap = extendColormap(Colormap.Jet, Color.LightGray, noInterpolate, extendSize:25, totalSize:256);
+            //IColormap colormap = extendColormap(Colormap.Jet, Color.LightGray, Helpers.CustomInterpolate((ratio) => (float)Math.Pow(ratio, 3)), extendSize:25, totalSize:256);
             heatmap = plot.Plot.AddHeatmap(data, colormap:new Colormap(colormap));
             heatmap.Update(data, min: 0);
             heatmap.Smooth = true;
