@@ -358,7 +358,7 @@ namespace insoles.Graphs
                         dataline = "1 " + (fakets).ToString("F2") + " " + (frame).ToString() + " " + 
                             stringTransformSole(soleLeft[j], transformFunc) + " " + 
                             stringTransformSole(soleRight[j], transformFunc) + " " +
-                            metric_left.ToString() + " " + metric_right.ToString() + " " +"\n";
+                            metric_left[j].ToString() + " " + metric_right[j].ToString() + " " +"\n";
                         fakets += 0.01f;
                         frame += 1;
                         mainWindow.fileSaver.appendCSVManual(dataline);
