@@ -1,5 +1,4 @@
 ﻿#define CENTER_SENSORS
-#define REDUCE_SENSORS //Comentar esto para que no haga la media de MET y HEEL
 #define BAKGROUND_DISTANCES //Comentar esto para no usar las distancias al borde
 
 using System;
@@ -29,12 +28,22 @@ namespace insoles.Graphs
         ARCH,
         HEEL
     }
+    public enum SensorHeelReduced
+    {
+        HALLUX,
+        TOES,
+        MET1,
+        MET3,
+        MET5,
+        ARCH,
+        HEEL
+    }
     public class PressureMap
     {
         delegate void ActionRef<T1, T2, T3>(T1 arg1, ref T2 arg2, ref T3 arg3);
 
         private Dictionary<Sensor, Matrix<float>> inverse_distances = new Dictionary<Sensor, Matrix<float>>();
-        private Dictionary<SensorReduced, Matrix<float>> inverse_reduced_distances = new Dictionary<SensorReduced, Matrix<float>>();
+        private Dictionary<SensorHeelReduced, Matrix<float>> inverse_reduced_distances = new Dictionary<SensorHeelReduced, Matrix<float>>();
         private Matrix<float> inverse_distances_background;
         //private GraphPressureMap graph;
         private GraphPressureHeatmap graph;
@@ -51,8 +60,8 @@ namespace insoles.Graphs
         private Dictionary<Sensor, (float, float)> centersLeft = new Dictionary<Sensor, (float, float)>();
         private Dictionary<Sensor, (float, float)> centersRight = new Dictionary<Sensor, (float, float)>();
 
-        private Dictionary<SensorReduced, (float, float)> centersLeftReduced = new Dictionary<SensorReduced, (float, float)>();
-        private Dictionary<SensorReduced, (float, float)> centersRightReduced = new Dictionary<SensorReduced, (float, float)>();
+        private Dictionary<SensorHeelReduced, (float, float)> centersLeftReduced = new Dictionary<SensorHeelReduced, (float, float)>();
+        private Dictionary<SensorHeelReduced, (float, float)> centersRightReduced = new Dictionary<SensorHeelReduced, (float, float)>();
         public PressureMap()
         {
             void initFunc()
@@ -70,13 +79,9 @@ namespace insoles.Graphs
                 }
 #if CENTER_SENSORS
                 CalculateCenters();
-#if REDUCE_SENSORS
-                centersLeftReduced = ReduceSensors(centersLeft, reduceSensorsFunc);
-                centersRightReduced = ReduceSensors(centersRight, reduceSensorsFunc);
+                centersLeftReduced = ReduceSensorsHeel(centersLeft, reduceSensorsFunc);
+                centersRightReduced = ReduceSensorsHeel(centersRight, reduceSensorsFunc);
                 inverse_reduced_distances = CalculateMinDistances(centersLeftReduced, centersRightReduced);
-#else
-                inverse_distances = CalculateMinDistances(centersLeft, centersRight);
-#endif
 #else
                 Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_left = foot.CalculateSensorPositionsLeft();
                 Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_right = foot.CalculateSensorPositionsRight();
@@ -150,6 +155,27 @@ namespace insoles.Graphs
             heels.Add(centers[Sensor.HEEL_L]);
             heels.Add(centers[Sensor.HEEL_R]);
             centersReduced[SensorReduced.HEEL] = transformFuncion(heels);
+
+            return centersReduced;
+        }
+        private Dictionary<SensorHeelReduced, T> ReduceSensorsHeel<T>(Dictionary<Sensor, T> centers, Func<List<T>, T> transformFuncion)
+        {
+            Dictionary<SensorHeelReduced, T> centersReduced = new Dictionary<SensorHeelReduced, T>();
+            centersReduced[SensorHeelReduced.HALLUX] = centers[Sensor.HALLUX];
+            centersReduced[SensorHeelReduced.TOES] = centers[Sensor.TOES];
+
+            centersReduced[SensorHeelReduced.MET1] = centers[Sensor.MET1];
+            centersReduced[SensorHeelReduced.MET3] = centers[Sensor.MET3];
+            centersReduced[SensorHeelReduced.MET5] = centers[Sensor.MET5];
+
+            centersReduced[SensorHeelReduced.ARCH] = centers[Sensor.ARCH];
+
+            List<T> heels = new List<T>
+            {
+                centers[Sensor.HEEL_L],
+                centers[Sensor.HEEL_R]
+            };
+            centersReduced[SensorHeelReduced.HEEL] = transformFuncion(heels);
 
             return centersReduced;
         }
@@ -360,13 +386,9 @@ namespace insoles.Graphs
                     Dictionary<Sensor, int> pressuresLeft = leftInsole.pressures;
                     Dictionary<Sensor, int> pressuresRight = rightInsole.pressures;
 #if CENTER_SENSORS
-#if REDUCE_SENSORS
-                    Dictionary<SensorReduced, int> pressuresLeftReduced = ReduceSensors(pressuresLeft, reduceFunc);
-                    Dictionary<SensorReduced, int> pressuresRightReduced = ReduceSensors(pressuresRight, reduceFunc);
+                    Dictionary<SensorHeelReduced, int> pressuresLeftReduced = ReduceSensorsHeel(pressuresLeft, reduceFunc);
+                    Dictionary<SensorHeelReduced, int> pressuresRightReduced = ReduceSensorsHeel(pressuresRight, reduceFunc);
                     pressureMaps[metric] = CalculateFromPoint(pressuresLeftReduced, pressuresRightReduced, inverse_reduced_distances);
-#else
-                    pressureMaps[metric] = CalculateFromPoint(pressuresLeft, pressuresRight, inverse_distances);
-#endif
 #else
                     pressureMaps[metric] = CalculateFromPoint(pressuresLeft, pressuresRight, inverse_distances);
 #endif
