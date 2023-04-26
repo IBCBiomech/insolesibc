@@ -22,7 +22,7 @@ namespace insoles.Graphs
         public ModelHeatmap(WpfPlot plot)
         {
             this.plot = plot;
-            plot.Plot.Style(Style.Seaborn);
+            plot.Plot.Style(dataBackground: Color.White);
             double xMin = 0;
             double xMax = Config.PLANTILLA_WIDTH;
             double yMin = 0;
