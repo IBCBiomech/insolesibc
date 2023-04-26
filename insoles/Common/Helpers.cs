@@ -368,5 +368,11 @@ namespace insoles.Common
 
         public enum AllUnits { digital, adc_neg, mbar, N}
         public enum Units { mbar, N}
+
+        public static float slope((float, float) p1, (float, float) p2)
+        {
+            //float slope = (p1.Item2 - points[0, 1]) / (points[3, 0] - points[0, 0]);
+            return 0;
+        }
     }
 }

@@ -82,6 +82,11 @@ namespace insoles
 
             initCameraAnchorables();
 
+            /* //generar imagenes
+            Transformers.transformImageButterfly();
+            Transformers.transformImageHeatmap();
+            */
+
             initialized?.Invoke(this, EventArgs.Empty);
 
             //fileSaver.saveFakeFile();

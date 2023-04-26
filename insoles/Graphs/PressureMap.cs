@@ -57,8 +57,8 @@ namespace insoles.Graphs
         private Metric metric;
         private bool dirty = true;
 
-        private Dictionary<Sensor, (float, float)> centersLeft = new Dictionary<Sensor, (float, float)>();
-        private Dictionary<Sensor, (float, float)> centersRight = new Dictionary<Sensor, (float, float)>();
+        public Dictionary<Sensor, (float, float)> centersLeft { get; private set; } = new Dictionary<Sensor, (float, float)>();
+        public Dictionary<Sensor, (float, float)> centersRight { get; private set; } = new Dictionary<Sensor, (float, float)>();
 
         private Dictionary<SensorHeelReduced, (float, float)> centersLeftReduced = new Dictionary<SensorHeelReduced, (float, float)>();
         private Dictionary<SensorHeelReduced, (float, float)> centersRightReduced = new Dictionary<SensorHeelReduced, (float, float)>();
@@ -99,7 +99,7 @@ namespace insoles.Graphs
                 {
                     MessageBox.Show("No se ha encontrado el fichero de la matrix\nSe va a proceder a recalcularla", "inverse_distances_background.mtx not found", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.Yes);
                     inverse_distances_background = CalculateMinDistancesBackground();
-                    //MatrixMarketWriter.WriteMatrix(Config.INITIAL_PATH + "\\inverse_distances_background.mtx", inverse_distances_background);
+                    MatrixMarketWriter.WriteMatrix(Config.INITIAL_PATH + "\\inverse_distances_background.mtx", inverse_distances_background);
                 }
 #endif
                 isInitialized = true;
@@ -388,6 +388,16 @@ namespace insoles.Graphs
 #if CENTER_SENSORS
                     Dictionary<SensorHeelReduced, int> pressuresLeftReduced = ReduceSensorsHeel(pressuresLeft, reduceFunc);
                     Dictionary<SensorHeelReduced, int> pressuresRightReduced = ReduceSensorsHeel(pressuresRight, reduceFunc);
+                     //Testear sensores individualmente
+                    foreach (SensorHeelReduced sensor in pressuresLeftReduced.Keys)
+                    {
+                        pressuresLeftReduced[sensor] = 0;
+                        pressuresRightReduced[sensor] = 0;
+                    }
+                    SensorHeelReduced sensorToTest = SensorHeelReduced.MET1;
+                    pressuresLeftReduced[sensorToTest] = 1000;
+                    pressuresRightReduced[sensorToTest] = 1000;
+                    
                     pressureMaps[metric] = CalculateFromPoint(pressuresLeftReduced, pressuresRightReduced, inverse_reduced_distances);
 #else
                     pressureMaps[metric] = CalculateFromPoint(pressuresLeft, pressuresRight, inverse_distances);
