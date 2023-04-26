@@ -23,6 +23,19 @@ namespace insoles.Graphs
         {
             this.plot = plot;
             plot.Plot.Style(Style.Seaborn);
+            double xMin = 0;
+            double xMax = Config.PLANTILLA_WIDTH;
+            double yMin = 0;
+            double yMax = Config.PLANTILLA_HEIGHT;
+            plot.Plot.SetInnerViewLimits(xMin, xMax, yMin, yMax);
+            plot.Plot.SetOuterViewLimits(yMin: 0);
+            plot.Plot.SetAxisLimits(xMin, xMax, yMin, yMax);
+            plot.Plot.AxisScaleLock(true);
+            plot.Refresh();
+            plot.SizeChanged += (sender, args) =>
+            {
+                plot.Plot.SetAxisLimits(xMin, xMax, yMin, yMax);
+            };
         }
         private Color noInterpolate(Color color, Color extended, float ratio)
         {

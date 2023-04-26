@@ -52,5 +52,8 @@ namespace insoles
         public const int NUM_SENSORS = 8;
         public enum HeatmapMethod { Alglib, IDW}
         public static HeatmapMethod HeatmapMethodUsed = HeatmapMethod.IDW;
+
+        public const double PLANTILLA_HEIGHT = 445;
+        public const double PLANTILLA_WIDTH = 615;
     }
 }
