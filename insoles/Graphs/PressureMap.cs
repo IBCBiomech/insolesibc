@@ -1,5 +1,6 @@
 ﻿#define CENTER_SENSORS
 #define BAKGROUND_DISTANCES //Comentar esto para no usar las distancias al borde
+#define AVERAGE
 
 using System;
 using System.Drawing;
@@ -400,16 +401,6 @@ namespace insoles.Graphs
 #if CENTER_SENSORS
                     Dictionary<SensorHeelReduced, int> pressuresLeftReduced = ReduceSensorsHeel(pressuresLeft, (l) => (int)l.Average());
                     Dictionary<SensorHeelReduced, int> pressuresRightReduced = ReduceSensorsHeel(pressuresRight, (l) => (int)l.Average());
-                    /* //Testear sensores individualmente
-                    foreach (SensorHeelReduced sensor in pressuresLeftReduced.Keys)
-                    {
-                        pressuresLeftReduced[sensor] = 0;
-                        pressuresRightReduced[sensor] = 0;
-                    }
-                    SensorHeelReduced sensorToTest = SensorHeelReduced.MET1;
-                    pressuresLeftReduced[sensorToTest] = 1000;
-                    pressuresRightReduced[sensorToTest] = 1000;
-                    */
 
                     return CalculateFromPoint(pressuresLeftReduced, pressuresRightReduced, inverse_reduced_distances);
 #else
@@ -419,9 +410,29 @@ namespace insoles.Graphs
 
                 for(int i = 0; i < graphData.length; i+= N_FRAMES)
                 {
+#if !AVERAGE
                     DataInsole left_i = ((FrameDataInsoles)graphData[i]).left;
                     DataInsole right_i = ((FrameDataInsoles)graphData[i]).right;
                     pressureMaps.Add(CalculateOne(left_i, right_i));
+#else
+                    DataInsole left = new();
+                    DataInsole right = new();
+                    for (int j = i; j < Math.Min(i + N_FRAMES, graphData.length); j++)
+                    {
+                        FrameDataInsoles frameData = (FrameDataInsoles)graphData[j];
+                        foreach (Sensor sensor in Enum.GetValues(typeof(Sensor)))
+                        {
+                            left[sensor] += frameData.left[sensor];
+                            right[sensor] += frameData.right[sensor];
+                        }
+                    }
+                    foreach (Sensor sensor in Enum.GetValues(typeof(Sensor)))
+                    {
+                        left[sensor] /= Math.Min(N_FRAMES, graphData.length - i);
+                        right[sensor] /= Math.Min(N_FRAMES, graphData.length - i);
+                    }
+                    pressureMaps.Add(CalculateOne(left, right));
+#endif
                 }
             }
             this.graphData = graphData;
