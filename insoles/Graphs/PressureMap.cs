@@ -443,6 +443,7 @@ namespace insoles.Graphs
                 await Task.Run(() => graph.InitData(graphData));
                 graph.DrawData(pressureMaps[0]);
                 graph.calculating = false;
+                timeLine.model.timeEvent -= onUpdateTime;
                 timeLine.model.timeEvent += onUpdateTime;
             }
             else
@@ -454,6 +455,8 @@ namespace insoles.Graphs
                     graph.InitData(graphData);
                     graph.DrawData(pressureMaps[0]);
                     graph.calculating = false;
+                    timeLine.model.timeEvent -= onUpdateTime;
+                    timeLine.model.timeEvent += onUpdateTime;
                 };
             }
         }
