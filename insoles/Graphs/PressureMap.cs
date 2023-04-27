@@ -407,8 +407,8 @@ namespace insoles.Graphs
                     return CalculateFromPoint(pressuresLeft, pressuresRight, inverse_distances);
 #endif
                 }
-
-                for(int i = 0; i < graphData.length; i+= N_FRAMES)
+                pressureMaps = new();
+                for (int i = 0; i < graphData.length; i+= N_FRAMES)
                 {
 #if !AVERAGE
                     DataInsole left_i = ((FrameDataInsoles)graphData[i]).left;
