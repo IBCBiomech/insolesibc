@@ -51,7 +51,8 @@ namespace insoles.Graphs
         private GraphPressureHeatmap graph;
         private Foot foot;
 
-        private List<Matrix<float>> pressureMaps = new();
+        private Dictionary<Metric, Matrix<float>> pressureMaps = new();
+        private List<Matrix<float>> pressureMapsLive;
 
         private bool isInitialized = false;
         public event EventHandler initialized;
@@ -120,13 +121,13 @@ namespace insoles.Graphs
                 mainWindow.graphPressures.Navigated += (s, e) =>
                 {
                     graph = mainWindow.graphPressures.Content as GraphPressureHeatmap;
-                    
+                    graph.MetricChanged += changeMetric;
                 };
             }
             else
             {
                 graph = mainWindow.graphPressures.Content as GraphPressureHeatmap;
-                
+                graph.MetricChanged += changeMetric;
             }
             if (mainWindow.timeLine.Content == null)
             {
@@ -392,7 +393,43 @@ namespace insoles.Graphs
         }
         public async void Calculate(GraphData graphData)
         {
-            void CalculateAll()
+            void CalculateMetrics()
+            {
+                void CalculateOne(GraphData graphData, ActionRef<GraphData, DataInsole, DataInsole> func, Metric metric)
+                {
+                    int reduceFunc(List<int> pressures)
+                    {
+                        return pressures.Sum() / pressures.Count;
+                    }
+                    DataInsole leftInsole = new DataInsole();
+                    DataInsole rightInsole = new DataInsole();
+                    func(graphData, ref leftInsole, ref rightInsole);
+                    Dictionary<Sensor, int> pressuresLeft = leftInsole.pressures;
+                    Dictionary<Sensor, int> pressuresRight = rightInsole.pressures;
+#if CENTER_SENSORS
+                    Dictionary<SensorHeelReduced, int> pressuresLeftReduced = ReduceSensorsHeel(pressuresLeft, reduceFunc);
+                    Dictionary<SensorHeelReduced, int> pressuresRightReduced = ReduceSensorsHeel(pressuresRight, reduceFunc);
+                    /* //Testear sensores individualmente
+                    foreach (SensorHeelReduced sensor in pressuresLeftReduced.Keys)
+                    {
+                        pressuresLeftReduced[sensor] = 0;
+                        pressuresRightReduced[sensor] = 0;
+                    }
+                    SensorHeelReduced sensorToTest = SensorHeelReduced.MET1;
+                    pressuresLeftReduced[sensorToTest] = 1000;
+                    pressuresRightReduced[sensorToTest] = 1000;
+                    */
+
+                    pressureMaps[metric] = CalculateFromPoint(pressuresLeftReduced, pressuresRightReduced, inverse_reduced_distances);
+#else
+                    pressureMaps[metric] = CalculateFromPoint(pressuresLeft, pressuresRight, inverse_distances);
+#endif
+                }
+                CalculateOne(graphData, average, Metric.Avg);
+                CalculateOne(graphData, max, Metric.Max);
+                CalculateOne(graphData, min, Metric.Min);
+            }
+            void CalculateLive()
             {
                 Matrix<float> CalculateOne(DataInsole leftInsole, DataInsole rightInsole)
                 {
@@ -407,7 +444,7 @@ namespace insoles.Graphs
                     return CalculateFromPoint(pressuresLeft, pressuresRight, inverse_distances);
 #endif
                 }
-                pressureMaps = new();
+                pressureMapsLive = new();
                 for (int i = 0; i < graphData.length; i+= N_FRAMES)
                 {
 #if !AVERAGE
@@ -431,7 +468,7 @@ namespace insoles.Graphs
                         left[sensor] /= Math.Min(N_FRAMES, graphData.length - i);
                         right[sensor] /= Math.Min(N_FRAMES, graphData.length - i);
                     }
-                    pressureMaps.Add(CalculateOne(left, right));
+                    pressureMapsLive.Add(CalculateOne(left, right));
 #endif
                 }
             }
@@ -439,10 +476,11 @@ namespace insoles.Graphs
             if (isInitialized)
             {
                 graph.calculating = true;
-                await Task.Run(() => CalculateAll());
+                await Task.Run(() => CalculateMetrics());
                 await Task.Run(() => graph.InitData(graphData));
-                graph.DrawData(pressureMaps[0]);
+                graph.DrawData(pressureMaps[metric]);
                 graph.calculating = false;
+                await Task.Run(() => CalculateLive());
                 timeLine.model.timeEvent -= onUpdateTime;
                 timeLine.model.timeEvent += onUpdateTime;
             }
@@ -451,10 +489,11 @@ namespace insoles.Graphs
                 graph.calculating = true;
                 initialized += (s, e) =>
                 {
-                    CalculateAll();
+                    CalculateMetrics();
                     graph.InitData(graphData);
-                    graph.DrawData(pressureMaps[0]);
+                    graph.DrawData(pressureMaps[metric]);
                     graph.calculating = false;
+                    CalculateLive();
                     timeLine.model.timeEvent -= onUpdateTime;
                     timeLine.model.timeEvent += onUpdateTime;
                 };
@@ -503,6 +542,8 @@ namespace insoles.Graphs
                     return currentFrame;
                 }
             }
+            if (!graph.animate)
+                return;
             int estimatedFrame = initialEstimation(time);
             estimatedFrame = Math.Max(estimatedFrame, graphData.minFrame); // No salirse del rango
             estimatedFrame = Math.Min(estimatedFrame, graphData.maxFrame); // No salirse del rango
@@ -510,7 +551,7 @@ namespace insoles.Graphs
             if (estimatedFrame != lastFrame)
             {
                 lastFrame = estimatedFrame;
-                graph.DrawData(pressureMaps[estimatedFrame]);
+                graph.DrawData(pressureMapsLive[estimatedFrame]);
             }
         }
         private Matrix<float> CalculateFromPoint<T>(Dictionary<T, int> left, Dictionary<T, int> right, 
@@ -639,6 +680,14 @@ namespace insoles.Graphs
                         right[sensor] = frameData.right[sensor];
                     }
                 }
+            }
+        }
+        public void changeMetric(object sender, MetricEventArgs e)
+        {
+            metric = e.metric;
+            if (pressureMaps.ContainsKey(metric) && !graph.calculating)
+            {
+                graph.DrawData(pressureMaps[metric]);
             }
         }
     }

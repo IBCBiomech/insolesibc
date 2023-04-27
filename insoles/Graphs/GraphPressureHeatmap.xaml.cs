@@ -120,6 +120,16 @@ namespace insoles.Graphs
                 NotifyPropertyChanged();
             }
         }
+        private bool _animate;
+        public bool animate
+        {
+            get { return _animate; }
+            set
+            {
+                _animate = value;
+                NotifyPropertyChanged();
+            }
+        }
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
@@ -370,6 +380,11 @@ namespace insoles.Graphs
             int yInt = (int)Math.Round(cp.Item2);
             return (yInt / range) * range + (range / 2);
             // Al hacer la division entera corta por abajo. Para que quede la media de los puntos le sumo la mitad del rango
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
