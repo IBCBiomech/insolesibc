@@ -217,6 +217,24 @@ namespace insoles.Graphs
                     throw new Exception("seleccion max min avg error");
             }
         }
+        public void InitData(GraphData graphData)
+        {
+            int max = 0;
+            for(int i = 0; i < graphData.length; i++)
+            {
+                DataInsole left = ((FrameDataInsoles)graphData[i]).left;
+                DataInsole right = ((FrameDataInsoles)graphData[i]).right;
+                foreach(int presure in left.pressures.Values) 
+                { 
+                    if(presure > max) max = presure;
+                }
+                foreach (int presure in right.pressures.Values)
+                {
+                    if (presure > max) max = presure;
+                }
+            }
+            model.InitData(max);
+        }
         public void DrawData(Matrix<float> data)
         {
             Matrix<double> dataDouble = data.Map(Convert.ToDouble);

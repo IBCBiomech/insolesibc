@@ -17,6 +17,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 using System.IO;
 using System.Windows.Resources;
 using MathNet.Numerics.Interpolation;
+using System.Windows.Navigation;
 
 namespace insoles.Graphs
 {
@@ -49,13 +50,20 @@ namespace insoles.Graphs
         private GraphPressureHeatmap graph;
         private Foot foot;
 
-        private Dictionary<Metric, Matrix<float>> pressureMaps = new Dictionary<Metric, Matrix<float>>();
+        private List<Matrix<float>> pressureMaps = new();
 
         private bool isInitialized = false;
         public event EventHandler initialized;
 
         private Metric metric;
         private bool dirty = true;
+
+        private const int N_FRAMES = 10;
+        private int lastFrame = -1;
+
+        private TimeLine.TimeLine timeLine;
+
+        private GraphData graphData;
 
         public Dictionary<Sensor, (float, float)> centersLeft { get; private set; } = new Dictionary<Sensor, (float, float)>();
         public Dictionary<Sensor, (float, float)> centersRight { get; private set; } = new Dictionary<Sensor, (float, float)>();
@@ -111,13 +119,24 @@ namespace insoles.Graphs
                 mainWindow.graphPressures.Navigated += (s, e) =>
                 {
                     graph = mainWindow.graphPressures.Content as GraphPressureHeatmap;
-                    graph.MetricChanged += changeMetric;
+                    
                 };
             }
             else
             {
                 graph = mainWindow.graphPressures.Content as GraphPressureHeatmap;
-                graph.MetricChanged += changeMetric;
+                
+            }
+            if (mainWindow.timeLine.Content == null)
+            {
+                mainWindow.timeLine.Navigated += delegate (object sender, NavigationEventArgs e)
+                {
+                    timeLine = mainWindow.timeLine.Content as TimeLine.TimeLine;
+                };
+            }
+            else
+            {
+                timeLine = mainWindow.timeLine.Content as TimeLine.TimeLine;
             }
             if (mainWindow.foot == null)
             {
@@ -370,24 +389,17 @@ namespace insoles.Graphs
             }
             return inverse_distances;
         }
-        public void Calculate(GraphData graphData)
+        public async void Calculate(GraphData graphData)
         {
             void CalculateAll()
             {
-                void CalculateOne(GraphData graphData, ActionRef<GraphData, DataInsole, DataInsole> func, Metric metric)
+                Matrix<float> CalculateOne(DataInsole leftInsole, DataInsole rightInsole)
                 {
-                    int reduceFunc(List<int> pressures)
-                    {
-                        return pressures.Sum() / pressures.Count;
-                    }
-                    DataInsole leftInsole = new DataInsole();
-                    DataInsole rightInsole = new DataInsole();
-                    func(graphData, ref leftInsole, ref rightInsole);
                     Dictionary<Sensor, int> pressuresLeft = leftInsole.pressures;
                     Dictionary<Sensor, int> pressuresRight = rightInsole.pressures;
 #if CENTER_SENSORS
-                    Dictionary<SensorHeelReduced, int> pressuresLeftReduced = ReduceSensorsHeel(pressuresLeft, reduceFunc);
-                    Dictionary<SensorHeelReduced, int> pressuresRightReduced = ReduceSensorsHeel(pressuresRight, reduceFunc);
+                    Dictionary<SensorHeelReduced, int> pressuresLeftReduced = ReduceSensorsHeel(pressuresLeft, (l) => (int)l.Average());
+                    Dictionary<SensorHeelReduced, int> pressuresRightReduced = ReduceSensorsHeel(pressuresRight, (l) => (int)l.Average());
                     /* //Testear sensores individualmente
                     foreach (SensorHeelReduced sensor in pressuresLeftReduced.Keys)
                     {
@@ -398,22 +410,29 @@ namespace insoles.Graphs
                     pressuresLeftReduced[sensorToTest] = 1000;
                     pressuresRightReduced[sensorToTest] = 1000;
                     */
-                    
-                    pressureMaps[metric] = CalculateFromPoint(pressuresLeftReduced, pressuresRightReduced, inverse_reduced_distances);
+
+                    return CalculateFromPoint(pressuresLeftReduced, pressuresRightReduced, inverse_reduced_distances);
 #else
-                    pressureMaps[metric] = CalculateFromPoint(pressuresLeft, pressuresRight, inverse_distances);
+                    return CalculateFromPoint(pressuresLeft, pressuresRight, inverse_distances);
 #endif
                 }
-                CalculateOne(graphData, average, Metric.Avg);
-                CalculateOne(graphData, max, Metric.Max);
-                CalculateOne(graphData, min, Metric.Min);
+
+                for(int i = 0; i < graphData.length; i+= N_FRAMES)
+                {
+                    DataInsole left_i = ((FrameDataInsoles)graphData[i]).left;
+                    DataInsole right_i = ((FrameDataInsoles)graphData[i]).right;
+                    pressureMaps.Add(CalculateOne(left_i, right_i));
+                }
             }
+            this.graphData = graphData;
             if (isInitialized)
             {
                 graph.calculating = true;
-                CalculateAll();
-                graph.DrawData(pressureMaps[metric]);
+                await Task.Run(() => CalculateAll());
+                await Task.Run(() => graph.InitData(graphData));
+                graph.DrawData(pressureMaps[0]);
                 graph.calculating = false;
+                timeLine.model.timeEvent += onUpdateTime;
             }
             else
             {
@@ -421,9 +440,63 @@ namespace insoles.Graphs
                 initialized += (s, e) =>
                 {
                     CalculateAll();
-                    graph.DrawData(pressureMaps[metric]);
+                    graph.InitData(graphData);
+                    graph.DrawData(pressureMaps[0]);
                     graph.calculating = false;
                 };
+            }
+        }
+        private void onUpdateTime(object sender, double time)
+        {
+            int initialEstimation(double time)
+            {
+                double timePerFrame = graphData.maxTime / graphData.maxFrame;
+                int expectedFrame = (int)Math.Round(time / timePerFrame);
+                return expectedFrame;
+            }
+            int searchFrameLineal(double time, int currentFrame, int previousFrame, double previousDiference)
+            {
+                double currentTime = graphData.time(currentFrame);
+                double currentDiference = Math.Abs(time - currentTime);
+                if (currentDiference >= previousDiference)
+                {
+                    return previousFrame;
+                }
+                else if (currentTime < time)
+                {
+                    if (currentFrame == graphData.maxFrame) //Si es el ultimo frame devolverlo
+                    {
+                        return graphData.maxFrame;
+                    }
+                    else
+                    {
+                        return searchFrameLineal(time, currentFrame + 1, currentFrame, currentDiference);
+                    }
+                }
+                else if (currentTime > time)
+                {
+                    if (currentFrame == graphData.minFrame) //Si es el primer frame devolverlo
+                    {
+                        return graphData.minFrame;
+                    }
+                    else
+                    {
+                        return searchFrameLineal(time, currentFrame - 1, currentFrame, currentDiference);
+                    }
+                }
+                else //currentTime == time muy poco probable (decimales) pero puede pasar
+                {
+                    return currentFrame;
+                }
+            }
+            int estimatedFrame = initialEstimation(time);
+            estimatedFrame = Math.Max(estimatedFrame, graphData.minFrame); // No salirse del rango
+            estimatedFrame = Math.Min(estimatedFrame, graphData.maxFrame); // No salirse del rango
+            estimatedFrame /= N_FRAMES;
+            if (estimatedFrame != lastFrame)
+            {
+                lastFrame = estimatedFrame;
+                graph.DrawData(pressureMaps[estimatedFrame]);
             }
         }
         private Matrix<float> CalculateFromPoint<T>(Dictionary<T, int> left, Dictionary<T, int> right, 
@@ -552,14 +625,6 @@ namespace insoles.Graphs
                         right[sensor] = frameData.right[sensor];
                     }
                 }
-            }
-        }
-        public void changeMetric(object sender, MetricEventArgs e)
-        {
-            metric = e.metric;
-            if (pressureMaps.ContainsKey(metric) && !graph.calculating)
-            {
-                graph.DrawData(pressureMaps[metric]);
             }
         }
     }
