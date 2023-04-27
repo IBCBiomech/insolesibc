@@ -28,8 +28,6 @@ namespace insoles.Graphs
         private Foot foot;
         private ScottPlot.Plottable.Image image;
         private ScatterPlot cps;
-        private const double HEIGHT = 605;
-        private const double WIDTH = 474;
         private double scale = 1;
 #if PLANTILLA
         string file = "Assets/bitmap_butterfly_white_smoke.png";
@@ -45,7 +43,7 @@ namespace insoles.Graphs
             plot.Plot.YAxis2.IsVisible = false;
             plot.Plot.XAxis.Label("Xcp(combo)(mm)");
             plot.Plot.YAxis.Label("Ycp(combo)(mm)");
-            //saveBitmap(foot);
+            saveBitmap(foot);
             drawFoot();
         }
         private void drawFoot()
@@ -55,16 +53,26 @@ namespace insoles.Graphs
             Stream stream = sri.Stream;
             Bitmap bitmap = new Bitmap(stream);
             image = plot.Plot.AddImage(bitmap, 0, 0, anchor: Alignment.LowerCenter);
-            image.HeightInAxisUnits = HEIGHT * scale;
-            image.WidthInAxisUnits = WIDTH * scale;
+            image.HeightInAxisUnits = Config.PLANTILLA_HEIGHT * scale;
+            image.WidthInAxisUnits = Config.PLANTILLA_WIDTH * scale;
             //plot.Plot.SetAxisLimitsX(-WIDTH * scale / 2, WIDTH * scale / 2);
             //plot.Plot.SetAxisLimitsY(0, HEIGHT * scale);
-            plot.Plot.SetInnerViewLimits(-WIDTH * scale / 2, WIDTH * scale / 2, 0, HEIGHT * scale);
-            //plot.Plot.SetOuterViewLimits(-WIDTH * scale, WIDTH * scale, 0, HEIGHT * scale * 2);
+            double xMin = -Config.PLANTILLA_WIDTH * scale / 2;
+            double xMax = Config.PLANTILLA_WIDTH * scale / 2;
+            double yMin = 0;
+            double yMax = Config.PLANTILLA_HEIGHT * scale;
+            plot.Plot.SetInnerViewLimits(xMin, xMax, yMin, yMax);
             plot.Plot.SetOuterViewLimits(yMin: 0);
+
+            plot.Plot.SetAxisLimits(xMin, xMax, yMin, yMax);
             plot.Plot.AxisScaleLock(true);
             plot.IsHitTestVisible = false;
             plot.Refresh();
+
+            plot.SizeChanged += (sender, args) =>
+            {
+                plot.Plot.SetAxisLimits(xMin, xMax, yMin, yMax);
+            };
         }
         public void saveBitmap(Foot foot)
         {
@@ -106,7 +114,7 @@ namespace insoles.Graphs
 #endif
             for (int i = 0; i < x_list.Count; i++)
             {
-                x[i] = (x_list[i] * qualityMult - WIDTH / 2) * scale;
+                x[i] = (x_list[i] * qualityMult - Config.PLANTILLA_WIDTH / 2) * scale;
             }
             for(int i = 0; i < y_list.Count; i++)
             {

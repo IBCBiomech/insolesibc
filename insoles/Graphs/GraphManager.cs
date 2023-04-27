@@ -369,7 +369,7 @@ namespace insoles.Graphs
                         dataline = "1 " + (fakets).ToString("F2") + " " + (frame).ToString() + " " + 
                             stringTransformSole(soleLeft[j], transformFunc) + " " + 
                             stringTransformSole(soleRight[j], transformFunc) + " " +
-                            metric_left.ToString() + " " + metric_right.ToString() + " " +"\n";
+                            metric_left[j].ToString() + " " + metric_right[j].ToString() + " " +"\n";
                         fakets += 0.01f;
                         frame += 1;
                         mainWindow.fileSaver.appendCSVManual(dataline);
@@ -421,29 +421,33 @@ namespace insoles.Graphs
             {
                 butterfly = mainWindow.butterfly;
             }
-            /*
-            if (mainWindow.pressureMap == null)
+            if (Config.HeatmapMethodUsed == Config.HeatmapMethod.Alglib)
             {
-                mainWindow.initialized += (s, e) =>
+                if (mainWindow.algLib == null)
                 {
-                    pressureMap = mainWindow.pressureMap;
-                };
-            }
-            else
-            {
-                pressureMap = mainWindow.pressureMap;
-            }
-            */
-            if (mainWindow.algLib == null)
-            {
-                mainWindow.initialized += (s, e) =>
+                    mainWindow.initialized += (s, e) =>
+                    {
+                        algLib = mainWindow.algLib;
+                    };
+                }
+                else
                 {
                     algLib = mainWindow.algLib;
-                };
+                }
             }
-            else
+            else if(Config.HeatmapMethodUsed == Config.HeatmapMethod.IDW)
             {
-                algLib = mainWindow.algLib;
+                if (mainWindow.pressureMap == null)
+                {
+                    mainWindow.initialized += (s, e) =>
+                    {
+                        pressureMap = mainWindow.pressureMap;
+                    };
+                }
+                else
+                {
+                    pressureMap = mainWindow.pressureMap;
+                }
             }
             if (mainWindow.graphSumPressures.Content == null)
             {
@@ -464,8 +468,14 @@ namespace insoles.Graphs
                 active = true;
                 this.graphData = graphData;
                 butterfly.Calculate(graphData);
-                //pressureMap.Calculate(graphData);
-                algLib.Calculate(graphData);
+                if (Config.HeatmapMethodUsed == Config.HeatmapMethod.Alglib)
+                {
+                    algLib.Calculate(graphData);
+                }
+                else if(Config.HeatmapMethodUsed == Config.HeatmapMethod.IDW)
+                {
+                    pressureMap.Calculate(graphData);
+                }
                 sumPressures.drawData(graphData);
                 frameEvent += sumPressures.onUpdateTimeLine;
                 timeLine.model.timeEvent += onUpdateTimeLine;
@@ -489,8 +499,14 @@ namespace insoles.Graphs
             {
                 this.graphData = graphData;
                 butterfly.Calculate(graphData);
-                //pressureMap.Calculate(graphData);
-                algLib.Calculate(graphData);
+                if (Config.HeatmapMethodUsed == Config.HeatmapMethod.Alglib)
+                {
+                    algLib.Calculate(graphData);
+                }
+                else if (Config.HeatmapMethodUsed == Config.HeatmapMethod.IDW)
+                {
+                    pressureMap.Calculate(graphData);
+                }        
                 sumPressures.clearData();
                 sumPressures.drawData(graphData);
             }

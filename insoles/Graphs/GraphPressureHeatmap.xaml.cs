@@ -41,6 +41,9 @@ namespace insoles.Graphs
         private int avg_ = int.MinValue;
         private int max_ = int.MinValue;
         private int min_ = int.MinValue;
+
+        private double? slopeLeft;
+        private double? slopeRight;
         public int avg
         {
             get
@@ -141,29 +144,33 @@ namespace insoles.Graphs
             {
                 foot = mainWindow.foot;
             }
-            /*
-            if (mainWindow.pressureMap == null)
+            if (Config.HeatmapMethodUsed == Config.HeatmapMethod.Alglib)
             {
-                mainWindow.initialized += (s, e) =>
+                if (mainWindow.algLib == null)
                 {
-                    pressureMap = mainWindow.pressureMap;
-                };
-            }
-            else
-            {
-                pressureMap = mainWindow.pressureMap;
-            }
-            */
-            if (mainWindow.algLib == null)
-            {
-                mainWindow.initialized += (s, e) =>
+                    mainWindow.initialized += (s, e) =>
+                    {
+                        algLib = mainWindow.algLib;
+                    };
+                }
+                else
                 {
                     algLib = mainWindow.algLib;
-                };
+                }
             }
-            else
+            else if(Config.HeatmapMethodUsed == Config.HeatmapMethod.IDW)
             {
-                algLib = mainWindow.algLib;
+                if (mainWindow.pressureMap == null)
+                {
+                    mainWindow.initialized += (s, e) =>
+                    {
+                        pressureMap = mainWindow.pressureMap;
+                    };
+                }
+                else
+                {
+                    pressureMap = mainWindow.pressureMap;
+                }
             }
             metric.SelectionChanged += (s, e) =>
             {
@@ -236,6 +243,24 @@ namespace insoles.Graphs
                 right = ReduceCPsByRanges(right, range);
             }
 #if REDUCE_SORT
+            double CalculateSlope(Dictionary<Sensor, (float, float)> centers)
+            {
+                float item1Top = (centers[Sensor.HALLUX].Item1 + centers[Sensor.TOES].Item1) / 2;
+                float item2Top = (centers[Sensor.HALLUX].Item2 + centers[Sensor.TOES].Item2) / 2;
+                (float, float) top = (item1Top, item2Top);
+                float item1Bot = (centers[Sensor.HEEL_L].Item1 + centers[Sensor.HEEL_R].Item1) / 2;
+                float item2Bot = (centers[Sensor.HEEL_L].Item2 + centers[Sensor.HEEL_R].Item2) / 2;
+                (float, float) bot = (item1Bot, item2Bot);
+                return 0;
+            }
+            if(slopeLeft == null)
+            {
+                slopeLeft = CalculateSlope(pressureMap.centersLeft);
+            }
+            if(slopeRight == null)
+            {
+                slopeRight = CalculateSlope(pressureMap.centersRight);
+            }
             ReduceByRanges(ref left, ref right, 1);
             ReduceSorting(ref left, ref right, 50);   
 #else

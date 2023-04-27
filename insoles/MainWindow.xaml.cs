@@ -66,8 +66,10 @@ namespace insoles
             fileSaver = new FileSaver.FileSaver();
             graphManager = new GraphManager();
             butterfly = new Butterfly();
-            //pressureMap = new PressureMap();
-            algLib = new AlgLib();
+            if(Config.HeatmapMethodUsed == Config.HeatmapMethod.Alglib)
+                algLib = new AlgLib();
+            else if(Config.HeatmapMethodUsed == Config.HeatmapMethod.IDW)
+                pressureMap = new PressureMap();
             foot = new Foot();
 
             api = new Wisewalk();
@@ -79,6 +81,11 @@ namespace insoles
             initToolBarHandlers();
 
             initCameraAnchorables();
+
+            /* //generar imagenes
+            Transformers.transformImageButterfly();
+            Transformers.transformImageHeatmap();
+            */
 
             initialized?.Invoke(this, EventArgs.Empty);
 

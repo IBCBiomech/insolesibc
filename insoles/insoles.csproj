@@ -50,7 +50,10 @@
     <Resource Include="Assets\bitmap_heatmap_30_closest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Assets\inverse_distances_background.mtx">
+    <Resource Include="Assets\deprecated\bitmap_butterfly_white_smoke.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\deprecated\bitmap_heatmap_30_closest.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
@@ -83,6 +86,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\inverse_distances_background.mtx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="DeviceList\Icons\arrow-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
