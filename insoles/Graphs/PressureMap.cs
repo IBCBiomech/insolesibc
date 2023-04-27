@@ -59,7 +59,7 @@ namespace insoles.Graphs
         private Metric metric;
         private bool dirty = true;
 
-        private const int N_FRAMES = 10;
+        private const int N_FRAMES = Config.N_FRAMES_HEATMAP;
         private int lastFrame = -1;
 
         private TimeLine.TimeLine timeLine;
