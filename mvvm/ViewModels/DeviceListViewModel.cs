@@ -39,6 +39,7 @@ namespace mvvm.ViewModels
             WeakReferenceMessenger.Default.Register<ScanMessageInsoles>(this, onScanMessageReceived);
             WeakReferenceMessenger.Default.Register<ScanMessageCameras>(this, onScanMessageReceived);
             WeakReferenceMessenger.Default.Register<OpenCameraClickMessage>(this, onOpenCameraClickMessageReceived);
+            WeakReferenceMessenger.Default.Register<ConnectClickMessage>(this, onConnectClickMessageReceived);
 
             _isInitialized = true;
         }
@@ -81,6 +82,20 @@ namespace mvvm.ViewModels
             }
             Trace.WriteLine(id);
             OpenCameraMessage message = new OpenCameraMessage(id);
+            WeakReferenceMessenger.Default.Send(message);
+        }
+        private void onConnectClickMessageReceived(object sender, ConnectClickMessage args)
+        {
+            Trace.WriteLine("onOpenCameraClickMessageReceived");
+            List<string> macs = new List<string>();
+            foreach (var insole in Insoles)
+            {
+                if (insole.IsSelected)
+                {
+                    macs.Add(insole.address);
+                }
+            }
+            ConnectMessage message = new ConnectMessage(macs);
             WeakReferenceMessenger.Default.Send(message);
         }
     }

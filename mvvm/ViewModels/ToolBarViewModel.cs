@@ -90,6 +90,8 @@ namespace mvvm.ViewModels
         private void OnConnect()
         {
             Trace.WriteLine("connect");
+            ConnectClickMessage message = new ConnectClickMessage();
+            WeakReferenceMessenger.Default.Send(message);
         }
         [RelayCommand]
         private void OnOpenCamera()

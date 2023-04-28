@@ -13,6 +13,7 @@ namespace mvvm.Models
     {
         private static HashSet<int> idsUsed = new();
         private static Dictionary<Side, InsoleInfo> sidesUsed = new();
+        public bool IsSelected { get; set; }
         public int? id { get; set; }
         public byte? handler { get; set; }
         public string name { get; set; }

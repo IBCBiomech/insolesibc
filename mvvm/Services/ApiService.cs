@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
 using mvvm.Messages;
+using mvvm.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,12 +11,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using WisewalkSDK;
 using static WisewalkSDK.Protocol_v3;
+using static WisewalkSDK.Wisewalk;
 
 namespace mvvm.Services
 {
     public class ApiService: IApiService
     {
         public Wisewalk api { get; private set; }
+        private List<Wisewalk.Dev> scanDevices;
         public string? port_selected;
         public string? error;
 
@@ -23,7 +26,9 @@ namespace mvvm.Services
         public ApiService()
         {
             api = new Wisewalk();
-            api.scanFinished += Api_scanFinished;
+            api.scanFinished += scanFinishedCallback;
+            api.dataReceived += dataReceivedCallback;
+            WeakReferenceMessenger.Default.Register<ConnectMessage>(this, onConnectMessageReceived);
         }
         public void ShowPorts()
         {
@@ -52,7 +57,7 @@ namespace mvvm.Services
                 Thread.Sleep(2000);
             }
         }
-        private void Api_scanFinished(List<Wisewalk.Dev> devices)
+        private void scanFinishedCallback(List<Wisewalk.Dev> devices)
         {
             var scanDevices = devices;
             Trace.WriteLine("# of devices: " + devices.Count);
@@ -64,8 +69,10 @@ namespace mvvm.Services
                 InsoleScanData imu = new InsoleScanData(name, GetMacAddress(scanDevices[i]));
                 IMUs.Add(imu);
             }
+            /* // IMUs falsos
             IMUs.Add(new InsoleScanData("Wisewalk", "AC:DE:FG"));
             IMUs.Add(new InsoleScanData("Wisewalk", "BA:DE:FG"));
+            */
             ScanMessageInsoles message = new ScanMessageInsoles(IMUs);
             WeakReferenceMessenger.Default.Send(message);
         }
@@ -89,12 +96,39 @@ namespace mvvm.Services
 
             return mac;
         }
+        private void dataReceivedCallback(byte deviceHandler, WisewalkSDK.WisewalkData data)
+        {
+            List<InsoleMeasureData> measures = new List<InsoleMeasureData>();
+            foreach(var sole in data.Sole)
+            {
+                measures.Add(new InsoleMeasureData(sole));
+            }
+            InsoleMeasuresMessage message = new InsoleMeasuresMessage(measures);
+            WeakReferenceMessenger.Default.Send(message);
+        }
         public async void Scan()
         {
             Trace.WriteLine("Scan from ApiService");
             await Task.Run(() => ScanDevices());
         }
-
+        private Dev findInsole(string mac)
+        {
+            return scanDevices.FirstOrDefault(de => GetMacAddress(de) == mac);
+        }
+        public void onConnectMessageReceived(object sender, ConnectMessage args)
+        {
+            Trace.WriteLine("onConnectMessageReceived");
+            List<Dev> conn_list_dev = new List<Dev>();
+            foreach (string mac in args.macs)
+            {
+                Trace.WriteLine(mac);
+                conn_list_dev.Add(findInsole(mac));
+            }
+            if (!api.Connect(conn_list_dev, out error))
+            {
+                Trace.WriteLine("Connect error " + error);
+            }
+        }
         public void Connect()
         {
             throw new NotImplementedException();

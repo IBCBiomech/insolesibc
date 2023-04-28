@@ -74,6 +74,11 @@
                 </controls:MultiSelectTreeViewItem.ItemTemplate>
             </controls:MultiSelectTreeViewItem>
             <controls:MultiSelectTreeViewItem ItemsSource="{Binding ViewModel.Insoles}" Visibility="Visible" x:Name="insoles" Padding="0 10 0 2.5">
+                <controls:MultiSelectTreeViewItem.ItemContainerStyle>
+                    <Style TargetType="{x:Type controls:MultiSelectTreeViewItem}">
+                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                    </Style>
+                </controls:MultiSelectTreeViewItem.ItemContainerStyle>
                 <controls:MultiSelectTreeViewItem.Header>
                     <Grid Width="340">
                         <Grid.ColumnDefinitions>
