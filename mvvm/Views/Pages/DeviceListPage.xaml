@@ -4,7 +4,9 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:System="clr-namespace:System;assembly=mscorlib"
       xmlns:models="clr-namespace:mvvm.Models"
+      xmlns:converters="clr-namespace:mvvm.Converters"
       xmlns:local="clr-namespace:mvvm.Views.Pages" xmlns:controls="clr-namespace:System.Windows.Controls;assembly=MultiSelectTreeView"
            Title="DeviceListPage"
       d:DataContext="{d:DesignInstance local:SettingsPage,
@@ -14,6 +16,16 @@
       Foreground="{DynamicResource TextFillColorPrimaryBrush}"
       mc:Ignorable="d"
       >
+    <Page.Resources>
+        <converters:ConnectedConverter x:Key="connectedConverter"/>
+        <converters:BatteryConverter x:Key="batteryConverter"/>
+        <ObjectDataProvider x:Key="dataFromSide" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="models:Side"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </Page.Resources>
 
     <controls:MultiSelectTreeView BorderThickness="0" x:Name="treeView">
         <controls:MultiSelectTreeViewItem x:Name="baseItem">
@@ -57,6 +69,56 @@
                             <TextBlock Text="{Binding Path=name}" Grid.Column="2" TextAlignment="Center"/>
                             <TextBlock Text="{Binding Path=number}" Grid.Column="3" TextAlignment="Center"/>
                             <TextBlock Text="{Binding Path=fps}" Grid.Column="4" TextAlignment="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </controls:MultiSelectTreeViewItem.ItemTemplate>
+            </controls:MultiSelectTreeViewItem>
+            <controls:MultiSelectTreeViewItem ItemsSource="{Binding ViewModel.Insoles}" Visibility="Visible" x:Name="insoles" Padding="0 10 0 2.5">
+                <controls:MultiSelectTreeViewItem.Header>
+                    <Grid Width="340">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0" Height="20" Width="20"/>
+                        <TextBlock Text="Con" Grid.Column="1" TextAlignment="Center"/>
+                        <TextBlock Text="Id" Grid.Column="2" TextAlignment="Center"/>
+                        <TextBlock Text="IMU-Insoles" Grid.Column="3" TextAlignment="Center"/>
+                        <TextBlock Text="SIDE" Grid.Column="4" TextAlignment="Center"/>
+                        <TextBlock Text="Address" Grid.Column="5" TextAlignment="Center"/>
+                        <TextBlock Text="Battery" Grid.Column="6" TextAlignment="Center"/>
+                        <TextBlock Text="FW" Grid.Column="7" TextAlignment="Center"/>
+                    </Grid>
+                </controls:MultiSelectTreeViewItem.Header>
+                <controls:MultiSelectTreeViewItem.ItemTemplate>
+                    <DataTemplate DataType="{x:Type models:InsoleInfo}">
+                        <Grid Margin="-19,0,0,0" Width="340">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="0.5*"/>
+                                <ColumnDefinition Width="0.5*"/>
+                                <ColumnDefinition Width="1.5*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Grid.Column="1" Height="15" Width="15" Source="pack://application:,,,/DeviceList/Icons/arrow-icon.png"/>
+                            <Image Grid.Column="2" Height="15" Width="15" Source="{Binding Path=connected, Converter={StaticResource connectedConverter}}"/>
+                            <TextBlock Text="{Binding Path=id}" Grid.Column="3" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding Path=name}" Grid.Column="4" TextAlignment="Center"/>
+                            <ComboBox ItemsSource="{Binding Source={StaticResource dataFromSide}}"
+                                      SelectedItem="{Binding Path=side}" Grid.Column="5"/>
+                            <TextBlock Text="{Binding Path=address}" Grid.Column="6" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding Path=battery, Converter={StaticResource batteryConverter}}" Grid.Column="7" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding Path=fw}" Grid.Column="8" TextAlignment="Center" />
                         </Grid>
                     </DataTemplate>
                 </controls:MultiSelectTreeViewItem.ItemTemplate>

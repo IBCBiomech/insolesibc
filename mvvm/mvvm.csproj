@@ -21,6 +21,8 @@
     <PackageReference Include="OpenCvSharp4.Extensions" Version="4.7.0.20230115" />
     <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.7.0.20230115" />
     <PackageReference Include="OpenCvSharp4.WpfExtensions" Version="4.7.0.20230115" />
+    <PackageReference Include="System.IO.Ports" Version="7.0.0" />
+    <PackageReference Include="System.Management" Version="7.0.1" />
     <PackageReference Include="WPF-UI" Version="2.0.3" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
@@ -37,9 +39,19 @@
     </Reference>
   </ItemGroup>
 
+  
+
   <ItemGroup>
     <Resource Include="Assets\applicationIcon-1024.png" />
     <Resource Include="Assets\applicationIcon-256.png" />
+  </ItemGroup>
+
+  
+
+  <ItemGroup>
+    <None Update="WisewalkSDK.dll">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

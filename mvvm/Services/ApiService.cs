@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using mvvm.Messages;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -35,7 +37,6 @@ namespace mvvm.Services
                     Trace.WriteLine(port.description);
                 }
             }
-            throw new Exception("No port found");
         }
         public void ScanDevices()
         {
@@ -56,6 +57,17 @@ namespace mvvm.Services
             var scanDevices = devices;
             Trace.WriteLine("# of devices: " + devices.Count);
             ShowScanList(scanDevices);
+            List<InsoleScanData> IMUs = new();
+            for(int i = 0; i < scanDevices.Count; i++)
+            {
+                string name = "Wisewalk";
+                InsoleScanData imu = new InsoleScanData(name, GetMacAddress(scanDevices[i]));
+                IMUs.Add(imu);
+            }
+            IMUs.Add(new InsoleScanData("Wisewalk", "AC:DE:FG"));
+            IMUs.Add(new InsoleScanData("Wisewalk", "BA:DE:FG"));
+            ScanMessageInsoles message = new ScanMessageInsoles(IMUs);
+            WeakReferenceMessenger.Default.Send(message);
         }
         private void ShowScanList(List<Wisewalk.Dev> devices)
         {
@@ -68,7 +80,15 @@ namespace mvvm.Services
                 Trace.WriteLine("MacAddress: ", " * " + macAddress);
             }
         }
+        private string GetMacAddress(Wisewalk.Dev device)
+        {
+            string mac = "";
 
+            mac = device.mac[5].ToString("X2") + ":" + device.mac[4].ToString("X2") + ":" + device.mac[3].ToString("X2") + ":" +
+                                    device.mac[2].ToString("X2") + ":" + device.mac[1].ToString("X2") + ":" + device.mac[0].ToString("X2");
+
+            return mac;
+        }
         public async void Scan()
         {
             Trace.WriteLine("Scan from ApiService");

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace mvvm.Messages
 {
-    public class IMUScanData
+    public class InsoleScanData
     {
         public string name { get; set; }
         public string MAC { get; set; }
-        public IMUScanData(string name, string MAC) 
+        public InsoleScanData(string name, string MAC) 
         {
             this.name = name;
             this.MAC = MAC;
