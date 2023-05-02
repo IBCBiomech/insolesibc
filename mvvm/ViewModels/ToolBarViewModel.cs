@@ -17,7 +17,7 @@ using Wpf.Ui.Dpi;
 using WisewalkSDK;
 using static WisewalkSDK.Protocol_v3;
 using System.Text.RegularExpressions;
-using mvvm.Services;
+using mvvm.Services.Interfaces;
 
 namespace mvvm.ViewModels
 {
@@ -98,6 +98,19 @@ namespace mvvm.ViewModels
         {
             Trace.WriteLine("openCamera");
             OpenCameraClickMessage message = new OpenCameraClickMessage();
+            WeakReferenceMessenger.Default.Send(message);
+        }
+        [RelayCommand]
+        private void OnRecord()
+        {
+            Trace.WriteLine("record");
+            App.GetService<ISaveService>().Start();
+        }
+        [RelayCommand]
+        private void OnStop()
+        {
+            Trace.WriteLine("stop");
+            StopMessage message = new StopMessage();
             WeakReferenceMessenger.Default.Send(message);
         }
     }

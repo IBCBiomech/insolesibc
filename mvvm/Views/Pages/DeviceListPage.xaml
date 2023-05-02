@@ -9,7 +9,7 @@
       xmlns:converters="clr-namespace:mvvm.Converters"
       xmlns:local="clr-namespace:mvvm.Views.Pages" xmlns:controls="clr-namespace:System.Windows.Controls;assembly=MultiSelectTreeView"
            Title="DeviceListPage"
-      d:DataContext="{d:DesignInstance local:SettingsPage,
+      d:DataContext="{d:DesignInstance local:DeviceListPage,
                                      IsDesignTimeCreatable=False}"
       d:DesignHeight="450" d:DesignWidth="800"
       d:Background="{DynamicResource ApplicationBackgroundBrush}"

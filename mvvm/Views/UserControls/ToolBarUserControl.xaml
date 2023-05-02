@@ -4,9 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:mvvm.Views.UserControls"
-             xmlns:pages="clr-namespace:mvvm.Views.Pages"
              mc:Ignorable="d" 
-             d:DataContext="{d:DesignInstance pages:SettingsPage,
+             d:DataContext="{d:DesignInstance local:ToolBarUserControl,
                                      IsDesignTimeCreatable=False}"
             d:DesignHeight="40" d:DesignWidth="800"
             d:Background="{DynamicResource ApplicationBackgroundBrush}"
@@ -20,6 +19,12 @@
         />
         <Button Content="Open Camera"
             Command="{Binding ViewModel.OpenCameraCommand, Mode=OneWay}"
+        />
+        <Button Content="Record"
+                Command="{Binding ViewModel.RecordCommand, Mode=OneWay}"
+        />
+        <Button Content="Stop"
+                Command="{Binding ViewModel.StopCommand, Mode=OneWay}"
         />
     </DockPanel>
 </UserControl>

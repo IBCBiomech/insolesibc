@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
 using mvvm.Messages;
 using mvvm.Models;
+using mvvm.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -69,10 +70,12 @@ namespace mvvm.Services
                 InsoleScanData imu = new InsoleScanData(name, GetMacAddress(scanDevices[i]));
                 IMUs.Add(imu);
             }
-            /* // IMUs falsos
+            // IMUs falsos
+            /*
             IMUs.Add(new InsoleScanData("Wisewalk", "AC:DE:FG"));
             IMUs.Add(new InsoleScanData("Wisewalk", "BA:DE:FG"));
             */
+            
             ScanMessageInsoles message = new ScanMessageInsoles(IMUs);
             WeakReferenceMessenger.Default.Send(message);
         }

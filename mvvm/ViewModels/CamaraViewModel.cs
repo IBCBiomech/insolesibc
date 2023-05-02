@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using mvvm.Helpers;
 using mvvm.Messages;
 using OpenCvSharp;
 using OpenCvSharp.WpfExtensions;
@@ -9,6 +10,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Wpf.Ui.Common.Interfaces;
@@ -25,6 +27,8 @@ namespace mvvm.ViewModels
         private CancellationToken cancellationTokenDisplay;
 
         private bool _isInitialized = false;
+
+        private LockedItem<Mat> lockedFrame = new LockedItem<Mat>(getBlackImage());
         public void OnNavigatedFrom()
         {
             
@@ -81,10 +85,13 @@ namespace mvvm.ViewModels
                 videoCapture.Read(frame);
                 if (!frame.Empty())
                 {
+                    lockedFrame = new LockedItem<Mat>(frame);
                     Application.Current.Dispatcher.BeginInvoke(() =>
                     {
-                        CurrentFrame = BitmapSourceConverter.ToBitmapSource(frame);
+                        CurrentFrame = BitmapSourceConverter.ToBitmapSource(lockedFrame.Item);
                     });
+                    FrameAvailableMessage message = new FrameAvailableMessage(lockedFrame);
+                    WeakReferenceMessenger.Default.Send(message);
                 }
             }
         }

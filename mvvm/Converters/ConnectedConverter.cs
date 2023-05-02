@@ -17,11 +17,11 @@ namespace mvvm.Converters
             bool connected = (bool)value;
             if (connected)
             {
-                return new Uri("pack://application:,,,/DeviceList/Icons/green-circle-icon.png");
+                return new Uri("pack://application:,,,/Assets/green-circle-icon.png");
             }
             else
             {
-                return new Uri("pack://application:,,,/DeviceList/Icons/red-circle-icon.png");
+                return new Uri("pack://application:,,,/Assets/red-circle-icon.png");
             }
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

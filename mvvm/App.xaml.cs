@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using mvvm.Models;
 using mvvm.Services;
+using mvvm.Services.Interfaces;
 using System.IO;
 using System.Reflection;
 using System.Windows;
@@ -62,6 +63,7 @@ namespace mvvm
                 services.AddScoped<ViewModels.CamaraViewModel>();
 
                 services.AddSingleton<IApiService, ApiService>();
+                services.AddSingleton<ISaveService, SaveService>();
 
                 // Configuration
                 services.Configure<AppConfig>(context.Configuration.GetSection(nameof(AppConfig)));

@@ -31,6 +31,8 @@
   <ItemGroup>
     <None Remove="Assets\applicationIcon-1024.png" />
     <None Remove="Assets\applicationIcon-256.png" />
+    <None Remove="Assets\green-circle-icon.png" />
+    <None Remove="Assets\red-circle-icon.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,6 +46,12 @@
   <ItemGroup>
     <Resource Include="Assets\applicationIcon-1024.png" />
     <Resource Include="Assets\applicationIcon-256.png" />
+    <Resource Include="Assets\green-circle-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\red-circle-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   
