@@ -36,10 +36,16 @@ namespace mvvm.ViewModels
 
         private void InitializeViewModel()
         {
-            WeakReferenceMessenger.Default.Register<ScanMessageInsoles>(this, onScanMessageReceived);
-            WeakReferenceMessenger.Default.Register<ScanMessageCameras>(this, onScanMessageReceived);
-            WeakReferenceMessenger.Default.Register<OpenCameraClickMessage>(this, onOpenCameraClickMessageReceived);
-            WeakReferenceMessenger.Default.Register<ConnectClickMessage>(this, onConnectClickMessageReceived);
+            WeakReferenceMessenger.Default.Register<ScanMessageInsoles>
+                (this, onScanMessageReceived);
+            WeakReferenceMessenger.Default.Register<ScanMessageCameras>
+                (this, onScanMessageReceived);
+            WeakReferenceMessenger.Default.Register<DeviceConnectedMessage>
+                (this, onDeviceConnectedMessageReceived);
+            WeakReferenceMessenger.Default.Register<OpenCameraClickMessage>
+                (this, onOpenCameraClickMessageReceived);
+            WeakReferenceMessenger.Default.Register<ConnectClickMessage>
+                (this, onConnectClickMessageReceived);
 
             _isInitialized = true;
         }
@@ -76,7 +82,7 @@ namespace mvvm.ViewModels
             {
                 if (cameraInfo.IsSelected)
                 {
-                    id = cameraInfo.number; //Id de la camara
+                    id = cameraInfo.Number; //Id de la camara
                     break;
                 }
             }
@@ -92,11 +98,25 @@ namespace mvvm.ViewModels
             {
                 if (insole.IsSelected)
                 {
-                    macs.Add(insole.address);
+                    macs.Add(insole.Address);
                 }
             }
             ConnectMessage message = new ConnectMessage(macs);
             WeakReferenceMessenger.Default.Send(message);
+        }
+        private void onDeviceConnectedMessageReceived(object sender, DeviceConnectedMessage args)
+        {
+            Trace.WriteLine("onDeviceConnectedMessageReceived from DeviceListViewModel");
+            string mac = args.device.Id;
+            foreach(var insole in Insoles)
+            {
+                if (insole.Address.Equals(mac))
+                {
+                    Trace.WriteLine("onDeviceConnectedMessageReceived insole found");
+                    insole.Connected = true;
+                    break;
+                }
+            }
         }
     }
 }

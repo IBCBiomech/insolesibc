@@ -2,6 +2,7 @@
 using mvvm.Messages;
 using mvvm.Models;
 using mvvm.Services.Interfaces;
+using mvvm.Views.Windows;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -28,6 +29,7 @@ namespace mvvm.Services
         {
             api = new Wisewalk();
             api.scanFinished += scanFinishedCallback;
+            api.deviceConnected += deviceConnectedCallback;
             api.dataReceived += dataReceivedCallback;
             WeakReferenceMessenger.Default.Register<ConnectMessage>(this, onConnectMessageReceived);
         }
@@ -63,20 +65,15 @@ namespace mvvm.Services
             var scanDevices = devices;
             Trace.WriteLine("# of devices: " + devices.Count);
             ShowScanList(scanDevices);
-            List<InsoleScanData> IMUs = new();
+            List<InsoleScanData> Insoles = new();
             for(int i = 0; i < scanDevices.Count; i++)
             {
                 string name = "Wisewalk";
-                InsoleScanData imu = new InsoleScanData(name, GetMacAddress(scanDevices[i]));
-                IMUs.Add(imu);
+                InsoleScanData insole = new InsoleScanData(name, GetMacAddress(scanDevices[i]));
+                Insoles.Add(insole);
             }
-            // IMUs falsos
-            /*
-            IMUs.Add(new InsoleScanData("Wisewalk", "AC:DE:FG"));
-            IMUs.Add(new InsoleScanData("Wisewalk", "BA:DE:FG"));
-            */
             
-            ScanMessageInsoles message = new ScanMessageInsoles(IMUs);
+            ScanMessageInsoles message = new ScanMessageInsoles(Insoles);
             WeakReferenceMessenger.Default.Send(message);
         }
         private void ShowScanList(List<Wisewalk.Dev> devices)
@@ -106,13 +103,21 @@ namespace mvvm.Services
             {
                 measures.Add(new InsoleMeasureData(sole));
             }
-            InsoleMeasuresMessage message = new InsoleMeasuresMessage(measures);
+            InsoleMeasuresMessage message = new InsoleMeasuresMessage(deviceHandler, measures);
             WeakReferenceMessenger.Default.Send(message);
         }
         public async void Scan()
         {
             Trace.WriteLine("Scan from ApiService");
             await Task.Run(() => ScanDevices());
+        }
+        public async void Start()
+        {
+            Trace.WriteLine("Start from ApiService");
+            api.SetDeviceConfiguration(0, 100, 3, out error);
+            api.SetDeviceConfiguration(1, 100, 3, out error);
+            await Task.Delay(2000);
+            api.StartStream(out error);
         }
         private Dev findInsole(string mac)
         {
@@ -132,9 +137,10 @@ namespace mvvm.Services
                 Trace.WriteLine("Connect error " + error);
             }
         }
-        public void Connect()
+        private void deviceConnectedCallback(byte handler, WisewalkSDK.Device dev)
         {
-            throw new NotImplementedException();
+            DeviceConnectedMessage message = new DeviceConnectedMessage(dev);
+            WeakReferenceMessenger.Default.Send(message);
         }
     }
 }

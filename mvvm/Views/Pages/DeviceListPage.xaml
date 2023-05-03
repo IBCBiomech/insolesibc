@@ -66,9 +66,9 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Image Grid.Column="1" Height="15" Width="15"/>
-                            <TextBlock Text="{Binding Path=name}" Grid.Column="2" TextAlignment="Center"/>
-                            <TextBlock Text="{Binding Path=number}" Grid.Column="3" TextAlignment="Center"/>
-                            <TextBlock Text="{Binding Path=fps}" Grid.Column="4" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding Path=Name}" Grid.Column="2" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding Path=Number}" Grid.Column="3" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding Path=Fps}" Grid.Column="4" TextAlignment="Center"/>
                         </Grid>
                     </DataTemplate>
                 </controls:MultiSelectTreeViewItem.ItemTemplate>
@@ -116,14 +116,14 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Image Grid.Column="1" Height="15" Width="15" Source="pack://application:,,,/DeviceList/Icons/arrow-icon.png"/>
-                            <Image Grid.Column="2" Height="15" Width="15" Source="{Binding Path=connected, Converter={StaticResource connectedConverter}}"/>
-                            <TextBlock Text="{Binding Path=id}" Grid.Column="3" TextAlignment="Center"/>
-                            <TextBlock Text="{Binding Path=name}" Grid.Column="4" TextAlignment="Center"/>
+                            <Image Grid.Column="2" Height="15" Width="15" Source="{Binding Path=Connected, Converter={StaticResource connectedConverter}}"/>
+                            <TextBlock Text="{Binding Path=Id}" Grid.Column="3" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding Path=Name}" Grid.Column="4" TextAlignment="Center"/>
                             <ComboBox ItemsSource="{Binding Source={StaticResource dataFromSide}}"
-                                      SelectedItem="{Binding Path=side}" Grid.Column="5"/>
-                            <TextBlock Text="{Binding Path=address}" Grid.Column="6" TextAlignment="Center"/>
-                            <TextBlock Text="{Binding Path=battery, Converter={StaticResource batteryConverter}}" Grid.Column="7" TextAlignment="Center"/>
-                            <TextBlock Text="{Binding Path=fw}" Grid.Column="8" TextAlignment="Center" />
+                                      SelectedItem="{Binding Path=Side}" Grid.Column="5"/>
+                            <TextBlock Text="{Binding Path=Address}" Grid.Column="6" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding Path=Battery, Converter={StaticResource batteryConverter}}" Grid.Column="7" TextAlignment="Center"/>
+                            <TextBlock Text="{Binding Path=Fw}" Grid.Column="8" TextAlignment="Center" />
                         </Grid>
                     </DataTemplate>
                 </controls:MultiSelectTreeViewItem.ItemTemplate>

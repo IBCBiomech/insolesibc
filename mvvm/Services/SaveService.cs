@@ -18,6 +18,15 @@ namespace mvvm.Services
     {
         private readonly MatType matType = MatType.CV_8UC3;
         private VideoWriter videoWriter;
+        private StringBuilder dataHolder;
+
+        private List<Sensor> order = new List<Sensor>() 
+        { 
+            Sensor.Arch, Sensor.Hallux, Sensor.HeelR, Sensor.HeelL, Sensor.Met1,
+            Sensor.Met3, Sensor.Met5, Sensor.Toes
+        };
+        private int frame;
+        private float fakets;
         public void SaveFrame(Mat frame)
         {
             if (videoWriter != null)
@@ -55,8 +64,15 @@ namespace mvvm.Services
             int Width = 640;
             int Height = 480;
             videoWriter = new VideoWriter(filePath, FourCC.DIVX, fps, new Size(Width, Height));
-            WeakReferenceMessenger.Default.Register<StopMessage>(this, onStopMessageReceived);
-            WeakReferenceMessenger.Default.Register<FrameAvailableMessage>(this, onFrameAvailableMessageReceived);
+            frame = 0;
+            fakets = 0;
+            dataHolder = new StringBuilder();
+            WeakReferenceMessenger.Default.Register<StopMessage>(this, 
+                onStopMessageReceived);
+            WeakReferenceMessenger.Default.Register<FrameAvailableMessage>(this, 
+                onFrameAvailableMessageReceived);
+            WeakReferenceMessenger.Default.Register<LiveDataCalculationsMessage>(this,
+                onLiveCalculationsMessageReceived);
         }
         private void onStopMessageReceived(object sender, StopMessage args)
         {
@@ -67,7 +83,7 @@ namespace mvvm.Services
         }
         private void onFrameAvailableMessageReceived(object sender, FrameAvailableMessage args)
         {
-            Trace.WriteLine("onFrameAvailableMessageReceived from SaveService");
+            //Trace.WriteLine("onFrameAvailableMessageReceived from SaveService");
             LockedItem<Mat> lockedFrame = args.lockedFrame;
             if (videoWriter != null)
             {
@@ -80,6 +96,21 @@ namespace mvvm.Services
                     videoWriter.Write(lockedFrame.Item);
                 }
             }
+        }
+        private void onLiveCalculationsMessageReceived(object sender, LiveDataCalculationsMessage args)
+        {
+            StringBuilder lines = new StringBuilder();
+            for(int i = 0; i < args.left.Count; i++)
+            {
+                string line = "1 " + fakets.ToString("F2") + " " + frame.ToString() + " " +
+                args.left[i].ToString(order, args.units) + " " + 
+                args.right[i].ToString(order, args.units) + " " + 
+                args.leftCalcs[i].ToString() + " " + args.rightCalcs[i].ToString();
+                lines.AppendLine(line);
+                frame++;
+                fakets += 0.01f;
+            }
+            dataHolder.Append(lines);
         }
     }
 }

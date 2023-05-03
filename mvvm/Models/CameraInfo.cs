@@ -1,4 +1,5 @@
-﻿using mvvm.Messages;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using mvvm.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,24 +8,29 @@ using System.Threading.Tasks;
 
 namespace mvvm.Models
 {
-    public class CameraInfo
+    [ObservableObject]
+    public partial class CameraInfo
     {
-        public bool IsSelected { get; set; }
-        public string name { get;set; }
-        public int number { get; set; }
-        public int? fps { get; set; }
+        [ObservableProperty]
+        private bool isSelected;
+        [ObservableProperty]
+        private string name;
+        [ObservableProperty]
+        private int number;
+        [ObservableProperty]
+        private int? fps;
         public CameraInfo(int number, string name)
         {
-            this.number = number;
-            this.name = name;
-            this.fps = null;
-            this.IsSelected = false;
+            Number = number;
+            Name = name;
+            Fps = null;
+            IsSelected = false;
         }
         public CameraInfo(CameraScanData c)
         {
-            number = c.number;
-            name = c.name;
-            fps = null;
+            Number = c.number;
+            Name = c.name;
+            Fps = null;
             IsSelected = false;
         }
     }

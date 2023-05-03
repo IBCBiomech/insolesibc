@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace mvvm.Services.Interfaces
 {
-    public interface IApiService
+    public interface ILiveDataCalculationsService
     {
-        void Scan();
-        void Start();
     }
 }

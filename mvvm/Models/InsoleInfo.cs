@@ -1,4 +1,5 @@
-﻿using mvvm.Messages;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using mvvm.Messages;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,38 +10,20 @@ using static WisewalkSDK.Protocol_v3;
 
 namespace mvvm.Models
 {
-    public class InsoleInfo
+    [ObservableObject]
+    public partial class InsoleInfo
     {
         private static HashSet<int> idsUsed = new();
         private static Dictionary<Side, InsoleInfo> sidesUsed = new();
-        public bool IsSelected { get; set; }
-        public int? id { get; set; }
+        [ObservableProperty]
+        private bool isSelected;
+        [ObservableProperty]
+        private int? id;
         public byte? handler { get; set; }
-        public string name { get; set; }
-        private Side? _side;
-        public Side? side
-        {
-            get { return _side; }
-            set
-            {
-                _side = value;
-                return;
-                if (side != null) // Libera la que estaba usando
-                {
-                    sidesUsed.Remove(side.Value);
-                }
-                if (value != null)
-                {
-                    if (sidesUsed.ContainsKey(value.Value)) // Estaba usado ese side?
-                    {
-                        InsoleInfo insoleReplaced = sidesUsed[value.Value]; // Insole que usaba ese side
-                        insoleReplaced.replaceSide();
-                    }
-                    sidesUsed[value.Value] = this;
-                    side = value;
-                }
-            }
-        }
+        [ObservableProperty]
+        private string name;
+        [ObservableProperty]
+        private Side? side;
         public void replaceSide()
         {
             Side? oldSide = this.side;
@@ -61,29 +44,34 @@ namespace mvvm.Models
             }
             return null;
         }
-        public string address { get; set; }
-        public int? battery { get; set; }
-        public bool connected { get;set; }
-        public string? fw { get; set; }
+        [ObservableProperty]
+        private string address;
+        [ObservableProperty]
+        private int? battery;
+        [ObservableProperty]
+        private bool connected;
+        [ObservableProperty]
+        private string? fw;
         public InsoleInfo(string name, string address)
         {
-            this.id = null;
-            this.name = name;
-            this.side = null;
-            this.address = address;
-            this.battery = null;
-            this.connected = false;
-            this.fw = null;
-            this.handler = null;
+            Id = null;
+            Name = name;
+            Side = null;
+            Address = address;
+            Battery = null;
+            Connected = false;
+            Fw = null;
+            handler = null;
         }
         public InsoleInfo(InsoleScanData insole)
         {
-            id = getNextID();
-            name = insole.name;
-            side = null;
-            address = insole.MAC;
-            connected = false;
-            fw = null;
+            Id = getNextID();
+            Name = insole.name;
+            Side = null;
+            Address = insole.MAC;
+            Battery = null;
+            Connected = false;
+            Fw = null;
             handler = null;
         }
         public void setID()
