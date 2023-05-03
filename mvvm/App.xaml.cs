@@ -62,7 +62,7 @@ namespace mvvm
                 services.AddScoped<Views.Pages.CamaraPage>();
                 services.AddScoped<ViewModels.CamaraViewModel>();
 
-                services.AddSingleton<IApiService, FakeApiService>();
+                services.AddSingleton<IApiService, ApiService>();
                 services.AddSingleton<ISaveService, SaveService>();
                 services.AddSingleton<ILiveDataCalculationsService, 
                     LiveDataCalculationsService>();
