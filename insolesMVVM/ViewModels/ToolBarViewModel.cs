@@ -8,7 +8,7 @@ using insolesMVVM.Messages;
 
 namespace insolesMVVM.ViewModels
 {
-	public class ToolBarViewModel : ReactiveObject
+	public class ToolBarViewModel : ViewModelBase
 	{
         private readonly ReactiveCommand<Unit, Unit> _scanCommand;
         private readonly ReactiveCommand<Unit, Unit> _connectCommand;
@@ -20,7 +20,7 @@ namespace insolesMVVM.ViewModels
             _scanCommand = ReactiveCommand.Create(() => 
             {
                 Trace.WriteLine("Scan");
-                WeakReferenceMessenger.Default.Send<TestMessage>(new TestMessage());
+                WeakReferenceMessenger.Default.Send(new ScanMessage());
             });
             _connectCommand = ReactiveCommand.Create(() => {
                 Trace.WriteLine("Connect");

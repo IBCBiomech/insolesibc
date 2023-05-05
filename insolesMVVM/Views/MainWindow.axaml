@@ -15,7 +15,12 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 	<Grid>
-		<v:ToolBar/>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		<v:ToolBarView Grid.Row="0"/>
+		<ContentControl Grid.Row="1" Content="{Binding Current}"/>
 	</Grid>
     
 

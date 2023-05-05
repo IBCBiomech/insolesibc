@@ -18,11 +18,13 @@
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="0.10.18" />
+    <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="0.10.18.1" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.18" />
     <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
     <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="0.10.18" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.18" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.0" />
+    <PackageReference Include="DirectShowLib" Version="1.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
     <PackageReference Include="OpenCvSharp4" Version="4.7.0.20230115" />
     <PackageReference Include="OpenCvSharp4.Extensions" Version="4.7.0.20230115" />

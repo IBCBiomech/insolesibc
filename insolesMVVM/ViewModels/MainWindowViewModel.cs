@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
+﻿using Avalonia.Controls;
+using CommunityToolkit.Mvvm.Messaging;
 using insolesMVVM.Messages;
 using System.Diagnostics;
 
@@ -6,14 +7,10 @@ namespace insolesMVVM.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        public string Greeting => "Welcome to Avalonia!";
         public MainWindowViewModel() 
         {
-            WeakReferenceMessenger.Default.Register<TestMessage>(this, onTestMessageReceived);
+            Current = new DeviceListViewModel();
         }
-        public void onTestMessageReceived(object sender, TestMessage args)
-        {
-            Trace.WriteLine("CommunityToolkit.Mvvm.Messaging works");
-        }
+        public ViewModelBase Current { get;private set; }
     }
 }

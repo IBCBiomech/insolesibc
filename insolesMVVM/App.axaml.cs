@@ -7,11 +7,13 @@ using insolesMVVM.Views;
 using System;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
+using System.ComponentModel;
 
 namespace insolesMVVM
 {
     public partial class App : Application
     {
+        public CameraService CameraService { get; set; } = new();
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -21,14 +23,6 @@ namespace insolesMVVM
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                /*
-                IServiceCollection services = new ServiceCollection();
-                services.AddSingleton<IApiService, ApiService>();
-
-                var serviceProvider = services.BuildServiceProvider();
-                Ioc.Default.ConfigureServices();
-                */
-
                 desktop.MainWindow = new MainWindow
                 {
                     DataContext = new MainWindowViewModel(),

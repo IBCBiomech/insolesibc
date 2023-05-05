@@ -1,15 +1,14 @@
-using Avalonia;
 using Avalonia.Controls;
 using insolesMVVM.ViewModels;
 
 namespace insolesMVVM.Views
 {
-    public partial class MainWindow : Window
+    public partial class ToolBarView : UserControl
     {
-        public MainWindow()
+        public ToolBarView()
         {
             InitializeComponent();
-            DataContext = new MainWindowViewModel();
+            DataContext = new ToolBarViewModel();
         }
     }
 }

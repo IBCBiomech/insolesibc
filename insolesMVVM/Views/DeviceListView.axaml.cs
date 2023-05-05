@@ -3,12 +3,12 @@ using insolesMVVM.ViewModels;
 
 namespace insolesMVVM.Views
 {
-    public partial class ToolBar : UserControl
+    public partial class DeviceListView : UserControl
     {
-        public ToolBar()
+        public DeviceListView()
         {
             InitializeComponent();
-            DataContext = new ToolBarViewModel();
+            DataContext = new DeviceListViewModel();
         }
     }
 }
