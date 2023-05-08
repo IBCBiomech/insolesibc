@@ -15,9 +15,11 @@ namespace insolesMVVM.ViewModels
 	public class DeviceListViewModel : ViewModelBase
 	{
 		private ObservableCollection<Camera> _cameras;
-		public DeviceListViewModel() 
+        private ObservableCollection<Insole> _insoles;
+        public DeviceListViewModel() 
 		{
             _cameras = new ObservableCollection<Camera>();
+            _insoles = new ObservableCollection<Insole>();
 
             SourceCameras = new FlatTreeDataGridSource<Camera>(_cameras)
             {
@@ -29,16 +31,36 @@ namespace insolesMVVM.ViewModels
                 },
             };
 
+            SourceInsoles = new FlatTreeDataGridSource<Insole>(_insoles)
+            {
+                Columns =
+                {
+                    new TextColumn<Insole, int>("Id", x => x.Id),
+                    new TextColumn<Insole, string>("Name", x => x.Name),
+                    new TextColumn<Insole, string>("Address", x => x.Address),
+                },
+            };
+
             WeakReferenceMessenger.Default.Register<ScanCamerasMessage>(this, OnScanCameras);
+            WeakReferenceMessenger.Default.Register<ScanInsolesMessage>(this, OnScanInsoles);
             WeakReferenceMessenger.Default.Register<OpenCameraMessage>(this, OnOpenCamera);
         }
-        private void OnScanCameras(object sender, ScanCamerasMessage args)
+        private void OnScanCameras(object sender, ScanCamerasMessage message)
         {
             Trace.WriteLine("OnScanCameras DeviceListViewModel");
             _cameras.Clear();
-            foreach(var camera in args.cameras)
+            foreach(var camera in message.cameras)
             {
                 _cameras.Add(new Camera(camera));
+            }
+        }
+        private void OnScanInsoles(object sender, ScanInsolesMessage message)
+        {
+            Trace.WriteLine("OnScanInsoles DeviceListViewModel");
+            _insoles.Clear();
+            foreach (var insole in message.insoles)
+            {
+                _insoles.Add(new Insole(insole));
             }
         }
         private void OnOpenCamera(object sender, OpenCameraMessage args)
@@ -61,6 +83,7 @@ namespace insolesMVVM.ViewModels
             WeakReferenceMessenger.Default.Send(message);
         }
         public FlatTreeDataGridSource<Camera> SourceCameras { get; }
+        public FlatTreeDataGridSource<Insole> SourceInsoles { get; }
         public IList<object> SelectedCameras { get; set; }
     }
 }

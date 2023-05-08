@@ -13,7 +13,8 @@ namespace insolesMVVM
 {
     public partial class App : Application
     {
-        public CameraService CameraService { get; set; } = new();
+        public ICameraService CameraService { get; set; } = new CameraService();
+        public IApiService ApiService { get; set; } = new ApiService();
         public DeviceListViewModel DeviceListViewModel { get; set; }
         public CameraViewportViewModel CameraViewportViewModel { get; set; }
         public MainWindowViewModel MainWindowViewModel { get; set; }
