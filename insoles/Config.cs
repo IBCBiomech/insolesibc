@@ -55,5 +55,7 @@ namespace insoles
 
         public const double PLANTILLA_HEIGHT = 445;
         public const double PLANTILLA_WIDTH = 615;
+        // coge 1 de ca N_FRAMES_HEATMAP para calcular los mapas de presiones
+        public const int N_FRAMES_HEATMAP = 15;
     }
 }

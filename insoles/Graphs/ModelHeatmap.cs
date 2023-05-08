@@ -18,6 +18,8 @@ namespace insoles.Graphs
 
         private ScatterPlot centers;
 
+        private int? max;
+
         Colormap[] viableColormaps = new Colormap[] {Colormap.Jet, Colormap.Turbo };
         public ModelHeatmap(WpfPlot plot)
         {
@@ -41,6 +43,10 @@ namespace insoles.Graphs
         {
             return extended;
         }
+        public void InitData(int max)
+        {
+            this.max = max;
+        }
         public void Draw(double?[,] data)
         {
             if(heatmap != null)
@@ -55,7 +61,7 @@ namespace insoles.Graphs
             IColormap colormap = extendColormap(Colormap.Jet, Color.LightGray, noInterpolate, extendSize:15, totalSize:256);
             //IColormap colormap = extendColormap(Colormap.Jet, Color.LightGray, Helpers.CustomInterpolate((ratio) => (float)Math.Pow(ratio, 3)), extendSize:25, totalSize:256);
             heatmap = plot.Plot.AddHeatmap(data, colormap:new Colormap(colormap));
-            heatmap.Update(data, min: 0);
+            heatmap.Update(data, min: 0, max: max);
             heatmap.Smooth = true;
             colorbar = plot.Plot.AddColorbar(heatmap);
             plot.Plot.Margins(0, 0);

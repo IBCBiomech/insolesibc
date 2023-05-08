@@ -120,6 +120,16 @@ namespace insoles.Graphs
                 NotifyPropertyChanged();
             }
         }
+        private bool _animate;
+        public bool animate
+        {
+            get { return _animate; }
+            set
+            {
+                _animate = value;
+                NotifyPropertyChanged();
+            }
+        }
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
@@ -216,6 +226,24 @@ namespace insoles.Graphs
                     Trace.WriteLine((string)FindResource("minStr"));
                     throw new Exception("seleccion max min avg error");
             }
+        }
+        public void InitData(GraphData graphData)
+        {
+            int max = 0;
+            for(int i = 0; i < graphData.length; i++)
+            {
+                DataInsole left = ((FrameDataInsoles)graphData[i]).left;
+                DataInsole right = ((FrameDataInsoles)graphData[i]).right;
+                foreach(int presure in left.pressures.Values) 
+                { 
+                    if(presure > max) max = presure;
+                }
+                foreach (int presure in right.pressures.Values)
+                {
+                    if (presure > max) max = presure;
+                }
+            }
+            model.InitData(max);
         }
         public void DrawData(Matrix<float> data)
         {
@@ -352,6 +380,11 @@ namespace insoles.Graphs
             int yInt = (int)Math.Round(cp.Item2);
             return (yInt / range) * range + (range / 2);
             // Al hacer la division entera corta por abajo. Para que quede la media de los puntos le sumo la mitad del rango
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

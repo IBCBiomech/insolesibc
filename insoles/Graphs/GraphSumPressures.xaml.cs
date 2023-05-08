@@ -76,11 +76,20 @@ public partial class GraphSumPressures : Page
     {
         double[] left = new double[data.length];
         double[] right = new double[data.length];
+        double max = 0;
         for (int i = 0; i < data.length; i++)
         {
             FrameDataInsoles data_i = (FrameDataInsoles)data[i];
             left[i] = data_i.left.totalPressure;
             right[i] = data_i.right.totalPressure;
+            if (left[i] > max)
+            {
+                max = left[i];
+            }
+            if (right[i] > max)
+            {
+                max = right[i];
+            }
             if(metricSelected == Metric.Avg)
             {
                 left[i] /= Config.NUM_SENSORS;
@@ -89,7 +98,7 @@ public partial class GraphSumPressures : Page
         }
         await Application.Current.Dispatcher.BeginInvoke(() =>
         {
-            model.updateData(left, right);
+            model.updateData(left, right, max);
         });
     }
     public async void onUpdateTimeLine(object sender, int frame)

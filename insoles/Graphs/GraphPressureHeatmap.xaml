@@ -23,11 +23,17 @@
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36"
                    Visibility="{Binding calculating_visibility}" Text="Calculating..."/>
         <TextBlock Text="N/m&#x00B2;" TextAlignment="Right" Padding="0 0 70 0" Visibility="{Binding graph_visibility}"/>
-        <ComboBox Name="metric" SelectedValuePath="Content" VerticalAlignment="Top" HorizontalAlignment="Left">
-            <ComboBoxItem Content="{StaticResource avgStr}"></ComboBoxItem>
-            <ComboBoxItem Content="{StaticResource maxStr}"></ComboBoxItem>
-            <ComboBoxItem Content="{StaticResource minStr}"></ComboBoxItem>
-        </ComboBox>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <ComboBox Name="metric" SelectedValuePath="Content">
+                <ComboBoxItem Content="{StaticResource avgStr}"></ComboBoxItem>
+                <ComboBoxItem Content="{StaticResource maxStr}"></ComboBoxItem>
+                <ComboBoxItem Content="{StaticResource minStr}"></ComboBoxItem>
+            </ComboBox>
+            <StackPanel Orientation="Horizontal">
+                <CheckBox Margin="10 0" VerticalAlignment="Center" IsChecked="{Binding animate}"/>
+                <TextBlock>Animate</TextBlock>
+            </StackPanel>
+        </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Visibility="{Binding graph_visibility}">
             <TextBlock x:Name="metricValue"/>
         </StackPanel>
