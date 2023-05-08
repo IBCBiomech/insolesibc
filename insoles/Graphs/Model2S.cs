@@ -89,10 +89,11 @@ namespace insoles.Graphs
         }
         #region Replay
         // Añade todos los datos de golpe (solo para replay)
-        public void updateData(double[] left, double[] right)
+        public void updateData(double[] left, double[] right, double max)
         {
             clear();
             plot.Plot.XAxis.TickLabelFormat(displacementFormatter);
+            plot.Plot.SetAxisLimitsY(0, max);
             replayModel.updateData(left, right);
         }
         // Cambia los datos a mostrar
