@@ -1,24 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
-using insolesMVVM.Messages;
+﻿using insolesMVVM.Messages;
+using ReactiveUI;
 
 namespace insolesMVVM.Models
 {
-    [ObservableObject]
-    public partial class Camera
+    public partial class Camera : ReactiveObject
     {
-        [ObservableProperty]
         private bool isSelected;
-        [ObservableProperty]
+        public bool IsSelected
+        {
+            get => isSelected;
+            set => this.RaiseAndSetIfChanged(ref isSelected, value);
+        }
         private string name;
-        [ObservableProperty]
+        public string Name
+        {
+            get => name;
+            set => this.RaiseAndSetIfChanged(ref name, value);
+        }
         private int number;
-        [ObservableProperty]
+        public int Number
+        {
+            get => number;
+            set => this.RaiseAndSetIfChanged(ref number, value);
+        }
         private int? fps;
+        public int? Fps
+        {
+            get => fps;
+            set => this.RaiseAndSetIfChanged(ref fps, value);
+        }
         public Camera(int number, string name)
         {
             Number = number;

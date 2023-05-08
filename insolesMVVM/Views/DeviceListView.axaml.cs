@@ -8,7 +8,6 @@ namespace insolesMVVM.Views
         public DeviceListView()
         {
             InitializeComponent();
-            DataContext = new DeviceListViewModel();
         }
     }
 }

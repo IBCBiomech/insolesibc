@@ -14,6 +14,11 @@ namespace insolesMVVM
     public partial class App : Application
     {
         public CameraService CameraService { get; set; } = new();
+        public DeviceListViewModel DeviceListViewModel { get; set; }
+        public CameraViewportViewModel CameraViewportViewModel { get; set; }
+        public MainWindowViewModel MainWindowViewModel { get; set; }
+        public DeviceListView DeviceListView { get; set; }
+        public CameraViewportView CameraViewportView { get; set; }
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
@@ -23,9 +28,20 @@ namespace insolesMVVM
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
-                desktop.MainWindow = new MainWindow
-                {
-                    DataContext = new MainWindowViewModel(),
+                DeviceListViewModel = new();
+                CameraViewportViewModel = new();
+                MainWindowViewModel = new MainWindowViewModel { 
+                    DeviceListViewModel = DeviceListViewModel ,
+                    CameraViewportViewModel = CameraViewportViewModel
+                };
+                DeviceListView = new DeviceListView {
+                    DataContext = DeviceListViewModel 
+                };
+                CameraViewportView = new CameraViewportView { 
+                    DataContext = CameraViewportViewModel
+                };
+                desktop.MainWindow = new MainWindow { 
+                    DataContext = MainWindowViewModel 
                 };
             }
 

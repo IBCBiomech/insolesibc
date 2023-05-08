@@ -10,9 +10,11 @@ namespace insolesMVVM.Services
 {
     public class CameraService : ICameraService
     {
+        private List<CameraStreamService> cameraStreams = new List<CameraStreamService>();
         public CameraService() 
         {
             WeakReferenceMessenger.Default.Register<ScanMessage>(this, Scan);
+            WeakReferenceMessenger.Default.Register<OpenCameraSelectedMessage>(this, OpenCamera);
         }
         public async void Scan(object sender, ScanMessage args)
         {
@@ -56,6 +58,14 @@ namespace insolesMVVM.Services
                 }
             }
             return indices;
+        }
+        private void OpenCamera(object sender, OpenCameraSelectedMessage args)
+        {
+            cameraStreams.Add(new CameraStreamService(args.camera.Number));
+        }
+        public Mat GetInitFrame()
+        {
+            return CameraStreamService.GetBlackImage();
         }
     }
 }

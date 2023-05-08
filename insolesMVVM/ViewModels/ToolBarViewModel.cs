@@ -27,6 +27,7 @@ namespace insolesMVVM.ViewModels
             });
             _openCameraCommand = ReactiveCommand.Create(() => {
                 Trace.WriteLine("Open Camera");
+                WeakReferenceMessenger.Default.Send(new OpenCameraMessage());
             });
             _recordCommand = ReactiveCommand.Create(() => {
                 Trace.WriteLine("Record");

@@ -30,6 +30,7 @@ namespace insolesMVVM.ViewModels
             };
 
             WeakReferenceMessenger.Default.Register<ScanCamerasMessage>(this, OnScanCameras);
+            WeakReferenceMessenger.Default.Register<OpenCameraMessage>(this, OnOpenCamera);
         }
         private void OnScanCameras(object sender, ScanCamerasMessage args)
         {
@@ -40,6 +41,26 @@ namespace insolesMVVM.ViewModels
                 _cameras.Add(new Camera(camera));
             }
         }
+        private void OnOpenCamera(object sender, OpenCameraMessage args)
+        {
+            Camera? cameraSelected = null;
+            foreach(var camera in _cameras)
+            {
+                if (camera.IsSelected)
+                {
+                    Trace.Write(camera.Name + " selected");
+                    cameraSelected = camera;
+                    break;
+                }
+            }
+            if(cameraSelected == null)
+            {
+                cameraSelected = _cameras[0];
+            }
+            OpenCameraSelectedMessage message = new(cameraSelected);
+            WeakReferenceMessenger.Default.Send(message);
+        }
         public FlatTreeDataGridSource<Camera> SourceCameras { get; }
+        public IList<object> SelectedCameras { get; set; }
     }
 }

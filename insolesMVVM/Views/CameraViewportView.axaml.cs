@@ -1,12 +1,11 @@
-using Avalonia;
 using Avalonia.Controls;
-using insolesMVVM.ViewModels;
 
 namespace insolesMVVM.Views
 {
-    public partial class MainWindow : Window
+    public partial class CameraViewportView : UserControl
     {
-        public MainWindow()
+
+        public CameraViewportView()
         {
             InitializeComponent();
         }
