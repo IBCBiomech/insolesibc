@@ -84,8 +84,6 @@ public partial class GraphSumPressures : Page
             FrameDataInsoles data_i = (FrameDataInsoles)data[i];
             left[i] = data_i.left.totalPressure;
             right[i] = data_i.right.totalPressure;
-            //left[i] = 30;
-            //right[i] = 30;
             if(metricSelected == Metric.Avg)
             {
                 left[i] /= Config.NUM_SENSORS;
@@ -101,7 +99,6 @@ public partial class GraphSumPressures : Page
             }
         }
         double stdLeft = StDev(left);
-        //stdLeft = 5;
         double stdRight = StDev(right);
         await Application.Current.Dispatcher.BeginInvoke(() =>
         {

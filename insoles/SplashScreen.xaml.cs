@@ -24,9 +24,11 @@ namespace insoles
     {
         const int totalTimeMs = 2000;
         const int numIterations = 20;
+        MainWindow mainWindow;
         public SplashScreen()
         {
             InitializeComponent();
+            mainWindow = new MainWindow();
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
@@ -50,7 +52,6 @@ namespace insoles
             progressBar.Value = e.ProgressPercentage * 100 / numIterations;
             if (e.ProgressPercentage == numIterations)
             {
-                MainWindow mainWindow = new MainWindow();
                 Close();
                 mainWindow.ShowDialog();
             }
