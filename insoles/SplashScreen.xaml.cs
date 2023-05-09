@@ -56,5 +56,6 @@ namespace insoles
                 mainWindow.ShowDialog();
             }
         }
+        //
     }
 }
