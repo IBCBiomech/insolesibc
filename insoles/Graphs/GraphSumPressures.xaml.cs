@@ -84,6 +84,8 @@ public partial class GraphSumPressures : Page
             FrameDataInsoles data_i = (FrameDataInsoles)data[i];
             left[i] = data_i.left.totalPressure;
             right[i] = data_i.right.totalPressure;
+            //left[i] = 30;
+            //right[i] = 30;
             if(metricSelected == Metric.Avg)
             {
                 left[i] /= Config.NUM_SENSORS;
@@ -99,6 +101,7 @@ public partial class GraphSumPressures : Page
             }
         }
         double stdLeft = StDev(left);
+        //stdLeft = 5;
         double stdRight = StDev(right);
         await Application.Current.Dispatcher.BeginInvoke(() =>
         {
@@ -129,6 +132,7 @@ public partial class GraphSumPressures : Page
         if (N.IsChecked.Value)
         {
             N.IsChecked = false;
+            model.m_bar = true;
         }
     }
 
@@ -140,6 +144,7 @@ public partial class GraphSumPressures : Page
         if (mbar.IsChecked.Value)
         {
             mbar.IsChecked = false;
+            model.N = true;
         }
     }
 
@@ -148,6 +153,7 @@ public partial class GraphSumPressures : Page
         if (!N.IsChecked.Value)
         {
             N.IsChecked = true;
+            model.m_bar = false;
         }
     }
 
@@ -156,6 +162,7 @@ public partial class GraphSumPressures : Page
         if (!mbar.IsChecked.Value)
         {
             mbar.IsChecked = true;
+            model.N = false;
         }
     }
 

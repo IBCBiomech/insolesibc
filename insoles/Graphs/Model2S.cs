@@ -46,6 +46,9 @@ namespace insoles.Graphs
         private StdModel stdModel;
 
         private bool _std = false;
+
+        private bool _N;
+        private bool _m_bar;
         public bool std { 
             get { return _std; }
             set 
@@ -54,6 +57,27 @@ namespace insoles.Graphs
                 stdModel.setVisibility(value);
                 replayModel.setVisibility(!value);
                 plot.Refresh();
+            }
+        }
+        public bool N
+        {
+            get { return _N; }
+            set
+            {
+                _N = value;
+                _m_bar = !value;
+            }
+        }
+        public bool m_bar
+        {
+            get
+            {
+                return _m_bar;
+            }
+            set
+            {
+                _m_bar = value;
+                _N = !value;
             }
         }
         public double displacement { get; set; } = 0;
@@ -132,6 +156,7 @@ namespace insoles.Graphs
         public void clear()
         {
             plot.Plot.Clear(typeof(SignalPlot));
+            plot.Plot.Clear(typeof(Polygon));
             plot.Render();
         }
         class CaptureModel
@@ -298,6 +323,14 @@ namespace insoles.Graphs
             public void updateData(double[] left, double[] right,
                 double stdLeft, double stdRight)
             {
+                if (model.N)
+                {
+                    threshold = 50;
+                }
+                else
+                {
+                    threshold = 5;
+                }
                 valuesLeft = left;
                 valuesRight = right;
                 xs = DataGen.Consecutive(valuesLeft.Length);
