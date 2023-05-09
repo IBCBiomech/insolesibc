@@ -287,6 +287,8 @@ namespace insoles.Graphs
 
             Color errorLeftColor;
             Color errorRightColor;
+
+            double threshold = 50;
             public StdModel(Model2S model)
             {
                 this.model = model;
@@ -300,7 +302,21 @@ namespace insoles.Graphs
                 valuesRight = right;
                 xs = DataGen.Consecutive(valuesLeft.Length);
                 stdsLeft = DataGen.Full(valuesLeft.Length, stdLeft);
+                for(int i = 0; i < valuesLeft.Length; i++)
+                {
+                    if (valuesLeft[i] < threshold)
+                    {
+                        stdsLeft[i] = 0;
+                    }
+                }
                 stdsRight = DataGen.Full(valuesRight.Length, stdRight);
+                for (int i = 0; i < valuesRight.Length; i++)
+                {
+                    if (valuesRight[i] < threshold)
+                    {
+                        stdsRight[i] = 0;
+                    }
+                }
                 polygonLeft = model.plot.Plot.AddFillError(xs, valuesLeft, stdsLeft, color: errorLeftColor);
                 polygonRight = model.plot.Plot.AddFillError(xs, valuesRight, stdsRight, color: errorRightColor);
                 signalPlotLeft = model.plot.Plot.AddSignal(valuesLeft, color: model.leftColor, label: "X");
