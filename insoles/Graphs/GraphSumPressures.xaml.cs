@@ -159,6 +159,16 @@ public partial class GraphSumPressures : Page
         }
     }
 
+    private void std_Checked(object sender, RoutedEventArgs e)
+    {
+        model.std = true;
+    }
+
+    private void std_Unchecked(object sender, RoutedEventArgs e)
+    {
+        model.std = false;
+    }
+
     public static double StDev(double[] input)
     {
         double avg = input.Average();

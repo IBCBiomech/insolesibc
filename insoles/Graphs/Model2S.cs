@@ -43,13 +43,26 @@ namespace insoles.Graphs
 
         private CaptureModel captureModel;
         private ReplayModel replayModel;
+        private StdModel stdModel;
 
+        private bool _std = false;
+        public bool std { 
+            get { return _std; }
+            set 
+            {
+                _std = value;
+                stdModel.setVisibility(value);
+                replayModel.setVisibility(!value);
+                plot.Refresh();
+            }
+        }
         public double displacement { get; set; } = 0;
 
         public Model2S(WpfPlot plot, double minY, double maxY)
         {
             captureModel = new CaptureModel(this);
             replayModel = new ReplayModel(this);
+            stdModel = new StdModel(this);
 
             this.minY = minY;
             this.maxY = maxY;
@@ -95,11 +108,16 @@ namespace insoles.Graphs
             clear();
             plot.Plot.XAxis.TickLabelFormat(displacementFormatter);
             plot.Plot.SetAxisLimitsY(0, max * 1.1);
-            replayModel.updateData(left, right, std_left, std_right);
+            replayModel.updateData(left, right);
+            stdModel.updateData(left, right, std_left, std_right);
+            replayModel.setVisibility(!std);
+            stdModel.setVisibility(std);
+            plot.Refresh();
         }
         // Cambia los datos a mostrar
         public void updateIndex(int index)
         {
+            if(!std)
             replayModel.updateIndex(index);
         }
         #endregion Replay
@@ -184,18 +202,12 @@ namespace insoles.Graphs
                 errorLeftColor = Color.FromArgb(64, model.leftColor);
                 errorRightColor = Color.FromArgb(64, model.rightColor);
             }
-            public void updateData(double[] left, double[] right,
-                double stdLeft, double stdRight)
+            public void updateData(double[] left, double[] right)
             {
                 bufferLeft = left;
                 bufferRight = right;
                 valuesLeft = new double[CAPACITY];
                 valuesRight = new double[CAPACITY];
-                xs = DataGen.Consecutive(valuesLeft.Length);
-                stdsLeft = DataGen.Full(valuesLeft.Length, stdLeft);
-                stdsRight = DataGen.Full(valuesRight.Length, stdRight);
-                //polygonLeft = model.plot.Plot.AddFillError(xs, valuesLeft, stdsLeft, color: errorLeftColor);
-                //polygonRight = model.plot.Plot.AddFillError(xs, valuesRight, stdsRight, color: errorRightColor);
                 signalPlotLeft = model.plot.Plot.AddSignal(valuesLeft, color: model.leftColor, label: "X");
                 signalPlotRight = model.plot.Plot.AddSignal(valuesRight, color: model.rightColor, label: "Y");
                 signalPlotLeft.MarkerSize = 0;
@@ -211,19 +223,6 @@ namespace insoles.Graphs
                     Array.Copy(bufferLeft, 0, valuesLeft, 0, index);
                     Array.Copy(bufferRight, 0, valuesRight, 0, index);
 
-                    if (index > 0)
-                    {
-                        model.plot.Plot.Clear(typeof(Polygon));
-                        double[] xs = DataGen.Consecutive(index);
-                        double[] valuesLeftCut = new double[index];
-                        double[] valuesRightCut = new double[index];
-                        Array.Copy(bufferLeft, 0, valuesLeftCut, 0, index);
-                        Array.Copy(bufferRight, 0, valuesRightCut, 0, index);
-                        double[] stdsLeftCut = DataGen.Full(index, stdsLeft[0]);
-                        double[] stdsRightCut = DataGen.Full(index, stdsRight[0]);
-                        polygonLeft = model.plot.Plot.AddFillError(xs, valuesLeftCut, stdsLeftCut, color: errorLeftColor);
-                        polygonRight = model.plot.Plot.AddFillError(xs, valuesRightCut, stdsRightCut, color: errorRightColor);
-                    }
                     signalPlotLeft.Label = labelLeft + "= " + bufferLeft[index].ToString("0.##");
                     signalPlotRight.Label = labelRight + "= " + bufferRight[index].ToString("0.##");
 
@@ -238,10 +237,6 @@ namespace insoles.Graphs
                     Array.Copy(bufferLeft, startIndex, valuesLeft, 0, CAPACITY);
                     Array.Copy(bufferRight, startIndex, valuesRight, 0, CAPACITY);
 
-                    model.plot.Plot.Clear(typeof(Polygon));
-                    polygonLeft = model.plot.Plot.AddFillError(xs, valuesLeft, stdsLeft, color: errorLeftColor);
-                    polygonRight = model.plot.Plot.AddFillError(xs, valuesRight, stdsRight, color: errorRightColor);
-
                     maxRenderIndex = CAPACITY - 1;
 
                     signalPlotLeft.Label = labelLeft + "= " + bufferLeft[index].ToString("0.##");
@@ -249,6 +244,17 @@ namespace insoles.Graphs
 
                     model.displacement = startIndex;
                     model.plot.Render();
+                }
+            }
+            public void setVisibility(bool visible)
+            {
+                if (signalPlotLeft == null)
+                    return;
+                signalPlotLeft.IsVisible = visible;
+                signalPlotRight.IsVisible = visible;
+                if (visible)
+                {
+                    model.plot.Plot.SetAxisLimitsX(xMin: 0, xMax: valuesLeft.Length + valuesLeft.Length * EXTRA_SPACE);
                 }
             }
             private int maxRenderIndex
@@ -262,6 +268,59 @@ namespace insoles.Graphs
                     signalPlotLeft.MaxRenderIndex = value;
                     signalPlotRight.MaxRenderIndex = value;
                     model.lineFrame.X = value;
+                }
+            }
+        }
+
+        class StdModel
+        {
+            Model2S model;
+            double[] xs;
+            double[] stdsLeft;
+            double[] stdsRight;
+            double[] valuesLeft;
+            double[] valuesRight;
+            SignalPlot signalPlotLeft;
+            SignalPlot signalPlotRight;
+            Polygon polygonLeft;
+            Polygon polygonRight;
+
+            Color errorLeftColor;
+            Color errorRightColor;
+            public StdModel(Model2S model)
+            {
+                this.model = model;
+                errorLeftColor = Color.FromArgb(64, model.leftColor);
+                errorRightColor = Color.FromArgb(64, model.rightColor);
+            }
+            public void updateData(double[] left, double[] right,
+                double stdLeft, double stdRight)
+            {
+                valuesLeft = left;
+                valuesRight = right;
+                xs = DataGen.Consecutive(valuesLeft.Length);
+                stdsLeft = DataGen.Full(valuesLeft.Length, stdLeft);
+                stdsRight = DataGen.Full(valuesRight.Length, stdRight);
+                polygonLeft = model.plot.Plot.AddFillError(xs, valuesLeft, stdsLeft, color: errorLeftColor);
+                polygonRight = model.plot.Plot.AddFillError(xs, valuesRight, stdsRight, color: errorRightColor);
+                signalPlotLeft = model.plot.Plot.AddSignal(valuesLeft, color: model.leftColor, label: "X");
+                signalPlotRight = model.plot.Plot.AddSignal(valuesRight, color: model.rightColor, label: "Y");
+                signalPlotLeft.MarkerSize = 0;
+                signalPlotRight.MarkerSize = 0;
+                model.plot.Plot.SetAxisLimitsX(xMin: 0, xMax: valuesLeft.Length);
+                model.plot.Render();
+            }
+            public void setVisibility(bool visible)
+            {
+                if (signalPlotLeft == null)
+                    return;
+                signalPlotLeft.IsVisible = visible;
+                signalPlotRight.IsVisible = visible;
+                polygonLeft.IsVisible = visible;
+                polygonRight.IsVisible = visible;
+                if (visible)
+                {
+                    model.plot.Plot.SetAxisLimitsX(xMin: 0, xMax: valuesLeft.Length);
                 }
             }
         }

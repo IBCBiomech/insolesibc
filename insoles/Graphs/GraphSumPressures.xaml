@@ -28,6 +28,10 @@
                 <CheckBox x:Name="N" Checked="N_Checked" Unchecked="N_Unchecked" VerticalAlignment="Center"/>
             </StackPanel>
         </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="0">
+            <TextBlock VerticalAlignment="Center">std</TextBlock>
+            <CheckBox x:Name="std" Checked="std_Checked" Unchecked="std_Unchecked" VerticalAlignment="Center"/>
+        </StackPanel>
     </Grid>
 </Page>
 
