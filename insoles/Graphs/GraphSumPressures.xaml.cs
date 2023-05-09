@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
@@ -82,6 +84,11 @@ public partial class GraphSumPressures : Page
             FrameDataInsoles data_i = (FrameDataInsoles)data[i];
             left[i] = data_i.left.totalPressure;
             right[i] = data_i.right.totalPressure;
+            if(metricSelected == Metric.Avg)
+            {
+                left[i] /= Config.NUM_SENSORS;
+                right[i] /= Config.NUM_SENSORS;
+            }
             if (left[i] > max)
             {
                 max = left[i];
@@ -90,15 +97,12 @@ public partial class GraphSumPressures : Page
             {
                 max = right[i];
             }
-            if(metricSelected == Metric.Avg)
-            {
-                left[i] /= Config.NUM_SENSORS;
-                right[i] /= Config.NUM_SENSORS;
-            }
         }
+        double stdLeft = StDev(left);
+        double stdRight = StDev(right);
         await Application.Current.Dispatcher.BeginInvoke(() =>
         {
-            model.updateData(left, right, max);
+            model.updateData(left, right, stdLeft, stdRight, max);
         });
     }
     public async void onUpdateTimeLine(object sender, int frame)
@@ -153,5 +157,13 @@ public partial class GraphSumPressures : Page
         {
             mbar.IsChecked = true;
         }
+    }
+
+    public static double StDev(double[] input)
+    {
+        double avg = input.Average();
+        double sum = input.Select(x => (avg - x) * (avg - x)).Sum();
+
+        return Math.Sqrt(sum / input.Length);
     }
 }

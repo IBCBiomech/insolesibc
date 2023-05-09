@@ -89,12 +89,13 @@ namespace insoles.Graphs
         }
         #region Replay
         // Añade todos los datos de golpe (solo para replay)
-        public void updateData(double[] left, double[] right, double max)
+        public void updateData(double[] left, double[] right,
+            double std_left, double std_right, double max)
         {
             clear();
             plot.Plot.XAxis.TickLabelFormat(displacementFormatter);
-            plot.Plot.SetAxisLimitsY(0, max);
-            replayModel.updateData(left, right);
+            plot.Plot.SetAxisLimitsY(0, max * 1.1);
+            replayModel.updateData(left, right, std_left, std_right);
         }
         // Cambia los datos a mostrar
         public void updateIndex(int index)
@@ -161,24 +162,40 @@ namespace insoles.Graphs
         class ReplayModel
         {
             Model2S model;
+            double[] xs;
+            double[] stdsLeft;
+            double[] stdsRight;
             double[] bufferLeft;
             double[] bufferRight;
             double[] valuesLeft;
             double[] valuesRight;
             SignalPlot signalPlotLeft;
             SignalPlot signalPlotRight;
+            Polygon polygonLeft;
+            Polygon polygonRight;
             private const int CAPACITY = 200;
             private const float EXTRA_SPACE = 0.1f;
+
+            Color errorLeftColor;
+            Color errorRightColor;
             public ReplayModel(Model2S model)
             {
                 this.model = model;
+                errorLeftColor = Color.FromArgb(64, model.leftColor);
+                errorRightColor = Color.FromArgb(64, model.rightColor);
             }
-            public void updateData(double[] left, double[] right)
+            public void updateData(double[] left, double[] right,
+                double stdLeft, double stdRight)
             {
                 bufferLeft = left;
                 bufferRight = right;
                 valuesLeft = new double[CAPACITY];
                 valuesRight = new double[CAPACITY];
+                xs = DataGen.Consecutive(valuesLeft.Length);
+                stdsLeft = DataGen.Full(valuesLeft.Length, stdLeft);
+                stdsRight = DataGen.Full(valuesRight.Length, stdRight);
+                //polygonLeft = model.plot.Plot.AddFillError(xs, valuesLeft, stdsLeft, color: errorLeftColor);
+                //polygonRight = model.plot.Plot.AddFillError(xs, valuesRight, stdsRight, color: errorRightColor);
                 signalPlotLeft = model.plot.Plot.AddSignal(valuesLeft, color: model.leftColor, label: "X");
                 signalPlotRight = model.plot.Plot.AddSignal(valuesRight, color: model.rightColor, label: "Y");
                 signalPlotLeft.MarkerSize = 0;
@@ -194,6 +211,19 @@ namespace insoles.Graphs
                     Array.Copy(bufferLeft, 0, valuesLeft, 0, index);
                     Array.Copy(bufferRight, 0, valuesRight, 0, index);
 
+                    if (index > 0)
+                    {
+                        model.plot.Plot.Clear(typeof(Polygon));
+                        double[] xs = DataGen.Consecutive(index);
+                        double[] valuesLeftCut = new double[index];
+                        double[] valuesRightCut = new double[index];
+                        Array.Copy(bufferLeft, 0, valuesLeftCut, 0, index);
+                        Array.Copy(bufferRight, 0, valuesRightCut, 0, index);
+                        double[] stdsLeftCut = DataGen.Full(index, stdsLeft[0]);
+                        double[] stdsRightCut = DataGen.Full(index, stdsRight[0]);
+                        polygonLeft = model.plot.Plot.AddFillError(xs, valuesLeftCut, stdsLeftCut, color: errorLeftColor);
+                        polygonRight = model.plot.Plot.AddFillError(xs, valuesRightCut, stdsRightCut, color: errorRightColor);
+                    }
                     signalPlotLeft.Label = labelLeft + "= " + bufferLeft[index].ToString("0.##");
                     signalPlotRight.Label = labelRight + "= " + bufferRight[index].ToString("0.##");
 
@@ -207,6 +237,10 @@ namespace insoles.Graphs
                     int startIndex = index - CAPACITY;
                     Array.Copy(bufferLeft, startIndex, valuesLeft, 0, CAPACITY);
                     Array.Copy(bufferRight, startIndex, valuesRight, 0, CAPACITY);
+
+                    model.plot.Plot.Clear(typeof(Polygon));
+                    polygonLeft = model.plot.Plot.AddFillError(xs, valuesLeft, stdsLeft, color: errorLeftColor);
+                    polygonRight = model.plot.Plot.AddFillError(xs, valuesRight, stdsRight, color: errorRightColor);
 
                     maxRenderIndex = CAPACITY - 1;
 

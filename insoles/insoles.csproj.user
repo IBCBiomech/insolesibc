@@ -18,6 +18,9 @@
     <Compile Update="Graphs\GraphsCP.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Graphs\TestGraph.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="SplashScreen.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -45,6 +48,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Graphs\GraphSumPressures.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Graphs\TestGraph.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">

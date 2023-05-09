@@ -35,6 +35,9 @@
                                     <dock:LayoutAnchorable x:Name="graphSumPressuresAnchorable" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False" Title="Ground Reaction Forces">
                                         <Frame Source="pack://application:,,,/Graphs/GraphSumPressures.xaml" x:Name="graphSumPressures"/>
                                     </dock:LayoutAnchorable>
+                                    <dock:LayoutAnchorable CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False" Title="Ground Reaction Forces">
+                                        <Frame Source="pack://application:,,,/Graphs/TestGraph.xaml"/>
+                                    </dock:LayoutAnchorable>
                                 </dock:LayoutAnchorablePane>
                                 <dock:LayoutAnchorablePane x:Name="camaraAnchorablePane" DockHeight="*" DockWidth="*">
                                     <dock:LayoutAnchorable x:Name="camaraAnchorable1" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False" Title="Foot Camera">
