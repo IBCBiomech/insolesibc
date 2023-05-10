@@ -16,6 +16,8 @@ namespace insolesMVVM.ViewModels
 	{
 		private ObservableCollection<Camera> _cameras;
         private ObservableCollection<Insole> _insoles;
+
+        private IList<object> _selectedCameras;
         public DeviceListViewModel() 
 		{
             _cameras = new ObservableCollection<Camera>();
@@ -44,6 +46,7 @@ namespace insolesMVVM.ViewModels
             WeakReferenceMessenger.Default.Register<ScanCamerasMessage>(this, OnScanCameras);
             WeakReferenceMessenger.Default.Register<ScanInsolesMessage>(this, OnScanInsoles);
             WeakReferenceMessenger.Default.Register<OpenCameraMessage>(this, OnOpenCamera);
+            WeakReferenceMessenger.Default.Register<ConnectMessage>(this, OnConnect);
         }
         private void OnScanCameras(object sender, ScanCamerasMessage message)
         {
@@ -79,11 +82,28 @@ namespace insolesMVVM.ViewModels
             {
                 cameraSelected = _cameras[0];
             }
+            else
+            {
+                Trace.WriteLine("selected camera");
+                cameraSelected = _cameras[0];
+            }
             OpenCameraSelectedMessage message = new(cameraSelected);
+            WeakReferenceMessenger.Default.Send(message);
+        }
+        private void OnConnect(object sender, ConnectMessage args)
+        {
+            List<string> macs = new();
+            foreach(var insole in _insoles)
+            {
+                macs.Add(insole.Address);
+            }
+            ConnectInsolesMessage message = new ConnectInsolesMessage(macs);
             WeakReferenceMessenger.Default.Send(message);
         }
         public FlatTreeDataGridSource<Camera> SourceCameras { get; }
         public FlatTreeDataGridSource<Insole> SourceInsoles { get; }
-        public IList<object> SelectedCameras { get; set; }
+        // Los selected de momento no funcionan, abro la primera camara i conecto todos los imus
+        public IList<Camera> SelectedCameras { get; set; }
+        public IList<Insole> SelectedInsoles { get; set; }
     }
 }

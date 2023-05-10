@@ -26,11 +26,11 @@ namespace insolesMVVM.Services
         {
             api = new Wisewalk();
             api.scanFinished += scanFinishedCallback;
-            //api.deviceConnected += deviceConnectedCallback;
-            //api.dataReceived += dataReceivedCallback;
+            api.deviceConnected += deviceConnectedCallback;
+            api.dataReceived += dataReceivedCallback;
             WeakReferenceMessenger.Default.Register<ScanMessage>(this, onScanMessageReceived);
-            //WeakReferenceMessenger.Default.Register<ConnectMessage>(this, onConnectMessageReceived);
-
+            WeakReferenceMessenger.Default.Register<ConnectInsolesMessage>(this, onConnectMessageReceived);
+            WeakReferenceMessenger.Default.Register<CaptureMessage>(this, onCaptureMessageReceived);
         }
         public void ShowPorts()
         {
@@ -98,24 +98,24 @@ namespace insolesMVVM.Services
 
             return mac;
         }
-        /*
+        
         private void dataReceivedCallback(byte deviceHandler, WisewalkSDK.WisewalkData data)
         {
-            List<InsoleMeasureData> measures = new List<InsoleMeasureData>();
+            List<InsoleData> measures = new List<InsoleData>();
             foreach (var sole in data.Sole)
             {
-                measures.Add(new InsoleMeasureData(sole));
+                measures.Add(new InsoleData(sole));
             }
             InsoleMeasuresMessage message = new InsoleMeasuresMessage(deviceHandler, measures);
             WeakReferenceMessenger.Default.Send(message);
         }
-        */
+        
         public async void onScanMessageReceived(object sender, ScanMessage message)
         {
             Trace.WriteLine("Scan from ApiService");
             await Task.Run(() => ScanDevices());
         }
-        public async void Start()
+        public async void onCaptureMessageReceived(object sender, CaptureMessage message)
         {
             Trace.WriteLine("Start from ApiService");
             api.SetDeviceConfiguration(0, 100, 3, out error);
@@ -127,8 +127,8 @@ namespace insolesMVVM.Services
         {
             return scanDevices.FirstOrDefault(de => GetMacAddress(de) == mac);
         }
-        /*
-        public void onConnectMessageReceived(object sender, ConnectMessage args)
+        
+        public void onConnectMessageReceived(object sender, ConnectInsolesMessage args)
         {
             Trace.WriteLine("onConnectMessageReceived");
             List<Dev> conn_list_dev = new List<Dev>();
@@ -147,6 +147,5 @@ namespace insolesMVVM.Services
             DeviceConnectedMessage message = new DeviceConnectedMessage(dev);
             WeakReferenceMessenger.Default.Send(message);
         }
-        */
     }
 }

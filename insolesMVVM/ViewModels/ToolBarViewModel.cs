@@ -14,6 +14,7 @@ namespace insolesMVVM.ViewModels
         private readonly ReactiveCommand<Unit, Unit> _connectCommand;
         private readonly ReactiveCommand<Unit, Unit> _openCameraCommand;
         private readonly ReactiveCommand<Unit, Unit> _recordCommand;
+        private readonly ReactiveCommand<Unit, Unit> _captureCommand;
 
         public ToolBarViewModel()
         {
@@ -24,6 +25,7 @@ namespace insolesMVVM.ViewModels
             });
             _connectCommand = ReactiveCommand.Create(() => {
                 Trace.WriteLine("Connect");
+                WeakReferenceMessenger.Default.Send(new ConnectMessage());
             });
             _openCameraCommand = ReactiveCommand.Create(() => {
                 Trace.WriteLine("Open Camera");
@@ -32,11 +34,16 @@ namespace insolesMVVM.ViewModels
             _recordCommand = ReactiveCommand.Create(() => {
                 Trace.WriteLine("Record");
             });
+            _captureCommand = ReactiveCommand.Create(() => {
+                Trace.WriteLine("Record");
+                WeakReferenceMessenger.Default.Send(new CaptureMessage());
+            });
         }
 
         public ReactiveCommand<Unit, Unit> ScanCommand => _scanCommand;
         public ReactiveCommand<Unit, Unit> ConnectCommand => _connectCommand;
         public ReactiveCommand<Unit, Unit> OpenCameraCommand => _openCameraCommand;
         public ReactiveCommand<Unit, Unit> RecordCommand => _recordCommand;
+        public ReactiveCommand<Unit, Unit> CaptureCommand => _captureCommand;
     }
 }
