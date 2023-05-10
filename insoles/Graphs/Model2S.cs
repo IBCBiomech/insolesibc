@@ -335,21 +335,25 @@ namespace insoles.Graphs
                 valuesRight = right;
                 xs = DataGen.Consecutive(valuesLeft.Length);
                 stdsLeft = DataGen.Full(valuesLeft.Length, stdLeft);
+                
                 for(int i = 0; i < valuesLeft.Length; i++)
                 {
-                    if (valuesLeft[i] < threshold)
+                    if (valuesLeft[i] < stdLeft)
                     {
-                        stdsLeft[i] = 0;
+                        stdsLeft[i] = valuesLeft[i];
                     }
                 }
+                
                 stdsRight = DataGen.Full(valuesRight.Length, stdRight);
+                
                 for (int i = 0; i < valuesRight.Length; i++)
                 {
-                    if (valuesRight[i] < threshold)
+                    if (valuesRight[i] < stdRight)
                     {
-                        stdsRight[i] = 0;
+                        stdsRight[i] = valuesRight[i];
                     }
                 }
+                
                 polygonLeft = model.plot.Plot.AddFillError(xs, valuesLeft, stdsLeft, color: errorLeftColor);
                 polygonRight = model.plot.Plot.AddFillError(xs, valuesRight, stdsRight, color: errorRightColor);
                 signalPlotLeft = model.plot.Plot.AddSignal(valuesLeft, color: model.leftColor, label: "X");
