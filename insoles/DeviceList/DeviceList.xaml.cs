@@ -69,6 +69,8 @@ namespace insoles.DeviceList
         }
         public void setCameras(List<CameraInfo> cameras)
         {
+            VM.cameras = new ObservableCollection<CameraInfo>(cameras);
+            /*
             VM.cameras = new ObservableCollection<CameraInfo>(VM.cameras.Where(cam => cameras.Any(newCamera => newCamera.name == cam.name)));
             foreach (CameraInfo cam in cameras)
             {
@@ -85,6 +87,7 @@ namespace insoles.DeviceList
                     }
                 }
             }
+            */
         }
         public void addCamera(CameraInfo camera)
         {
