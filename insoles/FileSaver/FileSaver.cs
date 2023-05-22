@@ -267,7 +267,7 @@ namespace insoles.FileSaver
                 this.camaraViewport = camaraViewport;
                 this.filename = filename;
                 videoWriter = new VideoWriter(path + Path.DirectorySeparatorChar + filename, FourCC.DIVX, 
-                    camaraViewport.fps, new OpenCvSharp.Size(Config.FRAME_WIDTH, Config.FRAME_HEIGHT));
+                    camaraViewport.fps, new OpenCvSharp.Size(camaraViewport.resolution.Width, camaraViewport.resolution.Height));
                 timerVideo = new System.Timers.Timer();
                 timerVideo.Interval = 1000 / camaraViewport.fps;
                 timerVideo.Elapsed += (sender, e) => appendVideo();
@@ -298,7 +298,7 @@ namespace insoles.FileSaver
                     {
                         frame.ConvertTo(frame, (MatType)Config.MAT_TYPE);
                     }
-                    Mat frameResized = frame.Resize(new OpenCvSharp.Size(Config.FRAME_WIDTH, Config.FRAME_HEIGHT));
+                    Mat frameResized = frame.Resize(new OpenCvSharp.Size(camaraViewport.resolution.Width, camaraViewport.resolution.Height));
                     if (videoWriter != null)
                     {
                         videoWriter.Write(frameResized);

@@ -96,6 +96,7 @@ namespace insoles.CamaraViewport
                 }
             }
         }
+        public System.Drawing.Size resolution;
         public Position? position 
         { 
             get
@@ -181,9 +182,10 @@ namespace insoles.CamaraViewport
             return frame;
         }
         // Empieza a grabar la camara
-        public async void initializeCamara(int index, int fps)
+        public async void initializeCamara(int index, int fps, System.Drawing.Size resolution)
         {
             this.fps = fps;
+            this.resolution = resolution;
             // Quitar la imagen de la grabacion anterior
             this.index = index;
             currentFrame = getBlackImage();
@@ -195,6 +197,8 @@ namespace insoles.CamaraViewport
             cancellationTokenDisplay = cancellationTokenSourceDisplay.Token;
             videoCapture = new VideoCapture(index, VideoCaptureAPIs.DSHOW);
             videoCapture.Set(VideoCaptureProperties.Fps, this.fps);
+            videoCapture.Set(VideoCaptureProperties.FrameHeight, resolution.Height);
+            videoCapture.Set(VideoCaptureProperties.FrameWidth, resolution.Width);
             cameraChanged?.Invoke(this, EventArgs.Empty);
             layoutAnchorable.Title = getTitle();
             await Task.Run(() => displayCameraCallback());

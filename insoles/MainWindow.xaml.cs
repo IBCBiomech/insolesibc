@@ -196,6 +196,26 @@ namespace insoles
                         Trace.WriteLine(stopwatch.Elapsed.TotalSeconds);
                         return cameraFps;
                     }
+                    Dictionary<int, List<System.Drawing.Size>>[] cameraResolutions()
+                    {
+                        var devices = new FilterInfoCollection(AForge.Video.DirectShow.FilterCategory.VideoInputDevice);
+                        Dictionary<int, List<System.Drawing.Size>>[] resolutions = new Dictionary<int, List<System.Drawing.Size>>[devices.Count];
+                        for (int i = 0; i < devices.Count; i++)
+                        {
+
+                            resolutions[i] = new Dictionary<int, List<System.Drawing.Size>>();
+                            var captureDevice = new VideoCaptureDevice(devices[i].MonikerString);
+                            foreach (var capability in captureDevice.VideoCapabilities)
+                            {
+                                if (!resolutions[i].ContainsKey(capability.AverageFrameRate))
+                                {
+                                    resolutions[i][capability.AverageFrameRate] = new List<System.Drawing.Size>();
+                                }
+                                resolutions[i][capability.AverageFrameRate].Add(capability.FrameSize);
+                            }
+                        }
+                        return resolutions;
+                    }
                     Dictionary<int, int> DirectshowAforgeMap()
                     {
                         var aforgeDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
@@ -248,6 +268,7 @@ namespace insoles
                     }
                     List<string> names = await Task.Run(() => cameraNames());
                     List<int>[] fps = await Task.Run(() => cameraFps());
+                    Dictionary<int, List<System.Drawing.Size>>[] resolutions = await Task.Run(() => cameraResolutions());
                     Dictionary<int, int> directshowToAforge = await Task.Run(() => DirectshowAforgeMap());
                     List<int> indices = await Task.Run(() => cameraIndices(names.Count));
                     //indices.ForEach(i => Trace.WriteLine(i));
@@ -262,7 +283,8 @@ namespace insoles
                             Trace.WriteLine("indices.Contains " + i);
                             List<int> camFps = fps[directshowToAforge[i]];
                             Trace.WriteLine("List<double> fps = await Task.Run(() => fpsValues(i)); i = " + i);
-                            cameras.Add(new CameraInfo(i, names[i], camFps));
+                            Dictionary<int, List<System.Drawing.Size>> camResolutions = resolutions[directshowToAforge[i]];
+                            cameras.Add(new CameraInfo(i, names[i], camFps, camResolutions));
                         }
                     }
                     deviceListClass.setCameras(cameras);
@@ -394,6 +416,7 @@ namespace insoles
                         CameraInfo cameraInfo = treeViewItem.DataContext as CameraInfo;
                         int id = cameraInfo.number; //Id de la camara
                         int fps = cameraInfo.fps;
+                        var resolution = cameraInfo.resolution;
                         while (frameIndex < camaraViewportFrames.Count)
                         {
                             CamaraViewport.CamaraViewport camaraViewportClass = camaraViewportFrames[frameIndex].Content as CamaraViewport.CamaraViewport;
@@ -401,7 +424,7 @@ namespace insoles
                             if (!camaraViewportClass.someCameraOpened())
                             {
                                 //camaraViewportClass.Title = cameraInfo.name + " CAM " + id;
-                                camaraViewportClass.initializeCamara(id, fps);
+                                camaraViewportClass.initializeCamara(id, fps, resolution);
                                 break;
                             }
                         }
