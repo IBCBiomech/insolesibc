@@ -286,7 +286,7 @@ namespace insoles.FileSaver
             }
             private void appendVideo()
             {
-                Trace.WriteLine("appendVideo");
+                //Trace.WriteLine("appendVideo");
                 if (videoWriter != null)
                 {
                     Mat frame = camaraViewport.currentFrame;
@@ -301,8 +301,9 @@ namespace insoles.FileSaver
                     Mat frameResized = frame.Resize(new OpenCvSharp.Size(camaraViewport.resolution.Width, camaraViewport.resolution.Height));
                     if (videoWriter != null)
                     {
-                        videoWriter.Write(frameResized);
-                        Trace.WriteLine("write frame");
+                        lock(videoWriter)
+                            videoWriter.Write(frameResized);
+                        //Trace.WriteLine("write frame");
                     }
                 }
                 else
