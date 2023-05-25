@@ -1,5 +1,6 @@
 ﻿using insoles.ToolBar;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Timers;
@@ -40,19 +41,22 @@ namespace insoles.TimeLine
         {
             ((MainWindow)Application.Current.MainWindow).virtualToolBar.fileOpenEvent += onFileOpen;
         }
-        private void onFileOpen(object sender, string? csv, string? video)
+        private void onFileOpen(object sender, List<string> csv, List<string> video)
         {
-            if (csv != null)
+            if (csv.Count == 1)
             {
-                this.csv.Text = Path.GetFileName(csv);
+                this.csv.Text = Path.GetFileName(csv[0]);
             }
             else
             {
                 this.csv.Text = "";
             }
-            if(video != null)
+            if(video.Count > 0)
             {
-                this.video.Text = Path.GetFileName(video);
+                for(int i = 0; i < video.Count; i++)
+                {
+                    this.video.Text += Path.GetFileName(video[i] + " ");
+                }
             }
             else
             {

@@ -18,6 +18,9 @@ using Path = System.IO.Path;
 using OpenCvSharp;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Linq;
+using insoles.CamaraViewport;
+using System.Collections.Generic;
 
 namespace insoles.ToolBar
 {
@@ -53,7 +56,7 @@ namespace insoles.ToolBar
         }
 
         private ToolBar toolBar;
-        private CamaraViewport.CamaraViewport camaraViewport;
+        private CamaraViewport.CamaraViewport[] camaraViewports = new CamaraViewport.CamaraViewport[2];
         private TimeLine.TimeLine timeLine;
 
         private SavingMenu saveMenu;
@@ -71,7 +74,7 @@ namespace insoles.ToolBar
         public event EventHandler recordChanged;
         public event EventHandler captureChanged;
 
-        public delegate void FileOpenHandler(object sender, string? csv, string? video);
+        public delegate void FileOpenHandler(object sender, List<string> csv, List<string> video);
         public event FileOpenHandler fileOpenEvent;
 
         public bool buttonsEnabled = false;
@@ -130,12 +133,23 @@ namespace insoles.ToolBar
             {
                 mainWindow.camaraViewport1.Navigated += delegate (object sender, NavigationEventArgs e)
                 {
-                    camaraViewport = mainWindow.camaraViewport1.Content as CamaraViewport.CamaraViewport;
+                    camaraViewports[0] = mainWindow.camaraViewport1.Content as CamaraViewport.CamaraViewport;
                 };
             }
             else
             {
-                camaraViewport = mainWindow.camaraViewport1.Content as CamaraViewport.CamaraViewport;
+                camaraViewports[0] = mainWindow.camaraViewport1.Content as CamaraViewport.CamaraViewport;
+            }
+            if (mainWindow.camaraViewport2.Content == null)
+            {
+                mainWindow.camaraViewport2.Navigated += delegate (object sender, NavigationEventArgs e)
+                {
+                    camaraViewports[1] = mainWindow.camaraViewport2.Content as CamaraViewport.CamaraViewport;
+                };
+            }
+            else
+            {
+                camaraViewports[1] = mainWindow.camaraViewport2.Content as CamaraViewport.CamaraViewport;
             }
             if (mainWindow.timeLine.Content == null)
             {
@@ -366,7 +380,38 @@ namespace insoles.ToolBar
             if(openFileDialog.ShowDialog() == true)
             {
                 string[] files = openFileDialog.FileNames;
-                if(files.Length == 2)
+                string[] filesVideo = files.Where((file) => Path.GetExtension(file) == ".avi").ToArray();
+                string[] filesCsv = files.Where(
+                    (file) => Path.GetExtension(file) == ".csv" || Path.GetExtension(file) == ".txt"
+                    ).ToArray();
+                List<double> durations = new List<double>();
+                if(filesVideo.Length == 0 && filesCsv.Length == 0)
+                {
+                    MessageBox.Show("Los ficheros de datos tienen que ser .txt o .csv y los de video .avi", "Error de formato", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else if(filesVideo.Length <= 2 && filesCsv.Length <= 1)
+                {
+                    for(int i = 0; i < filesVideo.Length; i++)
+                    {
+                        string videoPath = filesVideo[i];
+                        await Task.Run(() => camaraViewports[i].initReplay(videoPath));
+                        durations.Add(getVideoDuration(videoPath));
+                    }
+                    if(filesCsv.Length == 1)
+                    {
+                        GraphData csvData = await Task.Run(() => extractCSV(filesCsv[0]));
+                        graphManager.initReplay(csvData);
+                        durations.Add(csvData.maxTime);
+                    }
+                    fileOpenEvent?.Invoke(this, filesVideo.ToList(), filesCsv.ToList());
+                    timeLine.model.updateLimits(0, durations.Max());
+                }
+                else
+                {
+                    MessageBox.Show("Como maximo 2 ficheros de video y 1 de csv", "Error de numero de ficheros", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                /*
+                if (files.Length == 2)
                 {
                     GraphData csvData;
                     string file1 = files[0];
@@ -440,6 +485,7 @@ namespace insoles.ToolBar
                 {
                     MessageBox.Show("Selecciona 1 o 2 ficheros", "Error de numero de ficheros", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+                */
             }
         }
     }

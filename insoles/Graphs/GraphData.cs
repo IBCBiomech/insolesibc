@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define SWAP
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -183,8 +185,13 @@ namespace insoles.Graphs
             time = getDouble(values, 1);
             frame = getInt(values, 2);
             Func<float, float> transformFunc = GraphsConfig.transformFunc;
+#if SWAP
+            right = new DataInsole(values, 3, transformFunc);
+            left = new DataInsole(values, 11, transformFunc);
+#else
             left = new DataInsole(values, 3, transformFunc);
             right = new DataInsole(values, 11, transformFunc);
+#endif
         }
     }
     public class DataInsole
