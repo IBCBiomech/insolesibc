@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace mvvm.Messages
 {
-    public class ScanMessageInsoles : Message
+    public class ScanInsolesMessage : Message
     {
-        public ScanMessageInsoles(List<InsoleScanData> Insoles)
+        public ScanInsolesMessage(List<InsoleScan> Insoles)
         {
             this.Insoles = Insoles;
         }
-        public List<InsoleScanData> Insoles { get; set; }
+        public List<InsoleScan> Insoles { get; set; }
     }
 }

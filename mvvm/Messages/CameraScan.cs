@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace mvvm.Messages
 {
-    public class CameraScanData
+    public class CameraScan
     {
         public string name { get; set; }
         public int number { get; set; }
-        public CameraScanData(int number, string name)
+        public CameraScan(int number, string name)
         {
             this.number = number;
             this.name = name;

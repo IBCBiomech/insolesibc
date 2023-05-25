@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace mvvm.Messages
 {
-    public class InsoleMeasureData
+    public class InsoleData
     {
         public Dictionary<Sensor, int> raw { get; set; } = new Dictionary<Sensor, int>();
-        public InsoleMeasureData(WisewalkSDK.WisewalkData data, int index) 
+        public InsoleData(WisewalkSDK.WisewalkData data, int index)
         {
             WisewalkSDK.SoleSensor sole = data.Sole[index];
             raw[Sensor.Hallux] = sole.hallux;
@@ -23,7 +23,7 @@ namespace mvvm.Messages
             raw[Sensor.HeelL] = sole.heel_L;
             raw[Sensor.HeelR] = sole.heel_R;
         }
-        public InsoleMeasureData(WisewalkSDK.SoleSensor sole)
+        public InsoleData(WisewalkSDK.SoleSensor sole)
         {
             raw[Sensor.Hallux] = sole.hallux;
             raw[Sensor.Toes] = sole.toes;
@@ -34,11 +34,18 @@ namespace mvvm.Messages
             raw[Sensor.HeelL] = sole.heel_L;
             raw[Sensor.HeelR] = sole.heel_R;
         }
+        public InsoleData(Random random)
+        {
+            foreach (Sensor sensor in Enum.GetValues(typeof(Sensor)))
+            {
+                raw[sensor] = random.Next(4095);
+            }
+        }
         public string ToString(List<Sensor> order)
         {
             StringBuilder result = new StringBuilder();
-            for(int i = 0; i < order.Count - 1; i++) 
-            { 
+            for (int i = 0; i < order.Count - 1; i++)
+            {
                 result.Append(raw[order[i]].ToString() + " ");
             }
             result.Append(raw[order[order.Count - 1]].ToString());

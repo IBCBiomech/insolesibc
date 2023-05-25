@@ -1,9 +1,12 @@
-﻿using System;
+﻿//#define PRINT_MESSAGES
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using CommunityToolkit.Mvvm.Messaging;
@@ -27,20 +30,6 @@ namespace mvvm.Services
         };
         private int frame;
         private float fakets;
-        public void SaveFrame(Mat frame)
-        {
-            if (videoWriter != null)
-            {
-                lock (videoWriter)
-                {
-                    if (frame.Type() != matType)
-                    {
-                        frame.ConvertTo(frame, matType);
-                    }
-                    videoWriter.Write(frame);
-                }
-            }
-        }
         private string FileName()
         {
             DateTime now = DateTime.Now;
@@ -56,11 +45,13 @@ namespace mvvm.Services
         }
         public void Start()
         {
+#if PRINT_MESSAGES
             Trace.WriteLine("onRecordMessageReceived from SaveService");
+#endif
             string userName = Environment.UserName;
             string path = "C:\\Users\\" + userName + "\\Documents";
             string filePath = path + Path.DirectorySeparatorChar + FileName() + ".avi";
-            int fps = 25;
+            int fps = 60;
             int Width = 640;
             int Height = 480;
             videoWriter = new VideoWriter(filePath, FourCC.DIVX, fps, new Size(Width, Height));
@@ -74,31 +65,43 @@ namespace mvvm.Services
             WeakReferenceMessenger.Default.Register<LiveDataCalculationsMessage>(this,
                 onLiveCalculationsMessageReceived);
         }
-        private void onStopMessageReceived(object sender, StopMessage args)
+        private async void onStopMessageReceived(object sender, StopMessage args)
         {
+#if PRINT_MESSAGES
             Trace.WriteLine("onStopMessageReceived from SaveService");
+#endif
             WeakReferenceMessenger.Default.Unregister<FrameAvailableMessage>(this);
             videoWriter.Release();
             videoWriter.Dispose();
+
+            string userName = Environment.UserName;
+            string path = "C:\\Users\\" + userName + "\\Documents";
+            string filePath = path + Path.DirectorySeparatorChar + FileName() + ".txt";
+            await File.WriteAllTextAsync(filePath, dataHolder.ToString());
         }
         private void onFrameAvailableMessageReceived(object sender, FrameAvailableMessage args)
         {
-            //Trace.WriteLine("onFrameAvailableMessageReceived from SaveService");
-            LockedItem<Mat> lockedFrame = args.lockedFrame;
+#if PRINT_MESSAGES
+            Trace.WriteLine("onFrameAvailableMessageReceived from SaveService");
+#endif
+            Mat frame = args.frame;
             if (videoWriter != null)
             {
                 lock (videoWriter)
                 {
-                    if (lockedFrame.Item.Type() != matType)
+                    if (frame.Type() != matType)
                     {
-                        lockedFrame.Item.ConvertTo(lockedFrame.Item, matType);
+                        frame.ConvertTo(frame, matType);
                     }
-                    videoWriter.Write(lockedFrame.Item);
+                    videoWriter.Write(frame);
                 }
             }
         }
         private void onLiveCalculationsMessageReceived(object sender, LiveDataCalculationsMessage args)
         {
+#if PRINT_MESSAGES
+            Trace.WriteLine("onLiveCalculationsMessageReceived from SaveService");
+#endif
             StringBuilder lines = new StringBuilder();
             for(int i = 0; i < args.left.Count; i++)
             {

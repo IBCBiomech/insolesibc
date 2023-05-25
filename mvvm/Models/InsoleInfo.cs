@@ -63,7 +63,7 @@ namespace mvvm.Models
             Fw = null;
             handler = null;
         }
-        public InsoleInfo(InsoleScanData insole)
+        public InsoleInfo(InsoleScan insole)
         {
             Id = getNextID();
             Name = insole.name;

@@ -10,10 +10,12 @@ namespace mvvm.Messages
 {
     public class FrameAvailableMessage : Message
     {
-        public FrameAvailableMessage(LockedItem<Mat> lockedFrame) 
+        public int index { get; set; }
+        public Mat frame { get; set; }
+        public FrameAvailableMessage(int index, Mat frame)
         {
-            this.lockedFrame = lockedFrame;
+            this.frame = frame;
+            this.index = index;
         }
-        public LockedItem<Mat> lockedFrame { get; private set; }
     }
 }

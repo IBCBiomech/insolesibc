@@ -11,12 +11,12 @@ namespace mvvm.Messages
     {
         public Metric metric { get; set; }
         public Units units { get; set; }
-        public List<InsoleMeasureData> left {  get; set; }
-        public List<InsoleMeasureData> right { get; set; }
+        public List<InsoleData> left {  get; set; }
+        public List<InsoleData> right { get; set; }
         public float[] leftCalcs {  get; set; }
         public float[] rightCalcs { get; set; }
         public LiveDataCalculationsMessage(Metric metric, Units units, 
-            List<InsoleMeasureData> left, List<InsoleMeasureData> right,
+            List<InsoleData> left, List<InsoleData> right,
             float[] leftCalcs, float[] rightCalcs) 
         {
             this.metric = metric;

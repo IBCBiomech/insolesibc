@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.Messaging;
+﻿//#define DEBUG
+
+using CommunityToolkit.Mvvm.Messaging;
 using mvvm.Enums;
 using mvvm.Helpers;
 using mvvm.Messages;
@@ -15,8 +17,8 @@ namespace mvvm.Services
 {
     public class LiveDataCalculationsService : ILiveDataCalculationsService
     {
-        private List<InsoleMeasureData> left;
-        private List<InsoleMeasureData> right;
+        private List<InsoleData> left;
+        private List<InsoleData> right;
 
         private byte handlerLeft = 0;
         private byte handlerRight = 1;
@@ -28,7 +30,10 @@ namespace mvvm.Services
         }
         private void onInsoleMeasuresMessageReceived(object sender, InsoleMeasuresMessage args) 
         {
-            if(args.handler == handlerLeft)
+#if DEBUG
+            Trace.WriteLine("onInsoleMeasuresMessageReceived from LiveDataCalculationsService");
+#endif
+            if (args.handler == handlerLeft)
             {
                 left = args.measures;
                 counter++;
@@ -45,6 +50,9 @@ namespace mvvm.Services
         }
         private void Calculate()
         {
+#if DEBUG
+            Trace.WriteLine("Calculate from LiveDataCalculationsService");
+#endif
             float[] metric_left = new float[left.Count];
             float[] metric_right = new float[right.Count];
 
@@ -95,7 +103,7 @@ namespace mvvm.Services
                 left, right, metric_left, metric_right);
             WeakReferenceMessenger.Default.Send(message);
         }
-        private float Sum(InsoleMeasureData insole, Func<int, float> transformFunc)
+        private float Sum(InsoleData insole, Func<int, float> transformFunc)
         {
             float sum = 0;
             foreach(var digital in insole.raw.Values)

@@ -31,7 +31,9 @@ namespace mvvm.Services
             api.scanFinished += scanFinishedCallback;
             api.deviceConnected += deviceConnectedCallback;
             api.dataReceived += dataReceivedCallback;
-            WeakReferenceMessenger.Default.Register<ConnectMessage>(this, onConnectMessageReceived);
+            WeakReferenceMessenger.Default.Register<ScanMessage>(this, onScanMessageReceived);
+            WeakReferenceMessenger.Default.Register<ConnectInsolesMessage>(this, onConnectMessageReceived);
+            WeakReferenceMessenger.Default.Register<CaptureMessage>(this, onCaptureMessageReceived);
         }
         public void ShowPorts()
         {
@@ -65,15 +67,18 @@ namespace mvvm.Services
             var scanDevices = devices;
             Trace.WriteLine("# of devices: " + devices.Count);
             ShowScanList(scanDevices);
-            List<InsoleScanData> Insoles = new();
-            for(int i = 0; i < scanDevices.Count; i++)
+            List<InsoleScan> Insoles = new();
+            for (int i = 0; i < scanDevices.Count; i++)
             {
                 string name = "Wisewalk";
-                InsoleScanData insole = new InsoleScanData(name, GetMacAddress(scanDevices[i]));
+                InsoleScan insole = new InsoleScan(name, GetMacAddress(scanDevices[i]));
                 Insoles.Add(insole);
             }
-            
-            ScanMessageInsoles message = new ScanMessageInsoles(Insoles);
+
+            //InsoleScan insoleFake = new InsoleScan("Fake", "AC:DE:FG");
+            //Insoles.Add(insoleFake);
+
+            ScanInsolesMessage message = new ScanInsolesMessage(Insoles);
             WeakReferenceMessenger.Default.Send(message);
         }
         private void ShowScanList(List<Wisewalk.Dev> devices)
@@ -96,22 +101,24 @@ namespace mvvm.Services
 
             return mac;
         }
+
         private void dataReceivedCallback(byte deviceHandler, WisewalkSDK.WisewalkData data)
         {
-            List<InsoleMeasureData> measures = new List<InsoleMeasureData>();
-            foreach(var sole in data.Sole)
+            List<InsoleData> measures = new List<InsoleData>();
+            foreach (var sole in data.Sole)
             {
-                measures.Add(new InsoleMeasureData(sole));
+                measures.Add(new InsoleData(sole));
             }
             InsoleMeasuresMessage message = new InsoleMeasuresMessage(deviceHandler, measures);
             WeakReferenceMessenger.Default.Send(message);
         }
-        public async void Scan()
+
+        public async void onScanMessageReceived(object sender, ScanMessage message)
         {
             Trace.WriteLine("Scan from ApiService");
             await Task.Run(() => ScanDevices());
         }
-        public async void Start()
+        public async void onCaptureMessageReceived(object sender, CaptureMessage message)
         {
             Trace.WriteLine("Start from ApiService");
             api.SetDeviceConfiguration(0, 100, 3, out error);
@@ -123,7 +130,8 @@ namespace mvvm.Services
         {
             return scanDevices.FirstOrDefault(de => GetMacAddress(de) == mac);
         }
-        public void onConnectMessageReceived(object sender, ConnectMessage args)
+
+        public void onConnectMessageReceived(object sender, ConnectInsolesMessage args)
         {
             Trace.WriteLine("onConnectMessageReceived");
             List<Dev> conn_list_dev = new List<Dev>();

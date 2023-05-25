@@ -1,8 +1,8 @@
 ﻿namespace mvvm.Messages
 {
-    public class OpenCameraMessage : Message
+    public class OpenCameraSelectedMessage : Message
     {
-        public OpenCameraMessage(int index)
+        public OpenCameraSelectedMessage(int index)
         {
             this.index = index;
         }

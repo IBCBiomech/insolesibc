@@ -1,8 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using mvvm.Helpers;
 using mvvm.Messages;
+using mvvm.Services;
+using mvvm.Services.Interfaces;
 using OpenCvSharp;
 using OpenCvSharp.WpfExtensions;
 using System;
@@ -20,15 +23,9 @@ namespace mvvm.ViewModels
     public partial class CamaraViewModel : ObservableObject, INavigationAware
     {
         [ObservableProperty]
-        private BitmapSource _currentFrame = BitmapSourceConverter.ToBitmapSource(getBlackImage());
-
-        private VideoCapture videoCapture;
-        private CancellationTokenSource cancellationTokenSourceDisplay;
-        private CancellationToken cancellationTokenDisplay;
+        private BitmapSource _currentFrame;
 
         private bool _isInitialized = false;
-
-        private LockedItem<Mat> lockedFrame = new LockedItem<Mat>(getBlackImage());
         public void OnNavigatedFrom()
         {
             
@@ -41,7 +38,12 @@ namespace mvvm.ViewModels
         }
         private void InitializeViewModel()
         {
-            WeakReferenceMessenger.Default.Register<OpenCameraMessage>(this, onOpenCameraMessageReceived);
+            Application.Current.Dispatcher.BeginInvoke(() =>
+            {
+                CurrentFrame = BitmapSourceConverter.ToBitmapSource(
+                    App.GetService<ICameraService>().GetInitFrame());
+            });
+            WeakReferenceMessenger.Default.Register<FrameAvailableMessage>(this, ChangeFrame);
             _isInitialized = true;
         }
         [RelayCommand]
@@ -49,51 +51,12 @@ namespace mvvm.ViewModels
         {
             Trace.WriteLine("close camera");
         }
-        private static Mat getBlackImage()
+        private void ChangeFrame(object sender, FrameAvailableMessage message)
         {
-            MatType matType = MatType.CV_8UC3;
-            Mat frame = new Mat(480, 640, matType);
-            return frame;
-        }
-        private async void onOpenCameraMessageReceived(object sender, OpenCameraMessage args)
-        {
-            Trace.WriteLine("onOpenCameraMessageReceived");
-            int index = args.index;
-            Trace.WriteLine(index);
-            CurrentFrame = BitmapSourceConverter.ToBitmapSource(getBlackImage());
-
-            cancellationTokenSourceDisplay = new CancellationTokenSource();
-            cancellationTokenDisplay = cancellationTokenSourceDisplay.Token;
-            videoCapture = new VideoCapture(index, VideoCaptureAPIs.DSHOW);
-            await Task.Run(() => displayCameraCallback());
-        }
-        private async Task displayCameraCallback()
-        {
-            while (true)
+            Application.Current.Dispatcher.BeginInvoke(() =>
             {
-                if (cancellationTokenDisplay.IsCancellationRequested)
-                {
-                    videoCapture.Release();
-                    videoCapture = null;
-                    Application.Current.Dispatcher.BeginInvoke(() =>
-                    {
-                        CurrentFrame = BitmapSourceConverter.ToBitmapSource(getBlackImage());
-                    });
-                    return;
-                }
-                Mat frame = new Mat();
-                videoCapture.Read(frame);
-                if (!frame.Empty())
-                {
-                    lockedFrame = new LockedItem<Mat>(frame);
-                    Application.Current.Dispatcher.BeginInvoke(() =>
-                    {
-                        CurrentFrame = BitmapSourceConverter.ToBitmapSource(lockedFrame.Item);
-                    });
-                    FrameAvailableMessage message = new FrameAvailableMessage(lockedFrame);
-                    WeakReferenceMessenger.Default.Send(message);
-                }
-            }
+                CurrentFrame = BitmapSourceConverter.ToBitmapSource(message.frame);
+            });     
         }
     }
 }

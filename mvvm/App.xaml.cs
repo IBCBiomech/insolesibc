@@ -62,7 +62,8 @@ namespace mvvm
                 services.AddScoped<Views.Pages.CamaraPage>();
                 services.AddScoped<ViewModels.CamaraViewModel>();
 
-                services.AddSingleton<IApiService, ApiService>();
+                services.AddSingleton<IApiService, FakeApiService>();
+                services.AddSingleton<ICameraService, CameraService>();
                 services.AddSingleton<ISaveService, SaveService>();
                 services.AddSingleton<ILiveDataCalculationsService, 
                     LiveDataCalculationsService>();
@@ -88,6 +89,16 @@ namespace mvvm
         private async void OnStartup(object sender, StartupEventArgs e)
         {
             await _host.StartAsync();
+
+            InitializeServices();
+        }
+
+        private void InitializeServices()
+        {
+            GetService<IApiService>();
+            GetService<ICameraService>();
+            GetService<ISaveService>();
+            GetService<ILiveDataCalculationsService>();
         }
 
         /// <summary>

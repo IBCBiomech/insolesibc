@@ -36,9 +36,9 @@ namespace mvvm.ViewModels
 
         private void InitializeViewModel()
         {
-            WeakReferenceMessenger.Default.Register<ScanMessageInsoles>
+            WeakReferenceMessenger.Default.Register<ScanInsolesMessage>
                 (this, onScanMessageReceived);
-            WeakReferenceMessenger.Default.Register<ScanMessageCameras>
+            WeakReferenceMessenger.Default.Register<ScanCamerasMessage>
                 (this, onScanMessageReceived);
             WeakReferenceMessenger.Default.Register<DeviceConnectedMessage>
                 (this, onDeviceConnectedMessageReceived);
@@ -49,7 +49,7 @@ namespace mvvm.ViewModels
 
             _isInitialized = true;
         }
-        private void onScanMessageReceived(object sender, ScanMessageInsoles args)
+        private void onScanMessageReceived(object sender, ScanInsolesMessage args)
         {
             Trace.WriteLine("onCameraScanMessageReceived Insoles");
             var insolesCollection = new List<InsoleInfo>();
@@ -60,7 +60,7 @@ namespace mvvm.ViewModels
             }
             Insoles = insolesCollection;
         }
-        private void onScanMessageReceived(object sender, ScanMessageCameras args)
+        private void onScanMessageReceived(object sender, ScanCamerasMessage args)
         {
             Trace.WriteLine("onCameraScanMessageReceived cameras");
             var camerasCollection = new List<CameraInfo>();
@@ -87,7 +87,7 @@ namespace mvvm.ViewModels
                 }
             }
             Trace.WriteLine(id);
-            OpenCameraMessage message = new OpenCameraMessage(id);
+            OpenCameraSelectedMessage message = new OpenCameraSelectedMessage(id);
             WeakReferenceMessenger.Default.Send(message);
         }
         private void onConnectClickMessageReceived(object sender, ConnectClickMessage args)
@@ -101,7 +101,7 @@ namespace mvvm.ViewModels
                     macs.Add(insole.Address);
                 }
             }
-            ConnectMessage message = new ConnectMessage(macs);
+            ConnectInsolesMessage message = new ConnectInsolesMessage(macs);
             WeakReferenceMessenger.Default.Send(message);
         }
         private void onDeviceConnectedMessageReceived(object sender, DeviceConnectedMessage args)

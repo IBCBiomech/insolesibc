@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace mvvm.Messages
 {
-    public class ConnectMessage: Message
+    public class ConnectInsolesMessage: Message
     {
-        public ConnectMessage(List<string> macs) 
+        public ConnectInsolesMessage(List<string> macs) 
         { 
             this.macs = macs;
         }

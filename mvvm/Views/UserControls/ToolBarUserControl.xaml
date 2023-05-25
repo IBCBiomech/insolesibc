@@ -17,6 +17,9 @@
         <Button Content="Connect"
             Command="{Binding ViewModel.ConnectCommand, Mode=OneWay}"
         />
+        <Button Content="Capture"
+            Command="{Binding ViewModel.CaptureCommand, Mode=OneWay}"
+        />
         <Button Content="Open Camera"
             Command="{Binding ViewModel.OpenCameraCommand, Mode=OneWay}"
         />
