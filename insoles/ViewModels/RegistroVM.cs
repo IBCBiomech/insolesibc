@@ -44,6 +44,8 @@ namespace insoles.ViewModel
                 OnPropertyChanged();
             }
         }
+        private double[] dataLeft;
+        private double[] dataRight;
         public RegistroVM()
         {
             //Init services

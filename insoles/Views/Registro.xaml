@@ -50,6 +50,7 @@
             <StackPanel>
                 <DataGrid AutoGenerateColumns="True" ItemsSource="{Binding Insoles.DefaultView}"/>
                 <DataGrid AutoGenerateColumns="True" ItemsSource="{Binding Cameras.DefaultView}"/>
+                <WpfPlot Name="plot"/>
             </StackPanel>
         </Grid>
     </Grid>
