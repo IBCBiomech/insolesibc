@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\capture-icon.png" />
+    <None Remove="Images\connect-icon.png" />
     <None Remove="Images\customer_page.png" />
     <None Remove="Images\home_page.png" />
     <None Remove="Images\img_customer.png" />
@@ -33,6 +35,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\capture-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\connect-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\customer_page.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

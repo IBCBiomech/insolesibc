@@ -3,15 +3,48 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Menu="clr-namespace:insoles.Utilities"
              xmlns:local="clr-namespace:insoles.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Border CornerRadius="0,20,20,0" Margin="0,5,5,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <!-- Scan -->
+            <Menu:Btn Style="{StaticResource BtnStyle}"
+                              Command="{Binding ScanCommand}"
+                              IsChecked="True">
 
-            <Image Source="/Images/customer_page.png"
-                   Stretch="Fill" />
+                <Grid>
 
-        </Border>
+                    <Image Source="Images/capture-icon.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                    <TextBlock Text="Scan"
+                                       Style="{StaticResource Text_Style}" />
+
+                </Grid>
+
+            </Menu:Btn>
+            <!-- Connect -->
+            <Menu:Btn Style="{StaticResource BtnStyle}"
+                              Command="{Binding CaptureCommand}"
+                              IsChecked="True">
+
+                <Grid>
+
+                    <Image Source="Images/capture-icon.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                    <TextBlock Text="Capture"
+                                       Style="{StaticResource Text_Style}" />
+
+                </Grid>
+
+            </Menu:Btn>
+        </StackPanel>
     </Grid>
 </UserControl>
