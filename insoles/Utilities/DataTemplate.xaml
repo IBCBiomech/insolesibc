@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:insoles.ViewModel"
+                    xmlns:view="clr-namespace:insoles.View">
+
+    <DataTemplate DataType="{x:Type vm:HomeVM}">
+        <view:Home />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:RegistroVM}">
+        <view:Registro />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:AnalisisVM}">
+        <view:Analisis />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:InformesVM}">
+        <view:Informes />
+    </DataTemplate>
+
+</ResourceDictionary>
