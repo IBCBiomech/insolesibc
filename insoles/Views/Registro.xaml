@@ -46,5 +46,11 @@
 
             </Menu:Btn>
         </StackPanel>
+        <Grid Grid.Row="1">
+            <StackPanel>
+                <DataGrid AutoGenerateColumns="True" ItemsSource="{Binding Insoles.DefaultView}"/>
+                <DataGrid AutoGenerateColumns="True" ItemsSource="{Binding Cameras.DefaultView}"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>
