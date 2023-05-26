@@ -1,8 +1,10 @@
-﻿using insoles.Messages;
+﻿using insoles.Enums;
+using insoles.Messages;
 using insoles.Services;
 using insoles.Utilities;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Windows.Input;
 
 namespace insoles.ViewModel
@@ -11,6 +13,7 @@ namespace insoles.ViewModel
     {
         private IApiService apiService;
         private ICameraService cameraService;
+        private ILiveCalculationsService liveCalculationsService;
         public ICommand ScanCommand { get; set; }
         public ICommand ConnectCommand { get; set; }
         public ICommand CaptureCommand { get; set; }
@@ -51,6 +54,7 @@ namespace insoles.ViewModel
             //Init services
             apiService = new ApiService();
             cameraService = new CameraService();
+            liveCalculationsService = new LiveCalculationsService();
             //Init commands
             ScanCommand = new RelayCommand(Scan);
             ConnectCommand = new RelayCommand(Connect);
@@ -82,6 +86,20 @@ namespace insoles.ViewModel
                     CameraScan camera = camerasReceived[i];
                     Cameras.Rows.Add(i, camera.name);
                 }
+            };
+            apiService.DataReceived += (byte handler, List<InsoleData> packet) =>
+            {
+                liveCalculationsService.ProcessPacket(handler, packet);
+            };
+            liveCalculationsService.ResultReady += 
+                (
+                    Metric metric, Units units,
+                    List<InsoleData> left, List<InsoleData> right,
+                    float[] metricLeft, float[] metricRight
+                ) =>
+            {
+                Trace.WriteLine(metricLeft[0]);
+                Trace.WriteLine(metricRight[0]);
             };
         }
     }

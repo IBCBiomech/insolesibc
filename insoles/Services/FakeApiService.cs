@@ -32,6 +32,7 @@ namespace insoles.Services
                 new InsoleScan("Wisewalk", "BA:DE:FG")
             };
             ScanReceived?.Invoke(Insoles);
+            //ConnectedInsoles = Insoles;
         }
 
         public void Capture()
@@ -64,7 +65,7 @@ namespace insoles.Services
                 Random random = new Random();
                 measures.Add(new InsoleData(random));
             }
-            DataReceived?.Invoke(measures);
+            DataReceived?.Invoke((byte)handler, measures);
         }
     }
 }

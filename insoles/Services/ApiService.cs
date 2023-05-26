@@ -98,7 +98,7 @@ namespace insoles.Services
             {
                 measures.Add(new InsoleData(sole));
             }
-            DataReceived?.Invoke(measures);
+            DataReceived?.Invoke(deviceHandler, measures);
         }
 
         public async void Scan()
