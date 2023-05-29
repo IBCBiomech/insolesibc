@@ -1,8 +1,12 @@
 ﻿using insoles.Enums;
 using insoles.Messages;
+using insoles.Models;
 using insoles.Services;
 using insoles.Utilities;
+using insoles.View;
+using ScottPlot;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.Windows.Input;
@@ -26,7 +30,10 @@ namespace insoles.ViewModel
         }
         private void Connect(object obj) => apiService.Connect(new List<string> { "AC:DS" });
         private void Capture(object obj) => apiService.Capture();
-        private void OpenCamera(object obj) => cameraService.OpenCamera(0);
+        private void OpenCamera(object obj)
+        {
+            cameraService.OpenCamera(0);
+        }
         private DataTable insoles;
         private DataTable cameras;
         public DataTable Insoles
@@ -49,6 +56,7 @@ namespace insoles.ViewModel
         }
         private double[] dataLeft;
         private double[] dataRight;
+        public WpfPlot Plot { get; set; }
         public RegistroVM()
         {
             //Init services
@@ -101,6 +109,8 @@ namespace insoles.ViewModel
                 Trace.WriteLine(metricLeft[0]);
                 Trace.WriteLine(metricRight[0]);
             };
+            Plot = new WpfPlot();
+            Plot.Plot.Title("test plot");
         }
     }
 }

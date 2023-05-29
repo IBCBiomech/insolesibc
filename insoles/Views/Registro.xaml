@@ -11,6 +11,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             <!-- Scan -->
@@ -46,12 +47,19 @@
 
             </Menu:Btn>
         </StackPanel>
-        <Grid Grid.Row="1">
-            <StackPanel>
-                <DataGrid AutoGenerateColumns="True" ItemsSource="{Binding Insoles.DefaultView}"/>
-                <DataGrid AutoGenerateColumns="True" ItemsSource="{Binding Cameras.DefaultView}"/>
-                <WpfPlot Name="plot"/>
-            </StackPanel>
-        </Grid>
+        <StackPanel Orientation="Vertical" Grid.Row="1">
+            <DataGrid AutoGenerateColumns="True" ItemsSource="{Binding Insoles.DefaultView}"/>
+            <DataGrid x:Name="cameras" AutoGenerateColumns="True" 
+                          ItemsSource="{Binding Cameras.DefaultView}">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Open" Command="{Binding OpenCameraCommand}"
+                                      CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}, Path=DataContext}"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+            </DataGrid>
+            <WpfPlot Name="plot"/>
+        </StackPanel>
+        <ContentControl Content="{Binding Plot}"  Grid.Row="2"/>
     </Grid>
 </UserControl>
