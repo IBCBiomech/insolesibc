@@ -1,4 +1,4 @@
-﻿#define SWAP
+﻿//#define SWAP
 
 using System;
 using System.Collections.Generic;
