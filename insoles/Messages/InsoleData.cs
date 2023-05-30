@@ -37,7 +37,7 @@ namespace insoles.Messages
         {
             foreach (Sensor sensor in Enum.GetValues(typeof(Sensor)))
             {
-                raw[sensor] = random.Next(500);
+                raw[sensor] = random.Next(3500, 4095);
             }
         }
         public string ToString(List<Sensor> order)
