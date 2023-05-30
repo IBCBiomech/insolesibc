@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using AvalonDock.Layout;
 using System.Collections.Generic;
+using insoles.FileSaver;
 
 namespace insoles.CamaraViewport
 {
@@ -35,6 +36,8 @@ namespace insoles.CamaraViewport
         private Mat _currentFrame;
 
         private DeviceList.DeviceList deviceList;
+
+        private RecordingActive? recording = null;
 
         public LayoutAnchorable layoutAnchorable { get; set; }
         public int? index { get; private set; } = null;
@@ -238,14 +241,21 @@ namespace insoles.CamaraViewport
                 if (!currentFrame.Empty())
                 {
                     //currentFrame = frame;
-                    await Dispatcher.BeginInvoke(DispatcherPriority.Normal, () =>
+                    Dispatcher.BeginInvoke(DispatcherPriority.Normal, () =>
                     {
                         imgViewport.Source = BitmapSourceConverter.ToBitmapSource(currentFrame);
                     }
                     );
+                    if(recording != null)
+                    {
+                        Task.Run(() => recording.appendVideo(currentFrame));
+                    }
                 }
-                await Task.Delay(1000 / fps);
             }
+        }
+        public void setRecording(RecordingActive recording)
+        {
+            this.recording = recording;
         }
         // Cierra la camara y el video writer al cerrar la aplicacion
         public void onCloseApplication()
