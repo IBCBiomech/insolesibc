@@ -303,7 +303,12 @@ namespace insoles.FileSaver
                     if (videoWriter != null)
                     {
                         lock (videoWriter)
-                            videoWriter.Write(frame);
+                            if(videoWriter != null)
+                                videoWriter.Write(frame);
+                            else
+                            {
+                                Trace.Write("frame lost");
+                            }
                         //Trace.WriteLine("write frame");
                     }
                 }
@@ -329,17 +334,20 @@ namespace insoles.FileSaver
             VirtualToolBar virtualToolBar = ((MainWindow)Application.Current.MainWindow).virtualToolBar;
             camaraViewport.setRecording(null);
             virtualToolBar.pauseEvent -= onPauseVideo;
-            Task.Delay(10000).ContinueWith(task =>
+            lock (videoWriter)
             {
                 videoWriter.Release();
                 videoWriter = null;
-            });
+            }
         }
         public void onCloseApplication()
         {
             timerVideo.Stop();
-            videoWriter.Dispose();
-            videoWriter = null;
+            lock (videoWriter)
+            {
+                videoWriter.Dispose();
+                videoWriter = null;
+            }
         }
     }
 }

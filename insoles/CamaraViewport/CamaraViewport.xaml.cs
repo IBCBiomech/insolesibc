@@ -14,6 +14,7 @@ using System.Runtime.CompilerServices;
 using AvalonDock.Layout;
 using System.Collections.Generic;
 using insoles.FileSaver;
+using System.Diagnostics;
 
 namespace insoles.CamaraViewport
 {
@@ -42,7 +43,9 @@ namespace insoles.CamaraViewport
         public LayoutAnchorable layoutAnchorable { get; set; }
         public int? index { get; private set; } = null;
 
+        Stopwatch stopwatch = new Stopwatch();
         public int fps { get; private set; }
+        /*
         public Mat currentFrame
         {
             get
@@ -60,6 +63,8 @@ namespace insoles.CamaraViewport
                 }
             }
         }
+        */
+        public Mat currentFrame;
         private string titleFromPosition(Position position)
         {
             switch (position)
@@ -116,7 +121,7 @@ namespace insoles.CamaraViewport
         public CamaraViewport()
         {
             InitializeComponent();
-            _currentFrame = getBlackImage(); // Acceder directamente porque no estaba inicializado (Error sino)
+            currentFrame = getBlackImage(); // Acceder directamente porque no estaba inicializado (Error sino)
             imgViewport.Source = BitmapSourceConverter.ToBitmapSource(currentFrame);
             MainWindow mainWindow = (MainWindow)Application.Current.MainWindow;
             if (mainWindow.timeLine.Content == null)
@@ -204,6 +209,7 @@ namespace insoles.CamaraViewport
             videoCapture.Set(VideoCaptureProperties.FrameWidth, resolution.Width);
             cameraChanged?.Invoke(this, EventArgs.Empty);
             layoutAnchorable.Title = getTitle();
+            stopwatch.Start();
             await Task.Run(() => displayCameraCallback());
         }
         // Cierra la camara y la ventana
@@ -224,6 +230,7 @@ namespace insoles.CamaraViewport
         {
             while (true)
             {
+                Trace.WriteLine("start bucle " + stopwatch.Elapsed.TotalMilliseconds);
                 if (cancellationTokenDisplay.IsCancellationRequested)
                 {
                     videoCapture.Release();
@@ -237,19 +244,26 @@ namespace insoles.CamaraViewport
                     return;
                 }
                 //Mat frame = new Mat();
+                Trace.WriteLine("before read " + stopwatch.Elapsed.TotalMilliseconds);
                 videoCapture.Read(currentFrame);
+                Trace.WriteLine("after read " + stopwatch.Elapsed.TotalMilliseconds);
                 if (!currentFrame.Empty())
                 {
                     //currentFrame = frame;
-                    Dispatcher.BeginInvoke(DispatcherPriority.Normal, () =>
-                    {
-                        imgViewport.Source = BitmapSourceConverter.ToBitmapSource(currentFrame);
-                    }
-                    );
-                    if(recording != null)
+                    if (recording != null)
                     {
                         Task.Run(() => recording.appendVideo(currentFrame));
                     }
+                    Trace.WriteLine("after recording " + stopwatch.Elapsed.TotalMilliseconds);
+                    Dispatcher.BeginInvoke(DispatcherPriority.Normal, () =>
+                    {
+                        lock (imgViewport)
+                        {
+                            imgViewport.Source = BitmapSourceConverter.ToBitmapSource(currentFrame);
+                        }
+                    }
+                    );
+                    Trace.WriteLine("after display " + stopwatch.Elapsed.TotalMilliseconds);
                 }
             }
         }
