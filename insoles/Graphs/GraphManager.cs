@@ -322,7 +322,7 @@ namespace insoles.Graphs
                         transformFunc = (VALUE_digital) => VALUE_mbar(ADC_neg(VALUE_digital));
                         break;
                     case Units.N:
-                        transformFunc = (VALUE_digital) => VALUE_mbar(ADC_neg(VALUE_digital));
+                        transformFunc = (VALUE_digital) => N(VALUE_mbar(ADC_neg(VALUE_digital)));
                         break;
                     default:
                         throw new Exception("ninguna unidad seleccionada");
