@@ -298,11 +298,12 @@ namespace insoles.FileSaver
                     {
                         frame.ConvertTo(frame, (MatType)Config.MAT_TYPE);
                     }
-                    Mat frameResized = frame.Resize(new OpenCvSharp.Size(camaraViewport.resolution.Width, camaraViewport.resolution.Height));
+                    //Mat frameResized = frame.Resize(new OpenCvSharp.Size(camaraViewport.resolution.Width, camaraViewport.resolution.Height));
                     if (videoWriter != null)
                     {
                         lock(videoWriter)
-                            videoWriter.Write(frameResized);
+                            if(videoWriter != null)
+                                videoWriter.Write(frame);
                         //Trace.WriteLine("write frame");
                     }
                 }
