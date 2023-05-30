@@ -17,10 +17,12 @@ namespace insoles.Services
 
         public event ICameraService.CameraScanEventHandler ScanReceived;
 
+        public event ICameraService.FrameAvailableEventHandler FrameAvailable;
         public CameraService()
         {
 
         }
+
         public async void Scan()
         {
             List<string> names = await Task.Run(() => CameraNames());
@@ -65,7 +67,11 @@ namespace insoles.Services
         }
         public void OpenCamera(int index)
         {
-            cameraStreams.Add(new CameraStreamService(index));
+            cameraStreams.Add(new CameraStreamService(index, this));
+        }
+        public void InvokeFrameAvailable(int index, Mat frame)
+        {
+            FrameAvailable?.Invoke(index, frame);
         }
     }
 }

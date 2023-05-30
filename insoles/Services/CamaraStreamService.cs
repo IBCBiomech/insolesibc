@@ -12,37 +12,40 @@ namespace insoles.Services
 {
     public class CameraStreamService
     {
+        private CameraService cameraService;
         private int index;
         private VideoCapture videoCapture;
         private CancellationTokenSource cancellationTokenSourceDisplay;
         private CancellationToken cancellationTokenDisplay;
 
-        public delegate void FrameAvailableEventHandler(Mat frame);
+        public delegate void FrameAvailableEventHandler(int index, Mat frame);
         public event FrameAvailableEventHandler FrameAvailable;
-        public CameraStreamService(int index)
+        public CameraStreamService(int index, CameraService cameraService)
         {
             this.index = index;
             cancellationTokenSourceDisplay = new CancellationTokenSource();
             cancellationTokenDisplay = cancellationTokenSourceDisplay.Token;
             videoCapture = new VideoCapture(index, VideoCaptureAPIs.DSHOW);
             Task.Run(() => { DisplayCameraCallback(); });
+            this.cameraService = cameraService;
         }
         private void DisplayCameraCallback()
         {
             Mat frame = new Mat();
+            Stopwatch stopwatch = Stopwatch.StartNew();
             while (true)
             {
                 if (cancellationTokenDisplay.IsCancellationRequested)
                 {
                     videoCapture.Release();
                     videoCapture = null;
-                    FrameAvailable?.Invoke(GetBlackImage());
+                    cameraService.InvokeFrameAvailable(index, GetBlackImage());
                     return;
                 }
                 if (videoCapture.Grab())
                 {
                     videoCapture.Read(frame);
-                    FrameAvailable?.Invoke(frame);
+                    cameraService.InvokeFrameAvailable(index, frame);
                 }
             }
         }

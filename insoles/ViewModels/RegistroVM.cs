@@ -4,12 +4,17 @@ using insoles.Models;
 using insoles.Services;
 using insoles.Utilities;
 using insoles.View;
+using OpenCvSharp;
+using OpenCvSharp.Extensions;
+using OpenCvSharp.WpfExtensions;
 using ScottPlot;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace insoles.ViewModel
 {
@@ -54,6 +59,19 @@ namespace insoles.ViewModel
                 OnPropertyChanged();
             }
         }
+        private BitmapSource currentFrame;
+        public BitmapSource CurrentFrame
+        {
+            get 
+            { 
+                return currentFrame;
+            }
+            set
+            {
+                currentFrame = value;
+                OnPropertyChanged();
+            }
+        }
         private double[] dataLeft;
         private double[] dataRight;
         public WpfPlot Plot { get; set; }
@@ -94,6 +112,13 @@ namespace insoles.ViewModel
                     CameraScan camera = camerasReceived[i];
                     Cameras.Rows.Add(i, camera.name);
                 }
+            };
+            cameraService.FrameAvailable += (int index, Mat frame) =>
+            {
+                Application.Current.Dispatcher.BeginInvoke(() =>
+                {
+                    CurrentFrame = BitmapSourceConverter.ToBitmapSource(frame);
+                });
             };
             apiService.DataReceived += (byte handler, List<InsoleData> packet) =>
             {

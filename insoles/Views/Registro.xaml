@@ -12,6 +12,7 @@
             <RowDefinition Height="100"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             <!-- Scan -->
@@ -61,5 +62,6 @@
             <WpfPlot Name="plot"/>
         </StackPanel>
         <ContentControl Content="{Binding Plot}"  Grid.Row="2"/>
+        <Image Source="{Binding CurrentFrame}" Stretch="Uniform" Grid.Row="3"/>
     </Grid>
 </UserControl>
