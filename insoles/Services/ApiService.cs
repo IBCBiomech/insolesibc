@@ -58,7 +58,7 @@ namespace insoles.Services
         }
         private void scanFinishedCallback(List<Wisewalk.Dev> devices)
         {
-            var scanDevices = devices;
+            scanDevices = devices;
             Trace.WriteLine("# of devices: " + devices.Count);
             ShowScanList(scanDevices);
             List<InsoleScan> Insoles = new();
@@ -118,7 +118,6 @@ namespace insoles.Services
         {
             return scanDevices.FirstOrDefault(de => GetMacAddress(de) == mac);
         }
-
         public void Connect(List<string> macs)
         {
             Trace.WriteLine("onConnectMessageReceived");
@@ -129,6 +128,14 @@ namespace insoles.Services
                 conn_list_dev.Add(findInsole(mac));
             }
             if (!api.Connect(conn_list_dev, out error))
+            {
+                Trace.WriteLine("Connect error " + error);
+            }
+        }
+        public void ConnectAll()
+        {
+            Trace.WriteLine("onConnectMessageReceived connecting all scanned");
+            if (!api.Connect(scanDevices, out error))
             {
                 Trace.WriteLine("Connect error " + error);
             }

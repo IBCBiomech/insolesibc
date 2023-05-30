@@ -33,7 +33,10 @@ namespace insoles.ViewModel
             apiService.Scan();
             cameraService.Scan();
         }
-        private void Connect(object obj) => apiService.Connect(new List<string> { "AC:DS" });
+        private void Connect(object obj)
+        {
+            apiService.ConnectAll();
+        }
         private void Capture(object obj) => apiService.Capture();
         private void OpenCamera(object obj)
         {
@@ -72,9 +75,8 @@ namespace insoles.ViewModel
                 OnPropertyChanged();
             }
         }
-        private double[] dataLeft;
-        private double[] dataRight;
         public WpfPlot Plot { get; set; }
+        private GraphSumPressuresLiveModel GraphModel;
         public RegistroVM()
         {
             //Init services
@@ -131,11 +133,11 @@ namespace insoles.ViewModel
                     float[] metricLeft, float[] metricRight
                 ) =>
             {
-                Trace.WriteLine(metricLeft[0]);
-                Trace.WriteLine(metricRight[0]);
+                GraphModel.UpdateData(metricLeft, metricRight);
             };
             Plot = new WpfPlot();
             Plot.Plot.Title("test plot");
+            GraphModel = new(Plot);
         }
     }
 }

@@ -8,6 +8,7 @@ namespace insoles.Services
     {
         void Scan();
         void Connect(List<string> macs);
+        void ConnectAll();
         void Capture();
         public delegate void InsoleScanEventHandler(List<InsoleScan> data);
         public delegate void InsoleDataEventHandler(byte handler, List<InsoleData> data);

@@ -49,7 +49,14 @@
             </Menu:Btn>
         </StackPanel>
         <StackPanel Orientation="Vertical" Grid.Row="1">
-            <DataGrid AutoGenerateColumns="True" ItemsSource="{Binding Insoles.DefaultView}"/>
+            <DataGrid AutoGenerateColumns="True" ItemsSource="{Binding Insoles.DefaultView}">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Connect" Command="{Binding ConnectCommand}"
+                                      CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}, Path=DataContext}"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+            </DataGrid>
             <DataGrid x:Name="cameras" AutoGenerateColumns="True" 
                           ItemsSource="{Binding Cameras.DefaultView}">
                 <DataGrid.ContextMenu>

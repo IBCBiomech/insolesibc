@@ -57,6 +57,16 @@ namespace insoles.Services
                 DeviceConnected?.Invoke(dev);
             }
         }
+        public void ConnectAll()
+        {
+            foreach(var insole in Insoles)
+            {
+                WisewalkSDK.Device dev = new();
+                dev.Id = insole.MAC;
+                ConnectedInsoles.Add(insole);
+                DeviceConnected?.Invoke(dev);
+            }
+        }
         private void GenerateData(int handler)
         {
             List<InsoleData> measures = new List<InsoleData>();
