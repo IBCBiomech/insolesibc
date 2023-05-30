@@ -244,17 +244,13 @@ namespace insoles.CamaraViewport
                     return;
                 }
                 //Mat frame = new Mat();
-                Trace.WriteLine("before read " + stopwatch.Elapsed.TotalMilliseconds);
-                videoCapture.Read(currentFrame);
-                Trace.WriteLine("after read " + stopwatch.Elapsed.TotalMilliseconds);
-                if (!currentFrame.Empty())
+                if (videoCapture.Grab())
                 {
-                    //currentFrame = frame;
+                    videoCapture.Read(currentFrame);
                     if (recording != null)
                     {
                         Task.Run(() => recording.appendVideo(currentFrame));
                     }
-                    Trace.WriteLine("after recording " + stopwatch.Elapsed.TotalMilliseconds);
                     Dispatcher.BeginInvoke(DispatcherPriority.Normal, () =>
                     {
                         lock (imgViewport)
@@ -263,7 +259,6 @@ namespace insoles.CamaraViewport
                         }
                     }
                     );
-                    Trace.WriteLine("after display " + stopwatch.Elapsed.TotalMilliseconds);
                 }
             }
         }
