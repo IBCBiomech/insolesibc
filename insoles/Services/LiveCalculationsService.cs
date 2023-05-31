@@ -41,62 +41,29 @@ namespace insoles.Services
         }
         private void Calculate()
         {
+            List<Dictionary<Sensor, double>> N_left = new();
+            List<Dictionary<Sensor, double>> N_right = new();
             float[] metric_left = new float[left.Count];
             float[] metric_right = new float[right.Count];
 
-            Units units = Units.N;
-            Metric metric = Metric.Sum;
-            Func<int, float> transformFunc;
-            switch (units)
-            {
-                case Units.mbar:
-                    transformFunc = (VALUE_digital) => UnitsConversions.VALUE_mbar(
-                        UnitsConversions.ADC_neg(VALUE_digital));
-                    break;
-                case Units.N:
-                    transformFunc = (VALUE_digital) => UnitsConversions.N(
-                    UnitsConversions.VALUE_mbar(UnitsConversions.ADC_neg(VALUE_digital)));
-                    break;
-                default:
-                    throw new Exception("ninguna unidad seleccionada");
-            }
-            switch (metric)
-            {
-                case Metric.Avg:
-
-                    break;
-                case Metric.Sum:
-
-                    break;
-            }
-            int numSensors = left[0].raw.Count;
             int numPackets = left.Count;
-            if (metric == Metric.Avg)
+            for (int i = 0; i < numPackets; i++)
             {
-                for (int i = 0; i < numPackets; i++)
+                Dictionary<Sensor, double> N_left_i = new();
+                Dictionary<Sensor, double> N_right_i = new();
+                metric_left[i] = 0;
+                metric_right[i] = 0;
+                foreach (Sensor sensor in Enum.GetValues(typeof(Sensor)))
                 {
-                    metric_left[i] = Sum(left[i], transformFunc) / numSensors;
-                    metric_right[i] = Sum(right[i], transformFunc) / numSensors;
+                    N_left_i[sensor] = left[i].N(sensor);
+                    N_right_i[sensor] = right[i].N(sensor);
+                    metric_left[i] += (float)N_left_i[sensor];
+                    metric_right[i] += (float)N_right_i[sensor];
                 }
+                N_left.Add(N_left_i);
+                N_right.Add(N_right_i);
             }
-            else if (metric == Metric.Sum)
-            {
-                for (int i = 0; i < numPackets; i++)
-                {
-                    metric_left[i] = Sum(left[i], transformFunc);
-                    metric_right[i] = Sum(right[i], transformFunc);
-                }
-            }
-            ResultReady?.Invoke(metric, units, left, right, metric_left, metric_right);
-        }
-        private float Sum(InsoleData insole, Func<int, float> transformFunc)
-        {
-            float sum = 0;
-            foreach (var digital in insole.raw.Values)
-            {
-                sum += transformFunc(digital);
-            }
-            return sum;
+            ResultReady?.Invoke(N_left, N_right, metric_left, metric_right);
         }
     }
 }

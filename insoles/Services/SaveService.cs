@@ -3,6 +3,7 @@ using insoles.Messages;
 using OpenCvSharp;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -52,23 +53,39 @@ namespace insoles.Services
             string filename = year + month + day + '-' + hour + '-' + minute + '-' + second + '-' + milisecond;
             return filename;
         }
-        public void AppendCSV(List<InsoleData> left, List<InsoleData> right, float[] metricLeft, float[] metricRight)
+        public void AppendCSV(List<Dictionary<Sensor, double>> left, 
+            List<Dictionary<Sensor, double>> right, 
+            float[] metricLeft, float[] metricRight)
         {
             if (dataHolder != null)
             {
                 StringBuilder lines = new StringBuilder();
                 for (int i = 0; i < left.Count; i++)
                 {
-                    string line = "1 " + fakets.ToString("F2") + " " + frame.ToString() + " " +
-                    left[i].ToString(order) + " " +
-                    right[i].ToString(order) + " " +
-                    metricLeft[i].ToString() + " " + metricRight[i].ToString();
+                    string line = "1 " + 
+                        fakets.ToString("F2", CultureInfo.InvariantCulture) + 
+                        " " + frame.ToString() + " " +
+                        DictionaryToString(left[i], order) + " " +
+                        DictionaryToString(right[i], order) + " " +
+                        metricLeft[i].ToString("F2", CultureInfo.InvariantCulture) + " " +
+                        metricRight[i].ToString("F2", CultureInfo.InvariantCulture);
                     lines.AppendLine(line);
                     frame++;
                     fakets += 0.01f;
                 }
                 dataHolder.Append(lines);
             }
+        }
+        private string DictionaryToString(Dictionary<Sensor, double> dict,
+            List<Sensor> order)
+        {
+            StringBuilder result = new StringBuilder();
+            for (int i = 0; i < order.Count - 1; i++)
+            {
+                result.Append(dict[order[i]].ToString("F2", CultureInfo.InvariantCulture) + " ");
+            }
+            result.Append(dict[order[order.Count - 1]].ToString("F2", CultureInfo.InvariantCulture));
+            return result.ToString();
         }
 
         public void AppendVideo(Mat frame)

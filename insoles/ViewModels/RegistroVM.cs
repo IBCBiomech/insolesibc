@@ -122,8 +122,7 @@ namespace insoles.ViewModel
             };
             liveCalculationsService.ResultReady += 
                 (
-                    Metric metric, Units units,
-                    List<InsoleData> left, List<InsoleData> right,
+                    List<Dictionary<Sensor, double>> left, List<Dictionary<Sensor, double>> right,
                     float[] metricLeft, float[] metricRight
                 ) =>
             {

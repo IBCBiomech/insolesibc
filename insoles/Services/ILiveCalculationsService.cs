@@ -11,8 +11,8 @@ namespace insoles.Services
     public interface ILiveCalculationsService
     {
         void ProcessPacket(byte handler, List<InsoleData> data);
-        public delegate void ResultEventHandler(Metric metric, Units units, 
-            List<InsoleData> left, List<InsoleData> right,
+        public delegate void ResultEventHandler( 
+            List<Dictionary<Sensor, double>> left, List<Dictionary<Sensor, double>> right,
             float[] metricLeft, float[] metricRight);
         public event ResultEventHandler ResultReady;
     }

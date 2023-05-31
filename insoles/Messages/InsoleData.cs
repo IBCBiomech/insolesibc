@@ -1,4 +1,5 @@
 ﻿using insoles.Enums;
+using insoles.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,16 @@ namespace insoles.Messages
     public class InsoleData
     {
         public Dictionary<Sensor, int> raw { get; set; } = new Dictionary<Sensor, int>();
+        public double N(Sensor sensor) {
+            return UnitsConversions.N(
+                    UnitsConversions.VALUE_mbar(
+                        UnitsConversions.ADC_neg(raw[sensor])));
+        }
+        public double mbar(Sensor sensor)
+        {
+            return UnitsConversions.VALUE_mbar(
+                        UnitsConversions.ADC_neg(raw[sensor]));
+        }
         public InsoleData(WisewalkSDK.WisewalkData data, int index)
         {
             WisewalkSDK.SoleSensor sole = data.Sole[index];
