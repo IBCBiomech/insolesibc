@@ -44,11 +44,11 @@ namespace insoles.ViewModel
         {
             Trace.WriteLine("OpenCamera");
             CameraModel camera = obj as CameraModel;
-            cameraService.OpenCamera(camera.number, camera.fps);
+            cameraService.OpenCamera(camera.number, camera.fps, camera.resolution);
         }
         private void Record(object obj)
         {
-            saveService.Start(cameraService.getFps(0), new OpenCvSharp.Size(640, 480));
+            saveService.Start(cameraService.getFps(0), cameraService.getResolution(0));
         }
         private void Stop(object obj)
         {
@@ -74,7 +74,7 @@ namespace insoles.ViewModel
         public RegistroVM()
         {
             //Init services
-            apiService = new ApiService();
+            apiService = new FakeApiService();
             cameraService = new CameraService();
             liveCalculationsService = new LiveCalculationsService();
             saveService = new SaveService();
@@ -104,7 +104,7 @@ namespace insoles.ViewModel
                 Cameras.Clear();
                 foreach(CameraScan cam in camerasReceived)
                 {
-                    CameraModel camera = new(cam.number, cam.name, cam.fps, this);
+                    CameraModel camera = new(cam.number, cam.name, cam.fps, cam.resolutions, this);
                     Cameras.Add(camera);
                 }
             };

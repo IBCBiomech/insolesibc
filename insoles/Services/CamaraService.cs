@@ -30,6 +30,7 @@ namespace insoles.Services
             List<int> indices = await Task.Run(() => CameraIndices(names.Count));
             foreach (int index in indices) { Trace.WriteLine(index); }
             List<int>[] fps = await Task.Run(() => cameraFps());
+            Dictionary<int, List<System.Drawing.Size>>[] resolutions = await Task.Run(() => cameraResolutions());
             Dictionary<int, int> directshowToAforge = await Task.Run(() => DirectshowAforgeMap());
 
             List<CameraScan> cameras = new List<CameraScan>();
@@ -38,7 +39,8 @@ namespace insoles.Services
                 if (indices.Contains(i))
                 {
                     List<int> camFps = fps[directshowToAforge[i]];
-                    cameras.Add(new CameraScan(i, names[i], camFps));
+                    Dictionary<int, List<System.Drawing.Size>> camResolutions = resolutions[directshowToAforge[i]];
+                    cameras.Add(new CameraScan(i, names[i], camFps, camResolutions));
                 }
             }
             ScanReceived?.Invoke(cameras);
@@ -87,6 +89,26 @@ namespace insoles.Services
             }
             return cameraFps;
         }
+        Dictionary<int, List<System.Drawing.Size>>[] cameraResolutions()
+        {
+            var devices = new FilterInfoCollection(AForge.Video.DirectShow.FilterCategory.VideoInputDevice);
+            Dictionary<int, List<System.Drawing.Size>>[] resolutions = new Dictionary<int, List<System.Drawing.Size>>[devices.Count];
+            for (int i = 0; i < devices.Count; i++)
+            {
+
+                resolutions[i] = new Dictionary<int, List<System.Drawing.Size>>();
+                var captureDevice = new VideoCaptureDevice(devices[i].MonikerString);
+                foreach (var capability in captureDevice.VideoCapabilities)
+                {
+                    if (!resolutions[i].ContainsKey(capability.AverageFrameRate))
+                    {
+                        resolutions[i][capability.AverageFrameRate] = new List<System.Drawing.Size>();
+                    }
+                    resolutions[i][capability.AverageFrameRate].Add(capability.FrameSize);
+                }
+            }
+            return resolutions;
+        }
         Dictionary<int, int> DirectshowAforgeMap()
         {
             var aforgeDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
@@ -110,9 +132,10 @@ namespace insoles.Services
             }
             return deviceMap;
         }
-        public void OpenCamera(int index, int fps)
+        public void OpenCamera(int index, int fps, System.Drawing.Size resolution)
         {
             cameraStreams.Add(new CameraStreamService(index, fps, this));
+            //cameraStreams.Add(new CameraStreamService(index, fps, resolution, this)); //Al cambiar la resolucion va muy lento
         }
         public void InvokeFrameAvailable(int index, Mat frame)
         {
@@ -122,6 +145,11 @@ namespace insoles.Services
         public int getFps(int index)
         {
             return cameraStreams[index].fps;
+        }
+
+        public Size getResolution(int index)
+        {
+            return cameraStreams[0].resolution;
         }
     }
 }

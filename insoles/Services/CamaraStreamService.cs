@@ -15,13 +15,30 @@ namespace insoles.Services
         private CameraService cameraService;
         private int index;
         public int fps { get; private set; }
+        public Size resolution { get; private set; }
         private VideoCapture videoCapture;
         private CancellationTokenSource cancellationTokenSourceDisplay;
         private CancellationToken cancellationTokenDisplay;
 
         public delegate void FrameAvailableEventHandler(int index, Mat frame);
         public event FrameAvailableEventHandler FrameAvailable;
-        public CameraStreamService(int index, int fps, CameraService cameraService)
+        public CameraStreamService(int index, int fps, System.Drawing.Size resolution,
+            CameraService cameraService)
+        {
+            this.index = index;
+            this.fps = fps;
+            this.resolution = new Size(resolution.Width, resolution.Height);
+            cancellationTokenSourceDisplay = new CancellationTokenSource();
+            cancellationTokenDisplay = cancellationTokenSourceDisplay.Token;
+            videoCapture = new VideoCapture(index, VideoCaptureAPIs.DSHOW);
+            videoCapture.Set(VideoCaptureProperties.Fps, fps);
+            videoCapture.Set(VideoCaptureProperties.FrameHeight, resolution.Height);
+            videoCapture.Set(VideoCaptureProperties.FrameWidth, resolution.Width);
+            Task.Run(() => { DisplayCameraCallback(); });
+            this.cameraService = cameraService;
+        }
+        public CameraStreamService(int index, int fps,
+            CameraService cameraService)
         {
             this.index = index;
             this.fps = fps;
@@ -29,6 +46,8 @@ namespace insoles.Services
             cancellationTokenDisplay = cancellationTokenSourceDisplay.Token;
             videoCapture = new VideoCapture(index, VideoCaptureAPIs.DSHOW);
             videoCapture.Set(VideoCaptureProperties.Fps, fps);
+            this.resolution = new Size(videoCapture.Get(VideoCaptureProperties.FrameWidth),
+                videoCapture.Get(VideoCaptureProperties.FrameHeight));
             Task.Run(() => { DisplayCameraCallback(); });
             this.cameraService = cameraService;
         }
@@ -42,7 +61,7 @@ namespace insoles.Services
                 {
                     videoCapture.Release();
                     videoCapture = null;
-                    cameraService.InvokeFrameAvailable(index, GetBlackImage());
+                    cameraService.InvokeFrameAvailable(index, GetBlackImage(resolution));
                     return;
                 }
                 if (videoCapture.Grab())
@@ -52,10 +71,10 @@ namespace insoles.Services
                 }
             }
         }
-        public static Mat GetBlackImage()
+        public static Mat GetBlackImage(Size resolution)
         {
             MatType matType = MatType.CV_8UC3;
-            Mat frame = new Mat(480, 640, matType);
+            Mat frame = new Mat(resolution.Height, resolution.Width, matType);
             return frame;
         }
     }

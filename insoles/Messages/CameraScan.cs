@@ -11,11 +11,13 @@ namespace insoles.Messages
         public string name { get; set; }
         public int number { get; set; }
         public List<int> fps { get; set; }
-        public CameraScan(int number, string name, List<int> fps)
+        public Dictionary<int, List<System.Drawing.Size>> resolutions { get; set; }
+        public CameraScan(int number, string name, List<int> fps, Dictionary<int, List<System.Drawing.Size>> resolutions)
         {
             this.number = number;
             this.name = name;
             this.fps = fps;
+            this.resolutions = resolutions;
         }
     }
 }
