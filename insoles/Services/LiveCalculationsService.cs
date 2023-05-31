@@ -44,8 +44,8 @@ namespace insoles.Services
             float[] metric_left = new float[left.Count];
             float[] metric_right = new float[right.Count];
 
-            Units units = Units.mbar;
-            Metric metric = Metric.Avg;
+            Units units = Units.N;
+            Metric metric = Metric.Sum;
             Func<int, float> transformFunc;
             switch (units)
             {
