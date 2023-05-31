@@ -91,13 +91,16 @@ namespace insoles.ViewModel
             //Init listeners
             apiService.ScanReceived += (List<InsoleScan> insolesReceived) =>
             {
-                Insoles.Clear();
-                for (int i = 0; i < insolesReceived.Count; i++)
+                Application.Current.Dispatcher.BeginInvoke(() =>
                 {
-                    InsoleScan insole = insolesReceived[i];
-                    InsoleModel insoleModel = new(i, insole.name, insole.MAC, this);
-                    Insoles.Add(insoleModel);
-                }
+                    Insoles.Clear();
+                    for (int i = 0; i < insolesReceived.Count; i++)
+                    {
+                        InsoleScan insole = insolesReceived[i];
+                        InsoleModel insoleModel = new(i, insole.name, insole.MAC, this);
+                        Insoles.Add(insoleModel);
+                    }
+                });
             };
             cameraService.ScanReceived += (List<CameraScan> camerasReceived) =>
             {
