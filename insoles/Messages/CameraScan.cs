@@ -10,10 +10,12 @@ namespace insoles.Messages
     {
         public string name { get; set; }
         public int number { get; set; }
-        public CameraScan(int number, string name)
+        public List<int> fps { get; set; }
+        public CameraScan(int number, string name, List<int> fps)
         {
             this.number = number;
             this.name = name;
+            this.fps = fps;
         }
     }
 }

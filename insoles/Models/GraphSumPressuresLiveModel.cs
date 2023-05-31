@@ -4,7 +4,7 @@ using ScottPlot.Plottable;
 using System.Drawing;
 using System.Windows;
 
-namespace insoles.Models
+namespace insoles.Model
 {
     public class GraphSumPressuresLiveModel : ViewModelBase
     {

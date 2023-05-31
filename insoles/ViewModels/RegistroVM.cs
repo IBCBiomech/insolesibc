@@ -1,13 +1,15 @@
 ﻿using insoles.Enums;
 using insoles.Messages;
-using insoles.Models;
+using insoles.Model;
 using insoles.Services;
 using insoles.Utilities;
 using OpenCvSharp;
 using OpenCvSharp.WpfExtensions;
 using ScottPlot;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -16,13 +18,17 @@ namespace insoles.ViewModel
 {
     public class RegistroVM : ViewModelBase
     {
+        public string header { get; set; } = "header";
         private IApiService apiService;
         private ICameraService cameraService;
         private ILiveCalculationsService liveCalculationsService;
+        private ISaveService saveService;
         public ICommand ScanCommand { get; set; }
         public ICommand ConnectCommand { get; set; }
         public ICommand CaptureCommand { get; set; }
         public ICommand OpenCameraCommand { get; set; }
+        public ICommand RecordCommand { get; set; }
+        public ICommand StopCommand { get; set; }
 
         private void Scan(object obj)
         {
@@ -36,28 +42,20 @@ namespace insoles.ViewModel
         private void Capture(object obj) => apiService.Capture();
         private void OpenCamera(object obj)
         {
-            cameraService.OpenCamera(0);
+            Trace.WriteLine("OpenCamera");
+            CameraModel camera = obj as CameraModel;
+            cameraService.OpenCamera(camera.number, camera.fps);
         }
-        private DataTable insoles;
-        private DataTable cameras;
-        public DataTable Insoles
+        private void Record(object obj)
         {
-            get { return insoles; }
-            set
-            {
-                insoles = value;
-                OnPropertyChanged();
-            }
+            saveService.Start(cameraService.getFps(0), new OpenCvSharp.Size(640, 480));
         }
-        public DataTable Cameras
+        private void Stop(object obj)
         {
-            get { return cameras; }
-            set
-            {
-                cameras = value;
-                OnPropertyChanged();
-            }
+            saveService.Stop();
         }
+        public ObservableCollection<CameraModel> Cameras { get; set; }
+        public ObservableCollection<InsoleModel> Insoles { get; set; }
         private BitmapSource currentFrame;
         public BitmapSource CurrentFrame
         {
@@ -76,39 +74,38 @@ namespace insoles.ViewModel
         public RegistroVM()
         {
             //Init services
-            apiService = new ApiService();
+            apiService = new FakeApiService();
             cameraService = new CameraService();
             liveCalculationsService = new LiveCalculationsService();
+            saveService = new SaveService();
             //Init commands
             ScanCommand = new RelayCommand(Scan);
             ConnectCommand = new RelayCommand(Connect);
             CaptureCommand = new RelayCommand(Capture);
             OpenCameraCommand = new RelayCommand(OpenCamera);
-            //Init tables columns
-            insoles = new DataTable("Insoles");
-            insoles.Columns.Add("Id", typeof(int));
-            insoles.Columns.Add("Name", typeof(string));
-            insoles.Columns.Add("MAC", typeof(string));
-            cameras = new DataTable("Cameras");
-            cameras.Columns.Add("Id", typeof(int));
-            cameras.Columns.Add("Name", typeof(string));
+            RecordCommand = new RelayCommand(Record);
+            StopCommand = new RelayCommand(Stop);
+            //Init Collections
+            Cameras = new ObservableCollection<CameraModel>();
+            Insoles = new ObservableCollection<InsoleModel>();
             //Init listeners
             apiService.ScanReceived += (List<InsoleScan> insolesReceived) =>
             {
                 Insoles.Clear();
-                for(int i = 0; i < insolesReceived.Count; i++)
+                for (int i = 0; i < insolesReceived.Count; i++)
                 {
                     InsoleScan insole = insolesReceived[i];
-                    Insoles.Rows.Add(i, insole.name, insole.MAC);
+                    InsoleModel insoleModel = new(i, insole.name, insole.MAC, this);
+                    Insoles.Add(insoleModel);
                 }
             };
             cameraService.ScanReceived += (List<CameraScan> camerasReceived) =>
             {
                 Cameras.Clear();
-                for (int i = 0; i < camerasReceived.Count; i++)
+                foreach(CameraScan cam in camerasReceived)
                 {
-                    CameraScan camera = camerasReceived[i];
-                    Cameras.Rows.Add(i, camera.name);
+                    CameraModel camera = new(cam.number, cam.name, cam.fps, this);
+                    Cameras.Add(camera);
                 }
             };
             cameraService.FrameAvailable += (int index, Mat frame) =>
@@ -117,6 +114,7 @@ namespace insoles.ViewModel
                 {
                     CurrentFrame = BitmapSourceConverter.ToBitmapSource(frame);
                 });
+                saveService.AppendVideo(frame);
             };
             apiService.DataReceived += (byte handler, List<InsoleData> packet) =>
             {
@@ -130,6 +128,7 @@ namespace insoles.ViewModel
                 ) =>
             {
                 GraphModel.UpdateData(metricLeft, metricRight);
+                saveService.AppendCSV(left, right, metricLeft, metricRight);
             };
             Plot = new WpfPlot();
             Plot.Plot.Title("test plot");

@@ -14,18 +14,21 @@ namespace insoles.Services
     {
         private CameraService cameraService;
         private int index;
+        public int fps { get; private set; }
         private VideoCapture videoCapture;
         private CancellationTokenSource cancellationTokenSourceDisplay;
         private CancellationToken cancellationTokenDisplay;
 
         public delegate void FrameAvailableEventHandler(int index, Mat frame);
         public event FrameAvailableEventHandler FrameAvailable;
-        public CameraStreamService(int index, CameraService cameraService)
+        public CameraStreamService(int index, int fps, CameraService cameraService)
         {
             this.index = index;
+            this.fps = fps;
             cancellationTokenSourceDisplay = new CancellationTokenSource();
             cancellationTokenDisplay = cancellationTokenSourceDisplay.Token;
             videoCapture = new VideoCapture(index, VideoCaptureAPIs.DSHOW);
+            videoCapture.Set(VideoCaptureProperties.Fps, fps);
             Task.Run(() => { DisplayCameraCallback(); });
             this.cameraService = cameraService;
         }

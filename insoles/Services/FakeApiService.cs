@@ -59,7 +59,8 @@ namespace insoles.Services
         }
         public void ConnectAll()
         {
-            foreach(var insole in Insoles)
+            Trace.WriteLine("onConnectAllMessageReceived");
+            foreach (var insole in Insoles)
             {
                 WisewalkSDK.Device dev = new();
                 dev.Id = insole.MAC;

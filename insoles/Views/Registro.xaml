@@ -47,25 +47,89 @@
                 </Grid>
 
             </Menu:Btn>
+            <!-- Record -->
+            <Menu:Btn Style="{StaticResource BtnStyle}"
+                              Command="{Binding RecordCommand}"
+                              IsChecked="True">
+
+                <Grid>
+
+                    <Image Source="Images/capture-icon.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                    <TextBlock Text="Record"
+                                       Style="{StaticResource Text_Style}" />
+
+                </Grid>
+
+            </Menu:Btn>
+            <!-- Stop -->
+            <Menu:Btn Style="{StaticResource BtnStyle}"
+                              Command="{Binding StopCommand}"
+                              IsChecked="True">
+
+                <Grid>
+
+                    <Image Source="Images/capture-icon.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                    <TextBlock Text="Stop"
+                                       Style="{StaticResource Text_Style}" />
+
+                </Grid>
+
+            </Menu:Btn>
         </StackPanel>
         <StackPanel Orientation="Vertical" Grid.Row="1">
-            <DataGrid AutoGenerateColumns="True" ItemsSource="{Binding Insoles.DefaultView}">
-                <DataGrid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Connect" Command="{Binding ConnectCommand}"
-                                      CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}, Path=DataContext}"/>
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
-            </DataGrid>
-            <DataGrid x:Name="cameras" AutoGenerateColumns="True" 
-                          ItemsSource="{Binding Cameras.DefaultView}">
-                <DataGrid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="Open" Command="{Binding OpenCameraCommand}"
-                                      CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGridRow}}, Path=DataContext}"/>
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
-            </DataGrid>
+            <ListView ItemsSource="{Binding Insoles}">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="ContextMenu">
+                            <Setter.Value>
+                                <ContextMenu>
+                                    <MenuItem Header="Connect" Command="{Binding VM.ConnectCommand}"
+                                      CommandParameter="{Binding}"/>
+                                </ContextMenu>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Id" DisplayMemberBinding="{Binding id}" />
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding name}" />
+                        <GridViewColumn Header="MAC" DisplayMemberBinding="{Binding MAC}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <ListView ItemsSource="{Binding Cameras}">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="ContextMenu">
+                            <Setter.Value>
+                                <ContextMenu>
+                                    <MenuItem Header="Open" Command="{Binding VM.OpenCameraCommand}"
+                                      CommandParameter="{Binding}"/>
+                                </ContextMenu>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Number" DisplayMemberBinding="{Binding number}" />
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding name}" />
+                        <GridViewColumn Header="Fps" Width="60">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox ItemsSource="{Binding Path=fpsAvailable}"
+                                              SelectedValue="{Binding Path=fps}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
             <WpfPlot Name="plot"/>
         </StackPanel>
         <ContentControl Content="{Binding Plot}"  Grid.Row="2"/>
