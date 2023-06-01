@@ -10,21 +10,24 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using WisewalkSDK;
 
 namespace insoles.ViewModel
 {
     public class RegistroVM : ViewModelBase
     {
-        public string header { get; set; } = "header";
         private IApiService apiService;
         private ICameraService cameraService;
         private ILiveCalculationsService liveCalculationsService;
         private ISaveService saveService;
         public ICommand ScanCommand { get; set; }
         public ICommand ConnectCommand { get; set; }
+        public ICommand ConnectSelectedCommand { get; set; }
+        public ICommand ConnectAllCommand { get; set; }
         public ICommand CaptureCommand { get; set; }
         public ICommand OpenCameraCommand { get; set; }
         public ICommand RecordCommand { get; set; }
@@ -37,9 +40,31 @@ namespace insoles.ViewModel
         }
         private void Connect(object obj)
         {
+            InsoleModel insole = obj as InsoleModel;
+            List<string> macs = new List<string> { insole.MAC };
+            apiService.Connect(macs);
+        }
+        private void ConnectAll(object obj)
+        {
             apiService.ConnectAll();
         }
+        private void ConnectSelected(object obj)
+        {
+            List<string> macs = new List<string>();
+            var selected = obj as IList<object>;
+            foreach(var selectedItem in selected)
+            {
+                InsoleModel insole = selectedItem as InsoleModel;
+                macs.Add(insole.MAC);
+            }
+            apiService.Connect(macs);
+        }
         private void Capture(object obj) => apiService.Capture();
+        private bool CaptureCanExecute(object obj)
+        {
+            return Insoles.Where((InsoleModel insole) => insole.connected).Count() == 2
+                && !apiService.capturing;
+        }
         private void OpenCamera(object obj)
         {
             Trace.WriteLine("OpenCamera");
@@ -81,7 +106,9 @@ namespace insoles.ViewModel
             //Init commands
             ScanCommand = new RelayCommand(Scan);
             ConnectCommand = new RelayCommand(Connect);
-            CaptureCommand = new RelayCommand(Capture);
+            ConnectSelectedCommand = new RelayCommand(ConnectSelected);
+            ConnectAllCommand = new RelayCommand(ConnectAll);
+            CaptureCommand = new RelayCommand(Capture, CaptureCanExecute);
             OpenCameraCommand = new RelayCommand(OpenCamera);
             RecordCommand = new RelayCommand(Record);
             StopCommand = new RelayCommand(Stop);
@@ -101,6 +128,11 @@ namespace insoles.ViewModel
                         Insoles.Add(insoleModel);
                     }
                 });
+            };
+            apiService.DeviceConnected += (Device dev) =>
+            {
+                InsoleModel insole = Insoles.First((InsoleModel insole) => insole.MAC == dev.Id);
+                insole.connected = true;
             };
             cameraService.ScanReceived += (List<CameraScan> camerasReceived) =>
             {

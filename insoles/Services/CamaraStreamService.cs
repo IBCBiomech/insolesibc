@@ -51,10 +51,14 @@ namespace insoles.Services
             Task.Run(() => { DisplayCameraCallback(); });
             this.cameraService = cameraService;
         }
+        private void SetCodec(VideoCapture videoCapture, string codecName)
+        {
+            int fourCC = VideoWriter.FourCC(codecName[0], codecName[1], codecName[2], codecName[3]);
+            videoCapture.Set(VideoCaptureProperties.CodecPixelFormat, fourCC);
+        }
         private void DisplayCameraCallback()
         {
             Mat frame = new Mat();
-            Stopwatch stopwatch = Stopwatch.StartNew();
             while (true)
             {
                 if (cancellationTokenDisplay.IsCancellationRequested)
@@ -66,7 +70,7 @@ namespace insoles.Services
                 }
                 if (videoCapture.Grab())
                 {
-                    videoCapture.Read(frame);
+                    videoCapture.Retrieve(frame);
                     cameraService.InvokeFrameAvailable(index, frame);
                 }
             }

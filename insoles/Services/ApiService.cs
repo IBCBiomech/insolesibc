@@ -16,6 +16,7 @@ namespace insoles.Services
         private List<Wisewalk.Dev> scanDevices;
         public string? port_selected;
         public string? error;
+        public bool capturing { get; private set; } = false;
 
         public event IApiService.InsoleScanEventHandler ScanReceived;
         public event IApiService.InsoleDataEventHandler DataReceived;
@@ -113,6 +114,7 @@ namespace insoles.Services
             api.SetDeviceConfiguration(1, 100, 3, out error);
             await Task.Delay(2000);
             api.StartStream(out error);
+            capturing = true;
         }
         private Dev findInsole(string mac)
         {

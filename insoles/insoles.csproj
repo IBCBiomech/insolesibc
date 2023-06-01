@@ -11,12 +11,14 @@
     <None Remove="Images\capture-icon.png" />
     <None Remove="Images\connect-icon.png" />
     <None Remove="Images\customer_page.png" />
+    <None Remove="Images\green-circle-icon.png" />
     <None Remove="Images\home_page.png" />
     <None Remove="Images\img_customer.png" />
     <None Remove="Images\img_home.png" />
     <None Remove="Images\img_order.png" />
     <None Remove="Images\img_shipment.png" />
     <None Remove="Images\product_page.png" />
+    <None Remove="Images\red-circle-icon.png" />
     <None Remove="Images\shipment_page.png" />
     <None Remove="Images\shutdown_def.png" />
     <None Remove="Images\shutdown_mo.png" />
@@ -53,6 +55,9 @@
     <Resource Include="Images\customer_page.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\green-circle-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\home_page.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -69,6 +74,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\product_page.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\red-circle-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\shipment_page.png">

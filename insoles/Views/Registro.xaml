@@ -4,9 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Menu="clr-namespace:insoles.Utilities"
+             xmlns:converter="clr-namespace:insoles.Converter"
+             xmlns:proxy="clr-namespace:insoles.Proxy"
              xmlns:local="clr-namespace:insoles.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converter:BooleanToCircleConverter x:Key="booleanToCircleConverter"/>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100"/>
@@ -81,7 +87,16 @@
             </Menu:Btn>
         </StackPanel>
         <StackPanel Orientation="Vertical" Grid.Row="1">
-            <ListView ItemsSource="{Binding Insoles}">
+            <ListView x:Name="insolesListView" ItemsSource="{Binding Insoles}">
+                <ListView.Resources>
+                    <proxy:ListViewProxy x:Key="Proxy" SelectedItems="{Binding SelectedItems, ElementName=insolesListView}" ListView="{Binding ElementName=insolesListView}"/>
+                </ListView.Resources>
+                <ListView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Connect selected" Command="{Binding ConnectSelectedCommand}" CommandParameter="{Binding SelectedItems, Source={StaticResource Proxy}}"/>
+                        <MenuItem Header="Connect all" Command="{Binding ConnectAllCommand}"/>
+                    </ContextMenu>
+                </ListView.ContextMenu>
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="ContextMenu">
@@ -96,6 +111,14 @@
                 </ListView.ItemContainerStyle>
                 <ListView.View>
                     <GridView>
+                        <GridViewColumn Header="Con">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Width="20" Source="{Binding Path=connected, 
+                                        Converter={StaticResource booleanToCircleConverter}}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         <GridViewColumn Header="Id" DisplayMemberBinding="{Binding id}" />
                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding name}" />
                         <GridViewColumn Header="MAC" DisplayMemberBinding="{Binding MAC}" />

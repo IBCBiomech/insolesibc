@@ -14,6 +14,7 @@ namespace insoles.Services
         private List<InsoleScan> Insoles;
         private List<InsoleScan> ConnectedInsoles = new();
         private Timer timer;
+        public bool capturing { get; private set; } = false;
 
         public event IApiService.InsoleScanEventHandler ScanReceived;
         public event IApiService.InsoleDataEventHandler DataReceived;
@@ -45,6 +46,7 @@ namespace insoles.Services
                 timer.Elapsed += (s, e) => GenerateData(index);
                 timer.Start();
             }
+            capturing = true;
         }
         public void Connect(List<string> macs)
         {
