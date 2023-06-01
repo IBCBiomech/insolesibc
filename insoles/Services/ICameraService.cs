@@ -6,9 +6,12 @@ namespace insoles.Services
 {
     public interface ICameraService
     {
+        public const int MAX_CAMERAS = 1;
         public void Scan();
         public void OpenCamera(int index, int fps, System.Drawing.Size resolution);
         public int getFps(int index);
+        public bool CameraOpened(int index);
+        public int NumCamerasOpened { get; }
         public Size getResolution(int index);
         public delegate void CameraScanEventHandler(List<CameraScan> data);
         public event CameraScanEventHandler ScanReceived;

@@ -35,6 +35,9 @@ namespace insoles.Services
                 fileName = value;
             }
         }
+
+        public bool recording{get;set;} = false;
+
         private List<Sensor> order = new List<Sensor>()
         {
             Sensor.Arch, Sensor.Hallux, Sensor.HeelR, Sensor.HeelL, Sensor.Met1,
@@ -113,6 +116,7 @@ namespace insoles.Services
             frame = 0;
             fakets = 0;
             dataHolder = new StringBuilder();
+            recording = true;
         }
 
         public async void Stop()
@@ -126,6 +130,7 @@ namespace insoles.Services
             string filePath = path + Path.DirectorySeparatorChar + FileName + ".txt";
             await File.WriteAllTextAsync(filePath, dataHolder.ToString());
             FileName = null;
+            recording = false;
         }
     }
 }

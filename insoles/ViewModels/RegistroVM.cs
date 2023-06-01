@@ -6,6 +6,7 @@ using insoles.Utilities;
 using OpenCvSharp;
 using OpenCvSharp.WpfExtensions;
 using ScottPlot;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -44,9 +45,23 @@ namespace insoles.ViewModel
             List<string> macs = new List<string> { insole.MAC };
             apiService.Connect(macs);
         }
+        private bool ConnectCanExecute(object obj)
+        {
+            InsoleModel insole = obj as InsoleModel;
+            return obj != null && !insole.connected; // Si no tira NullReferenceException
+        }
         private void ConnectAll(object obj)
         {
             apiService.ConnectAll();
+        }
+        private bool ConnectAllCanExecute(object obj)
+        {
+            foreach(InsoleModel insole in Insoles)
+            {
+                if (!insole.connected)
+                    return true;
+            }
+            return false;
         }
         private void ConnectSelected(object obj)
         {
@@ -58,6 +73,18 @@ namespace insoles.ViewModel
                 macs.Add(insole.MAC);
             }
             apiService.Connect(macs);
+        }
+        private bool ConnectSelectedCanExecute(object obj)
+        {
+            List<string> macs = new List<string>();
+            var selected = obj as IList<object>;
+            foreach (var selectedItem in selected)
+            {
+                InsoleModel insole = selectedItem as InsoleModel;
+                if (!insole.connected)
+                    return true;
+            }
+            return false;
         }
         private void Capture(object obj) => apiService.Capture();
         private bool CaptureCanExecute(object obj)
@@ -71,13 +98,28 @@ namespace insoles.ViewModel
             CameraModel camera = obj as CameraModel;
             cameraService.OpenCamera(camera.number, camera.fps, camera.resolution);
         }
+        private bool OpenCameraCanExecute(object obj)
+        {
+            CameraModel camera = obj as CameraModel;
+            return obj!=null  // Si no tira NullReferenceException
+                && !cameraService.CameraOpened(camera.number)
+                && cameraService.NumCamerasOpened < ICameraService.MAX_CAMERAS;
+        }
         private void Record(object obj)
         {
             saveService.Start(cameraService.getFps(0), cameraService.getResolution(0));
         }
+        private bool RecordCanExecute(object obj)
+        {
+            return !saveService.recording;
+        }
         private void Stop(object obj)
         {
             saveService.Stop();
+        }
+        private bool StopCanExecute(object obj)
+        {
+            return saveService.recording;
         }
         public ObservableCollection<CameraModel> Cameras { get; set; }
         public ObservableCollection<InsoleModel> Insoles { get; set; }
@@ -105,13 +147,13 @@ namespace insoles.ViewModel
             saveService = new SaveService();
             //Init commands
             ScanCommand = new RelayCommand(Scan);
-            ConnectCommand = new RelayCommand(Connect);
-            ConnectSelectedCommand = new RelayCommand(ConnectSelected);
-            ConnectAllCommand = new RelayCommand(ConnectAll);
+            ConnectCommand = new RelayCommand(Connect, ConnectCanExecute);
+            ConnectSelectedCommand = new RelayCommand(ConnectSelected, ConnectSelectedCanExecute);
+            ConnectAllCommand = new RelayCommand(ConnectAll, ConnectAllCanExecute);
             CaptureCommand = new RelayCommand(Capture, CaptureCanExecute);
-            OpenCameraCommand = new RelayCommand(OpenCamera);
-            RecordCommand = new RelayCommand(Record);
-            StopCommand = new RelayCommand(Stop);
+            OpenCameraCommand = new RelayCommand(OpenCamera, OpenCameraCanExecute);
+            RecordCommand = new RelayCommand(Record, RecordCanExecute);
+            StopCommand = new RelayCommand(Stop, StopCanExecute);
             //Init Collections
             Cameras = new ObservableCollection<CameraModel>();
             Insoles = new ObservableCollection<InsoleModel>();

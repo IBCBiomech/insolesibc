@@ -13,7 +13,7 @@ namespace insoles.Services
     public class CameraStreamService
     {
         private CameraService cameraService;
-        private int index;
+        public int index { get; private set; }
         public int fps { get; private set; }
         public Size resolution { get; private set; }
         private VideoCapture videoCapture;

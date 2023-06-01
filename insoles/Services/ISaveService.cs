@@ -7,6 +7,7 @@ namespace insoles.Services
 {
     public interface ISaveService
     {
+        public bool recording { get; }
         void Start(int fps, Size size);
         void Stop();
         void AppendVideo(Mat frame);

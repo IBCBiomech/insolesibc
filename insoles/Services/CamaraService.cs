@@ -15,6 +15,8 @@ namespace insoles.Services
     {
         private List<CameraStreamService> cameraStreams = new List<CameraStreamService>();
 
+        public int NumCamerasOpened => cameraStreams.Count;
+
         public event ICameraService.CameraScanEventHandler ScanReceived;
 
         public event ICameraService.FrameAvailableEventHandler FrameAvailable;
@@ -150,6 +152,16 @@ namespace insoles.Services
         public Size getResolution(int index)
         {
             return cameraStreams[0].resolution;
+        }
+
+        public bool CameraOpened(int index)
+        {
+            foreach(CameraStreamService stream in cameraStreams)
+            {
+                if (stream.index == index)
+                    return true;
+            }
+            return false;
         }
     }
 }
