@@ -136,8 +136,8 @@ namespace insoles.Services
         }
         public void OpenCamera(int index, int fps, System.Drawing.Size resolution)
         {
-            cameraStreams.Add(new CameraStreamService(index, fps, this));
-            //cameraStreams.Add(new CameraStreamService(index, fps, resolution, this)); //Al cambiar la resolucion va muy lento
+            //cameraStreams.Add(new CameraStreamService(index, fps, this));
+            cameraStreams.Add(new CameraStreamService(index, fps, resolution, this)); //Al cambiar la resolucion va muy lento
         }
         public void InvokeFrameAvailable(int index, Mat frame)
         {
