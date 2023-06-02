@@ -315,35 +315,25 @@ namespace insoles.Graphs
 
                 GraphSumPressures.Metric metric = graph.metricSelected;
 
-                Func<int, float> transformFunc;
-                switch (unit)
+                Func<int, float> ADC_negTransformFunc = (VALUE_digital) => ADC_neg(VALUE_digital);
+                for(int i = 0; i < Config.NUMPACKETS; i++)
                 {
-                    case Units.mbar:
-                        transformFunc = (VALUE_digital) => VALUE_mbar(ADC_neg(VALUE_digital));
-                        break;
-                    case Units.N:
-                        transformFunc = (VALUE_digital) => N(VALUE_mbar(ADC_neg(VALUE_digital)));
-                        break;
-                    default:
-                        throw new Exception("ninguna unidad seleccionada");
+                    metric_left[i] = sumTransformSole(soleLeft[i], ADC_negTransformFunc);
+                    metric_right[i] = sumTransformSole(soleRight[i], ADC_negTransformFunc);
                 }
-                if (metric == GraphSumPressures.Metric.Avg) 
+                for(int i = 0; i < Config.NUMPACKETS; i++)
                 {
-                    for (int i = 0; i < Config.NUMPACKETS; i++)
-                    {
-                        metric_left[i] = avgSole(soleLeft[i]);
-                        metric_right[i] = avgSole(soleRight[i]);
-                    }
+                    metric_left[i] = VALUE_mbar((int)metric_left[i]);
+                    metric_right[i] = VALUE_mbar((int)metric_right[i]);
                 }
-                else
+                if(unit == Units.N)
                 {
                     for (int i = 0; i < Config.NUMPACKETS; i++)
                     {
-                        metric_left[i] = sumTransformSole(soleLeft[i], transformFunc);
-                        metric_right[i] = sumTransformSole(soleRight[i], transformFunc);
+                        metric_left[i] = N((int)metric_left[i]);
+                        metric_right[i] = N((int)metric_right[i]);
                     }
                 }
-
 
                 //GraphSumPressures graph = new GraphSumPressures(); // Cambiar esto. Iván: esta línea la tengo que quitar para que funcione el gráfico
                 graph.drawData(metric_left, metric_right);
@@ -367,8 +357,8 @@ namespace insoles.Graphs
 */
                         
                         dataline = "1 " + (fakets).ToString("F2") + " " + (frame).ToString() + " " + 
-                            stringTransformSole(soleLeft[j], transformFunc) + " " + 
-                            stringTransformSole(soleRight[j], transformFunc) + " " +
+                            stringTransformSole(soleLeft[j], ADC_negTransformFunc) + " " + 
+                            stringTransformSole(soleRight[j], ADC_negTransformFunc) + " " +
                             metric_right[j].ToString() + " " + metric_left[j].ToString() + " " +"\n";
                         fakets += 0.01f;
                         frame += 1;
