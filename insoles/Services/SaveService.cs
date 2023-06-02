@@ -1,6 +1,6 @@
 ﻿using insoles.Enums;
 using insoles.Messages;
-using OpenCvSharp;
+using Emgu.CV;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -9,12 +9,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Drawing;
 
 namespace insoles.Services
 {
     public class SaveService : ISaveService
     {
-        private readonly MatType matType = MatType.CV_8UC3;
         private VideoWriter videoWriter;
         private StringBuilder dataHolder;
         private int frame;
@@ -97,22 +97,18 @@ namespace insoles.Services
             {
                 lock (videoWriter)
                 {
-                    if (frame.Type() != matType)
-                    {
-                        frame.ConvertTo(frame, matType);
-                    }
                     if(videoWriter != null)
                         videoWriter.Write(frame);
                 }
             }
         }
 
-        public void Start(int fps, Size size)
+        public void Start(int fps, Size size, int fourcc)
         {
             string userName = Environment.UserName;
             string path = "C:\\Users\\" + userName + "\\Documents";
             string filePath = path + Path.DirectorySeparatorChar + FileName + ".avi";
-            videoWriter = new VideoWriter(filePath, FourCC.DIVX, fps, size);
+            videoWriter = new VideoWriter(filePath, fourcc, fps, size, true);
             frame = 0;
             fakets = 0;
             dataHolder = new StringBuilder();
@@ -121,7 +117,6 @@ namespace insoles.Services
 
         public async void Stop()
         {
-            videoWriter.Release();
             videoWriter.Dispose();
             videoWriter = null;
 

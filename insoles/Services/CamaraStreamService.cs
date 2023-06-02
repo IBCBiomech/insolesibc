@@ -1,12 +1,11 @@
-﻿using insoles.Messages;
-using OpenCvSharp;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
+﻿using Emgu.CV;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Drawing;
+using Emgu.CV.CvEnum;
+using System.Text.RegularExpressions;
+using System.Diagnostics;
+using System.Windows.Controls;
 
 namespace insoles.Services
 {
@@ -14,8 +13,24 @@ namespace insoles.Services
     {
         private CameraService cameraService;
         public int index { get; private set; }
-        public int fps { get; private set; }
-        public Size resolution { get; private set; }
+        public int fps { 
+            get {
+                return (int)videoCapture.Get(CapProp.Fps);
+            } 
+        }
+        public int fourcc { 
+            get
+            {
+                return (int)videoCapture.Get(CapProp.FourCC);
+            } 
+        }
+        public Size resolution { 
+            get 
+            { 
+                return new Size((int)videoCapture.Get(CapProp.FrameWidth),
+                    (int)videoCapture.Get(CapProp.FrameHeight));
+            } 
+        }
         private VideoCapture videoCapture;
         private CancellationTokenSource cancellationTokenSourceDisplay;
         private CancellationToken cancellationTokenDisplay;
@@ -26,35 +41,26 @@ namespace insoles.Services
             CameraService cameraService)
         {
             this.index = index;
-            this.fps = fps;
-            this.resolution = new Size(resolution.Width, resolution.Height);
+            //this.resolution = new Size(resolution.Width, resolution.Height);
             cancellationTokenSourceDisplay = new CancellationTokenSource();
             cancellationTokenDisplay = cancellationTokenSourceDisplay.Token;
-            videoCapture = new VideoCapture(index, VideoCaptureAPIs.DSHOW);
-            videoCapture.Set(VideoCaptureProperties.Fps, fps);
-            videoCapture.Set(VideoCaptureProperties.FrameHeight, resolution.Height);
-            videoCapture.Set(VideoCaptureProperties.FrameWidth, resolution.Width);
-            Task.Run(() => { DisplayCameraCallback(); });
+            videoCapture = new VideoCapture(index, VideoCapture.API.DShow);
+            videoCapture.Set(CapProp.Fps, fps);
+            //videoCapture.Set(CapProp.FrameHeight, resolution.Height);
+            //videoCapture.Set(CapProp.FrameWidth, resolution.Width);
+
+            //videoCapture.Set(CapProp.FourCC, VideoWriter.Fourcc('H', '2', '6', '4')); // Con esto no funciona
+            //videoCapture.Set(CapProp.FourCC, VideoWriter.Fourcc('D', 'I', 'V', 'X'));
+
+            videoCapture.ImageGrabbed += (sender, args) =>
+            {
+                Mat frame = new Mat();
+                videoCapture.Retrieve(frame);
+                cameraService.InvokeFrameAvailable(index, frame);
+            };
+            videoCapture.Start();
+            //Task.Run(() => { DisplayCameraCallback(); });
             this.cameraService = cameraService;
-        }
-        public CameraStreamService(int index, int fps,
-            CameraService cameraService)
-        {
-            this.index = index;
-            this.fps = fps;
-            cancellationTokenSourceDisplay = new CancellationTokenSource();
-            cancellationTokenDisplay = cancellationTokenSourceDisplay.Token;
-            videoCapture = new VideoCapture(index, VideoCaptureAPIs.DSHOW);
-            videoCapture.Set(VideoCaptureProperties.Fps, fps);
-            this.resolution = new Size(videoCapture.Get(VideoCaptureProperties.FrameWidth),
-                videoCapture.Get(VideoCaptureProperties.FrameHeight));
-            Task.Run(() => { DisplayCameraCallback(); });
-            this.cameraService = cameraService;
-        }
-        private void SetCodec(VideoCapture videoCapture, string codecName)
-        {
-            int fourCC = VideoWriter.FourCC(codecName[0], codecName[1], codecName[2], codecName[3]);
-            videoCapture.Set(VideoCaptureProperties.CodecPixelFormat, fourCC);
         }
         private void DisplayCameraCallback()
         {
@@ -63,9 +69,8 @@ namespace insoles.Services
             {
                 if (cancellationTokenDisplay.IsCancellationRequested)
                 {
-                    videoCapture.Release();
-                    videoCapture = null;
-                    cameraService.InvokeFrameAvailable(index, GetBlackImage(resolution));
+                    videoCapture.Dispose();
+                    //cameraService.InvokeFrameAvailable(index, GetBlackImage(resolution));
                     return;
                 }
                 if (videoCapture.Grab())
@@ -75,11 +80,13 @@ namespace insoles.Services
                 }
             }
         }
+        /*
         public static Mat GetBlackImage(Size resolution)
         {
             MatType matType = MatType.CV_8UC3;
             Mat frame = new Mat(resolution.Height, resolution.Width, matType);
             return frame;
         }
+        */
     }
 }

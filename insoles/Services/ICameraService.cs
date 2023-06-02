@@ -1,6 +1,7 @@
 ﻿using insoles.Messages;
-using OpenCvSharp;
+using Emgu.CV;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace insoles.Services
 {
@@ -13,6 +14,7 @@ namespace insoles.Services
         public bool CameraOpened(int index);
         public int NumCamerasOpened { get; }
         public Size getResolution(int index);
+        public int getFourcc(int index);
         public delegate void CameraScanEventHandler(List<CameraScan> data);
         public event CameraScanEventHandler ScanReceived;
         public delegate void FrameAvailableEventHandler(int index, Mat frame);

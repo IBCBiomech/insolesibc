@@ -3,8 +3,8 @@ using insoles.Messages;
 using insoles.Model;
 using insoles.Services;
 using insoles.Utilities;
-using OpenCvSharp;
-using OpenCvSharp.WpfExtensions;
+using Emgu.CV;
+//using Emgu.CV.WPF; //No funciona
 using ScottPlot;
 using System;
 using System.Collections.Generic;
@@ -107,7 +107,7 @@ namespace insoles.ViewModel
         }
         private void Record(object obj)
         {
-            saveService.Start(cameraService.getFps(0), cameraService.getResolution(0));
+            saveService.Start(cameraService.getFps(0), cameraService.getResolution(0), cameraService.getFourcc(0));
         }
         private bool RecordCanExecute(object obj)
         {
@@ -141,7 +141,7 @@ namespace insoles.ViewModel
         public RegistroVM()
         {
             //Init services
-            apiService = new ApiService();
+            apiService = new FakeApiService();
             cameraService = new CameraService();
             liveCalculationsService = new LiveCalculationsService();
             saveService = new SaveService();
@@ -189,7 +189,7 @@ namespace insoles.ViewModel
             {
                 Application.Current.Dispatcher.BeginInvoke(() =>
                 {
-                    CurrentFrame = BitmapSourceConverter.ToBitmapSource(frame);
+                    CurrentFrame = FormatConversions.ToBitmapSource(frame);
                 });
                 saveService.AppendVideo(frame);
             };

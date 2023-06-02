@@ -1,6 +1,5 @@
 ﻿using DirectShowLib;
 using insoles.Messages;
-using OpenCvSharp;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -8,6 +7,8 @@ using System.Threading.Tasks;
 using AForge.Video.DirectShow;
 
 using FilterCategory = DirectShowLib.FilterCategory;
+using System.Drawing;
+using Emgu.CV;
 
 namespace insoles.Services
 {
@@ -60,14 +61,15 @@ namespace insoles.Services
         List<int> CameraIndices(int maxIndex = 10)
         {
             List<int> indices = new List<int>();
-            VideoCapture capture = new VideoCapture();
             for (int index = 0; index < maxIndex; index++)
             {
-                capture.Open(index, VideoCaptureAPIs.DSHOW);
-                if (capture.IsOpened())
+                using (VideoCapture capture = new VideoCapture(index))
                 {
-                    indices.Add(index);
-                    capture.Release();
+                    if (capture.IsOpened)
+                    {
+                        indices.Add(index);
+                        capture.Dispose();
+                    }
                 }
             }
             return indices;
@@ -152,6 +154,11 @@ namespace insoles.Services
         public Size getResolution(int index)
         {
             return cameraStreams[0].resolution;
+        }
+
+        public int getFourcc(int index)
+        {
+            return cameraStreams[0].fourcc;
         }
 
         public bool CameraOpened(int index)
