@@ -309,9 +309,15 @@ namespace insoles.Graphs
             {
                 Trace.WriteLine("received");
                 Trace.WriteLine("left");
-                Trace.WriteLine(soleLeft);
+                for(int i = 0; i < soleLeft.Count; i++)
+                {
+                    Trace.WriteLine(stringSole(soleLeft[i]));
+                }
                 Trace.WriteLine("right");
-                Trace.WriteLine(soleRight);
+                for (int i = 0; i < soleRight.Count; i++)
+                {
+                    Trace.WriteLine(stringSole(soleRight[i]));
+                }
                 //transformPressures(ref soleLeft);
                 float[] metric_left = new float[soleLeft.Count];
                 float[] metric_right = new float[soleRight.Count];
