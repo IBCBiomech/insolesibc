@@ -305,7 +305,7 @@ namespace insoles.Graphs
                 soleRight = data.Sole;
                 numSoles++;
             }
-            if (numSoles % 2 == 0)
+            if (numSoles % 2 == 0 && soleLeft != null && soleRight != null)
             {
                 Trace.WriteLine("received");
                 Trace.WriteLine("left");
