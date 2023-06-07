@@ -294,7 +294,6 @@ namespace insoles.Graphs
        
         public void Api_dataReceived(byte deviceHandler, WisewalkSDK.WisewalkData data)
         {
-           
                       
             if (deviceList.Side(deviceHandler) == Side.Left)
             {
@@ -308,7 +307,11 @@ namespace insoles.Graphs
             }
             if (numSoles % 2 == 0)
             {
-
+                Trace.WriteLine("received");
+                Trace.WriteLine("left");
+                Trace.WriteLine(soleLeft);
+                Trace.WriteLine("right");
+                Trace.WriteLine(soleRight);
                 //transformPressures(ref soleLeft);
                 float[] metric_left = new float[soleLeft.Count];
                 float[] metric_right = new float[soleRight.Count];
@@ -343,8 +346,6 @@ namespace insoles.Graphs
                         metric_right[i] = sumTransformSole(soleRight[i], transformFunc);
                     }
                 }
-
-
                 //GraphSumPressures graph = new GraphSumPressures(); // Cambiar esto. Iván: esta línea la tengo que quitar para que funcione el gráfico
                 graph.drawData(metric_left, metric_right);
 
