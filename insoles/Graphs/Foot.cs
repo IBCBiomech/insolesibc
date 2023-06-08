@@ -75,6 +75,10 @@ namespace insoles.Graphs
             }
             return sensor_positions;
         }
+        public int CalculateHeight()
+        {
+            return sensor_map.ColumnCount;
+        }
         public List<Tuple<int, int>> CalculateFootPositionsLeft()
         {
             return CalculateFootPositions(new Tuple<int, int>(0, sensor_map.RowCount / 2));

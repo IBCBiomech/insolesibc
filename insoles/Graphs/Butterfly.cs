@@ -12,14 +12,15 @@ namespace insoles.Graphs
 {
     public class Butterfly
     {
+        Plantilla plantilla;
         private Dictionary<Sensor, Tuple<double, double>> cp_sensors_left;
         private Dictionary<Sensor, Tuple<double, double>> cp_sensors_right;
 
         private List<Tuple<double, double>> cps_left;
         private List<Tuple<double, double>> cps_right;
 
-        private Dictionary<Sensor, int> area_sensors_left;
-        private Dictionary<Sensor, int> area_sensors_right;
+        private Dictionary<Sensor, double> area_sensors_left;
+        private Dictionary<Sensor, double> area_sensors_right;
 
         private FramePressures[] frames;
 
@@ -67,24 +68,27 @@ namespace insoles.Graphs
         }
         public void init()
         {
+            plantilla = new PlantillaWiseware(foot.CalculateHeight());
             cp_sensors_left = new Dictionary<Sensor, Tuple<double, double>>();
             Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_left = foot.CalculateSensorPositionsLeft();
-            area_sensors_left = new Dictionary<Sensor, int>();
+            area_sensors_left = new Dictionary<Sensor, double>();
             foreach (Sensor sensor in (Sensor[])Enum.GetValues(typeof(Sensor)))
             {
                 cp_sensors_left[sensor] = Helpers.Average(sensor_positions_left[sensor]);
-                area_sensors_left[sensor] = sensor_positions_left[sensor].Count;
+                //area_sensors_left[sensor] = sensor_positions_left[sensor].Count;
+                area_sensors_left[sensor] = plantilla.GetArea(sensor);
             }
 
 
 
             cp_sensors_right = new Dictionary<Sensor, Tuple<double, double>>();
             Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_right = foot.CalculateSensorPositionsRight();
-            area_sensors_right = new Dictionary<Sensor, int>();
+            area_sensors_right = new Dictionary<Sensor, double>();
             foreach (Sensor sensor in (Sensor[])Enum.GetValues(typeof(Sensor)))
             {
                 cp_sensors_right[sensor] = Helpers.Average(sensor_positions_right[sensor]);
-                area_sensors_right[sensor] = sensor_positions_right[sensor].Count;
+                //area_sensors_right[sensor] = sensor_positions_right[sensor].Count;
+                area_sensors_right[sensor] = plantilla.GetArea(sensor);
             }
             
         }
@@ -103,7 +107,7 @@ namespace insoles.Graphs
                 Tuple<double, double>? pressure_center_left;
                 Tuple<double, double>? pressure_center_right;
 
-                int total_pressure_left = 0;
+                double total_pressure_left = 0;
                 foreach (Sensor sensor in (Sensor[])Enum.GetValues(typeof(Sensor)))
                 {
                     total_pressure_left += pressure_left[sensor] * area_sensors_left[sensor];
@@ -127,7 +131,7 @@ namespace insoles.Graphs
                     pressure_center_left = null;
                 }
 
-                int total_pressure_right = 0;
+                double total_pressure_right = 0;
                 foreach (Sensor sensor in (Sensor[])Enum.GetValues(typeof(Sensor)))
                 {
                     total_pressure_right += pressure_right[sensor] * area_sensors_right[sensor];
@@ -152,7 +156,7 @@ namespace insoles.Graphs
                 }
 
 
-                frames[i] = new FramePressures(i, pressure_center_left, pressure_center_right, total_pressure_left, total_pressure_right);
+                frames[i] = new FramePressures(i, pressure_center_left, pressure_center_right, (int)total_pressure_left, (int)total_pressure_right);
             }
 #if STATS
             FramePressures.PrintStats();
