@@ -291,6 +291,14 @@ namespace insoles.Graphs
                 transform(sole.met_5).ToString() + " " + transform(sole.toes).ToString();
         }
 
+        public string stringSoleRaw(WisewalkSDK.SoleSensor sole)
+        {
+            return (sole.arch).ToString() + " " + (sole.hallux).ToString() + " " +
+                (sole.heel_R).ToString() + " " + (sole.heel_L).ToString() + " " +
+                (sole.met_1).ToString() + " " + (sole.met_3).ToString() + " " +
+                (sole.met_5).ToString() + " " + (sole.toes).ToString();
+        }
+
        
         public void Api_dataReceived(byte deviceHandler, WisewalkSDK.WisewalkData data)
         {
@@ -311,12 +319,12 @@ namespace insoles.Graphs
                 Trace.WriteLine("left");
                 for(int i = 0; i < soleLeft.Count; i++)
                 {
-                    Trace.WriteLine(stringSole(soleLeft[i]));
+                    Trace.WriteLine(stringSoleRaw(soleLeft[i]));
                 }
                 Trace.WriteLine("right");
                 for (int i = 0; i < soleRight.Count; i++)
                 {
-                    Trace.WriteLine(stringSole(soleRight[i]));
+                    Trace.WriteLine(stringSoleRaw(soleRight[i]));
                 }
                 //transformPressures(ref soleLeft);
                 float[] metric_left = new float[soleLeft.Count];
