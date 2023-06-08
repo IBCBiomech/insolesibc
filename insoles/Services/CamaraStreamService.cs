@@ -6,6 +6,7 @@ using Emgu.CV.CvEnum;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Windows.Controls;
+using System.Windows.Media.Media3D;
 
 namespace insoles.Services
 {
@@ -46,8 +47,9 @@ namespace insoles.Services
             cancellationTokenDisplay = cancellationTokenSourceDisplay.Token;
             videoCapture = new VideoCapture(index, VideoCapture.API.DShow);
             videoCapture.Set(CapProp.Fps, fps);
-            //videoCapture.Set(CapProp.FrameHeight, resolution.Height);
-            //videoCapture.Set(CapProp.FrameWidth, resolution.Width);
+            videoCapture.Set(CapProp.FrameHeight, resolution.Height);
+            videoCapture.Set(CapProp.FrameWidth, resolution.Width);
+            videoCapture.Set(CapProp.Autofocus, 39);
 
             //videoCapture.Set(CapProp.FourCC, VideoWriter.Fourcc('H', '2', '6', '4')); // Con esto no funciona
             //videoCapture.Set(CapProp.FourCC, VideoWriter.Fourcc('D', 'I', 'V', 'X'));

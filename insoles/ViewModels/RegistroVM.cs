@@ -141,7 +141,7 @@ namespace insoles.ViewModel
         public RegistroVM()
         {
             //Init services
-            apiService = new FakeApiService();
+            apiService = new ApiService();
             cameraService = new CameraService();
             liveCalculationsService = new LiveCalculationsService();
             saveService = new SaveService();
