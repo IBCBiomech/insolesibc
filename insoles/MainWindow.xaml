@@ -26,7 +26,7 @@
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="228" />
-                <ColumnDefinition Width="622" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <!--// Navigation Panel //-->

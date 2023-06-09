@@ -8,86 +8,20 @@
              xmlns:proxy="clr-namespace:insoles.Proxy"
              xmlns:local="clr-namespace:insoles.View"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch">
     <UserControl.Resources>
         <converter:BooleanToCircleConverter x:Key="booleanToCircleConverter"/>
     </UserControl.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <!-- Scan -->
-            <Menu:Btn Style="{StaticResource BtnStyle}"
-                              Command="{Binding ScanCommand}"
-                              IsChecked="True">
-
-                <Grid>
-
-                    <Image Source="Images/capture-icon.png"
-                                   Style="{StaticResource Image_Style}" />
-
-                    <TextBlock Text="Scan"
-                                       Style="{StaticResource Text_Style}" />
-
-                </Grid>
-
-            </Menu:Btn>
-            <!-- Connect -->
-            <Menu:Btn Style="{StaticResource BtnStyle}"
-                              Command="{Binding CaptureCommand}"
-                              IsChecked="True">
-
-                <Grid>
-
-                    <Image Source="Images/capture-icon.png"
-                                   Style="{StaticResource Image_Style}" />
-
-                    <TextBlock Text="Capture"
-                                       Style="{StaticResource Text_Style}" />
-
-                </Grid>
-
-            </Menu:Btn>
-            <!-- Record -->
-            <Menu:Btn Style="{StaticResource BtnStyle}"
-                              Command="{Binding RecordCommand}"
-                              IsChecked="True">
-
-                <Grid>
-
-                    <Image Source="Images/capture-icon.png"
-                                   Style="{StaticResource Image_Style}" />
-
-                    <TextBlock Text="Record"
-                                       Style="{StaticResource Text_Style}" />
-
-                </Grid>
-
-            </Menu:Btn>
-            <!-- Stop -->
-            <Menu:Btn Style="{StaticResource BtnStyle}"
-                              Command="{Binding StopCommand}"
-                              IsChecked="True">
-
-                <Grid>
-
-                    <Image Source="Images/capture-icon.png"
-                                   Style="{StaticResource Image_Style}" />
-
-                    <TextBlock Text="Stop"
-                                       Style="{StaticResource Text_Style}" />
-
-                </Grid>
-
-            </Menu:Btn>
-        </StackPanel>
-        <StackPanel Orientation="Vertical" Grid.Row="1">
-            <ListView x:Name="insolesListView" ItemsSource="{Binding Insoles}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.Column="0">
+            <ListView x:Name="insolesListView" DockPanel.Dock="Top" ItemsSource="{Binding Insoles}">
                 <ListView.Resources>
                     <proxy:ListViewProxy x:Key="Proxy" SelectedItems="{Binding SelectedItems, ElementName=insolesListView}" ListView="{Binding ElementName=insolesListView}"/>
                 </ListView.Resources>
@@ -161,9 +95,52 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            <WpfPlot Name="plot"/>
-        </StackPanel>
-        <ContentControl Content="{Binding Plot}"  Grid.Row="2"/>
-        <Image Source="{Binding CurrentFrame}" Stretch="Uniform" Grid.Row="3"/>
+        </DockPanel>
+        <DockPanel Grid.Column="1">
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Grid.Row="0">
+                <!-- Scan -->
+                <Button Command="{Binding ScanCommand}" Style="{StaticResource BtnIconStyle}">
+                    <Image Source="../Images/capture-icon.png" Style="{StaticResource Icon_Style}"/>
+                </Button>
+                <!-- Connect -->
+                <Button Command="{Binding CaptureCommand}" Style="{StaticResource BtnIconStyle}">
+                    <Image Source="../Images/capture-icon.png" Style="{StaticResource Icon_Style}"/>
+                </Button>
+                <!-- Record -->
+                <Menu:Btn Style="{StaticResource BtnStyle}"
+                              Command="{Binding RecordCommand}"
+                              IsChecked="True">
+
+                    <Grid>
+
+                        <Image Source="Images/capture-icon.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                        <TextBlock Text="Record"
+                                       Style="{StaticResource Text_Style}" />
+
+                    </Grid>
+
+                </Menu:Btn>
+                <!-- Stop -->
+                <Menu:Btn Style="{StaticResource BtnStyle}"
+                              Command="{Binding StopCommand}"
+                              IsChecked="True">
+
+                    <Grid>
+
+                        <Image Source="Images/capture-icon.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                        <TextBlock Text="Stop"
+                                       Style="{StaticResource Text_Style}" />
+
+                    </Grid>
+
+                </Menu:Btn>
+            </StackPanel>
+            <ContentControl DockPanel.Dock="Bottom" Content="{Binding Plot}"/>
+        </DockPanel>
+        <Image Source="{Binding CurrentFrame}" Stretch="Uniform" Grid.Column="2"/>
     </Grid>
 </UserControl>
