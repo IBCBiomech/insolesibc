@@ -361,6 +361,10 @@ namespace insoles.Common
         {
             return (VALUE_mbar * 100) * (float)(435 / Math.Pow(10, 6));
         }
+        public static float N(float VALUE_mbar, int num)
+        {
+            return (VALUE_mbar * 100) * (float)(435 * num / Math.Pow(10, 6));
+        }
         public static float VALUE_mbar_from_N(float N)
         {
             return N / (float)(435 / Math.Pow(10, 6)) / 100;

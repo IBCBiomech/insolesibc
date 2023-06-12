@@ -316,22 +316,18 @@ namespace insoles.Graphs
                 GraphSumPressures.Metric metric = graph.metricSelected;
 
                 Func<int, float> ADC_negTransformFunc = (VALUE_digital) => ADC_neg(VALUE_digital);
+                Func<int, float> mbarTransformFunc = (VALUE_digital) => VALUE_mbar(ADC_neg(VALUE_digital));
                 for(int i = 0; i < Config.NUMPACKETS; i++)
                 {
-                    metric_left[i] = sumTransformSole(soleLeft[i], ADC_negTransformFunc);
-                    metric_right[i] = sumTransformSole(soleRight[i], ADC_negTransformFunc);
-                }
-                for(int i = 0; i < Config.NUMPACKETS; i++)
-                {
-                    metric_left[i] = VALUE_mbar((int)metric_left[i]);
-                    metric_right[i] = VALUE_mbar((int)metric_right[i]);
+                    metric_left[i] = sumTransformSole(soleLeft[i], mbarTransformFunc);
+                    metric_right[i] = sumTransformSole(soleRight[i], mbarTransformFunc);
                 }
                 if(unit == Units.N)
                 {
                     for (int i = 0; i < Config.NUMPACKETS; i++)
                     {
-                        metric_left[i] = N((int)metric_left[i]);
-                        metric_right[i] = N((int)metric_right[i]);
+                        metric_left[i] = N((int)metric_left[i], 8);
+                        metric_right[i] = N((int)metric_right[i], 8);
                     }
                 }
 
