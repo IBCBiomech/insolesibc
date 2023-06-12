@@ -1,4 +1,5 @@
 ﻿using insoles.Services;
+using insoles.States;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace insoles.Commands
 {
     public class RecordCommand : ICommand
     {
+        private RegistroState state;
         private ISaveService saveService;
         private ICameraService cameraService;
         public event EventHandler CanExecuteChanged
@@ -17,20 +19,22 @@ namespace insoles.Commands
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
-        public RecordCommand(ISaveService saveService, ICameraService cameraService)
+        public RecordCommand(RegistroState state, ISaveService saveService, ICameraService cameraService)
         {
+            this.state = state;
             this.saveService = saveService;
             this.cameraService = cameraService;
         }
 
         public bool CanExecute(object? parameter)
         {
-            return !saveService.recording;
+            return state.capturing && !state.recording;
         }
 
         public void Execute(object? parameter)
         {
             saveService.Start(cameraService.getFps(0), cameraService.getResolution(0), cameraService.getFourcc(0));
+            state.recording = true;
         }
     }
 }

@@ -62,6 +62,8 @@
                                         <ContextMenu>
                                             <MenuItem Header="Connect" Command="{Binding VM.connectCommand}" 
                                                       CommandParameter="{Binding}"/>
+                                            <MenuItem Header="Disconnect" Command="{Binding VM.disconnectCommand}" 
+                                                      CommandParameter="{Binding}"/>
                                         </ContextMenu>
                                     </Grid.ContextMenu>
                                     <Grid.ColumnDefinitions>
@@ -133,7 +135,7 @@
                     <Image Source="../Images/capture-icon.png" Style="{StaticResource Icon_Style}"/>
                 </Button>
                 <!-- Pause -->
-                <Button Style="{StaticResource BtnIconStyle}">
+                <Button Command="{Binding pauseCommand}" Style="{StaticResource BtnIconStyle}">
                     <Image Source="../Images/pause-icon.png" Style="{StaticResource Icon_Style}"/>
                 </Button>
                 <!-- Stop -->

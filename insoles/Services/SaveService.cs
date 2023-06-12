@@ -10,11 +10,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Drawing;
+using insoles.States;
 
 namespace insoles.Services
 {
     public class SaveService : ISaveService
     {
+        private RegistroState state;
         private VideoWriter videoWriter;
         private StringBuilder dataHolder;
         private int frame;
@@ -36,13 +38,15 @@ namespace insoles.Services
             }
         }
 
-        public bool recording{get;set;} = false;
-
         private List<Sensor> order = new List<Sensor>()
         {
             Sensor.Arch, Sensor.Hallux, Sensor.HeelR, Sensor.HeelL, Sensor.Met1,
             Sensor.Met3, Sensor.Met5, Sensor.Toes
         };
+        public SaveService(RegistroState state)
+        {
+            this.state = state;
+        }
         private string FileNameGenerator()
         {
             DateTime now = DateTime.Now;
@@ -60,23 +64,26 @@ namespace insoles.Services
             List<Dictionary<Sensor, double>> right, 
             float[] metricLeft, float[] metricRight)
         {
-            if (dataHolder != null)
+            if (!state.paused)
             {
-                StringBuilder lines = new StringBuilder();
-                for (int i = 0; i < left.Count; i++)
+                if (dataHolder != null)
                 {
-                    string line = "1 " + 
-                        fakets.ToString("F2", CultureInfo.InvariantCulture) + 
-                        " " + frame.ToString() + " " +
-                        DictionaryToString(left[i], order) + " " +
-                        DictionaryToString(right[i], order) + " " +
-                        metricLeft[i].ToString("F2", CultureInfo.InvariantCulture) + " " +
-                        metricRight[i].ToString("F2", CultureInfo.InvariantCulture);
-                    lines.AppendLine(line);
-                    frame++;
-                    fakets += 0.01f;
+                    StringBuilder lines = new StringBuilder();
+                    for (int i = 0; i < left.Count; i++)
+                    {
+                        string line = "1 " +
+                            fakets.ToString("F2", CultureInfo.InvariantCulture) +
+                            " " + frame.ToString() + " " +
+                            DictionaryToString(left[i], order) + " " +
+                            DictionaryToString(right[i], order) + " " +
+                            metricLeft[i].ToString("F2", CultureInfo.InvariantCulture) + " " +
+                            metricRight[i].ToString("F2", CultureInfo.InvariantCulture);
+                        lines.AppendLine(line);
+                        frame++;
+                        fakets += 0.01f;
+                    }
+                    dataHolder.Append(lines);
                 }
-                dataHolder.Append(lines);
             }
         }
         private string DictionaryToString(Dictionary<Sensor, double> dict,
@@ -93,12 +100,15 @@ namespace insoles.Services
 
         public void AppendVideo(Mat frame)
         {
-            if (videoWriter != null)
+            if (!state.paused)
             {
-                lock (videoWriter)
+                if (videoWriter != null)
                 {
-                    if(videoWriter != null)
-                        videoWriter.Write(frame);
+                    lock (videoWriter)
+                    {
+                        if (videoWriter != null)
+                            videoWriter.Write(frame);
+                    }
                 }
             }
         }
@@ -112,7 +122,6 @@ namespace insoles.Services
             frame = 0;
             fakets = 0;
             dataHolder = new StringBuilder();
-            recording = true;
         }
 
         public async void Stop()
@@ -125,7 +134,11 @@ namespace insoles.Services
             string filePath = path + Path.DirectorySeparatorChar + FileName + ".txt";
             await File.WriteAllTextAsync(filePath, dataHolder.ToString());
             FileName = null;
-            recording = false;
+        }
+
+        public void Pause()
+        {
+            
         }
     }
 }

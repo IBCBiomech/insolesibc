@@ -1,4 +1,5 @@
 ﻿using insoles.Messages;
+using insoles.States;
 using System.Collections.Generic;
 using WisewalkSDK;
 
@@ -8,14 +9,17 @@ namespace insoles.Services
     {
         void Scan();
         void Connect(List<string> macs);
-        void ConnectAll();
+        void Disconnect(List<string> macs);
         void Capture();
-        public bool capturing { get; }
+        void Stop();
+        void Pause();
+        void Resume();
         public delegate void InsoleScanEventHandler(List<InsoleScan> data);
         public delegate void InsoleDataEventHandler(byte handler, List<InsoleData> data);
-        public delegate void DeviceEventHandler(Device dev);
+        public delegate void MACEventHandler(string mac);
         public event InsoleScanEventHandler ScanReceived;
         public event InsoleDataEventHandler DataReceived;
-        public event DeviceEventHandler DeviceConnected;
+        public event MACEventHandler DeviceConnected;
+        public event MACEventHandler DeviceDisconnected;
     }
 }

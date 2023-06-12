@@ -1,6 +1,8 @@
 ﻿using insoles.Messages;
+using insoles.States;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -12,23 +14,28 @@ namespace insoles.Services
 {
     public class ApiService : IApiService
     {
+        private RegistroState state;
         public Wisewalk api { get; private set; }
         private List<Wisewalk.Dev> scanDevices;
+        private Dictionary<string, Device> devicesConnected;
         public string? port_selected;
         public string? error;
-        public bool capturing { get; private set; } = false;
 
         public event IApiService.InsoleScanEventHandler ScanReceived;
         public event IApiService.InsoleDataEventHandler DataReceived;
-        public event IApiService.DeviceEventHandler DeviceConnected;
+        public event IApiService.MACEventHandler DeviceConnected;
+        public event IApiService.MACEventHandler DeviceDisconnected;
 
         //private static List<Wisewalk.Dev> scanDevices = new List<Wisewalk.Dev>();
-        public ApiService()
+        public ApiService(RegistroState state)
         {
+            this.state = state;
             api = new Wisewalk();
             api.scanFinished += scanFinishedCallback;
             api.deviceConnected += deviceConnectedCallback;
+            api.deviceDisconnected += deviceDisconnectedCallback;
             api.dataReceived += dataReceivedCallback;
+            devicesConnected = new Dictionary<string, Device>();
         }
         public void ShowPorts()
         {
@@ -114,11 +121,15 @@ namespace insoles.Services
             api.SetDeviceConfiguration(1, 100, 3, out error);
             await Task.Delay(2000);
             api.StartStream(out error);
-            capturing = true;
         }
         private Dev findInsole(string mac)
         {
             return scanDevices.FirstOrDefault(de => GetMacAddress(de) == mac);
+        }
+        private byte findHandler(string mac)
+        {
+            string handler = devicesConnected.Where(d => d.Value.Id == mac).FirstOrDefault().Key;
+            return byte.Parse(handler);
         }
         public void Connect(List<string> macs)
         {
@@ -134,17 +145,55 @@ namespace insoles.Services
                 Trace.WriteLine("Connect error " + error);
             }
         }
-        public void ConnectAll()
+        public async void Disconnect(List<string> macs)
         {
-            Trace.WriteLine("onConnectMessageReceived connecting all scanned");
-            if (!api.Connect(scanDevices, out error))
+            List<int> device_handlers = new List<int>();
+            foreach (string mac in macs)
             {
-                Trace.WriteLine("Connect error " + error);
+                device_handlers.Add(findHandler(mac));
+            }
+            if (!api.Disconnect(device_handlers, out error))
+            {
+                Trace.WriteLine("Disconnect error " + error);
+            }
+            await Task.Delay(2000);
+            foreach (string mac in macs)
+            {
+                DeviceDisconnected?.Invoke(mac);
             }
         }
         private void deviceConnectedCallback(byte handler, WisewalkSDK.Device dev)
         {
-            DeviceConnected?.Invoke(dev);
+            DeviceConnected?.Invoke(dev.Id);
+            devicesConnected[handler.ToString()] = dev;
+        }
+        private void deviceDisconnectedCallback(byte handler)
+        {
+            Device device = devicesConnected[handler.ToString()];
+            DeviceDisconnected?.Invoke(device.Id);
+            devicesConnected.Remove(handler.ToString());
+        }
+
+        public void Stop()
+        {
+            if(!api.StopStream(out error))
+            {
+                Trace.WriteLine(error);
+            }
+        }
+        public void Pause()
+        {
+            if (!api.StopStream(out error))
+            {
+                Trace.WriteLine(error);
+            }
+        }
+        public void Resume()
+        {
+            if(!api.StartStream(out error))
+            {
+                Trace.WriteLine(error);
+            }
         }
     }
 }

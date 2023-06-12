@@ -9,35 +9,39 @@ using System.Windows.Input;
 
 namespace insoles.Commands
 {
-    public class StopCommand : ICommand
+    public class PauseCommand : ICommand
     {
         private RegistroState state;
         private IApiService apiService;
-        private ISaveService saveService; 
+        public PauseCommand(RegistroState state, IApiService apiService) 
+        { 
+            this.state = state;
+            this.apiService = apiService;
+        }
+        
         public event EventHandler CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        public StopCommand(RegistroState state, IApiService apiService,ISaveService saveService)
-        {
-            this.state = state;
-            this.apiService = apiService;
-            this.saveService = saveService;
-        }
-
         public bool CanExecute(object? parameter)
         {
-            return state.recording;
+            return state.capturing;
         }
 
         public void Execute(object? parameter)
         {
-            apiService.Stop();
-            saveService.Stop();
-            state.capturing = false;
-            state.recording = false;
+            if (state.paused)
+            {
+                apiService.Resume();
+                state.paused = false;
+            }
+            else
+            {
+                apiService.Pause();
+                state.paused = true;
+            }
         }
     }
 }

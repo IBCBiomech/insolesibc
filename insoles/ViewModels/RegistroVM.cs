@@ -18,22 +18,27 @@ using System.Windows.Media.Imaging;
 using WisewalkSDK;
 using insoles.Commands;
 using System.Windows.Navigation;
+using static WisewalkSDK.Wisewalk;
+using insoles.States;
 
 namespace insoles.ViewModel
 {
     public class RegistroVM : ViewModelBase
     {
+        private RegistroState state;
         private IApiService apiService;
         private ICameraService cameraService;
         private ILiveCalculationsService liveCalculationsService;
         private ISaveService saveService;
         public ScanCommand scanCommand { get; set; }
         public ConnectCommand connectCommand { get; set; }
+        public DisconnectCommand disconnectCommand { get; set; }
         public CaptureCommand captureCommand { get; set; }
         public OpenCameraCommand openCameraCommand { get; set; }
         public CloseCameraCommand closeCameraCommand { get; set; }
         public RecordCommand recordCommand { get; set; }
         public StopCommand stopCommand { get; set; }
+        public PauseCommand pauseCommand { get; set; }
         public ObservableCollection<CameraModel> Cameras { get; set; }
         public ObservableCollection<InsoleModel> Insoles { get; set; }
         private BitmapSource currentFrameTop;
@@ -66,20 +71,23 @@ namespace insoles.ViewModel
         private GraphSumPressuresLiveModel GraphModel;
         public RegistroVM()
         {
+            state = new RegistroState();
             //currentFrames.Add(CurrentFrameTop); currentFrames.Add(CurrentFrameBottom);
             //Init services
-            apiService = new FakeApiService();
+            apiService = new FakeApiService(state);
             cameraService = new CameraService();
             liveCalculationsService = new LiveCalculationsService();
-            saveService = new SaveService();
+            saveService = new SaveService(state);
             //Init commands
             scanCommand = new ScanCommand(apiService, cameraService);
             connectCommand = new ConnectCommand(apiService);
-            captureCommand = new CaptureCommand(apiService, () => Insoles);
+            disconnectCommand = new DisconnectCommand(apiService);
+            captureCommand = new CaptureCommand(state, apiService, () => Insoles);
             openCameraCommand = new OpenCameraCommand(cameraService);
             closeCameraCommand = new CloseCameraCommand(cameraService);
-            recordCommand = new RecordCommand(saveService, cameraService);
-            stopCommand = new StopCommand(saveService);
+            recordCommand = new RecordCommand(state, saveService, cameraService);
+            pauseCommand = new PauseCommand(state, apiService);
+            stopCommand = new StopCommand(state, apiService, saveService);
             //Init Collections
             Cameras = new ObservableCollection<CameraModel>();
             Insoles = new ObservableCollection<InsoleModel>();
@@ -97,10 +105,16 @@ namespace insoles.ViewModel
                     }
                 });
             };
-            apiService.DeviceConnected += (Device dev) =>
+            apiService.DeviceConnected += (string mac) =>
             {
-                InsoleModel insole = Insoles.First((InsoleModel insole) => insole.MAC == dev.Id);
+                InsoleModel insole = Insoles.First((InsoleModel insole) => insole.MAC == mac);
                 insole.connected = true;
+            };
+            apiService.DeviceDisconnected += (string mac) =>
+            {
+                Trace.WriteLine("RegistroVM apiService.DeviceDisconnected");
+                InsoleModel insole = Insoles.First((InsoleModel insole) => insole.MAC == mac);
+                insole.connected = false;
             };
             cameraService.ScanReceived += (List<CameraScan> camerasReceived) =>
             {
