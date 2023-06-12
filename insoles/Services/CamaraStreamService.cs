@@ -1,16 +1,13 @@
 ﻿using Emgu.CV;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Drawing;
 using Emgu.CV.CvEnum;
-using System.Text.RegularExpressions;
+using System;
 using System.Diagnostics;
-using System.Windows.Controls;
-using System.Windows.Media.Media3D;
 
 namespace insoles.Services
 {
-    public class CameraStreamService
+    public class CameraStreamService : IDisposable
     {
         private CameraService cameraService;
         public int index { get; private set; }
@@ -54,41 +51,35 @@ namespace insoles.Services
             //videoCapture.Set(CapProp.FourCC, VideoWriter.Fourcc('H', '2', '6', '4')); // Con esto no funciona
             //videoCapture.Set(CapProp.FourCC, VideoWriter.Fourcc('D', 'I', 'V', 'X'));
 
-            videoCapture.ImageGrabbed += (sender, args) =>
-            {
-                Mat frame = new Mat();
-                videoCapture.Retrieve(frame);
-                cameraService.InvokeFrameAvailable(index, frame);
-            };
+            videoCapture.ImageGrabbed += ImageGrabbedCallback;
             videoCapture.Start();
             //Task.Run(() => { DisplayCameraCallback(); });
             this.cameraService = cameraService;
         }
-        private void DisplayCameraCallback()
+        private void ImageGrabbedCallback(object? sender, EventArgs eventArgs)
         {
             Mat frame = new Mat();
-            while (true)
-            {
-                if (cancellationTokenDisplay.IsCancellationRequested)
-                {
-                    videoCapture.Dispose();
-                    //cameraService.InvokeFrameAvailable(index, GetBlackImage(resolution));
-                    return;
-                }
-                if (videoCapture.Grab())
-                {
-                    videoCapture.Retrieve(frame);
-                    cameraService.InvokeFrameAvailable(index, frame);
-                }
-            }
+            videoCapture.Retrieve(frame);
+            cameraService.InvokeFrameAvailable(index, frame);
+        }
+        public void Stop()
+        {
+            videoCapture.ImageGrabbed -= ImageGrabbedCallback;
+            videoCapture.Stop();
+            Dispose();
+        }
+
+        public void Dispose()
+        {
+            videoCapture?.Dispose();
         }
         /*
-        public static Mat GetBlackImage(Size resolution)
-        {
-            MatType matType = MatType.CV_8UC3;
-            Mat frame = new Mat(resolution.Height, resolution.Width, matType);
-            return frame;
-        }
-        */
+public static Mat GetBlackImage(Size resolution)
+{
+   MatType matType = MatType.CV_8UC3;
+   Mat frame = new Mat(resolution.Height, resolution.Width, matType);
+   return frame;
+}
+*/
     }
 }

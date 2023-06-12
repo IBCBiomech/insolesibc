@@ -27,6 +27,9 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Styles\InsoleColumns.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Styles\ButtonIcon.xaml">
       <SubType>Designer</SubType>
     </Page>

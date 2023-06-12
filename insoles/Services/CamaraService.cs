@@ -21,6 +21,7 @@ namespace insoles.Services
         public event ICameraService.CameraScanEventHandler ScanReceived;
 
         public event ICameraService.FrameAvailableEventHandler FrameAvailable;
+        public Dictionary<int, int> indicesMap = new Dictionary<int, int>();
         public CameraService()
         {
 
@@ -138,12 +139,26 @@ namespace insoles.Services
         }
         public void OpenCamera(int index, int fps, System.Drawing.Size resolution)
         {
-            //cameraStreams.Add(new CameraStreamService(index, fps, this));
             cameraStreams.Add(new CameraStreamService(index, fps, resolution, this)); //Al cambiar la resolucion va muy lento
+            for(int i = 0; i < ICameraService.MAX_CAMERAS; i++)
+            {
+                if (!indicesMap.ContainsValue(i))
+                {
+                    indicesMap[index] = i;
+                    break;
+                }
+            }
         }
         public void InvokeFrameAvailable(int index, Mat frame)
         {
-            FrameAvailable?.Invoke(index, frame);
+            try
+            {
+                FrameAvailable?.Invoke(indicesMap[index], frame);
+            }
+            catch(KeyNotFoundException)
+            {
+                Trace.WriteLine("InvokeFrameAvailable KeyNotFoundException");
+            }
         }
 
         public int getFps(int index)
@@ -169,6 +184,20 @@ namespace insoles.Services
                     return true;
             }
             return false;
+        }
+
+        public void CloseCamera(int index)
+        {
+            foreach (CameraStreamService stream in cameraStreams)
+            {
+                if (stream.index == index)
+                {
+                    stream.Stop();
+                    cameraStreams.Remove(stream);
+                    indicesMap.Remove(index);
+                    break;
+                }             
+            }
         }
     }
 }

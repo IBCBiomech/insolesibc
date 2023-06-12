@@ -16,6 +16,8 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using WisewalkSDK;
+using insoles.Commands;
+using System.Windows.Navigation;
 
 namespace insoles.ViewModel
 {
@@ -25,114 +27,38 @@ namespace insoles.ViewModel
         private ICameraService cameraService;
         private ILiveCalculationsService liveCalculationsService;
         private ISaveService saveService;
-        public ICommand ScanCommand { get; set; }
-        public ICommand ConnectCommand { get; set; }
-        public ICommand ConnectSelectedCommand { get; set; }
-        public ICommand ConnectAllCommand { get; set; }
-        public ICommand CaptureCommand { get; set; }
-        public ICommand OpenCameraCommand { get; set; }
-        public ICommand RecordCommand { get; set; }
-        public ICommand StopCommand { get; set; }
-
-        private void Scan(object obj)
-        {
-            apiService.Scan();
-            cameraService.Scan();
-        }
-        private void Connect(object obj)
-        {
-            InsoleModel insole = obj as InsoleModel;
-            List<string> macs = new List<string> { insole.MAC };
-            apiService.Connect(macs);
-        }
-        private bool ConnectCanExecute(object obj)
-        {
-            InsoleModel insole = obj as InsoleModel;
-            return obj != null && !insole.connected; // Si no tira NullReferenceException
-        }
-        private void ConnectAll(object obj)
-        {
-            apiService.ConnectAll();
-        }
-        private bool ConnectAllCanExecute(object obj)
-        {
-            foreach(InsoleModel insole in Insoles)
-            {
-                if (!insole.connected)
-                    return true;
-            }
-            return false;
-        }
-        private void ConnectSelected(object obj)
-        {
-            List<string> macs = new List<string>();
-            var selected = obj as IList<object>;
-            foreach(var selectedItem in selected)
-            {
-                InsoleModel insole = selectedItem as InsoleModel;
-                macs.Add(insole.MAC);
-            }
-            apiService.Connect(macs);
-        }
-        private bool ConnectSelectedCanExecute(object obj)
-        {
-            List<string> macs = new List<string>();
-            var selected = obj as IList<object>;
-            foreach (var selectedItem in selected)
-            {
-                InsoleModel insole = selectedItem as InsoleModel;
-                if (!insole.connected)
-                    return true;
-            }
-            return false;
-        }
-        private void Capture(object obj) => apiService.Capture();
-        private bool CaptureCanExecute(object obj)
-        {
-            return Insoles.Where((InsoleModel insole) => insole.connected).Count() == 2
-                && !apiService.capturing;
-        }
-        private void OpenCamera(object obj)
-        {
-            Trace.WriteLine("OpenCamera");
-            CameraModel camera = obj as CameraModel;
-            cameraService.OpenCamera(camera.number, camera.fps, camera.resolution);
-        }
-        private bool OpenCameraCanExecute(object obj)
-        {
-            CameraModel camera = obj as CameraModel;
-            return obj!=null  // Si no tira NullReferenceException
-                && !cameraService.CameraOpened(camera.number)
-                && cameraService.NumCamerasOpened < ICameraService.MAX_CAMERAS;
-        }
-        private void Record(object obj)
-        {
-            saveService.Start(cameraService.getFps(0), cameraService.getResolution(0), cameraService.getFourcc(0));
-        }
-        private bool RecordCanExecute(object obj)
-        {
-            return !saveService.recording;
-        }
-        private void Stop(object obj)
-        {
-            saveService.Stop();
-        }
-        private bool StopCanExecute(object obj)
-        {
-            return saveService.recording;
-        }
+        public ScanCommand scanCommand { get; set; }
+        public ConnectCommand connectCommand { get; set; }
+        public CaptureCommand captureCommand { get; set; }
+        public OpenCameraCommand openCameraCommand { get; set; }
+        public CloseCameraCommand closeCameraCommand { get; set; }
+        public RecordCommand recordCommand { get; set; }
+        public StopCommand stopCommand { get; set; }
         public ObservableCollection<CameraModel> Cameras { get; set; }
         public ObservableCollection<InsoleModel> Insoles { get; set; }
-        private BitmapSource currentFrame;
-        public BitmapSource CurrentFrame
+        private BitmapSource currentFrameTop;
+        public BitmapSource CurrentFrameTop
         {
             get 
             { 
-                return currentFrame;
+                return currentFrameTop;
             }
             set
             {
-                currentFrame = value;
+                currentFrameTop = value;
+                OnPropertyChanged();
+            }
+        }
+        private BitmapSource currentFrameBottom;
+        public BitmapSource CurrentFrameBottom
+        {
+            get
+            {
+                return currentFrameBottom;
+            }
+            set
+            {
+                currentFrameBottom = value;
                 OnPropertyChanged();
             }
         }
@@ -140,20 +66,20 @@ namespace insoles.ViewModel
         private GraphSumPressuresLiveModel GraphModel;
         public RegistroVM()
         {
+            //currentFrames.Add(CurrentFrameTop); currentFrames.Add(CurrentFrameBottom);
             //Init services
-            apiService = new ApiService();
+            apiService = new FakeApiService();
             cameraService = new CameraService();
             liveCalculationsService = new LiveCalculationsService();
             saveService = new SaveService();
             //Init commands
-            ScanCommand = new RelayCommand(Scan);
-            ConnectCommand = new RelayCommand(Connect, ConnectCanExecute);
-            ConnectSelectedCommand = new RelayCommand(ConnectSelected, ConnectSelectedCanExecute);
-            ConnectAllCommand = new RelayCommand(ConnectAll, ConnectAllCanExecute);
-            CaptureCommand = new RelayCommand(Capture, CaptureCanExecute);
-            OpenCameraCommand = new RelayCommand(OpenCamera, OpenCameraCanExecute);
-            RecordCommand = new RelayCommand(Record, RecordCanExecute);
-            StopCommand = new RelayCommand(Stop, StopCanExecute);
+            scanCommand = new ScanCommand(apiService, cameraService);
+            connectCommand = new ConnectCommand(apiService);
+            captureCommand = new CaptureCommand(apiService, () => Insoles);
+            openCameraCommand = new OpenCameraCommand(cameraService);
+            closeCameraCommand = new CloseCameraCommand(cameraService);
+            recordCommand = new RecordCommand(saveService, cameraService);
+            stopCommand = new StopCommand(saveService);
             //Init Collections
             Cameras = new ObservableCollection<CameraModel>();
             Insoles = new ObservableCollection<InsoleModel>();
@@ -187,11 +113,22 @@ namespace insoles.ViewModel
             };
             cameraService.FrameAvailable += (int index, Mat frame) =>
             {
-                Application.Current.Dispatcher.BeginInvoke(() =>
+                if (index == 0)
                 {
-                    CurrentFrame = FormatConversions.ToBitmapSource(frame);
-                });
-                saveService.AppendVideo(frame);
+                    Application.Current.Dispatcher.BeginInvoke(() =>
+                    {
+                        CurrentFrameTop = FormatConversions.ToBitmapSource(frame);
+                    });
+                    saveService.AppendVideo(frame);
+                }
+                else if(index == 1)
+                {
+                    Application.Current.Dispatcher.BeginInvoke(() =>
+                    {
+                        CurrentFrameBottom = FormatConversions.ToBitmapSource(frame);
+                    });
+                    saveService.AppendVideo(frame);
+                }
             };
             apiService.DataReceived += (byte handler, List<InsoleData> packet) =>
             {

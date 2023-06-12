@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ColumnDefinition x:Key="Column1" Width="Auto"/>
+    <ColumnDefinition x:Key="Column2" Width="Auto"/>
+    <ColumnDefinition x:Key="Column3" Width="Auto"/>
+    <ColumnDefinition x:Key="Column4" Width="Auto"/>
+    <ColumnDefinition x:Key="Column5" Width="Auto"/>
+    <ColumnDefinition x:Key="Column6" Width="Auto"/>
+</ResourceDictionary>

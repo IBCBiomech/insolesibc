@@ -10,6 +10,7 @@ namespace insoles.Services
         public const int MAX_CAMERAS = 1;
         public void Scan();
         public void OpenCamera(int index, int fps, System.Drawing.Size resolution);
+        public void CloseCamera(int index);
         public int getFps(int index);
         public bool CameraOpened(int index);
         public int NumCamerasOpened { get; }
