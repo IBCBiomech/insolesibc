@@ -20,6 +20,8 @@ using insoles.Commands;
 using System.Windows.Navigation;
 using static WisewalkSDK.Wisewalk;
 using insoles.States;
+using insoles.Database;
+using System.Threading.Tasks;
 
 namespace insoles.ViewModel
 {
@@ -30,6 +32,7 @@ namespace insoles.ViewModel
         private ICameraService cameraService;
         private ILiveCalculationsService liveCalculationsService;
         private ISaveService saveService;
+        private IDatabaseService databaseService;
         public ScanCommand scanCommand { get; set; }
         public ConnectCommand connectCommand { get; set; }
         public DisconnectCommand disconnectCommand { get; set; }
@@ -39,6 +42,7 @@ namespace insoles.ViewModel
         public RecordCommand recordCommand { get; set; }
         public StopCommand stopCommand { get; set; }
         public PauseCommand pauseCommand { get; set; }
+        public CrearPacienteCommand crearPacienteCommand { get; set; }
         public ObservableCollection<CameraModel> Cameras { get; set; }
         public ObservableCollection<InsoleModel> Insoles { get; set; }
         private BitmapSource currentFrameTop;
@@ -69,6 +73,7 @@ namespace insoles.ViewModel
         }
         public WpfPlot Plot { get; set; }
         private GraphSumPressuresLiveModel GraphModel;
+        public ObservableCollection<Paciente> Pacientes { get; set; }
         public RegistroVM()
         {
             state = new RegistroState();
@@ -78,6 +83,7 @@ namespace insoles.ViewModel
             cameraService = new CameraService();
             liveCalculationsService = new LiveCalculationsService();
             saveService = new SaveService(state);
+            databaseService = new SQLiteDatabaseService();
             //Init commands
             scanCommand = new ScanCommand(apiService, cameraService);
             connectCommand = new ConnectCommand(apiService);
@@ -88,6 +94,7 @@ namespace insoles.ViewModel
             recordCommand = new RecordCommand(state, saveService, cameraService);
             pauseCommand = new PauseCommand(state, apiService);
             stopCommand = new StopCommand(state, apiService, saveService);
+            crearPacienteCommand = new CrearPacienteCommand(databaseService);
             //Init Collections
             Cameras = new ObservableCollection<CameraModel>();
             Insoles = new ObservableCollection<InsoleModel>();
@@ -160,6 +167,7 @@ namespace insoles.ViewModel
             Plot = new WpfPlot();
             Plot.Plot.Title("test plot");
             GraphModel = new(Plot);
+            Pacientes = new ObservableCollection<Paciente>(databaseService.GetPacientes());
         }
     }
 }

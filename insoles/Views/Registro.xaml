@@ -23,49 +23,21 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <DockPanel Grid.Column="0">
-            <controls:MultiSelectTreeView>
-                <controls:MultiSelectTreeViewItem>
-                    <controls:MultiSelectTreeViewItem.Header>
-                        <TextBlock Text="Dispositivos">
-                            <TextBlock.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Header="Scan" Command="{Binding scanCommand}"/>
-                                </ContextMenu>
-                            </TextBlock.ContextMenu>
-                        </TextBlock>
-                    </controls:MultiSelectTreeViewItem.Header>
-                    <controls:MultiSelectTreeViewItem ItemsSource="{Binding Insoles}">
+            <StackPanel Orientation="Vertical">
+                <controls:MultiSelectTreeView>
+                    <controls:MultiSelectTreeViewItem>
                         <controls:MultiSelectTreeViewItem.Header>
-                            <Grid Width="390">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
-                                    <ColumnDefinition Width="0.5*"/>
-                                    <ColumnDefinition Width="0.5*"/>
-                                    <ColumnDefinition Width="1.5*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="IMU Insoles" Grid.Column="0" TextAlignment="Center"/>
-                                <TextBlock Text="Id" Grid.Column="1" TextAlignment="Center"/>
-                                <TextBlock Text="Con" Grid.Column="2" TextAlignment="Center"/>
-                                <TextBlock Text="MAC" Grid.Column="3" TextAlignment="Center"/>
-                                <TextBlock Text="Lado" Grid.Column="4" TextAlignment="Center"/>
-                                <TextBlock Text="Battery" Grid.Column="5" TextAlignment="Center"/>
-                                <TextBlock Text="FW" Grid.Column="6" TextAlignment="Center"/>
-                            </Grid>
+                            <TextBlock Text="Dispositivos">
+                                <TextBlock.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Scan" Command="{Binding scanCommand}"/>
+                                    </ContextMenu>
+                                </TextBlock.ContextMenu>
+                            </TextBlock>
                         </controls:MultiSelectTreeViewItem.Header>
-                        <controls:MultiSelectTreeViewItem.ItemTemplate>
-                            <DataTemplate DataType="{x:Type model:InsoleModel}">
-                                <Grid Margin="-16,0,0,0" Width="390">
-                                    <Grid.ContextMenu>
-                                        <ContextMenu>
-                                            <MenuItem Header="Connect" Command="{Binding VM.connectCommand}" 
-                                                      CommandParameter="{Binding}"/>
-                                            <MenuItem Header="Disconnect" Command="{Binding VM.disconnectCommand}" 
-                                                      CommandParameter="{Binding}"/>
-                                        </ContextMenu>
-                                    </Grid.ContextMenu>
+                        <controls:MultiSelectTreeViewItem ItemsSource="{Binding Insoles}">
+                            <controls:MultiSelectTreeViewItem.Header>
+                                <Grid Width="390">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="100"/>
                                         <ColumnDefinition Width="0.5*"/>
@@ -75,41 +47,45 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding Path=id}" Grid.Column="1" TextAlignment="Center"/>
-                                    <Image Width="20" Grid.Column="2" Source="{Binding Path=connected, Converter={StaticResource booleanToCircleConverter}}"/>
-                                    <TextBlock Text="{Binding Path=MAC}" Grid.Column="3" TextAlignment="Center"/>
+                                    <TextBlock Text="IMU Insoles" Grid.Column="0" TextAlignment="Center"/>
+                                    <TextBlock Text="Id" Grid.Column="1" TextAlignment="Center"/>
+                                    <TextBlock Text="Con" Grid.Column="2" TextAlignment="Center"/>
+                                    <TextBlock Text="MAC" Grid.Column="3" TextAlignment="Center"/>
+                                    <TextBlock Text="Lado" Grid.Column="4" TextAlignment="Center"/>
+                                    <TextBlock Text="Battery" Grid.Column="5" TextAlignment="Center"/>
+                                    <TextBlock Text="FW" Grid.Column="6" TextAlignment="Center"/>
                                 </Grid>
-                            </DataTemplate>
-                        </controls:MultiSelectTreeViewItem.ItemTemplate>
-                    </controls:MultiSelectTreeViewItem>
-                    <controls:MultiSelectTreeViewItem ItemsSource="{Binding Cameras}">
-                        <controls:MultiSelectTreeViewItem.Header>
-                            <Grid Width="340">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
-                                    <ColumnDefinition Width="0.5*"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="1.5*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Cameras" Grid.Column="0" TextAlignment="Center"/>
-                                <TextBlock Text="Id" Grid.Column="1" TextAlignment="Center"/>
-                                <TextBlock Text="Name" Grid.Column="2" TextAlignment="Center"/>
-                                <TextBlock Text="Resol." Grid.Column="3" TextAlignment="Center"/>
-                                <TextBlock Text="FPS" Grid.Column="4" TextAlignment="Center"/>
-                            </Grid>
-                        </controls:MultiSelectTreeViewItem.Header>
-                        <controls:MultiSelectTreeViewItem.ItemTemplate>
-                            <DataTemplate DataType="{x:Type model:CameraModel}">
-                                <Grid Margin="-16,0,0,0" Width="340">
-                                    <Grid.ContextMenu>
-                                        <ContextMenu>
-                                            <MenuItem Header="Open" Command="{Binding VM.openCameraCommand}"
-                                                  CommandParameter="{Binding}"/>
-                                            <MenuItem Header="Close" Command="{Binding VM.closeCameraCommand}"
-                                                      CommandParameter="{Binding}"/>
-                                        </ContextMenu>
-                                    </Grid.ContextMenu>
+                            </controls:MultiSelectTreeViewItem.Header>
+                            <controls:MultiSelectTreeViewItem.ItemTemplate>
+                                <DataTemplate DataType="{x:Type model:InsoleModel}">
+                                    <Grid Margin="-16,0,0,0" Width="390">
+                                        <Grid.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="Connect" Command="{Binding VM.connectCommand}" 
+                                                          CommandParameter="{Binding}"/>
+                                                <MenuItem Header="Disconnect" Command="{Binding VM.disconnectCommand}" 
+                                                          CommandParameter="{Binding}"/>
+                                            </ContextMenu>
+                                        </Grid.ContextMenu>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="0.5*"/>
+                                            <ColumnDefinition Width="0.5*"/>
+                                            <ColumnDefinition Width="1.5*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Path=id}" Grid.Column="1" TextAlignment="Center"/>
+                                        <Image Width="20" Grid.Column="2" Source="{Binding Path=connected, Converter={StaticResource booleanToCircleConverter}}"/>
+                                        <TextBlock Text="{Binding Path=MAC}" Grid.Column="3" TextAlignment="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </controls:MultiSelectTreeViewItem.ItemTemplate>
+                        </controls:MultiSelectTreeViewItem>
+                        <controls:MultiSelectTreeViewItem ItemsSource="{Binding Cameras}">
+                            <controls:MultiSelectTreeViewItem.Header>
+                                <Grid Width="340">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="100"/>
                                         <ColumnDefinition Width="0.5*"/>
@@ -117,16 +93,86 @@
                                         <ColumnDefinition Width="1.5*"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="{Binding Path=number}" Grid.Column="1" TextAlignment="Center"/>
-                                    <TextBlock Text="{Binding Path=name}" Grid.Column="2" TextAlignment="Center"/>
-                                    <ComboBox Grid.Column="3" ItemsSource="{Binding Path=resolutionsAvailable}" SelectedValue="{Binding Path=resolution}"/>
-                                    <ComboBox Grid.Column="4" ItemsSource="{Binding Path=fpsAvailable}" SelectedValue="{Binding Path=fps}"/>
+                                    <TextBlock Text="Cameras" Grid.Column="0" TextAlignment="Center"/>
+                                    <TextBlock Text="Id" Grid.Column="1" TextAlignment="Center"/>
+                                    <TextBlock Text="Name" Grid.Column="2" TextAlignment="Center"/>
+                                    <TextBlock Text="Resol." Grid.Column="3" TextAlignment="Center"/>
+                                    <TextBlock Text="FPS" Grid.Column="4" TextAlignment="Center"/>
                                 </Grid>
-                            </DataTemplate>
-                        </controls:MultiSelectTreeViewItem.ItemTemplate>
+                            </controls:MultiSelectTreeViewItem.Header>
+                            <controls:MultiSelectTreeViewItem.ItemTemplate>
+                                <DataTemplate DataType="{x:Type model:CameraModel}">
+                                    <Grid Margin="-16,0,0,0" Width="340">
+                                        <Grid.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="Open" Command="{Binding VM.openCameraCommand}"
+                                                      CommandParameter="{Binding}"/>
+                                                <MenuItem Header="Close" Command="{Binding VM.closeCameraCommand}"
+                                                          CommandParameter="{Binding}"/>
+                                            </ContextMenu>
+                                        </Grid.ContextMenu>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="0.5*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="1.5*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Path=number}" Grid.Column="1" TextAlignment="Center"/>
+                                        <TextBlock Text="{Binding Path=name}" Grid.Column="2" TextAlignment="Center"/>
+                                        <ComboBox Grid.Column="3" ItemsSource="{Binding Path=resolutionsAvailable}" SelectedValue="{Binding Path=resolution}"/>
+                                        <ComboBox Grid.Column="4" ItemsSource="{Binding Path=fpsAvailable}" SelectedValue="{Binding Path=fps}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </controls:MultiSelectTreeViewItem.ItemTemplate>
+                        </controls:MultiSelectTreeViewItem>
                     </controls:MultiSelectTreeViewItem>
-                </controls:MultiSelectTreeViewItem>
-            </controls:MultiSelectTreeView>
+                </controls:MultiSelectTreeView>
+                <TreeView>
+                    <TreeViewItem ItemsSource="{Binding Pacientes}">
+                        <TreeViewItem.Header>
+                            <TextBlock Text="Sujetos">
+                                <TextBlock.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Crear" Command="{Binding crearPacienteCommand}"/>
+                                    </ContextMenu>
+                                </TextBlock.ContextMenu>
+                            </TextBlock>
+                        </TreeViewItem.Header>
+                        <TreeViewItem.ItemTemplate>
+                            <DataTemplate DataType="{x:Type model:Paciente}">
+                                <TreeViewItem Header="{Binding Nombre}">
+                                    <TreeViewItem Header="Pruebas">
+                                        <TreeViewItem Header="Marcha">
+                                            <TreeViewItem.Resources>
+                                                <DataTemplate DataType="{x:Type model:Test}">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="100"/>
+                                                            <ColumnDefinition Width="120"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock Text="{Binding csv}" Grid.Column="0"/>
+                                                        <TextBlock Text="{Binding Date}" Grid.Column="1"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </TreeViewItem.Resources>
+                                            <TreeViewItem.ItemsSource>
+                                                <Binding Path="Tests" />
+                                            </TreeViewItem.ItemsSource>
+                                        </TreeViewItem>
+                                        <TreeViewItem Header="Informes">
+                                            
+                                        </TreeViewItem>
+                                        <TreeViewItem Header="Prueba de carga">
+                                            
+                                        </TreeViewItem>
+                                    </TreeViewItem>
+                                </TreeViewItem>
+                            </DataTemplate>
+                        </TreeViewItem.ItemTemplate>
+                    </TreeViewItem>
+                </TreeView>
+            </StackPanel>
         </DockPanel>
         <DockPanel Grid.Column="1">
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Grid.Row="0">

@@ -36,6 +36,12 @@
     <PackageReference Include="Emgu.CV.Bitmap" Version="4.7.0.5276" />
     <PackageReference Include="Emgu.CV.runtime.windows" Version="4.7.0.5276" />
     <PackageReference Include="Emgu.CV.Wpf" Version="4.7.0.5276" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.5" />
     <PackageReference Include="Microsoft.Win32.SystemEvents" Version="7.0.0" />
     <PackageReference Include="MultiSelectTreeView" Version="1.0.9" />
     <PackageReference Include="OpenCvSharp4" Version="4.7.0.20230115" />

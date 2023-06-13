@@ -22,7 +22,7 @@ namespace insoles.Model
             left = new double[CAPACITY];
             right = new double[CAPACITY];
             signalPlotLeft = plot.Plot.AddSignal(left, color: Color.Red, label: "Left");
-            signalPlotRight = plot.Plot.AddSignal(left, color: Color.Blue, label: "Right");
+            signalPlotRight = plot.Plot.AddSignal(right, color: Color.Blue, label: "Right");
             signalPlotLeft.MarkerSize = 0;
             signalPlotRight.MarkerSize = 0;
             plot.Plot.SetAxisLimitsY(-10, 500);
