@@ -1,7 +1,9 @@
 ﻿using insoles.Commands;
+using insoles.Model;
 using insoles.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -24,19 +26,20 @@ namespace insoles.Forms
     {
         public AcceptarCrearPacienteCommand acceptarCommand { get; set; }
         public string nombre { get;set; }
-        public string apellidos { get; set; }
-        public DateTime fechaNacimiento { get; set; }
-        public string lugar { get; set; }
-        public float peso { get; set; }
-        public float altura { get; set; }
-        public float longitudPie { get; set; }
-        public int numeroPie { get; set; }
-        public string profesion { get; set; }
-        public CrearPacienteForm(IDatabaseService databaseService)
+        public string? apellidos { get; set; }
+        public DateTime? fechaNacimiento { get; set; }
+        public string? lugar { get; set; }
+        public float? peso { get; set; }
+        public float? altura { get; set; }
+        public float? longitudPie { get; set; }
+        public int? numeroPie { get; set; }
+        public string? profesion { get; set; }
+        public CrearPacienteForm(IDatabaseService databaseService, 
+            ObservableCollection<Paciente> pacientes)
         {
             InitializeComponent();
             DataContext = this;
-            acceptarCommand = new AcceptarCrearPacienteCommand(this, databaseService);
+            acceptarCommand = new AcceptarCrearPacienteCommand(this, databaseService, pacientes);
         }
     }
 }

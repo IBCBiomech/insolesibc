@@ -1,7 +1,9 @@
 ﻿using insoles.Forms;
+using insoles.Model;
 using insoles.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,9 +14,12 @@ namespace insoles.Commands
     public class CrearPacienteCommand : ICommand
     {
         private IDatabaseService databaseService;
-        public CrearPacienteCommand(IDatabaseService databaseService)
+        private ObservableCollection<Paciente> pacientes;
+        public CrearPacienteCommand(IDatabaseService databaseService, 
+            ObservableCollection<Paciente> pacientes)
         {
             this.databaseService = databaseService;
+            this.pacientes = pacientes;
         }
         public event EventHandler CanExecuteChanged
         {
@@ -29,7 +34,7 @@ namespace insoles.Commands
 
         public void Execute(object? parameter)
         {
-            CrearPacienteForm form = new CrearPacienteForm(databaseService);
+            CrearPacienteForm form = new CrearPacienteForm(databaseService, pacientes);
             form.ShowDialog();
         }
     }

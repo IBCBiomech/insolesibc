@@ -76,6 +76,7 @@ namespace insoles.ViewModel
         public ObservableCollection<Paciente> Pacientes { get; set; }
         public RegistroVM()
         {
+            Pacientes = new ObservableCollection<Paciente>();
             state = new RegistroState();
             //currentFrames.Add(CurrentFrameTop); currentFrames.Add(CurrentFrameBottom);
             //Init services
@@ -94,7 +95,7 @@ namespace insoles.ViewModel
             recordCommand = new RecordCommand(state, saveService, cameraService);
             pauseCommand = new PauseCommand(state, apiService);
             stopCommand = new StopCommand(state, apiService, saveService);
-            crearPacienteCommand = new CrearPacienteCommand(databaseService);
+            crearPacienteCommand = new CrearPacienteCommand(databaseService, Pacientes);
             //Init Collections
             Cameras = new ObservableCollection<CameraModel>();
             Insoles = new ObservableCollection<InsoleModel>();
@@ -167,7 +168,11 @@ namespace insoles.ViewModel
             Plot = new WpfPlot();
             Plot.Plot.Title("test plot");
             GraphModel = new(Plot);
-            Pacientes = new ObservableCollection<Paciente>(databaseService.GetPacientes());
+            List<Paciente> pacientesDB = databaseService.GetPacientes();
+            foreach(Paciente paciente in pacientesDB)
+            {
+                Pacientes.Add(paciente);
+            }
         }
     }
 }
