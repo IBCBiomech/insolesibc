@@ -11,7 +11,7 @@ using insoles.Database;
 namespace insoles.Migrations
 {
     [DbContext(typeof(DBContextSqlLite))]
-    [Migration("20230613111532_InitialCreate")]
+    [Migration("20230614091151_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -66,6 +66,10 @@ namespace insoles.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("PacienteId")

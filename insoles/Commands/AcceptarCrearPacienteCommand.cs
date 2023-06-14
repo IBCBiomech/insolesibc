@@ -16,19 +16,17 @@ namespace insoles.Commands
     public class AcceptarCrearPacienteCommand : ICommand
     {
         private CrearPacienteForm form;
-        private IDatabaseService databaseService;
-        private ObservableCollection<Paciente> pacientes;
+        private DatabaseBridge databaseBridge;
         public event EventHandler CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
         public AcceptarCrearPacienteCommand(CrearPacienteForm form, 
-            IDatabaseService databaseService, ObservableCollection<Paciente> pacientes)
+            DatabaseBridge databaseBridge)
         {
             this.form = form;
-            this.databaseService = databaseService;
-            this.pacientes = pacientes;
+            this.databaseBridge = databaseBridge;
         }
 
         public bool CanExecute(object? parameter)
@@ -41,8 +39,7 @@ namespace insoles.Commands
             Trace.WriteLine("AcceptarCreatePacienteCommand executed");
             Paciente paciente = new Paciente(form.nombre, form.apellidos, form.fechaNacimiento,
                 form.lugar, form.peso, form.altura, form.longitudPie, form.numeroPie, form.profesion);
-            databaseService.AddPaciente(paciente);
-            pacientes.Add(paciente);
+            databaseBridge.AddPaciente(paciente);
             form.Close();
         }
     }

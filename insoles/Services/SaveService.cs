@@ -11,17 +11,22 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Drawing;
 using insoles.States;
+using System.Diagnostics;
+using System.Windows.Documents;
+using insoles.Model;
 
 namespace insoles.Services
 {
     public class SaveService : ISaveService
     {
         private RegistroState state;
-        private VideoWriter videoWriter;
+        private VideoWriter[] videoWriters;
         private StringBuilder dataHolder;
         private int frame;
         private float fakets;
         private string fileName;
+        private List<string> videoFileNames;
+        DateTime testTime;
         private string FileName
         {
             get
@@ -50,6 +55,7 @@ namespace insoles.Services
         private string FileNameGenerator()
         {
             DateTime now = DateTime.Now;
+            testTime = now;
             string year = now.Year.ToString();
             string month = now.Month.ToString().PadLeft(2, '0');
             string day = now.Day.ToString().PadLeft(2, '0');
@@ -98,47 +104,58 @@ namespace insoles.Services
             return result.ToString();
         }
 
-        public void AppendVideo(Mat frame)
+        public void AppendVideo(Mat frame, int index)
         {
             if (!state.paused)
             {
-                if (videoWriter != null)
+                if (videoWriters != null)
                 {
-                    lock (videoWriter)
+                    if (videoWriters[index] != null) // Race condition
                     {
-                        if (videoWriter != null)
-                            videoWriter.Write(frame);
+                        lock (videoWriters[index])
+                        {
+                            if (videoWriters[index] != null)
+                                videoWriters[index].Write(frame);
+                        }
                     }
                 }
             }
         }
 
-        public void Start(int fps, Size size, int fourcc)
+        public void Start(ICameraService cameraService)
         {
+            videoFileNames = new List<string>();
             string userName = Environment.UserName;
             string path = "C:\\Users\\" + userName + "\\Documents";
-            string filePath = path + Path.DirectorySeparatorChar + FileName + ".avi";
-            videoWriter = new VideoWriter(filePath, fourcc, fps, size, true);
+            string filePath = path + Path.DirectorySeparatorChar + FileName;
+            videoWriters = new VideoWriter[cameraService.NumCamerasOpened];
+            for(int i = 0; i < videoWriters.Length; i++)
+            {
+                string filePath_i = filePath + "cam" + i + ".avi";
+                videoFileNames.Add(filePath_i);
+                videoWriters[i] = new VideoWriter(filePath_i, 
+                    cameraService.getFourcc(i), cameraService.getFps(i), 
+                    cameraService.getResolution(i), true);
+            }  
             frame = 0;
             fakets = 0;
             dataHolder = new StringBuilder();
         }
 
-        public async void Stop()
+        public Test Stop()
         {
-            videoWriter.Dispose();
-            videoWriter = null;
-
+            foreach(VideoWriter videoWriter in videoWriters)
+            {
+                videoWriter.Dispose();
+            }
+            videoWriters = null;
             string userName = Environment.UserName;
             string path = "C:\\Users\\" + userName + "\\Documents";
             string filePath = path + Path.DirectorySeparatorChar + FileName + ".txt";
-            await File.WriteAllTextAsync(filePath, dataHolder.ToString());
+            File.WriteAllTextAsync(filePath, dataHolder.ToString());
             FileName = null;
-        }
-
-        public void Pause()
-        {
-            
+            Test test = new Test(testTime, filePath, videoFileNames);
+            return test;
         }
     }
 }

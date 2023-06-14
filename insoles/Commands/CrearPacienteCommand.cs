@@ -13,13 +13,10 @@ namespace insoles.Commands
 {
     public class CrearPacienteCommand : ICommand
     {
-        private IDatabaseService databaseService;
-        private ObservableCollection<Paciente> pacientes;
-        public CrearPacienteCommand(IDatabaseService databaseService, 
-            ObservableCollection<Paciente> pacientes)
+        private DatabaseBridge databaseBridge;
+        public CrearPacienteCommand(DatabaseBridge databaseBridge)
         {
-            this.databaseService = databaseService;
-            this.pacientes = pacientes;
+            this.databaseBridge = databaseBridge;
         }
         public event EventHandler CanExecuteChanged
         {
@@ -34,7 +31,7 @@ namespace insoles.Commands
 
         public void Execute(object? parameter)
         {
-            CrearPacienteForm form = new CrearPacienteForm(databaseService, pacientes);
+            CrearPacienteForm form = new CrearPacienteForm(databaseBridge);
             form.ShowDialog();
         }
     }

@@ -44,8 +44,8 @@ namespace insoles.Services
             cancellationTokenDisplay = cancellationTokenSourceDisplay.Token;
             videoCapture = new VideoCapture(index, VideoCapture.API.DShow);
             videoCapture.Set(CapProp.Fps, fps);
-            videoCapture.Set(CapProp.FrameHeight, resolution.Height);
-            videoCapture.Set(CapProp.FrameWidth, resolution.Width);
+            //videoCapture.Set(CapProp.FrameHeight, resolution.Height);
+            //videoCapture.Set(CapProp.FrameWidth, resolution.Width);
             videoCapture.Set(CapProp.Autofocus, 39);
             videoCapture.Set(CapProp.Bitrate, 20000);
             //videoCapture.Set(CapProp.FourCC, VideoWriter.Fourcc('H', '2', '6', '4')); // Con esto no funciona

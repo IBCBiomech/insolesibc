@@ -32,7 +32,7 @@ namespace insoles.ViewModel
         private ICameraService cameraService;
         private ILiveCalculationsService liveCalculationsService;
         private ISaveService saveService;
-        private IDatabaseService databaseService;
+        private DatabaseBridge databaseBridge;
         public ScanCommand scanCommand { get; set; }
         public ConnectCommand connectCommand { get; set; }
         public DisconnectCommand disconnectCommand { get; set; }
@@ -42,6 +42,7 @@ namespace insoles.ViewModel
         public RecordCommand recordCommand { get; set; }
         public StopCommand stopCommand { get; set; }
         public PauseCommand pauseCommand { get; set; }
+        public event RoutedPropertyChangedEventHandler<object> PacientesSelectionChanged;
         public CrearPacienteCommand crearPacienteCommand { get; set; }
         public ObservableCollection<CameraModel> Cameras { get; set; }
         public ObservableCollection<InsoleModel> Insoles { get; set; }
@@ -73,10 +74,30 @@ namespace insoles.ViewModel
         }
         public WpfPlot Plot { get; set; }
         private GraphSumPressuresLiveModel GraphModel;
-        public ObservableCollection<Paciente> Pacientes { get; set; }
+        public ObservableCollection<Paciente> Pacientes
+        {
+            get
+            {
+                return databaseBridge.Pacientes;
+            }
+        }
+
+        private object selectedPaciente;
+        public object SelectedPaciente { 
+            get 
+            {
+                return selectedPaciente;
+            }
+            set 
+            { 
+                selectedPaciente = value;
+                Trace.WriteLine(((Paciente)value).Nombre);
+                OnPropertyChanged();
+            } 
+        }
         public RegistroVM()
         {
-            Pacientes = new ObservableCollection<Paciente>();
+            databaseBridge = new DatabaseBridge();
             state = new RegistroState();
             //currentFrames.Add(CurrentFrameTop); currentFrames.Add(CurrentFrameBottom);
             //Init services
@@ -84,18 +105,17 @@ namespace insoles.ViewModel
             cameraService = new CameraService();
             liveCalculationsService = new LiveCalculationsService();
             saveService = new SaveService(state);
-            databaseService = new SQLiteDatabaseService();
             //Init commands
             scanCommand = new ScanCommand(apiService, cameraService);
             connectCommand = new ConnectCommand(apiService);
             disconnectCommand = new DisconnectCommand(apiService);
-            captureCommand = new CaptureCommand(state, apiService, () => Insoles);
+            captureCommand = new CaptureCommand(state, apiService, () => Insoles, () => selectedPaciente);
             openCameraCommand = new OpenCameraCommand(cameraService);
             closeCameraCommand = new CloseCameraCommand(cameraService);
             recordCommand = new RecordCommand(state, saveService, cameraService);
             pauseCommand = new PauseCommand(state, apiService);
-            stopCommand = new StopCommand(state, apiService, saveService);
-            crearPacienteCommand = new CrearPacienteCommand(databaseService, Pacientes);
+            stopCommand = new StopCommand(state, apiService, saveService, databaseBridge);
+            crearPacienteCommand = new CrearPacienteCommand(databaseBridge);
             //Init Collections
             Cameras = new ObservableCollection<CameraModel>();
             Insoles = new ObservableCollection<InsoleModel>();
@@ -141,7 +161,7 @@ namespace insoles.ViewModel
                     {
                         CurrentFrameTop = FormatConversions.ToBitmapSource(frame);
                     });
-                    saveService.AppendVideo(frame);
+                    saveService.AppendVideo(frame, index);
                 }
                 else if(index == 1)
                 {
@@ -149,7 +169,7 @@ namespace insoles.ViewModel
                     {
                         CurrentFrameBottom = FormatConversions.ToBitmapSource(frame);
                     });
-                    saveService.AppendVideo(frame);
+                    saveService.AppendVideo(frame, index);
                 }
             };
             apiService.DataReceived += (byte handler, List<InsoleData> packet) =>
@@ -165,14 +185,15 @@ namespace insoles.ViewModel
                 GraphModel.UpdateData(metricLeft, metricRight);
                 saveService.AppendCSV(left, right, metricLeft, metricRight);
             };
+            PacientesSelectionChanged += (object sender, RoutedPropertyChangedEventArgs<object> e) =>
+            {
+                Trace.WriteLine("selection changed");
+            };
             Plot = new WpfPlot();
             Plot.Plot.Title("test plot");
             GraphModel = new(Plot);
-            List<Paciente> pacientesDB = databaseService.GetPacientes();
-            foreach(Paciente paciente in pacientesDB)
-            {
-                Pacientes.Add(paciente);
-            }
+            if(databaseBridge.Pacientes.Count > 0)
+                state.selectedPaciente = databaseBridge.Pacientes[0]; // Temporal
         }
     }
 }

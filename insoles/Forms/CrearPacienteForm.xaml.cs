@@ -34,12 +34,11 @@ namespace insoles.Forms
         public float? longitudPie { get; set; }
         public int? numeroPie { get; set; }
         public string? profesion { get; set; }
-        public CrearPacienteForm(IDatabaseService databaseService, 
-            ObservableCollection<Paciente> pacientes)
+        public CrearPacienteForm(DatabaseBridge databaseBridge)
         {
             InitializeComponent();
             DataContext = this;
-            acceptarCommand = new AcceptarCrearPacienteCommand(this, databaseService, pacientes);
+            acceptarCommand = new AcceptarCrearPacienteCommand(this, databaseBridge);
         }
     }
 }

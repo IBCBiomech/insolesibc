@@ -1,4 +1,5 @@
-﻿using System;
+﻿using insoles.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,7 @@ namespace insoles.States
         public bool paused { get; set; } = false;
         public bool capturing { get; set; } = false;
         public bool recording { get; set; } = false;
+
+        public Paciente? selectedPaciente { get; set; } = null;
     }
 }

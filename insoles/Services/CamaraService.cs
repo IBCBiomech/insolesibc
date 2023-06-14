@@ -26,7 +26,6 @@ namespace insoles.Services
         {
 
         }
-
         public async void Scan()
         {
             List<string> names = await Task.Run(() => CameraNames());

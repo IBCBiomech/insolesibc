@@ -33,7 +33,7 @@ namespace insoles.Commands
 
         public void Execute(object? parameter)
         {
-            saveService.Start(cameraService.getFps(0), cameraService.getResolution(0), cameraService.getFourcc(0));
+            saveService.Start(cameraService);
             state.recording = true;
         }
     }

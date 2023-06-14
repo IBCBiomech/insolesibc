@@ -15,8 +15,5 @@
     <DataTemplate DataType="{x:Type vm:InformesVM}">
         <view:Informes />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type vm:CamaraViewportVM}">
-        <view:CamaraViewport/>
-    </DataTemplate>
 
 </ResourceDictionary>

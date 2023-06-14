@@ -7,7 +7,7 @@ namespace insoles.Services
 {
     public interface ICameraService
     {
-        public const int MAX_CAMERAS = 1;
+        public const int MAX_CAMERAS = 2;
         public void Scan();
         public void OpenCamera(int index, int fps, System.Drawing.Size resolution);
         public void CloseCamera(int index);

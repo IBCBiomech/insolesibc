@@ -65,6 +65,10 @@ namespace insoles.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<int?>("PacienteId")
                         .HasColumnType("INTEGER");
 

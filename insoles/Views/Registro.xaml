@@ -14,6 +14,8 @@
              VerticalAlignment="Stretch">
     <UserControl.Resources>
         <converter:BooleanToCircleConverter x:Key="booleanToCircleConverter"/>
+        <converter:PathToFileNameConverter x:Key="pathToFileNameConverter"/>
+        <converter:NullToVisibilityConverter x:Key="nullToVisibilityConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -144,21 +146,29 @@
                                 <TreeViewItem Header="{Binding Nombre}">
                                     <TreeViewItem Header="Pruebas">
                                         <TreeViewItem Header="Marcha">
-                                            <TreeViewItem.Resources>
-                                                <DataTemplate DataType="{x:Type model:Test}">
-                                                    <Grid>
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="100"/>
-                                                            <ColumnDefinition Width="120"/>
-                                                        </Grid.ColumnDefinitions>
-                                                        <TextBlock Text="{Binding csv}" Grid.Column="0"/>
-                                                        <TextBlock Text="{Binding Date}" Grid.Column="1"/>
-                                                    </Grid>
-                                                </DataTemplate>
-                                            </TreeViewItem.Resources>
                                             <TreeViewItem.ItemsSource>
                                                 <Binding Path="Tests" />
                                             </TreeViewItem.ItemsSource>
+                                            <TreeViewItem.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type model:Test}">
+                                                    <TreeViewItem Header="{Binding Nombre}">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="150"/>
+                                                                <ColumnDefinition Width="120"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <Grid.RowDefinitions>
+                                                                <RowDefinition Height="auto"/>
+                                                                <RowDefinition Height="auto"/>
+                                                            </Grid.RowDefinitions>
+                                                            <TextBlock Text="{Binding csv, Converter={StaticResource pathToFileNameConverter}}" Grid.Column="0" Grid.Row="0"/>
+                                                            <TextBlock Text="{Binding Date}" Grid.Column="1" Grid.Row="0"/>
+                                                            <TextBlock Text="{Binding video1, Converter={StaticResource pathToFileNameConverter}}" Visibility="{Binding video1, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="0" Grid.Row="1"/>
+                                                            <TextBlock Text="{Binding Date}" Visibility="{Binding video1, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="1" Grid.Row="1"/>
+                                                        </Grid>
+                                                    </TreeViewItem>
+                                                </DataTemplate>
+                                            </TreeViewItem.ItemTemplate>
                                         </TreeViewItem>
                                         <TreeViewItem Header="Informes">
                                             
@@ -195,6 +205,9 @@
             </StackPanel>
             <ContentControl DockPanel.Dock="Bottom" Content="{Binding Plot}"/>
         </DockPanel>
-        <Image Source="{Binding CurrentFrameTop}" Stretch="Uniform" Grid.Column="2"/>
+        <StackPanel Grid.Column="2" Orientation="Vertical">
+            <Image Source="{Binding CurrentFrameTop}" Stretch="Uniform"/>
+            <Image Source="{Binding CurrentFrameBottom}" Stretch="Uniform"/>
+        </StackPanel>
     </Grid>
 </UserControl>
