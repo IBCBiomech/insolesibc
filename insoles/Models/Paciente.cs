@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,8 @@ namespace insoles.Model
         public int? NumeroPie { get; set; }
         public string Profesion { get; set; }
         public ICollection<Test> Tests { get; set; }
+        [NotMapped]
+        public bool IsSelected { get; set; }
         public Paciente(string nombre, string? apellidos, DateTime? fechaNacimiento,
             string? lugar, float? peso, float? altura, float? longitudPie, int? numeroPie,
             string? profesion)

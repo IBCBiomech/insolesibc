@@ -130,12 +130,13 @@
                         </controls:MultiSelectTreeViewItem>
                     </controls:MultiSelectTreeViewItem>
                 </controls:MultiSelectTreeView>
-                <TreeView>
+                <TreeView SelectedItemChanged="TreeView_SelectedItemChanged">
                     <TreeViewItem ItemsSource="{Binding Pacientes}">
                         <TreeViewItem.Header>
                             <TextBlock Text="Sujetos">
                                 <TextBlock.ContextMenu>
                                     <ContextMenu>
+                                        <MenuItem Header="Obtener" Command="{Binding obtenerPacientesCommand}"/>
                                         <MenuItem Header="Crear" Command="{Binding crearPacienteCommand}"/>
                                     </ContextMenu>
                                 </TextBlock.ContextMenu>
@@ -145,7 +146,7 @@
                             <DataTemplate DataType="{x:Type model:Paciente}">
                                 <TreeViewItem Header="{Binding Nombre}">
                                     <TreeViewItem Header="Pruebas">
-                                        <TreeViewItem Header="Marcha">
+                                        <TreeViewItem Header="Tests">
                                             <TreeViewItem.ItemsSource>
                                                 <Binding Path="Tests" />
                                             </TreeViewItem.ItemsSource>
@@ -171,10 +172,7 @@
                                             </TreeViewItem.ItemTemplate>
                                         </TreeViewItem>
                                         <TreeViewItem Header="Informes">
-                                            
-                                        </TreeViewItem>
-                                        <TreeViewItem Header="Prueba de carga">
-                                            
+
                                         </TreeViewItem>
                                     </TreeViewItem>
                                 </TreeViewItem>

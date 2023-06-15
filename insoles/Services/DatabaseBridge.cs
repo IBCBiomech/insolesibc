@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace insoles.Services
 {
@@ -15,21 +16,32 @@ namespace insoles.Services
         public DatabaseBridge()
         {
             databaseService = new SQLiteDatabaseService();
-            List<Paciente> pacientesDB = databaseService.GetPacientes();
-            foreach (Paciente paciente in pacientesDB)
+        }
+        public async Task LoadPacientes()
+        {
+            List<Paciente> pacientesDB = await databaseService.GetPacientes();
+            await Application.Current.Dispatcher.BeginInvoke(() =>
             {
-                Pacientes.Add(paciente);
-            }
+                Pacientes.Clear();
+                foreach (Paciente paciente in pacientesDB)
+                {
+                    Pacientes.Add(paciente);
+                }
+            });
         }
-        public void AddPaciente(Paciente paciente)
+        public async Task AddPaciente(Paciente paciente)
         {
-            Pacientes.Add(paciente);
-            databaseService.AddPaciente(paciente);
+            await databaseService.AddPaciente(paciente);
+            await LoadPacientes();
         }
-        public void AddTest(Paciente paciente, Test test)
+        public async Task AddTest(Paciente paciente, Test test)
         {
-            paciente.Tests.Add(test);
-            databaseService.AddTest(paciente, test);
+            await databaseService.AddTest(paciente, test);
+            await LoadPacientes();
+        }
+        public Paciente? GetSelectedPaciente()
+        {
+            return Pacientes.FirstOrDefault();
         }
     }
 }

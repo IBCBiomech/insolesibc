@@ -42,6 +42,7 @@ namespace insoles.ViewModel
         public RecordCommand recordCommand { get; set; }
         public StopCommand stopCommand { get; set; }
         public PauseCommand pauseCommand { get; set; }
+        public ObtenerPacientesCommand obtenerPacientesCommand { get; set; }
         public event RoutedPropertyChangedEventHandler<object> PacientesSelectionChanged;
         public CrearPacienteCommand crearPacienteCommand { get; set; }
         public ObservableCollection<CameraModel> Cameras { get; set; }
@@ -98,7 +99,7 @@ namespace insoles.ViewModel
         public RegistroVM()
         {
             databaseBridge = new DatabaseBridge();
-            state = new RegistroState();
+            state = new RegistroState(databaseBridge);
             //currentFrames.Add(CurrentFrameTop); currentFrames.Add(CurrentFrameBottom);
             //Init services
             apiService = new FakeApiService(state);
@@ -116,6 +117,7 @@ namespace insoles.ViewModel
             pauseCommand = new PauseCommand(state, apiService);
             stopCommand = new StopCommand(state, apiService, saveService, databaseBridge);
             crearPacienteCommand = new CrearPacienteCommand(databaseBridge);
+            obtenerPacientesCommand = new ObtenerPacientesCommand(databaseBridge);
             //Init Collections
             Cameras = new ObservableCollection<CameraModel>();
             Insoles = new ObservableCollection<InsoleModel>();
@@ -192,8 +194,6 @@ namespace insoles.ViewModel
             Plot = new WpfPlot();
             Plot.Plot.Title("test plot");
             GraphModel = new(Plot);
-            if(databaseBridge.Pacientes.Count > 0)
-                state.selectedPaciente = databaseBridge.Pacientes[0]; // Temporal
         }
     }
 }

@@ -12,7 +12,7 @@ namespace insoles.Services
 {
     public class SQLiteDatabaseService : IDatabaseService
     {
-        public void AddPaciente(Paciente paciente)
+        public Task AddPaciente(Paciente paciente)
         {
             using (var dbContext = new DBContextSqlLite())
             {
@@ -20,6 +20,7 @@ namespace insoles.Services
                 try
                 {
                     dbContext.SaveChanges();
+                    return Task.CompletedTask;
                 }
                 catch (DbUpdateException ex)
                 {
@@ -29,7 +30,7 @@ namespace insoles.Services
                 }
             }
         }
-        public void AddTest(Paciente paciente, Test test)
+        public Task AddTest(Paciente paciente, Test test)
         {
             Trace.WriteLine("SQLiteDatabaseService AddTest");
             using (var dbContext = new DBContextSqlLite())
@@ -45,6 +46,7 @@ namespace insoles.Services
                     try
                     {
                         dbContext.SaveChanges();
+                        return Task.CompletedTask;
                     }
                     catch (DbUpdateException ex)
                     {
@@ -53,15 +55,19 @@ namespace insoles.Services
                         throw innerException;
                     }
                 }
+                else
+                {
+                    return Task.CompletedTask;
+                }
             }
 
         }
-        public List<Paciente> GetPacientes()
+        public async Task<List<Paciente>> GetPacientes()
         {
             using (var dbContext = new DBContextSqlLite())
             {
                 dbContext.Database.EnsureCreated();
-                return dbContext.Pacientes.Include(p => p.Tests).ToList();
+                return await dbContext.Pacientes.Include(p => p.Tests).ToListAsync();
             }
         }
     }

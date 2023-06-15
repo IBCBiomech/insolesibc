@@ -36,10 +36,12 @@ namespace insoles.Commands
 
         public void Execute(object? parameter)
         {
-            Trace.WriteLine("AcceptarCreatePacienteCommand executed");
             Paciente paciente = new Paciente(form.nombre, form.apellidos, form.fechaNacimiento,
                 form.lugar, form.peso, form.altura, form.longitudPie, form.numeroPie, form.profesion);
-            databaseBridge.AddPaciente(paciente);
+            Task.Run(async () =>
+            {
+                await databaseBridge.AddPaciente(paciente);
+            });
             form.Close();
         }
     }

@@ -10,8 +10,8 @@ namespace insoles.Services
 {
     public interface IDatabaseService
     {
-        void AddPaciente(Paciente paciente);
-        void AddTest(Paciente paciente, Test test);
-        List<Paciente> GetPacientes();
+        Task AddPaciente(Paciente paciente);
+        Task AddTest(Paciente paciente, Test test);
+        Task<List<Paciente>> GetPacientes();
     }
 }

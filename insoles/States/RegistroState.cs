@@ -1,4 +1,5 @@
 ﻿using insoles.Model;
+using insoles.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,17 @@ namespace insoles.States
         public bool capturing { get; set; } = false;
         public bool recording { get; set; } = false;
 
-        public Paciente? selectedPaciente { get; set; } = null;
+        public Paciente? selectedPaciente
+        {
+            get
+            {
+                return databaseBridge.GetSelectedPaciente();
+            }
+        }
+        private DatabaseBridge databaseBridge;
+        public RegistroState(DatabaseBridge databaseBridge)
+        {
+            this.databaseBridge = databaseBridge;
+        }
     }
 }
