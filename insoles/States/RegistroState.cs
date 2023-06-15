@@ -21,10 +21,19 @@ namespace insoles.States
                 return databaseBridge.GetSelectedPaciente();
             }
         }
+        public Paciente fixedPaciente { get; private set; }
         private DatabaseBridge databaseBridge;
         public RegistroState(DatabaseBridge databaseBridge)
         {
             this.databaseBridge = databaseBridge;
+        }
+        public void fixPaciente()
+        {
+            if(selectedPaciente == null)
+            {
+                throw new Exception("No selected paciente");
+            }
+            fixedPaciente = selectedPaciente;
         }
     }
 }

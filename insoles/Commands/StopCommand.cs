@@ -44,7 +44,7 @@ namespace insoles.Commands
             state.recording = false;
             Task.Run(async () =>
             {
-                await databaseBridge.AddTest(state.selectedPaciente, test);
+                await databaseBridge.AddTest(state.fixedPaciente, test);
             });
         }
     }

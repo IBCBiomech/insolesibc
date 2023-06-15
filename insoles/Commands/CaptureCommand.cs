@@ -36,17 +36,16 @@ namespace insoles.Commands
         {
             if (state.capturing)
                 return false;
-            /*
-            object selected = getSelectedPaciente();
+            object? selected = state.selectedPaciente;
             if (selected == null)
                 return false;
-            */
             ObservableCollection<InsoleModel> insoles = getInsoles();
             return insoles.Where((InsoleModel insole) => insole.connected).Count() == 2;
         }
 
         public void Execute(object? parameter)
         {
+            state.fixPaciente();
             apiService.Capture();
             state.capturing = true;
         }

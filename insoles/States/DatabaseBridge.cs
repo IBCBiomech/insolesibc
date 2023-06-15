@@ -41,7 +41,11 @@ namespace insoles.Services
         }
         public Paciente? GetSelectedPaciente()
         {
-            return Pacientes.FirstOrDefault();
+            foreach(Paciente paciente in Pacientes)
+            {
+                if(paciente.IsSelected) return paciente;
+            }
+            return null;
         }
     }
 }

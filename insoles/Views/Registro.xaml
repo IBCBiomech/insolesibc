@@ -130,7 +130,7 @@
                         </controls:MultiSelectTreeViewItem>
                     </controls:MultiSelectTreeViewItem>
                 </controls:MultiSelectTreeView>
-                <TreeView SelectedItemChanged="TreeView_SelectedItemChanged">
+                <TreeView>
                     <TreeViewItem ItemsSource="{Binding Pacientes}">
                         <TreeViewItem.Header>
                             <TextBlock Text="Sujetos">
@@ -144,7 +144,7 @@
                         </TreeViewItem.Header>
                         <TreeViewItem.ItemTemplate>
                             <DataTemplate DataType="{x:Type model:Paciente}">
-                                <TreeViewItem Header="{Binding Nombre}">
+                                <TreeViewItem Header="{Binding Nombre}" IsSelected="{Binding IsSelected, Mode=TwoWay}">
                                     <TreeViewItem Header="Pruebas">
                                         <TreeViewItem Header="Tests">
                                             <TreeViewItem.ItemsSource>
