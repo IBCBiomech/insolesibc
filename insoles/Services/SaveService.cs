@@ -20,6 +20,7 @@ namespace insoles.Services
     public class SaveService : ISaveService
     {
         private RegistroState state;
+        private DatabaseBridge databaseBridge;
         private VideoWriter[] videoWriters;
         private StringBuilder dataHolder;
         private int frame;

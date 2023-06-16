@@ -60,13 +60,19 @@ namespace insoles.Services
                     return Task.CompletedTask;
                 }
             }
-
+        }
+        public async Task UpdateTest(Test test)
+        {
+            using (var dbContext = new DBContextSqlLite())
+            {
+                dbContext.Tests.Update(test);
+                await dbContext.SaveChangesAsync();
+            }
         }
         public async Task<List<Paciente>> GetPacientes()
         {
             using (var dbContext = new DBContextSqlLite())
             {
-                dbContext.Database.EnsureCreated();
                 return await dbContext.Pacientes.Include(p => p.Tests).ToListAsync();
             }
         }

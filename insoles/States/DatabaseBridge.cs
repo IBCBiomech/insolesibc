@@ -1,13 +1,16 @@
 ﻿using insoles.Model;
+using insoles.Services;
+using Microsoft.Data.Sqlite;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace insoles.Services
+namespace insoles.States
 {
     public class DatabaseBridge
     {
@@ -19,15 +22,26 @@ namespace insoles.Services
         }
         public async Task LoadPacientes()
         {
-            List<Paciente> pacientesDB = await databaseService.GetPacientes();
-            await Application.Current.Dispatcher.BeginInvoke(() =>
+            Trace.WriteLine("Load Pacientes");
+            try
             {
-                Pacientes.Clear();
-                foreach (Paciente paciente in pacientesDB)
+                List<Paciente> pacientesDB = await databaseService.GetPacientes();
+                Trace.WriteLine("Load Pacientes got from DB");
+                await Application.Current.Dispatcher.BeginInvoke(() =>
                 {
-                    Pacientes.Add(paciente);
-                }
-            });
+                    Pacientes.Clear();
+                    foreach (Paciente paciente in pacientesDB)
+                    {
+                        Pacientes.Add(paciente);
+                    }
+                });
+            }
+            catch (SqliteException ex)
+            {
+                Trace.WriteLine("Error Message: " + ex.Message);
+                Trace.WriteLine("Error Code: " + ex.ErrorCode);
+                Trace.WriteLine("Stack Trace: " + ex.StackTrace);
+            }
         }
         public async Task AddPaciente(Paciente paciente)
         {
@@ -37,6 +51,11 @@ namespace insoles.Services
         public async Task AddTest(Paciente paciente, Test test)
         {
             await databaseService.AddTest(paciente, test);
+            await LoadPacientes();
+        }
+        public async Task UpdateTest(Test test)
+        {
+            await databaseService.UpdateTest(test);
             await LoadPacientes();
         }
         public Paciente? GetSelectedPaciente()

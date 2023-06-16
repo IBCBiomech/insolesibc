@@ -10,6 +10,9 @@
     <Compile Update="Forms\CrearPacienteForm.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Forms\TextInputForm.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Analisis.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -25,6 +28,9 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Forms\CrearPacienteForm.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Forms\TextInputForm.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">

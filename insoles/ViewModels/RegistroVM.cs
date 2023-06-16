@@ -6,22 +6,14 @@ using insoles.Utilities;
 using Emgu.CV;
 //using Emgu.CV.WPF; //No funciona
 using ScottPlot;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
-using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using WisewalkSDK;
 using insoles.Commands;
-using System.Windows.Navigation;
-using static WisewalkSDK.Wisewalk;
 using insoles.States;
-using insoles.Database;
-using System.Threading.Tasks;
 
 namespace insoles.ViewModel
 {
@@ -99,6 +91,7 @@ namespace insoles.ViewModel
         public RegistroVM()
         {
             databaseBridge = new DatabaseBridge();
+            ((MainWindow)Application.Current.MainWindow).databaseBridge = databaseBridge; // Temporal para acceder desde los commandos
             state = new RegistroState(databaseBridge);
             //currentFrames.Add(CurrentFrameTop); currentFrames.Add(CurrentFrameBottom);
             //Init services

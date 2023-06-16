@@ -132,6 +132,11 @@
                 </controls:MultiSelectTreeView>
                 <TreeView>
                     <TreeViewItem ItemsSource="{Binding Pacientes}">
+                        <TreeViewItem.ItemContainerStyle>
+                            <Style TargetType="{x:Type TreeViewItem}">
+                                <Setter Property="IsSelected" Value="{Binding IsSelected}" />
+                            </Style>
+                        </TreeViewItem.ItemContainerStyle>
                         <TreeViewItem.Header>
                             <TextBlock Text="Sujetos">
                                 <TextBlock.ContextMenu>
@@ -144,7 +149,7 @@
                         </TreeViewItem.Header>
                         <TreeViewItem.ItemTemplate>
                             <DataTemplate DataType="{x:Type model:Paciente}">
-                                <TreeViewItem Header="{Binding Nombre}" IsSelected="{Binding IsSelected, Mode=TwoWay}">
+                                <TreeViewItem Header="{Binding Nombre}">
                                     <TreeViewItem Header="Pruebas">
                                         <TreeViewItem Header="Tests">
                                             <TreeViewItem.ItemsSource>
@@ -153,6 +158,11 @@
                                             <TreeViewItem.ItemTemplate>
                                                 <DataTemplate DataType="{x:Type model:Test}">
                                                     <TreeViewItem Header="{Binding Nombre}">
+                                                        <TreeViewItem.ContextMenu>
+                                                            <ContextMenu>
+                                                                <MenuItem Header="Renombrar" Command="{Binding renombrarCarpetaTestCommand}" CommandParameter="{Binding}"/>
+                                                            </ContextMenu>
+                                                        </TreeViewItem.ContextMenu>
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
                                                                 <ColumnDefinition Width="150"/>
@@ -161,11 +171,32 @@
                                                             <Grid.RowDefinitions>
                                                                 <RowDefinition Height="auto"/>
                                                                 <RowDefinition Height="auto"/>
+                                                                <RowDefinition Height="auto"/>
                                                             </Grid.RowDefinitions>
-                                                            <TextBlock Text="{Binding csv, Converter={StaticResource pathToFileNameConverter}}" Grid.Column="0" Grid.Row="0"/>
+                                                            <TextBlock Text="{Binding csv, Converter={StaticResource pathToFileNameConverter}}" Grid.Column="0" Grid.Row="0">
+                                                                <TextBlock.ContextMenu>
+                                                                    <ContextMenu>
+                                                                        <MenuItem Header="Renombrar" Command="{Binding renombrarFicheroCSVTestCommand}" CommandParameter="{Binding}"/>
+                                                                    </ContextMenu>
+                                                                </TextBlock.ContextMenu>
+                                                            </TextBlock>
                                                             <TextBlock Text="{Binding Date}" Grid.Column="1" Grid.Row="0"/>
-                                                            <TextBlock Text="{Binding video1, Converter={StaticResource pathToFileNameConverter}}" Visibility="{Binding video1, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="0" Grid.Row="1"/>
+                                                            <TextBlock Text="{Binding video1, Converter={StaticResource pathToFileNameConverter}}" Visibility="{Binding video1, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="0" Grid.Row="1">
+                                                                <TextBlock.ContextMenu>
+                                                                    <ContextMenu>
+                                                                        <MenuItem Header="Renombrar" Command="{Binding renombrarFicheroVideo1TestCommand}" CommandParameter="{Binding}"/>
+                                                                    </ContextMenu>
+                                                                </TextBlock.ContextMenu>
+                                                            </TextBlock>
                                                             <TextBlock Text="{Binding Date}" Visibility="{Binding video1, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="1" Grid.Row="1"/>
+                                                            <TextBlock Text="{Binding video2, Converter={StaticResource pathToFileNameConverter}}" Visibility="{Binding video1, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="0" Grid.Row="2">
+                                                                <TextBlock.ContextMenu>
+                                                                    <ContextMenu>
+                                                                        <MenuItem Header="Renombrar" Command="{Binding renombrarFicheroVideo2TestCommand}" CommandParameter="{Binding}"/>
+                                                                    </ContextMenu>
+                                                                </TextBlock.ContextMenu>
+                                                            </TextBlock>
+                                                            <TextBlock Text="{Binding Date}" Visibility="{Binding video2, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="1" Grid.Row="2"/>
                                                         </Grid>
                                                     </TreeViewItem>
                                                 </DataTemplate>

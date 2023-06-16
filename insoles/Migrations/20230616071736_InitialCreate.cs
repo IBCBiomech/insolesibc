@@ -33,31 +33,32 @@ namespace insoles.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Test",
+                name: "Tests",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    PacienteId = table.Column<int>(type: "INTEGER", nullable: false),
                     Date = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Nombre = table.Column<string>(type: "TEXT", nullable: false),
                     csv = table.Column<string>(type: "TEXT", nullable: false),
                     video1 = table.Column<string>(type: "TEXT", nullable: true),
-                    video2 = table.Column<string>(type: "TEXT", nullable: true),
-                    PacienteId = table.Column<int>(type: "INTEGER", nullable: true)
+                    video2 = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Test", x => x.Id);
+                    table.PrimaryKey("PK_Tests", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Test_Pacientes_PacienteId",
+                        name: "FK_Tests_Pacientes_PacienteId",
                         column: x => x.PacienteId,
                         principalTable: "Pacientes",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Test_PacienteId",
-                table: "Test",
+                name: "IX_Tests_PacienteId",
+                table: "Tests",
                 column: "PacienteId");
         }
 
@@ -65,7 +66,7 @@ namespace insoles.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Test");
+                name: "Tests");
 
             migrationBuilder.DropTable(
                 name: "Pacientes");

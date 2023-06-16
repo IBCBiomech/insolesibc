@@ -11,7 +11,7 @@ using insoles.Database;
 namespace insoles.Migrations
 {
     [DbContext(typeof(DBContextSqlLite))]
-    [Migration("20230614091151_InitialCreate")]
+    [Migration("20230616071736_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -72,7 +72,7 @@ namespace insoles.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("PacienteId")
+                    b.Property<int>("PacienteId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("csv")
@@ -89,14 +89,18 @@ namespace insoles.Migrations
 
                     b.HasIndex("PacienteId");
 
-                    b.ToTable("Test");
+                    b.ToTable("Tests");
                 });
 
             modelBuilder.Entity("insoles.Model.Test", b =>
                 {
-                    b.HasOne("insoles.Model.Paciente", null)
+                    b.HasOne("insoles.Model.Paciente", "Paciente")
                         .WithMany("Tests")
-                        .HasForeignKey("PacienteId");
+                        .HasForeignKey("PacienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Paciente");
                 });
 
             modelBuilder.Entity("insoles.Model.Paciente", b =>

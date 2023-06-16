@@ -7,6 +7,12 @@ namespace insoles.Database
     {
         public DbSet<Paciente> Pacientes { get; set; }
 
+        public DbSet<Test> Tests { get; set; }
+
+        public DBContextSqlLite()
+        {
+            Database.EnsureCreated();
+        }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
@@ -14,6 +20,11 @@ namespace insoles.Database
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Test>()
+                .HasOne(t => t.Paciente)
+                .WithMany(p => p.Tests)
+                .HasForeignKey(t => t.PacienteId);
+
             modelBuilder.Entity<Paciente>()
                 .Property(p => p.Apellidos)
                 .IsRequired(false);

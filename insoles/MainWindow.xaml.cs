@@ -1,4 +1,5 @@
-﻿using System;
+﻿using insoles.States;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +21,7 @@ namespace insoles
     /// </summary>
     public partial class MainWindow : Window
     {
+        public DatabaseBridge databaseBridge { get; set; }
         public MainWindow()
         {
             InitializeComponent();
