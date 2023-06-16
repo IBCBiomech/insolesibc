@@ -2,6 +2,7 @@
 # IBC Bio :registered: 2023
 
 ![Bio](Images/bio.png)
+  
 
 ## Configuraciones
 
