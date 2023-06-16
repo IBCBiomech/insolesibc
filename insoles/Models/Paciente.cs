@@ -35,7 +35,6 @@ namespace insoles.Model
             set 
             { 
                 isSelected = value;
-                Trace.WriteLine("Is selected changed");
                 OnPropertyChanged();
             } }
         public Paciente(string nombre, string? apellidos, DateTime? fechaNacimiento,

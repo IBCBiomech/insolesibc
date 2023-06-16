@@ -13,6 +13,9 @@
     <Compile Update="Forms\TextInputForm.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControls\PacientesUserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Analisis.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -55,6 +58,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Styles\Text.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\PacientesUserControl.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Utilities\DataTemplate.xaml">

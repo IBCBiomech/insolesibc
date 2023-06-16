@@ -6,11 +6,13 @@
              xmlns:Menu="clr-namespace:insoles.Utilities"
              xmlns:converter="clr-namespace:insoles.Converter"
              xmlns:enum="clr-namespace:insoles.Enums"
+             xmlns:behaviour="clr-namespace:insoles.Behaviour"
              xmlns:proxy="clr-namespace:insoles.Proxy"
              xmlns:local="clr-namespace:insoles.View"
              xmlns:System="clr-namespace:System;assembly=mscorlib"
              xmlns:model="clr-namespace:insoles.Model"
              xmlns:controls="clr-namespace:System.Windows.Controls;assembly=MultiSelectTreeView"
+             xmlns:userControls="clr-namespace:insoles.UserControls"
              mc:Ignorable="d" 
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch">
@@ -144,87 +146,7 @@
                         </controls:MultiSelectTreeViewItem>
                     </controls:MultiSelectTreeViewItem>
                 </controls:MultiSelectTreeView>
-                <TreeView>
-                    <TreeViewItem ItemsSource="{Binding Pacientes}">
-                        <TreeViewItem.ItemContainerStyle>
-                            <Style TargetType="{x:Type TreeViewItem}">
-                                <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-                            </Style>
-                        </TreeViewItem.ItemContainerStyle>
-                        <TreeViewItem.Header>
-                            <TextBlock Text="Sujetos">
-                                <TextBlock.ContextMenu>
-                                    <ContextMenu>
-                                        <MenuItem Header="Obtener" Command="{Binding obtenerPacientesCommand}"/>
-                                        <MenuItem Header="Crear" Command="{Binding crearPacienteCommand}"/>
-                                    </ContextMenu>
-                                </TextBlock.ContextMenu>
-                            </TextBlock>
-                        </TreeViewItem.Header>
-                        <TreeViewItem.ItemTemplate>
-                            <DataTemplate DataType="{x:Type model:Paciente}">
-                                <TreeViewItem Header="{Binding Nombre}">
-                                    <TreeViewItem Header="Pruebas">
-                                        <TreeViewItem Header="Tests">
-                                            <TreeViewItem.ItemsSource>
-                                                <Binding Path="Tests" />
-                                            </TreeViewItem.ItemsSource>
-                                            <TreeViewItem.ItemTemplate>
-                                                <DataTemplate DataType="{x:Type model:Test}">
-                                                    <TreeViewItem Header="{Binding Nombre}">
-                                                        <TreeViewItem.ContextMenu>
-                                                            <ContextMenu>
-                                                                <MenuItem Header="Renombrar" Command="{Binding renombrarCarpetaTestCommand}" CommandParameter="{Binding}"/>
-                                                            </ContextMenu>
-                                                        </TreeViewItem.ContextMenu>
-                                                        <Grid>
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="150"/>
-                                                                <ColumnDefinition Width="120"/>
-                                                            </Grid.ColumnDefinitions>
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition Height="auto"/>
-                                                                <RowDefinition Height="auto"/>
-                                                                <RowDefinition Height="auto"/>
-                                                            </Grid.RowDefinitions>
-                                                            <TextBlock Text="{Binding csv, Converter={StaticResource pathToFileNameConverter}}" Grid.Column="0" Grid.Row="0">
-                                                                <TextBlock.ContextMenu>
-                                                                    <ContextMenu>
-                                                                        <MenuItem Header="Renombrar" Command="{Binding renombrarFicheroCSVTestCommand}" CommandParameter="{Binding}"/>
-                                                                    </ContextMenu>
-                                                                </TextBlock.ContextMenu>
-                                                            </TextBlock>
-                                                            <TextBlock Text="{Binding Date}" Grid.Column="1" Grid.Row="0"/>
-                                                            <TextBlock Text="{Binding video1, Converter={StaticResource pathToFileNameConverter}}" Visibility="{Binding video1, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="0" Grid.Row="1">
-                                                                <TextBlock.ContextMenu>
-                                                                    <ContextMenu>
-                                                                        <MenuItem Header="Renombrar" Command="{Binding renombrarFicheroVideo1TestCommand}" CommandParameter="{Binding}"/>
-                                                                    </ContextMenu>
-                                                                </TextBlock.ContextMenu>
-                                                            </TextBlock>
-                                                            <TextBlock Text="{Binding Date}" Visibility="{Binding video1, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="1" Grid.Row="1"/>
-                                                            <TextBlock Text="{Binding video2, Converter={StaticResource pathToFileNameConverter}}" Visibility="{Binding video1, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="0" Grid.Row="2">
-                                                                <TextBlock.ContextMenu>
-                                                                    <ContextMenu>
-                                                                        <MenuItem Header="Renombrar" Command="{Binding renombrarFicheroVideo2TestCommand}" CommandParameter="{Binding}"/>
-                                                                    </ContextMenu>
-                                                                </TextBlock.ContextMenu>
-                                                            </TextBlock>
-                                                            <TextBlock Text="{Binding Date}" Visibility="{Binding video2, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="1" Grid.Row="2"/>
-                                                        </Grid>
-                                                    </TreeViewItem>
-                                                </DataTemplate>
-                                            </TreeViewItem.ItemTemplate>
-                                        </TreeViewItem>
-                                        <TreeViewItem Header="Informes">
-
-                                        </TreeViewItem>
-                                    </TreeViewItem>
-                                </TreeViewItem>
-                            </DataTemplate>
-                        </TreeViewItem.ItemTemplate>
-                    </TreeViewItem>
-                </TreeView>
+                <userControls:PacientesUserControl Pacientes="{Binding Pacientes}"/>
             </StackPanel>
         </DockPanel>
         <DockPanel Grid.Column="1">
