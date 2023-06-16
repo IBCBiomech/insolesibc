@@ -5,8 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:Menu="clr-namespace:insoles.Utilities"
              xmlns:converter="clr-namespace:insoles.Converter"
+             xmlns:enum="clr-namespace:insoles.Enums"
              xmlns:proxy="clr-namespace:insoles.Proxy"
              xmlns:local="clr-namespace:insoles.View"
+             xmlns:System="clr-namespace:System;assembly=mscorlib"
              xmlns:model="clr-namespace:insoles.Model"
              xmlns:controls="clr-namespace:System.Windows.Controls;assembly=MultiSelectTreeView"
              mc:Ignorable="d" 
@@ -16,6 +18,13 @@
         <converter:BooleanToCircleConverter x:Key="booleanToCircleConverter"/>
         <converter:PathToFileNameConverter x:Key="pathToFileNameConverter"/>
         <converter:NullToVisibilityConverter x:Key="nullToVisibilityConverter"/>
+        <converter:IntToPercentageConverter x:Key="intToPercentageConverter"/>
+        <ObjectDataProvider x:Key="dataFromSide" MethodName="GetValues"
+                            ObjectType="{x:Type System:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="enum:Side"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
     </UserControl.Resources>
 
     <Grid>
@@ -81,6 +90,11 @@
                                         <TextBlock Text="{Binding Path=id}" Grid.Column="1" TextAlignment="Center"/>
                                         <Image Width="20" Grid.Column="2" Source="{Binding Path=connected, Converter={StaticResource booleanToCircleConverter}}"/>
                                         <TextBlock Text="{Binding Path=MAC}" Grid.Column="3" TextAlignment="Center"/>
+                                        <ComboBox ItemsSource="{Binding Source={StaticResource dataFromSide}}"
+                                                  SelectedItem="{Binding Path=side}" Grid.Column="4"/>
+                                        <TextBlock Text="{Binding Path=battery, Converter={StaticResource intToPercentageConverter}}" 
+                                                   Grid.Column="5" TextAlignment="Center"/>
+                                        <TextBlock Text="{Binding Path=fw}" Grid.Column="6" TextAlignment="Center" />
                                     </Grid>
                                 </DataTemplate>
                             </controls:MultiSelectTreeViewItem.ItemTemplate>

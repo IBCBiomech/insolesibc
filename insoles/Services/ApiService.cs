@@ -1,5 +1,6 @@
 ﻿using insoles.Messages;
 using insoles.States;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing.Printing;
@@ -25,6 +26,7 @@ namespace insoles.Services
         public event IApiService.InsoleDataEventHandler DataReceived;
         public event IApiService.MACEventHandler DeviceConnected;
         public event IApiService.MACEventHandler DeviceDisconnected;
+        public event IApiService.MACFirmwareBatteryEventHandler HeaderInfoReceived;
 
         //private static List<Wisewalk.Dev> scanDevices = new List<Wisewalk.Dev>();
         public ApiService(RegistroState state)
@@ -34,6 +36,8 @@ namespace insoles.Services
             api.scanFinished += scanFinishedCallback;
             api.deviceConnected += deviceConnectedCallback;
             api.deviceDisconnected += deviceDisconnectedCallback;
+            api.updateDeviceConfiguration += updateDeviceConfigurationCallback;
+            api.updateDeviceRTC += updateDeviceRTCCallback;
             api.dataReceived += dataReceivedCallback;
             devicesConnected = new Dictionary<string, Device>();
         }
@@ -166,6 +170,7 @@ namespace insoles.Services
         {
             DeviceConnected?.Invoke(dev.Id);
             devicesConnected[handler.ToString()] = dev;
+            api.SetDeviceConfiguration(handler, 100, 3, out error);
         }
         private void deviceDisconnectedCallback(byte handler)
         {
@@ -173,7 +178,20 @@ namespace insoles.Services
             DeviceDisconnected?.Invoke(device.Id);
             devicesConnected.Remove(handler.ToString());
         }
-
+        private void updateDeviceConfigurationCallback(byte handler, byte sambleRate, byte packetType)
+        {
+            api.SetRTCDevice(handler, GetDateTime(), out error);
+        }
+        private DateTime GetDateTime()
+        {
+            DateTime dateTime = new DateTime(2022, 11, 8, 13, 0, 0, 0);
+            return dateTime;
+        }
+        private void updateDeviceRTCCallback(byte handler, DateTime dateTime)
+        {
+            Device device = api.GetDevicesConnected()[handler.ToString()];
+            HeaderInfoReceived?.Invoke(device.Id, device.HeaderInfo.fwVersion, device.HeaderInfo.battery);
+        }
         public void Stop()
         {
             if(!api.StopStream(out error))

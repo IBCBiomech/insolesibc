@@ -17,9 +17,11 @@ namespace insoles.Services
         public delegate void InsoleScanEventHandler(List<InsoleScan> data);
         public delegate void InsoleDataEventHandler(byte handler, List<InsoleData> data);
         public delegate void MACEventHandler(string mac);
+        public delegate void MACFirmwareBatteryEventHandler(string mac, string firmware, int battery);
         public event InsoleScanEventHandler ScanReceived;
         public event InsoleDataEventHandler DataReceived;
         public event MACEventHandler DeviceConnected;
         public event MACEventHandler DeviceDisconnected;
+        public event MACFirmwareBatteryEventHandler HeaderInfoReceived;
     }
 }

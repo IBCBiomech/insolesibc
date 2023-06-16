@@ -21,6 +21,7 @@ namespace insoles.Services
         public event IApiService.InsoleDataEventHandler DataReceived;
         public event IApiService.MACEventHandler DeviceConnected;
         public event IApiService.MACEventHandler DeviceDisconnected;
+        public event IApiService.MACFirmwareBatteryEventHandler HeaderInfoReceived;
 
         public FakeApiService(RegistroState state)
         {
@@ -58,6 +59,7 @@ namespace insoles.Services
             {
                 ConnectedInsoles.Add(Insoles.Where((insole) => insole.MAC == mac).First());
                 DeviceConnected?.Invoke(mac);
+                HeaderInfoReceived?.Invoke(mac, "1.10", 100);
             }
         }
         private void GenerateData(int handler)

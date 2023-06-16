@@ -95,7 +95,7 @@ namespace insoles.ViewModel
             state = new RegistroState(databaseBridge);
             //currentFrames.Add(CurrentFrameTop); currentFrames.Add(CurrentFrameBottom);
             //Init services
-            apiService = new FakeApiService(state);
+            apiService = new ApiService(state);
             cameraService = new CameraService();
             liveCalculationsService = new LiveCalculationsService();
             saveService = new SaveService(state);
@@ -123,7 +123,7 @@ namespace insoles.ViewModel
                     for (int i = 0; i < insolesReceived.Count; i++)
                     {
                         InsoleScan insole = insolesReceived[i];
-                        InsoleModel insoleModel = new(i, insole.name, insole.MAC, this);
+                        InsoleModel insoleModel = new(insole.name, insole.MAC, this);
                         Insoles.Add(insoleModel);
                     }
                 });
@@ -138,6 +138,12 @@ namespace insoles.ViewModel
                 Trace.WriteLine("RegistroVM apiService.DeviceDisconnected");
                 InsoleModel insole = Insoles.First((InsoleModel insole) => insole.MAC == mac);
                 insole.connected = false;
+            };
+            apiService.HeaderInfoReceived += (string mac, string fw, int battery) =>
+            {
+                InsoleModel insole = Insoles.First((InsoleModel insole) => insole.MAC == mac);
+                insole.fw = fw;
+                insole.battery = battery;
             };
             cameraService.ScanReceived += (List<CameraScan> camerasReceived) =>
             {
