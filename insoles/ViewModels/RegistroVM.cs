@@ -35,7 +35,6 @@ namespace insoles.ViewModel
         public StopCommand stopCommand { get; set; }
         public PauseCommand pauseCommand { get; set; }
         public ObtenerPacientesCommand obtenerPacientesCommand { get; set; }
-        public event RoutedPropertyChangedEventHandler<object> PacientesSelectionChanged;
         public CrearPacienteCommand crearPacienteCommand { get; set; }
         public ObservableCollection<CameraModel> Cameras { get; set; }
         public ObservableCollection<InsoleModel> Insoles { get; set; }
@@ -74,24 +73,9 @@ namespace insoles.ViewModel
                 return databaseBridge.Pacientes;
             }
         }
-
-        private object selectedPaciente;
-        public object SelectedPaciente { 
-            get 
-            {
-                return selectedPaciente;
-            }
-            set 
-            { 
-                selectedPaciente = value;
-                Trace.WriteLine(((Paciente)value).Nombre);
-                OnPropertyChanged();
-            } 
-        }
         public RegistroVM()
         {
-            databaseBridge = new DatabaseBridge();
-            ((MainWindow)Application.Current.MainWindow).databaseBridge = databaseBridge; // Temporal para acceder desde los commandos
+            databaseBridge = ((MainWindow)Application.Current.MainWindow).databaseBridge;
             state = new RegistroState(databaseBridge);
             //currentFrames.Add(CurrentFrameTop); currentFrames.Add(CurrentFrameBottom);
             //Init services
@@ -103,7 +87,7 @@ namespace insoles.ViewModel
             scanCommand = new ScanCommand(apiService, cameraService);
             connectCommand = new ConnectCommand(apiService);
             disconnectCommand = new DisconnectCommand(apiService);
-            captureCommand = new CaptureCommand(state, apiService, () => Insoles, () => selectedPaciente);
+            captureCommand = new CaptureCommand(state, apiService, () => Insoles);
             openCameraCommand = new OpenCameraCommand(cameraService);
             closeCameraCommand = new CloseCameraCommand(cameraService);
             recordCommand = new RecordCommand(state, saveService, cameraService);
@@ -185,10 +169,6 @@ namespace insoles.ViewModel
             {
                 GraphModel.UpdateData(metricLeft, metricRight);
                 saveService.AppendCSV(left, right, metricLeft, metricRight);
-            };
-            PacientesSelectionChanged += (object sender, RoutedPropertyChangedEventArgs<object> e) =>
-            {
-                Trace.WriteLine("selection changed");
             };
             Plot = new WpfPlot();
             Plot.Plot.Title("test plot");

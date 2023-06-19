@@ -37,6 +37,8 @@ namespace insoles.Model
         public RenombrarFicheroVideo1TestCommand renombrarFicheroVideo1TestCommand { get; set; }
         [NotMapped]
         public RenombrarFicheroVideo2TestCommand renombrarFicheroVideo2TestCommand { get; set; }
+        [NotMapped]
+        public CargarTestCommand cargarTestCommand { get; set; }
         public Test(DateTime date, string csv)
         {
             this.Nombre = "Test";
@@ -46,6 +48,7 @@ namespace insoles.Model
             renombrarFicheroCSVTestCommand = new RenombrarFicheroCSVTestCommand();
             renombrarFicheroVideo1TestCommand = new RenombrarFicheroVideo1TestCommand();
             renombrarFicheroVideo2TestCommand = new RenombrarFicheroVideo2TestCommand();
+            cargarTestCommand = new CargarTestCommand();
         }
         public Test(DateTime date, string csv, List<string> videos) : this(date, csv)
         {

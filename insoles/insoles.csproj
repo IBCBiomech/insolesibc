@@ -12,13 +12,17 @@
     <None Remove="Images\capture-icon.png" />
     <None Remove="Images\connect-icon.png" />
     <None Remove="Images\customer_page.png" />
+    <None Remove="Images\fast-backward-icon.png" />
+    <None Remove="Images\fast-forward-icon.png" />
     <None Remove="Images\green-circle-icon.png" />
     <None Remove="Images\home_page.png" />
     <None Remove="Images\img_customer.png" />
     <None Remove="Images\img_home.png" />
     <None Remove="Images\img_order.png" />
     <None Remove="Images\img_shipment.png" />
+    <None Remove="Images\pause-icon-black.png" />
     <None Remove="Images\pause-icon.png" />
+    <None Remove="Images\play-icon.png" />
     <None Remove="Images\product_page.png" />
     <None Remove="Images\record-icon.png" />
     <None Remove="Images\red-circle-icon.png" />
@@ -77,6 +81,12 @@
     <Resource Include="Images\customer_page.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\fast-backward-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\fast-forward-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\green-circle-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -95,7 +105,13 @@
     <Resource Include="Images\img_shipment.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\pause-icon-black.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\pause-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\play-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\product_page.png">
@@ -119,6 +135,12 @@
     <Resource Include="Images\stop-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="UserControls\PacientesUserControlAnalisis.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

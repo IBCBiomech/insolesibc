@@ -22,9 +22,11 @@ namespace insoles
     public partial class MainWindow : Window
     {
         public DatabaseBridge databaseBridge { get; set; }
+        public AnalisisState analisisState { get; set; }
         public MainWindow()
         {
             InitializeComponent();
+            databaseBridge = new DatabaseBridge();
         }
         private void CloseApp_Click(object sender, RoutedEventArgs e)
         {

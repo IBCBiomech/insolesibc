@@ -15,7 +15,6 @@ namespace insoles.Commands
     {
         private RegistroState state;
         private Func<ObservableCollection<InsoleModel>> getInsoles;
-        private Func<object> getSelectedPaciente;
         private IApiService apiService;
 
         public event EventHandler CanExecuteChanged
@@ -24,12 +23,11 @@ namespace insoles.Commands
             remove { CommandManager.RequerySuggested -= value; }
         }
         public CaptureCommand(RegistroState state, IApiService apiService, 
-            Func<ObservableCollection<InsoleModel>> getInsoles, Func<object> getSelectedPaciente)
+            Func<ObservableCollection<InsoleModel>> getInsoles)
         {
             this.state = state;
             this.apiService = apiService;
             this.getInsoles = getInsoles;
-            this.getSelectedPaciente = getSelectedPaciente;
         }
 
         public bool CanExecute(object? parameter)

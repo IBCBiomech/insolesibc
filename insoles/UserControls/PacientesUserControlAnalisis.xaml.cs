@@ -20,17 +20,17 @@ namespace insoles.UserControls
     /// <summary>
     /// Lógica de interacción para PacientesUserControl.xaml
     /// </summary>
-    public partial class PacientesUserControl : UserControl
+    public partial class PacientesUserControlAnalisis : UserControl
     {
         public static readonly DependencyProperty PacientesProperty =
-            DependencyProperty.Register("Pacientes", typeof(ObservableCollection<Paciente>), typeof(PacientesUserControl), new PropertyMetadata(null));
+            DependencyProperty.Register("Pacientes", typeof(ObservableCollection<Paciente>), typeof(PacientesUserControlAnalisis), new PropertyMetadata(null));
 
         public ObservableCollection<Paciente> Pacientes
         {
             get { return (ObservableCollection<Paciente>)GetValue(PacientesProperty); }
             set { SetValue(PacientesProperty, value); }
         }
-        public PacientesUserControl()
+        public PacientesUserControlAnalisis()
         {
             InitializeComponent();
         }
