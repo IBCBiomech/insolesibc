@@ -1,4 +1,6 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
+using System.Collections.Generic;
+using System;
 using System.Drawing;
 
 namespace insoles.Utilities
@@ -20,6 +22,18 @@ namespace insoles.Utilities
                 }
             }
             return floats;
+        }
+        public static List<(int, int, float)> FindAll(Matrix<float> matrix, Func<float, bool> func)
+        {
+            List<(int, int, float)> result = new List<(int, int, float)>();
+            foreach (var tuple in matrix.EnumerateIndexed())
+            {
+                if (func(tuple.Item3))
+                {
+                    result.Add(tuple);
+                }
+            }
+            return result;
         }
     }
 }

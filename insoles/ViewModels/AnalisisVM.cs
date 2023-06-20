@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -22,6 +23,7 @@ namespace insoles.ViewModel
         private IPlantillaService plantilla;
         private IFileExtractorService fileExtractor;
         private IButterflyService butterfly;
+        private IPressureMapService pressureMap;
         public ObtenerPacientesCommand obtenerPacientesCommand { get; set; }
         public CrearPacienteCommand crearPacienteCommand { get; set; }
         public TimelinePlayCommand timelinePlayCommand { get; set; }
@@ -37,6 +39,7 @@ namespace insoles.ViewModel
         }
         public TimeLine timeLine { get; set; }
         public GrafoMariposa grafoMariposa {get; set;}
+        public Heatmap heatmap { get; set;}
         public AnalisisVM()
         {
             state = new AnalisisState();
@@ -46,7 +49,10 @@ namespace insoles.ViewModel
             plantilla = new PlantillaService(codes);
             fileExtractor = new FileExtractorService();
             butterfly = new ButterflyService(plantilla);
+            pressureMap = new PressureMapService(plantilla.sensor_map, codes,
+                plantilla.CalculateSensorPositionsLeft(), plantilla.CalculateSensorPositionsRight());
             grafoMariposa = new GrafoMariposa();
+            heatmap = new Heatmap();
             databaseBridge = ((MainWindow)Application.Current.MainWindow).databaseBridge;
             crearPacienteCommand = new CrearPacienteCommand(databaseBridge);
             obtenerPacientesCommand = new ObtenerPacientesCommand(databaseBridge);
@@ -54,7 +60,7 @@ namespace insoles.ViewModel
             timelinePauseCommand = new TimelinePauseCommand(state, timeLine);
             timelineFastForwardCommand = new TimelineFastForwardCommand(state, timeLine);
             timelineFastBackwardCommand = new TimelineFastBackwardCommand(state, timeLine);
-            state.PropertyChanged += (object sender, PropertyChangedEventArgs e) =>
+            state.PropertyChanged += async(object sender, PropertyChangedEventArgs e) =>
             {
                 if(e.PropertyName == "test")
                 {
@@ -66,10 +72,14 @@ namespace insoles.ViewModel
                         List<Tuple<double, double>> cps_right;
                         butterfly.Calculate(data, out frames, out cps_left, out cps_right);
                         grafoMariposa.DrawData(frames);
+                        
+                        var pressureMaps = await pressureMap.CalculateMetrics(data);
+                        
+                        var pressureMapsLive = await pressureMap.CalculateLive(data);
+
                     }         
                 }
             };
         }
-
     }
 }

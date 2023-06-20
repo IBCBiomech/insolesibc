@@ -32,6 +32,11 @@
                                         <ContentControl Content="{Binding grafoMariposa}"/>
                                     </dock:LayoutAnchorable>
                                 </dock:LayoutAnchorablePane>
+                                <dock:LayoutAnchorablePane>
+                                    <dock:LayoutAnchorable CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                        <ContentControl Content="{Binding heatmap}"/>
+                                    </dock:LayoutAnchorable>
+                                </dock:LayoutAnchorablePane>
                             </dock:LayoutAnchorablePaneGroup>
                         </dock:LayoutAnchorablePaneGroup>
                     </dock:LayoutPanel>
