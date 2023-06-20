@@ -9,6 +9,8 @@
 
   <ItemGroup>
     <None Remove="Images\bio.png" />
+    <None Remove="Images\bitmap.png" />
+    <None Remove="Images\bitmap_mariposa.png" />
     <None Remove="Images\capture-icon.png" />
     <None Remove="Images\connect-icon.png" />
     <None Remove="Images\customer_page.png" />
@@ -37,10 +39,12 @@
     <PackageReference Include="AForge.Video" Version="2.2.5" />
     <PackageReference Include="AForge.Video.DirectShow" Version="2.2.5" />
     <PackageReference Include="DirectShowLib" Version="1.0.0" />
+    <PackageReference Include="Dirkster.AvalonDock" Version="4.72.0" />
     <PackageReference Include="Emgu.CV" Version="4.7.0.5276" />
     <PackageReference Include="Emgu.CV.Bitmap" Version="4.7.0.5276" />
     <PackageReference Include="Emgu.CV.runtime.windows" Version="4.7.0.5276" />
     <PackageReference Include="Emgu.CV.Wpf" Version="4.7.0.5276" />
+    <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
       <PrivateAssets>all</PrivateAssets>
@@ -72,6 +76,12 @@
 
   <ItemGroup>
     <Resource Include="Images\bio.png" />
+    <Resource Include="Images\bitmap.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\bitmap_mariposa.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\capture-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
