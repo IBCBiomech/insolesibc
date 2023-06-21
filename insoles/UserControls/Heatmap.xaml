@@ -15,24 +15,25 @@
         <converter:PreTextConverter x:Key="maxConverter" text="Max: "/>
         <converter:PreTextConverter x:Key="minConverter" text="Min: "/>
         <converter:PreTextConverter x:Key="avgConverter" text="Avg: "/>
+        <converter:TrueToVisibleConverter x:Key="trueVisibleConverter"/>
+        <converter:FalseToVisibleConverter x:Key="falseVisibleConverter"/>
     </UserControl.Resources>
     <Grid>
-        <WpfPlot x:Name="plot" Visibility="{Binding graph_visibility}"/>
+        <WpfPlot x:Name="plot" Visibility="{Binding graph_loaded, Converter={StaticResource trueVisibleConverter}}"/>
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36"
-                   Visibility="{Binding calculating_visibility}" Text="Calculating..."/>
-        <TextBlock Text="N/m&#x00B2;" TextAlignment="Right" Padding="0 0 70 0" Visibility="{Binding graph_visibility}"/>
+                   Visibility="{Binding graph_loaded, Converter={StaticResource falseVisibleConverter}}" Text="Calculating..."/>
+        <TextBlock Text="N/m&#x00B2;" TextAlignment="Right" Padding="0 0 70 0"
+                   Visibility="{Binding graph_loaded, Converter={StaticResource trueVisibleConverter}}"/>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left">
-            <ComboBox Name="metric" SelectedValuePath="Content">
-                <ComboBoxItem Content="{StaticResource avgStr}"></ComboBoxItem>
-                <ComboBoxItem Content="{StaticResource maxStr}"></ComboBoxItem>
-                <ComboBoxItem Content="{StaticResource minStr}"></ComboBoxItem>
-            </ComboBox>
+            <ComboBox ItemsSource="{Binding metrics}"
+          SelectedItem="{Binding selectedMetric}" />
             <StackPanel Orientation="Horizontal">
                 <CheckBox Margin="10 0" VerticalAlignment="Center" IsChecked="{Binding animate}"/>
                 <TextBlock>Animate</TextBlock>
             </StackPanel>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Visibility="{Binding graph_visibility}">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                    Visibility="{Binding graph_loaded, Converter={StaticResource trueVisibleConverter}}">
             <TextBlock x:Name="metricValue"/>
         </StackPanel>
     </Grid>

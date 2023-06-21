@@ -74,9 +74,9 @@ namespace insoles.ViewModel
                         grafoMariposa.DrawData(frames);
                         
                         var pressureMaps = await pressureMap.CalculateMetrics(data);
-                        
+                        heatmap.pressure_maps_metrics = pressureMaps;
                         var pressureMapsLive = await pressureMap.CalculateLive(data);
-
+                        heatmap.pressure_maps_live = pressureMapsLive;
                     }         
                 }
             };

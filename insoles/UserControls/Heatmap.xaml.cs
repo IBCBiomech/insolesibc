@@ -31,9 +31,6 @@ namespace insoles.UserControls
         private Colorbar colorbar;
         private ScatterPlot centers;
 
-        Dictionary<Metric, Matrix<float>> pressure_maps_metrics;
-        List<Matrix<float>> pressure_maps_live;
-
         private int avg_ = int.MinValue;
         private int max_ = int.MinValue;
         private int min_ = int.MinValue;
@@ -73,18 +70,94 @@ namespace insoles.UserControls
                 NotifyPropertyChanged();
             }
         }
+        private Metric _selectedMetric;
+        public Metric selectedMetric {
+            get
+            {
+                return _selectedMetric;
+            }
+            set
+            {
+                _selectedMetric = value;
+                if(pressure_maps_metrics != null && !animate) 
+                {
+                    DrawData(pressure_maps_metrics[selectedMetric]);
+                }
+                NotifyPropertyChanged();
+            }
+        }
+        public IEnumerable<Metric> metrics
+        {
+            get { return Enum.GetValues(typeof(Metric)).Cast<Metric>(); }
+        }
+        private bool _animate;
+        public bool animate { 
+            get
+            {
+                return _animate;
+            }
+            set
+            {
+                animate = value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(graph_loaded));
+            }
+        }
+        public bool graph_loaded { 
+            get
+            {
+                if(animate)
+                {
+                    return pressure_maps_live != null;
+                }
+                else
+                {
+                    return pressure_maps_metrics != null;
+                }
+            } 
+        }
+        Dictionary<Metric, Matrix<float>>? _pressure_maps_metrics;
+        public Dictionary<Metric, Matrix<float>>? pressure_maps_metrics
+        {
+            get
+            {
+                return _pressure_maps_metrics;
+            }
+            set
+            {
+                _pressure_maps_metrics = value;
+                if (pressure_maps_metrics != null && !animate)
+                {
+                    DrawData(pressure_maps_metrics[selectedMetric]);
+                }
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(graph_loaded));
+            }
+        }
+        List<Matrix<float>>? _pressure_maps_live;
+        public List<Matrix<float>>? pressure_maps_live
+        {
+            get
+            {
+                return _pressure_maps_live;
+            }
+            set
+            {
+                _pressure_maps_live = value;
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(graph_loaded));
+            }
+        }
         public Heatmap()
         {
             InitializeComponent();
+            DataContext = this;
             
         }
-        public void SetDataMetrics(Dictionary<Metric, Matrix<float>> pressure_maps)
+        public void ClearData()
         {
-            pressure_maps_metrics = pressure_maps;
-        }
-        public void SetDataLive(List<Matrix<float>> pressure_maps)
-        {
-            pressure_maps_live = pressure_maps;
+            pressure_maps_metrics = null;
+            pressure_maps_live = null;
         }
         public void DrawData(Matrix<float> data)
         {
@@ -92,12 +165,11 @@ namespace insoles.UserControls
             dataDouble = dataDouble.Transpose();
             double[,] dataArray = dataDouble.ToArray();
             double?[,] dataNull = HelperFunctions.replace(dataArray, BACKGROUND, null);
-            Dispatcher.Invoke(() => Draw(dataNull));
             var filtered = dataDouble.Enumerate().Where(x => x != BACKGROUND);
             avg = (int)filtered.Average();
             max = (int)filtered.Maximum();
             min = (int)filtered.Minimum();
-            //graph_visibility = Visibility.Visible;
+            Dispatcher.Invoke(() => Draw(dataNull));
         }
         private void Draw(double?[,] data)
         {

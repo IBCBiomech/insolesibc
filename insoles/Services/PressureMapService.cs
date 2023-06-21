@@ -22,6 +22,7 @@ namespace insoles.Services
 
         const int BACKGROUND = -1;
         const int N_FRAMES = 10;
+        const int MIN_VALUE = 1;
 
         private bool isInitialized = false;
 
@@ -49,7 +50,7 @@ namespace insoles.Services
             {
                 inverse_distances[sensor] = sensor_map.MapIndexed((row, col, code) =>
                 {
-                    if (code == codes.Foot())
+                    if (code != codes.Background())
                     {
                         if (row < sensor_map.RowCount / 2)
                         {
@@ -62,6 +63,8 @@ namespace insoles.Services
                                     min_distance = distance;
                                 }
                             }
+                            if(min_distance < MIN_VALUE)
+                                min_distance = MIN_VALUE;
                             return 1.0f / min_distance;
                         }
                         else
@@ -75,6 +78,8 @@ namespace insoles.Services
                                     min_distance = distance;
                                 }
                             }
+                            if (min_distance < MIN_VALUE)
+                                min_distance = MIN_VALUE;
                             return 1.0f / min_distance;
                         }
                     }
