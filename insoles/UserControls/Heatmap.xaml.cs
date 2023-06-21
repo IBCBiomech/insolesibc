@@ -1,4 +1,5 @@
 ﻿using insoles.Controlls;
+using insoles.DataHolders;
 using insoles.Utilities;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.Statistics;
@@ -11,6 +12,7 @@ using System.DirectoryServices;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace insoles.UserControls
@@ -30,6 +32,8 @@ namespace insoles.UserControls
         private ScottPlot.Plottable.Heatmap heatmap;
         private Colorbar colorbar;
         private ScatterPlot centers;
+
+        private int colorbarMax;
 
         private int avg_ = int.MinValue;
         private int max_ = int.MinValue;
@@ -82,6 +86,7 @@ namespace insoles.UserControls
                 if(pressure_maps_metrics != null && !animate) 
                 {
                     DrawData(pressure_maps_metrics[selectedMetric]);
+                    DrawCenters(centersXs, centersYs);
                 }
                 NotifyPropertyChanged();
             }
@@ -129,6 +134,7 @@ namespace insoles.UserControls
                 if (pressure_maps_metrics != null && !animate)
                 {
                     DrawData(pressure_maps_metrics[selectedMetric]);
+                    DrawCenters(centersXs, centersYs);
                 }
                 NotifyPropertyChanged();
                 NotifyPropertyChanged(nameof(graph_loaded));
@@ -148,11 +154,39 @@ namespace insoles.UserControls
                 NotifyPropertyChanged(nameof(graph_loaded));
             }
         }
+        private double[] centersXs;
+        private double[] centersYs;
         public Heatmap()
         {
             InitializeComponent();
             DataContext = this;
             
+        }
+        public Task UpdateLimits(GraphData data)
+        {
+            int max = 0;
+            for(int i = 0; i < data.length; i++)
+            {
+                FrameDataInsoles frame = (FrameDataInsoles)data[i];
+                DataInsole left = frame.left;
+                foreach(var pressure in left.pressures.Values)
+                {
+                    if(pressure > max)
+                    {
+                        max = (int)pressure;
+                    }
+                }
+                DataInsole right = frame.right;
+                foreach (var pressure in right.pressures.Values)
+                {
+                    if (pressure > max)
+                    {
+                        max = (int)pressure;
+                    }
+                }
+            }
+            colorbarMax = max;
+            return Task.CompletedTask;
         }
         public void ClearData()
         {
@@ -183,12 +217,133 @@ namespace insoles.UserControls
             }
             IColormap colormap = extendColormap(Colormap.Jet, Color.LightGray, (color, extended, ratio) => extended, extendSize: 15, totalSize: 256);
             heatmap = plot.Plot.AddHeatmap(data, colormap: new Colormap(colormap));
-            heatmap.Update(data, min: 0, max: max);
+            heatmap.Update(data, min: 0, max: colorbarMax);
             heatmap.Smooth = true;
             colorbar = plot.Plot.AddColorbar(heatmap);
             plot.Plot.Margins(0, 0);
             plot.Plot.MoveFirst(heatmap);
             plot.Refresh();
+        }
+        public Task CalculateCenters(List<Tuple<double, double>> left, List<Tuple<double, double>> right)
+        {
+            void ReduceSorting(ref List<Tuple<double, double>> left, ref List<Tuple<double, double>> right, int NumResult)
+            {
+                left = ReduceCPsSorting(left, NumResult);
+                right = ReduceCPsSorting(right, NumResult);
+            }
+            void ReduceByRanges(ref List<Tuple<double, double>> left, ref List<Tuple<double, double>> right, int range)
+            {
+                left = ReduceCPsByRanges(left, range);
+                right = ReduceCPsByRanges(right, range);
+            }
+#if REDUCE_SORT
+            double CalculateSlope(Dictionary<Sensor, (float, float)> centers)
+            {
+                float item1Top = (centers[Sensor.HALLUX].Item1 + centers[Sensor.TOES].Item1) / 2;
+                float item2Top = (centers[Sensor.HALLUX].Item2 + centers[Sensor.TOES].Item2) / 2;
+                (float, float) top = (item1Top, item2Top);
+                float item1Bot = (centers[Sensor.HEEL_L].Item1 + centers[Sensor.HEEL_R].Item1) / 2;
+                float item2Bot = (centers[Sensor.HEEL_L].Item2 + centers[Sensor.HEEL_R].Item2) / 2;
+                (float, float) bot = (item1Bot, item2Bot);
+                return 0;
+            }
+            if(slopeLeft == null)
+            {
+                slopeLeft = CalculateSlope(pressureMap.centersLeft);
+            }
+            if(slopeRight == null)
+            {
+                slopeRight = CalculateSlope(pressureMap.centersRight);
+            }
+            ReduceByRanges(ref left, ref right, 1);
+            ReduceSorting(ref left, ref right, 50);   
+#else
+            left = ReduceCPsByRanges(left);
+            right = ReduceCPsByRanges(right);
+#endif
+            CPsToXsYs(left, right, out centersXs, out centersYs);
+            return Task.CompletedTask;
+        }
+        private void CPsToXsYs(List<Tuple<double, double>> left, List<Tuple<double, double>> right,
+            out double[] xs, out double[] ys)
+        {
+            xs = new double[left.Count + right.Count];
+            ys = new double[left.Count + right.Count];
+            for (int i = 0; i < left.Count; i++)
+            {
+                xs[i] = left[i].Item1;
+                ys[i] = left[i].Item2;
+            }
+            for (int i = 0; i < right.Count; i++)
+            {
+                xs[left.Count + i] = right[i].Item1;
+                ys[left.Count + i] = right[i].Item2;
+            }
+        }
+        private List<Tuple<double, double>> ReduceCPsSorting(List<Tuple<double, double>> cps, int NumResult, float minFactor = 0.75f)
+        {
+            cps.Sort((x, y) => y.Item2.CompareTo(x.Item2));
+            List<Tuple<double, double>> cpsReduced = new List<Tuple<double, double>>();
+            int NumAverage = cps.Count / NumResult;
+            if (NumAverage < 1)
+            {
+                NumAverage = 1;
+            }
+            int index = 0;
+            double item1Sum = 0;
+            double item2Sum = 0;
+            foreach (Tuple<double, double> cp in cps)
+            {
+                item1Sum += cp.Item1;
+                item2Sum += cp.Item2;
+                index++;
+                if (index % NumAverage == 0)
+                {
+                    Tuple<double, double> cpReduced = new Tuple<double, double>(item1Sum / NumAverage, item2Sum / NumAverage);
+                    cpsReduced.Add(cpReduced);
+                    item1Sum = 0;
+                    item2Sum = 0;
+                }
+            }
+            int lastNumAverage = index % NumAverage;
+            if (lastNumAverage > NumAverage * minFactor)
+            {
+                Tuple<double, double> cpReduced = new Tuple<double, double>(item1Sum / lastNumAverage, item2Sum / lastNumAverage);
+                cpsReduced.Add(cpReduced);
+            }
+            return cpsReduced;
+        }
+        private List<Tuple<double, double>> ReduceCPsByRanges(List<Tuple<double, double>> cps, int range = 10)
+        {
+            Dictionary<double, List<double>> cpsToReduce = new Dictionary<double, List<double>>();
+            foreach (Tuple<double, double> cp in cps)
+            {
+                double key = ReduceFunc(cp, range);
+                List<double> xs;
+                if (cpsToReduce.TryGetValue(key, out xs))
+                {
+                    xs.Add(cp.Item1);
+                }
+                else
+                {
+                    xs = new List<double>();
+                    xs.Add(cp.Item1);
+                    cpsToReduce[key] = xs;
+                }
+            }
+            List<Tuple<double, double>> cpsReduced = new List<Tuple<double, double>>();
+            foreach (double key in cpsToReduce.Keys)
+            {
+                List<double> cpsOfKey = cpsToReduce[key];
+                cpsReduced.Add(new Tuple<double, double>(cpsOfKey.Average(), key));
+            }
+            return cpsReduced;
+        }
+        private double ReduceFunc(Tuple<double, double> cp, int range = 10)
+        {
+            int yInt = (int)Math.Round(cp.Item2);
+            return (yInt / range) * range + (range / 2);
+            // Al hacer la division entera corta por abajo. Para que quede la media de los puntos le sumo la mitad del rango
         }
         public void DrawCenters(double[] xs, double[] ys)
         {

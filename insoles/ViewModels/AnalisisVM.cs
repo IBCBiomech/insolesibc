@@ -99,7 +99,9 @@ namespace insoles.ViewModel
                         {
                             camaraViewport2.video = null;
                         }
-                        
+
+                        await heatmap.UpdateLimits(data);
+                        await heatmap.CalculateCenters(cps_left, cps_right);
                         var pressureMaps = await pressureMap.CalculateMetrics(data);
                         heatmap.pressure_maps_metrics = pressureMaps;
                         var pressureMapsLive = await pressureMap.CalculateLive(data);
