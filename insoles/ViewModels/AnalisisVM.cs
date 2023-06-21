@@ -40,6 +40,8 @@ namespace insoles.ViewModel
         public TimeLine timeLine { get; set; }
         public GrafoMariposa grafoMariposa {get; set;}
         public Heatmap heatmap { get; set;}
+        public CamaraReplay camaraViewport1 { get; set; }
+        public CamaraReplay camaraViewport2 { get; set; }
         public AnalisisVM()
         {
             state = new AnalisisState();
@@ -53,6 +55,8 @@ namespace insoles.ViewModel
                 plantilla.CalculateSensorPositionsLeft(), plantilla.CalculateSensorPositionsRight());
             grafoMariposa = new GrafoMariposa();
             heatmap = new Heatmap();
+            camaraViewport1 = new CamaraReplay();
+            camaraViewport2 = new CamaraReplay();
             databaseBridge = ((MainWindow)Application.Current.MainWindow).databaseBridge;
             crearPacienteCommand = new CrearPacienteCommand(databaseBridge);
             obtenerPacientesCommand = new ObtenerPacientesCommand(databaseBridge);
@@ -60,6 +64,11 @@ namespace insoles.ViewModel
             timelinePauseCommand = new TimelinePauseCommand(state, timeLine);
             timelineFastForwardCommand = new TimelineFastForwardCommand(state, timeLine);
             timelineFastBackwardCommand = new TimelineFastBackwardCommand(state, timeLine);
+            timeLine.TimeChanged += (sender, time) =>
+            {
+                camaraViewport1.time = time;
+                camaraViewport2.time = time;
+            };
             state.PropertyChanged += async(object sender, PropertyChangedEventArgs e) =>
             {
                 if(e.PropertyName == "test")
@@ -67,11 +76,29 @@ namespace insoles.ViewModel
                     if(state.test != null)
                     {
                         GraphData data = fileExtractor.ExtractCSV(state.test.csv);
+                        timeLine.ChangeLimits(data.maxTime);
                         FramePressures[] frames;
                         List<Tuple<double, double>> cps_left;
                         List<Tuple<double, double>> cps_right;
                         butterfly.Calculate(data, out frames, out cps_left, out cps_right);
                         grafoMariposa.DrawData(frames);
+
+                        if(state.test.video1 != null)
+                        {
+                            camaraViewport1.videoPath = state.test.video1;
+                        }
+                        else
+                        {
+                            camaraViewport1.video = null;
+                        }
+                        if(state.test.video2 != null)
+                        {
+                            camaraViewport2.videoPath = state.test.video2;
+                        }
+                        else
+                        {
+                            camaraViewport2.video = null;
+                        }
                         
                         var pressureMaps = await pressureMap.CalculateMetrics(data);
                         heatmap.pressure_maps_metrics = pressureMaps;

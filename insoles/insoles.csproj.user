@@ -13,6 +13,9 @@
     <Compile Update="Forms\TextInputForm.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControls\CamaraReplay.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\GrafoMariposa.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -67,6 +70,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Styles\Text.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\CamaraReplay.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\GrafoMariposa.xaml">

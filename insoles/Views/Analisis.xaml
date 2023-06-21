@@ -24,7 +24,16 @@
                     <dock:LayoutPanel>
                         <dock:LayoutAnchorablePaneGroup Orientation="Vertical">
                             <dock:LayoutAnchorablePaneGroup Orientation="Horizontal">
-                                
+                                <dock:LayoutAnchorablePane>
+                                    <dock:LayoutAnchorable CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                        <ContentControl Content="{Binding camaraViewport1}"/>
+                                    </dock:LayoutAnchorable>
+                                </dock:LayoutAnchorablePane>
+                                <dock:LayoutAnchorablePane>
+                                    <dock:LayoutAnchorable CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                        <ContentControl Content="{Binding camaraViewport2}"/>
+                                    </dock:LayoutAnchorable>
+                                </dock:LayoutAnchorablePane>
                             </dock:LayoutAnchorablePaneGroup>
                             <dock:LayoutAnchorablePaneGroup Orientation="Horizontal">
                                 <dock:LayoutAnchorablePane>

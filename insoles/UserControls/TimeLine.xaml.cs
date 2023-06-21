@@ -32,6 +32,9 @@ namespace insoles.UserControls
         private double maxY = 1;
         private double lastTime;
         private double MIN_CHANGE_TO_NOTIFY;
+
+        public delegate void TimeEventHandler(object sender, double time);
+        public event TimeEventHandler TimeChanged;
         public TimeLine(AnalisisState state)
         {
             InitializeComponent();
@@ -72,6 +75,7 @@ namespace insoles.UserControls
             line.Dragged += (sender, e) =>
             {
                 deltaTime = line.X1;
+                InvokeTimeChanged(deltaTime);
                 if (stopwatch.IsRunning)
                 {
                     stopwatch.Restart();
@@ -96,6 +100,7 @@ namespace insoles.UserControls
                     stopwatch.Reset();
                     timer.Stop();
                 }
+                InvokeTimeChanged(totalTime);
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     line.X1 = totalTime - width / 2;
@@ -104,6 +109,19 @@ namespace insoles.UserControls
                 });
             };
             stopwatch = new Stopwatch();
+        }
+        public void ChangeLimits(double max)
+        {
+            ChangeLimits(0, max);
+        }
+        public void ChangeLimits(double min, double max)
+        {
+            minX = min;
+            maxX = max;
+            plot.Plot.SetInnerViewLimits(xMin: minX, xMax: maxX, yMin: minY, yMax: maxY);
+            plot.Plot.SetOuterViewLimits(xMin: minX, xMax: maxX, yMin: minY, yMax: maxY);
+            plot.Plot.SetAxisLimitsX(minX, maxX);
+            plot.Refresh();
         }
         public void Play()
         {
@@ -129,6 +147,7 @@ namespace insoles.UserControls
                 stopwatch.Reset();
             }
             deltaTime = maxX;
+            InvokeTimeChanged(deltaTime);
             line.X1 = maxX - width;
             line.X2 = maxX;
             plot.Refresh();
@@ -145,9 +164,18 @@ namespace insoles.UserControls
                 stopwatch.Reset();
             }
             deltaTime = minX;
+            InvokeTimeChanged(deltaTime);
             line.X1 = minX;
             line.X2 = minX + width;
             plot.Refresh();
+        }
+        private void InvokeTimeChanged(double time)
+        {
+            if(Math.Abs(time - lastTime) > MIN_CHANGE_TO_NOTIFY)
+            {
+                TimeChanged?.Invoke(this, time);
+                lastTime = time;
+            }
         }
     }
 }
