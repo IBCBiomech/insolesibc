@@ -27,6 +27,13 @@ namespace insoles.Services
         {
             this.state = state;
         }
+
+        //Para testear el Unit
+        //Constructor por defecto
+        public FakeApiService() { }
+
+        //Para testear método fake -> retorna 7.0
+        public double FakeMethodTest() => 2.0 + 5.0; 
         public void Scan()
         {
             Trace.WriteLine("Scan from FakeApiService");
