@@ -11,9 +11,11 @@
 
   <ItemGroup>
     <None Remove="Images\bio.png" />
+    <None Remove="Images\bio2.png" />
     <None Remove="Images\bitmap.png" />
     <None Remove="Images\bitmap_mariposa.png" />
     <None Remove="Images\capture-icon.png" />
+    <None Remove="Images\close_icon.png" />
     <None Remove="Images\connect-icon.png" />
     <None Remove="Images\customer_page.png" />
     <None Remove="Images\fast-backward-icon.png" />
@@ -80,6 +82,7 @@
 
   <ItemGroup>
     <Resource Include="Images\bio.png" />
+    <Resource Include="Images\bio2.png" />
     <Resource Include="Images\bitmap.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -89,6 +92,7 @@
     <Resource Include="Images\capture-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\close_icon.png" />
     <Resource Include="Images\connect-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
