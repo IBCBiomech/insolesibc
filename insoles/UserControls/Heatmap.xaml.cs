@@ -224,6 +224,7 @@ namespace insoles.UserControls
             plot.Plot.MoveFirst(heatmap);
             plot.Refresh();
         }
+        #region CPS
         public Task CalculateCenters(List<Tuple<double, double>> left, List<Tuple<double, double>> right)
         {
             void ReduceSorting(ref List<Tuple<double, double>> left, ref List<Tuple<double, double>> right, int NumResult)
@@ -326,8 +327,10 @@ namespace insoles.UserControls
                 }
                 else
                 {
-                    xs = new List<double>();
-                    xs.Add(cp.Item1);
+                    xs = new List<double>
+                    {
+                        cp.Item1
+                    };
                     cpsToReduce[key] = xs;
                 }
             }
@@ -345,6 +348,7 @@ namespace insoles.UserControls
             return (yInt / range) * range + (range / 2);
             // Al hacer la division entera corta por abajo. Para que quede la media de los puntos le sumo la mitad del rango
         }
+        #endregion CPs
         public void DrawCenters(double[] xs, double[] ys)
         {
             if (centers != null)

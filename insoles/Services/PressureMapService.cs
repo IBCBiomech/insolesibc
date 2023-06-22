@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using System;
 using MathNet.Numerics.LinearAlgebra;
+using MathNet.Numerics.Data.Text;
 using insoles.Utilities;
 using insoles.DataHolders;
 using insoles.UserControls;
 using System.Linq;
 using System.Threading.Tasks;
+using Emgu.CV.Ocl;
+using System.Windows.Resources;
+using System.Windows;
+using System.IO;
 
 namespace insoles.Services
 {
@@ -33,8 +38,20 @@ namespace insoles.Services
             Task.Run(() =>
             {
                 inverse_distances = CalculateMinDistances(sensor_map, codes,
-                    sensor_positions_left, sensor_positions_right);
-                inverse_distances_background = CalculateMinDistancesBackground(sensor_map, codes);
+                    sensor_positions_left, sensor_positions_right);                
+                try
+                {
+                    Uri uri = new Uri("pack://application:,,,/Precalculus/inverse_distances_background.mtx");
+                    StreamResourceInfo sri = Application.GetResourceStream(uri);
+                    Stream stream = sri.Stream;
+                    inverse_distances_background = MatrixMarketReader.ReadMatrix<float>(stream);
+                }
+                catch (IOException)
+                {
+                    MessageBox.Show("No se ha encontrado el fichero de la matrix\nSe va a proceder a recalcularla", "inverse_distances_background.mtx not found", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.Yes);
+                    inverse_distances_background = CalculateMinDistancesBackground(sensor_map, codes);
+                    //MatrixMarketWriter.WriteMatrix("C:\\Users\\" + Environment.UserName + "\\Documents" + "\\inverse_distances_background.mtx", inverse_distances_background);
+                }
                 isInitialized = true;
             });
         }

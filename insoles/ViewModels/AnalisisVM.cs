@@ -38,6 +38,7 @@ namespace insoles.ViewModel
             }
         }
         public TimeLine timeLine { get; set; }
+        public GRF grf { get; set; }
         public GrafoMariposa grafoMariposa {get; set;}
         public Heatmap heatmap { get; set;}
         public CamaraReplay camaraViewport1 { get; set; }
@@ -50,6 +51,7 @@ namespace insoles.ViewModel
             codes = new CodesService();
             plantilla = new PlantillaService(codes);
             fileExtractor = new FileExtractorService();
+            grf = new GRF();
             butterfly = new ButterflyService(plantilla);
             pressureMap = new PressureMapService(plantilla.sensor_map, codes,
                 plantilla.CalculateSensorPositionsLeft(), plantilla.CalculateSensorPositionsRight());
@@ -99,7 +101,7 @@ namespace insoles.ViewModel
                         {
                             camaraViewport2.video = null;
                         }
-
+                        await grf.Update(data);
                         await heatmap.UpdateLimits(data);
                         await heatmap.CalculateCenters(cps_left, cps_right);
                         var pressureMaps = await pressureMap.CalculateMetrics(data);

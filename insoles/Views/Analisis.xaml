@@ -26,10 +26,13 @@
                             <dock:LayoutAnchorablePaneGroup Orientation="Horizontal">
                                 <dock:LayoutAnchorablePane>
                                     <dock:LayoutAnchorable CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
-                                        <ContentControl Content="{Binding camaraViewport1}"/>
+                                        <ContentControl Content="{Binding grf}"/>
                                     </dock:LayoutAnchorable>
                                 </dock:LayoutAnchorablePane>
                                 <dock:LayoutAnchorablePane>
+                                    <dock:LayoutAnchorable CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                        <ContentControl Content="{Binding camaraViewport1}"/>
+                                    </dock:LayoutAnchorable>
                                     <dock:LayoutAnchorable CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
                                         <ContentControl Content="{Binding camaraViewport2}"/>
                                     </dock:LayoutAnchorable>

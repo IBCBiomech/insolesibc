@@ -19,6 +19,9 @@
     <Compile Update="UserControls\GrafoMariposa.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="UserControls\GRF.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\Heatmap.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -76,6 +79,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\GrafoMariposa.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UserControls\GRF.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\Heatmap.xaml">

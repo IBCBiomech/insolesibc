@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <DocumentationFile>C:\Users\Deva\wsibc\insolesibc\insoles\bin\Debug\net6.0-windows\doc\Documentation.xml</DocumentationFile>
+    <DocumentationFile>C:\Users\berna\source\repos\insolesibc\insoles\bin\Debug\net6.0-windows\doc\Documentation.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -34,6 +34,7 @@
     <None Remove="Images\shutdown_def.png" />
     <None Remove="Images\shutdown_mo.png" />
     <None Remove="Images\stop-icon.png" />
+    <None Remove="Precalculus\inverse_distances_background.mtx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,6 +48,7 @@
     <PackageReference Include="Emgu.CV.runtime.windows" Version="4.7.0.5276" />
     <PackageReference Include="Emgu.CV.Wpf" Version="4.7.0.5276" />
     <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
+    <PackageReference Include="MathNet.Numerics.Data.Text" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.5">
       <PrivateAssets>all</PrivateAssets>
@@ -145,6 +147,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\stop-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Precalculus\inverse_distances_background.mtx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
