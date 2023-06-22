@@ -5,7 +5,7 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <GenerateDocumentationFile>False</GenerateDocumentationFile>
     <DocumentationFile>C:\Users\berna\source\repos\insolesibc\insoles\bin\Debug\net6.0-windows\doc\Documentation.xml</DocumentationFile>
   </PropertyGroup>
 
