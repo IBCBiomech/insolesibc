@@ -9,7 +9,9 @@
         mc:Ignorable="d"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
-        Title="MainWindow" Height="600" Width="1400">
+        AllowsTransparency="True"
+        Background="Transparent"
+        Title="MainWindow" Height="700" Width="1400">
     
     <Window.DataContext>
         <vm:NavigationVM />
