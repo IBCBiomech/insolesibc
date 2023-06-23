@@ -57,7 +57,7 @@ namespace insoles.ViewModel
             pressureMap = new PressureMapCentersService(plantilla.sensor_map, codes,
                 plantilla.CalculateSensorPositionsLeft(), plantilla.CalculateSensorPositionsRight());
             grafoMariposa = new GrafoMariposa();
-            heatmap = new Heatmap();
+            heatmap = new Heatmap(pressureMap.N_FRAMES);
             camaraViewport1 = new CamaraReplay();
             camaraViewport2 = new CamaraReplay();
             databaseBridge = ((MainWindow)Application.Current.MainWindow).databaseBridge;
@@ -71,6 +71,7 @@ namespace insoles.ViewModel
             {
                 camaraViewport1.time = time;
                 camaraViewport2.time = time;
+                heatmap.time = time;
             };
             state.PropertyChanged += async(object sender, PropertyChangedEventArgs e) =>
             {

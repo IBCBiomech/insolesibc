@@ -35,6 +35,8 @@ namespace insoles.UserControls
         private Text L;
         private Text R;
 
+        private double maxTime;
+
         private int colorbarMax;
 
         private int avg_ = int.MinValue;
@@ -105,9 +107,19 @@ namespace insoles.UserControls
             }
             set
             {
-                animate = value;
+                _animate = value;
                 NotifyPropertyChanged();
                 NotifyPropertyChanged(nameof(graph_loaded));
+                if (value)
+                {
+                    if (graph_loaded)
+                        DrawData(pressure_maps_live[Math.Min(frame, pressure_maps_live.Count - 1)]);
+                }
+                else
+                {
+                    if (graph_loaded)
+                        DrawData(pressure_maps_metrics[selectedMetric]);
+                }         
             }
         }
         public bool graph_loaded { 
@@ -122,6 +134,34 @@ namespace insoles.UserControls
                     return pressure_maps_metrics != null;
                 }
             } 
+        }
+        private int _frame = 0;
+        private int frame
+        {
+            get
+            {
+                return _frame;
+            }
+            set
+            {
+                if(value != _frame)
+                {
+                    _frame = value;
+                    if(animate && graph_loaded)
+                    {
+                        DrawData(pressure_maps_live[Math.Min(value, pressure_maps_live.Count - 1)]);
+                    }
+                }
+            }
+        }
+        private const double TIME_PER_FRAME = 0.01;
+        private int N_FRAMES;
+        public double time
+        {
+            set
+            {
+                frame = (int)Math.Floor(value / (N_FRAMES * TIME_PER_FRAME));
+            }
         }
         Dictionary<Metric, Matrix<float>>? _pressure_maps_metrics;
         public Dictionary<Metric, Matrix<float>>? pressure_maps_metrics
@@ -158,11 +198,11 @@ namespace insoles.UserControls
         }
         private double[] centersXs;
         private double[] centersYs;
-        public Heatmap()
+        public Heatmap(int N_FRAMES)
         {
             InitializeComponent();
             DataContext = this;
-            
+            this.N_FRAMES = N_FRAMES;
         }
         public Task UpdateLimits(GraphData data)
         {
@@ -188,6 +228,7 @@ namespace insoles.UserControls
                 }
             }
             colorbarMax = max;
+            maxTime = data.maxTime;
             return Task.CompletedTask;
         }
         public void ClearData()

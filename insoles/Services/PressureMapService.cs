@@ -26,7 +26,7 @@ namespace insoles.Services
         private List<Matrix<float>> pressureMapsLive;
 
         const int BACKGROUND = -1;
-        const int N_FRAMES = 10;
+        public int N_FRAMES { get; } = 10;
         const int MIN_VALUE = 1;
 
         private bool isInitialized = false;

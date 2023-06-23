@@ -33,7 +33,7 @@ namespace insoles.Services
         private Matrix<float> inverse_distances_background;
 
         const int BACKGROUND = -1;
-        const int N_FRAMES = 10;
+        public int N_FRAMES { get; } = 10;
 
         private bool isInitialized = false;
 

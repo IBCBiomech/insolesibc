@@ -13,5 +13,6 @@ namespace insoles.Services
     {
         Task<Dictionary<UserControls.Metric, Matrix<float>>> CalculateMetrics(GraphData graphData);
         Task<List<Matrix<float>>> CalculateLive(GraphData graphData);
+        int N_FRAMES { get; }
     }
 }
