@@ -106,7 +106,7 @@
     </Style>
 
     <ImageBrush x:Key="close_app_def"
-                ImageSource="/Images/shutdown_def.png"
+                ImageSource="/Images/close_icon.png"
                 Stretch="None" />
 
     <ImageBrush x:Key="close_app_mo"

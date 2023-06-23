@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+
 namespace insoles.View
 {
     /// <summary>
@@ -22,7 +23,9 @@ namespace insoles.View
     {
         public Informes()
         {
+
             InitializeComponent();
+           
         }
     }
 }

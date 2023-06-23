@@ -9,8 +9,10 @@
         mc:Ignorable="d"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
-        Title="MainWindow" Height="600" Width="1400">
-    
+        AllowsTransparency="True"
+        Background="Transparent"
+        Title="MainWindow" Height="700" Width="1400">
+
     <Window.DataContext>
         <vm:NavigationVM />
     </Window.DataContext>
@@ -27,34 +29,31 @@
             <!--// Base Grid //-->
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="228" />
+                <ColumnDefinition Width="75" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <!--// Navigation Panel //-->
 
             <Grid HorizontalAlignment="Left"
-                  Width="228">
+                  Width="75">
 
                 <Border Background="#272B2F"
-                        CornerRadius="20,0,0,20" />
+                         />
 
-                <StackPanel Height="400"
-                            Width="228">
+                <StackPanel Height="400" Margin="0,150,0,150">
 
                     <!--// Home //-->
 
                     <Menu:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding HomeCommand}"
-                              IsChecked="True">
+                              IsChecked="True" Width="72"
+                              HorizontalAlignment="Left">
 
-                        <Grid>
+                        <Grid Margin="0,0,76,0">
 
-                            <Image Source="Images/img_home.png"
+                            <Image Source="Images/Home_Icon.png"
                                    Style="{StaticResource Image_Style}" />
-
-                            <TextBlock Text="Home"
-                                       Style="{StaticResource Text_Style}" />
 
                         </Grid>
 
@@ -63,15 +62,13 @@
                     <!--// Registro //-->
 
                     <Menu:Btn Style="{StaticResource BtnStyle}"
-                              Command="{Binding RegistroCommand}">
+                              Command="{Binding RegistroCommand}"
+                              HorizontalAlignment="Left" Width="72">
 
-                        <Grid>
+                        <Grid Margin="0,0,78,0">
 
-                            <Image Source="Images/img_customer.png"
+                            <Image Source="Images/drive_icon.png"
                                    Style="{StaticResource Image_Style}" />
-
-                            <TextBlock Text="Registro"
-                                       Style="{StaticResource Text_Style}" />
 
                         </Grid>
 
@@ -80,15 +77,13 @@
                     <!--// Analisis //-->
 
                     <Menu:Btn Style="{StaticResource BtnStyle}"
-                              Command="{Binding AnalisisCommand}">
+                              Command="{Binding AnalisisCommand}"
+                              HorizontalAlignment="Left" Width="73">
 
                         <Grid>
 
-                            <Image Source="Images/img_order.png"
+                            <Image Source="Images/analytics_icon.png"
                                    Style="{StaticResource Image_Style}" />
-
-                            <TextBlock Text="Analisis"
-                                       Style="{StaticResource Text_Style}" />
 
                         </Grid>
 
@@ -97,15 +92,13 @@
                     <!--// Informes //-->
 
                     <Menu:Btn Style="{StaticResource BtnStyle}"
-                              Command="{Binding InformesCommand}">
+                              Command="{Binding InformesCommand}"
+                              HorizontalAlignment="Left" Width="72">
 
-                        <Grid>
+                        <Grid Margin="0,0,78,0">
 
-                            <Image Source="Images/img_shipment.png"
+                            <Image Source="Images/Document_Icon.png"
                                    Style="{StaticResource Image_Style}" />
-
-                            <TextBlock Text="Informes"
-                                       Style="{StaticResource Text_Style}" />
 
                         </Grid>
 
@@ -116,9 +109,13 @@
             </Grid>
 
             <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="39*"/>
+                    <RowDefinition Height="101*"/>
+                </Grid.RowDefinitions>
 
                 <ContentControl x:Name="Pages"
-                                Content="{Binding CurrentView}" />
+                                Content="{Binding CurrentView}" Grid.RowSpan="2" />
 
             </Grid>
 

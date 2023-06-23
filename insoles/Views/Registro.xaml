@@ -28,7 +28,7 @@
         </ObjectDataProvider>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Background="White">
         <dock:DockingManager>
             <dock:LayoutRoot>
                 <dock:LayoutPanel>
