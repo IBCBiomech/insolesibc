@@ -66,6 +66,9 @@ namespace insoles.UserControls
             {
                 plot.Plot.SetAxisLimits(xMin, xMax, yMin, yMax);
             };
+
+            plot.Plot.AddText("L", xMin, (yMax + yMin) / 2, size:25, color:Color.DarkGray);
+            plot.Plot.AddText("R", xMax, (yMax + yMin) / 2, size:25, color: Color.DarkGray);
         }
         public Task DrawData(FramePressures[] data)
         {

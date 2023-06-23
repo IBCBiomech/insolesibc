@@ -32,6 +32,8 @@ namespace insoles.UserControls
         private ScottPlot.Plottable.Heatmap heatmap;
         private Colorbar colorbar;
         private ScatterPlot centers;
+        private Text L;
+        private Text R;
 
         private int colorbarMax;
 
@@ -204,6 +206,10 @@ namespace insoles.UserControls
             max = (int)filtered.Maximum();
             min = (int)filtered.Minimum();
             Dispatcher.Invoke(() => Draw(dataNull));
+            if(L == null)
+                L = plot.Plot.AddText("L", 0, data.RowCount / 2, size: 25, color: Color.DarkGray);
+            if(R == null)
+                R = plot.Plot.AddText("R", data.ColumnCount * 1.25, data.RowCount / 2, size: 25, color: Color.DarkGray);
         }
         private void Draw(double?[,] data)
         {
