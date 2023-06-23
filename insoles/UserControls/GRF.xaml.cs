@@ -61,13 +61,15 @@ namespace insoles.UserControls
 
             double[] xs_left = xs_temp_left.ToArray();
             double[] ys_left = ys_temp_left.ToArray();
-            plot.Plot.AddScatterLines(xs_left, ys_left, System.Drawing.Color.DarkOrange, 5);
-            plot.Plot.AddFillError(xs_left, ys_left, dts_left, System.Drawing.Color.FromArgb(50, System.Drawing.Color.IndianRed));
+            plot.Plot.AddScatterLines(xs_left, ys_left, System.Drawing.Color.DarkOrange, 5, label:"left");
+            //plot.Plot.AddFillError(xs_left, ys_left, dts_left, System.Drawing.Color.FromArgb(50, System.Drawing.Color.IndianRed));
 
             double[] xs_right = xs_temp_right.ToArray();
             double[] ys_right = ys_temp_right.ToArray();
-            plot.Plot.AddScatterLines(xs_right, ys_right, System.Drawing.Color.DarkBlue, 5);
-            plot.Plot.AddFillError(xs_right, ys_right, dts_right, System.Drawing.Color.FromArgb(50, System.Drawing.Color.SkyBlue));
+            plot.Plot.AddScatterLines(xs_right, ys_right, System.Drawing.Color.DarkBlue, 5, label:"right");
+            //plot.Plot.AddFillError(xs_right, ys_right, dts_right, System.Drawing.Color.FromArgb(50, System.Drawing.Color.SkyBlue));
+
+            plot.Plot.Legend();
 
             plot.Render();
 
