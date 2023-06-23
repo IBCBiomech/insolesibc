@@ -17,40 +17,124 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Net;
 using System.Diagnostics;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using ScottPlot.Plottable;
 
 namespace insoles.UserControls
 {
     /// <summary>
     /// Lógica de interacción para GRF.xaml
     /// </summary>
-    public partial class GRF : UserControl
+    public enum Units { N, Kg}
+    public partial class GRF : UserControl, INotifyPropertyChanged
     {
         private List<double> xs_temp_left;
         private List<double> ys_temp_left;
         private List<double> xs_temp_right;
         private List<double> ys_temp_right;
+
+        private List<double> xs_left_N;
+        private List<double> ys_left_N;
+        private List<double> xs_right_N;
+        private List<double> ys_right_N;
+
+        private List<double> xs_left_Kg;
+        private List<double> ys_left_Kg;
+        private List<double> xs_right_Kg;
+        private List<double> ys_right_Kg;
+
         List<double> XPoints = new List<double>();
+
+        private Units _selectedUnits;
+
+        public Units selectedUnits
+        {
+            get { return _selectedUnits; }
+            set
+            {
+                _selectedUnits = value;
+                NotifyPropertyChanged();
+                if(value == Units.N)
+                {
+                    setN();
+                    plot.Plot.Clear();
+                    render();
+                }
+                else if(value == Units.Kg)
+                {
+                    setKg();
+                    plot.Plot.Clear();
+                    render();
+                }
+            }
+        }
+        public IEnumerable<Units> units
+        {
+            get { return Enum.GetValues(typeof(Units)).Cast<Units>(); }
+        }
+        private ScatterPlot leftLines;
+        private ScatterPlot rightLines;
         public GRF()
         {
             InitializeComponent();
             DataContext = this;
         }
+        private void setN()
+        {
+            xs_temp_left = xs_left_N;
+            ys_temp_left = ys_left_N;
+            xs_temp_right = xs_right_N;
+            ys_temp_right = ys_right_N;
+        }
+        private void setKg()
+        {
+            xs_temp_left = xs_left_Kg;
+            ys_temp_left = ys_left_Kg;
+            xs_temp_right = xs_right_Kg;
+            ys_temp_right = ys_right_Kg;
+        }
         public Task Update(GraphData data)
         {
-            xs_temp_left = new List<double>();
-            ys_temp_left = new List<double>();
-            xs_temp_right = new List<double>();
-            ys_temp_right = new List<double>();
+            plot.Plot.Clear();
+            xs_left_N = new();
+            ys_left_N = new();
+            xs_right_N = new();
+            ys_right_N = new();
+
+            xs_left_Kg = new();
+            ys_left_Kg = new();
+            xs_right_Kg = new();
+            ys_right_Kg = new();
             foreach (var frame in data.frames)
             {
                 FrameDataInsoles frameInsoles = (FrameDataInsoles)frame;
                 DataInsole left = frameInsoles.left;
                 DataInsole right = frameInsoles.right;
-                xs_temp_left.Add(frameInsoles.time);
-                xs_temp_right.Add(frameInsoles.time);
-                ys_temp_left.Add(left.totalPressure);
-                ys_temp_right.Add(right.totalPressure);
+
+                xs_left_N.Add(frameInsoles.time);
+                xs_right_N.Add(frameInsoles.time);
+                ys_left_N.Add(left.totalPressure);
+                ys_right_N.Add(right.totalPressure);
+
+                xs_left_Kg.Add(frameInsoles.time);
+                xs_right_Kg.Add(frameInsoles.time);
+                ys_left_Kg.Add(left.totalPressure / 9.8);
+                ys_right_Kg.Add(right.totalPressure / 9.8);
             }
+            if(selectedUnits == Units.N)
+                setN();
+            else if(selectedUnits == Units.Kg) 
+                setKg();
+
+            render();
+
+            return Task.CompletedTask;
+        }
+        private void render()
+        {
+            if (ys_temp_left == null)
+                return;
             double[] dts_left = StdDevPointCalculation(ys_temp_left);
             double[] dts_right = StdDevPointCalculation(ys_temp_right);
 
@@ -61,19 +145,17 @@ namespace insoles.UserControls
 
             double[] xs_left = xs_temp_left.ToArray();
             double[] ys_left = ys_temp_left.ToArray();
-            plot.Plot.AddScatterLines(xs_left, ys_left, System.Drawing.Color.DarkOrange, 5, label:"left");
+            plot.Plot.AddScatterLines(xs_left, ys_left, System.Drawing.Color.DarkOrange, 5, label: "left");
             //plot.Plot.AddFillError(xs_left, ys_left, dts_left, System.Drawing.Color.FromArgb(50, System.Drawing.Color.IndianRed));
 
             double[] xs_right = xs_temp_right.ToArray();
             double[] ys_right = ys_temp_right.ToArray();
-            plot.Plot.AddScatterLines(xs_right, ys_right, System.Drawing.Color.DarkBlue, 5, label:"right");
+            plot.Plot.AddScatterLines(xs_right, ys_right, System.Drawing.Color.DarkBlue, 5, label: "right");
             //plot.Plot.AddFillError(xs_right, ys_right, dts_right, System.Drawing.Color.FromArgb(50, System.Drawing.Color.SkyBlue));
 
             plot.Plot.Legend();
 
             plot.Render();
-
-            return Task.CompletedTask;
         }
         // Este método es el que añade las barras verticales
         private void MouseTracking(object sender, MouseButtonEventArgs e)
@@ -195,6 +277,14 @@ namespace insoles.UserControls
                 }
             }
             return nearestValue;
+        }
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }

@@ -12,6 +12,9 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <WpfPlot x:Name="plot" Grid.Row="0"/>
+        <ComboBox HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="0" ItemsSource="{Binding units}"
+          SelectedItem="{Binding selectedUnits, Mode=TwoWay}"
+          DisplayMemberPath="." />
         <StackPanel Grid.Row="0" HorizontalAlignment="Right" Width="50" >
             <Button x:Name="StdDevButton1" Content="STDDEV" Click="StdDevButton1_Click"/>
         </StackPanel>
