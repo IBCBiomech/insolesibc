@@ -13,9 +13,8 @@
              xmlns:model="clr-namespace:insoles.Model"
              xmlns:controls="clr-namespace:System.Windows.Controls;assembly=MultiSelectTreeView"
              xmlns:userControls="clr-namespace:insoles.UserControls"
-             mc:Ignorable="d" 
-             HorizontalAlignment="Stretch"
-             VerticalAlignment="Stretch">
+             xmlns:dock="https://github.com/Dirkster99/AvalonDock"
+             mc:Ignorable="d">
     <UserControl.Resources>
         <converter:BooleanToCircleConverter x:Key="booleanToCircleConverter"/>
         <converter:PathToFileNameConverter x:Key="pathToFileNameConverter"/>
@@ -29,47 +28,65 @@
         </ObjectDataProvider>
     </UserControl.Resources>
 
-    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Grid>
+        <dock:DockingManager>
+            <dock:LayoutRoot>
+                <dock:LayoutPanel>
+                    <dock:LayoutAnchorablePaneGroup Orientation="Vertical">
+                        <dock:LayoutAnchorablePaneGroup Orientation="Horizontal">
+                            <dock:LayoutAnchorablePane>
+                                <dock:LayoutAnchorable Title="GRF" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                    <DockPanel>
+                                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Grid.Row="0">
+                                            <!-- Capture -->
+                                            <Button Command="{Binding captureCommand}" Style="{StaticResource BtnIconStyle}">
+                                                <Image Source="../Images/capture-icon.png" Style="{StaticResource Icon_Style}"/>
+                                            </Button>
+                                            <!-- Pause -->
+                                            <Button Command="{Binding pauseCommand}" Style="{StaticResource BtnIconStyle}">
+                                                <Image Source="../Images/pause-icon.png" Style="{StaticResource Icon_Style}"/>
+                                            </Button>
+                                            <!-- Stop -->
+                                            <Button Command="{Binding stopCommand}" Style="{StaticResource BtnIconStyle}">
+                                                <Image Source="../Images/stop-icon.png" Style="{StaticResource Icon_Style}"/>
+                                            </Button>
+                                            <!-- Record -->
+                                            <Button Command="{Binding recordCommand}" Style="{StaticResource BtnIconStyle}">
+                                                <Image Source="../Images/record-icon.png" Style="{StaticResource Icon_Style}"/>
+                                            </Button>
+                                        </StackPanel>
+                                        <ContentControl DockPanel.Dock="Bottom" Content="{Binding Plot}"/>
+                                    </DockPanel>
+                                </dock:LayoutAnchorable>
+                            </dock:LayoutAnchorablePane>
+                            <dock:LayoutAnchorablePaneGroup Orientation="Vertical">
+                                <dock:LayoutAnchorablePane>
+                                    <dock:LayoutAnchorable Title="Cam1" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                        <Image Source="{Binding CurrentFrameTop}" Stretch="Uniform"/>
+                                    </dock:LayoutAnchorable>
+                                </dock:LayoutAnchorablePane>
+                                <dock:LayoutAnchorablePane>
+                                    <dock:LayoutAnchorable Title="Cam2" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                        <Image Source="{Binding CurrentFrameBottom}" Stretch="Uniform"/>
+                                    </dock:LayoutAnchorable>
+                                </dock:LayoutAnchorablePane>
+                            </dock:LayoutAnchorablePaneGroup>
+                        </dock:LayoutAnchorablePaneGroup>
+                        <dock:LayoutAnchorablePane>
+                            <dock:LayoutAnchorable Title="Dispositivos" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                <userControls:Dispositivos Insoles="{Binding Insoles}" Cameras="{Binding Cameras}"/>
+                            </dock:LayoutAnchorable>
+                            <dock:LayoutAnchorable Title="Sujetos" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                <userControls:PacientesUserControl Pacientes="{Binding Pacientes}"/>
+                            </dock:LayoutAnchorable>
+                        </dock:LayoutAnchorablePane>
+                    </dock:LayoutAnchorablePaneGroup>
+                </dock:LayoutPanel>
+            </dock:LayoutRoot>
+        </dock:DockingManager>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <DockPanel Grid.Column="0">
-                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Grid.Row="0">
-                    <!-- Capture -->
-                    <Button Command="{Binding captureCommand}" Style="{StaticResource BtnIconStyle}">
-                        <Image Source="../Images/capture-icon.png" Style="{StaticResource Icon_Style}"/>
-                    </Button>
-                    <!-- Pause -->
-                    <Button Command="{Binding pauseCommand}" Style="{StaticResource BtnIconStyle}">
-                        <Image Source="../Images/pause-icon.png" Style="{StaticResource Icon_Style}"/>
-                    </Button>
-                    <!-- Stop -->
-                    <Button Command="{Binding stopCommand}" Style="{StaticResource BtnIconStyle}">
-                        <Image Source="../Images/stop-icon.png" Style="{StaticResource Icon_Style}"/>
-                    </Button>
-                    <!-- Record -->
-                    <Button Command="{Binding recordCommand}" Style="{StaticResource BtnIconStyle}">
-                        <Image Source="../Images/record-icon.png" Style="{StaticResource Icon_Style}"/>
-                    </Button>
-                </StackPanel>
-                <ContentControl DockPanel.Dock="Bottom" Content="{Binding Plot}"/>
-            </DockPanel>
-            <StackPanel Grid.Column="1" Orientation="Vertical">
-                <Image Source="{Binding CurrentFrameTop}" Stretch="Uniform"/>
-                <Image Source="{Binding CurrentFrameBottom}" Stretch="Uniform"/>
-            </StackPanel>
-        </Grid>
-        <DockPanel Grid.Row="1">
-            <StackPanel Orientation="Vertical">
-                <userControls:Dispositivos Insoles="{Binding Insoles}" Cameras="{Binding Cameras}"/>
-                <userControls:PacientesUserControl Pacientes="{Binding Pacientes}"/>
-            </StackPanel>
-        </DockPanel>
     </Grid>
 </UserControl>

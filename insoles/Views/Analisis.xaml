@@ -9,52 +9,48 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <userControls:PacientesUserControlAnalisis Grid.Column="0" Pacientes="{Binding Pacientes}"/>
-            <dock:DockingManager Grid.Column="1">
-                <dock:LayoutRoot>
-                    <dock:LayoutPanel>
-                        <dock:LayoutAnchorablePaneGroup Orientation="Vertical">
-                            <dock:LayoutAnchorablePaneGroup Orientation="Horizontal">
-                                <dock:LayoutAnchorablePane>
-                                    <dock:LayoutAnchorable CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
-                                        <ContentControl Content="{Binding grf}"/>
-                                    </dock:LayoutAnchorable>
-                                </dock:LayoutAnchorablePane>
-                                <dock:LayoutAnchorablePane>
-                                    <dock:LayoutAnchorable CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
-                                        <ContentControl Content="{Binding camaraViewport1}"/>
-                                    </dock:LayoutAnchorable>
-                                    <dock:LayoutAnchorable CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
-                                        <ContentControl Content="{Binding camaraViewport2}"/>
-                                    </dock:LayoutAnchorable>
-                                </dock:LayoutAnchorablePane>
-                            </dock:LayoutAnchorablePaneGroup>
-                            <dock:LayoutAnchorablePaneGroup Orientation="Horizontal">
-                                <dock:LayoutAnchorablePane>
-                                    <dock:LayoutAnchorable CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
-                                        <ContentControl Content="{Binding grafoMariposa}"/>
-                                    </dock:LayoutAnchorable>
-                                </dock:LayoutAnchorablePane>
-                                <dock:LayoutAnchorablePane>
-                                    <dock:LayoutAnchorable CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
-                                        <ContentControl Content="{Binding heatmap}"/>
-                                    </dock:LayoutAnchorable>
-                                </dock:LayoutAnchorablePane>
-                            </dock:LayoutAnchorablePaneGroup>
+        <dock:DockingManager>
+            <dock:LayoutRoot>
+                <dock:LayoutPanel>
+                    <dock:LayoutAnchorablePaneGroup Orientation="Vertical">
+                        <dock:LayoutAnchorablePaneGroup Orientation="Horizontal">
+                            <dock:LayoutAnchorablePane>
+                                <dock:LayoutAnchorable Title="GRF" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                    <ContentControl Content="{Binding grf}"/>
+                                </dock:LayoutAnchorable>
+                            </dock:LayoutAnchorablePane>
+                            <dock:LayoutAnchorablePane>
+                                <dock:LayoutAnchorable Title="Cam1" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                    <ContentControl Content="{Binding camaraViewport1}"/>
+                                </dock:LayoutAnchorable>
+                                <dock:LayoutAnchorable Title="Cam2" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                    <ContentControl Content="{Binding camaraViewport2}"/>
+                                </dock:LayoutAnchorable>
+                            </dock:LayoutAnchorablePane>
                         </dock:LayoutAnchorablePaneGroup>
-                    </dock:LayoutPanel>
-                </dock:LayoutRoot>
-            </dock:DockingManager>
-        </Grid>
-        <ContentControl Grid.Row="1" Content="{Binding timeLine}"/>
+                        <dock:LayoutAnchorablePaneGroup Orientation="Horizontal">
+                            <dock:LayoutAnchorablePane>
+                                <dock:LayoutAnchorable Title="Butterfly" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                    <ContentControl Content="{Binding grafoMariposa}"/>
+                                </dock:LayoutAnchorable>
+                            </dock:LayoutAnchorablePane>
+                            <dock:LayoutAnchorablePane>
+                                <dock:LayoutAnchorable Title="Pressure map" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                    <ContentControl Content="{Binding heatmap}"/>
+                                </dock:LayoutAnchorable>
+                            </dock:LayoutAnchorablePane>
+                        </dock:LayoutAnchorablePaneGroup>
+                        <dock:LayoutAnchorablePane>
+                            <dock:LayoutAnchorable Title="Sujetos" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                <userControls:PacientesUserControlAnalisis Pacientes="{Binding Pacientes}"/>
+                            </dock:LayoutAnchorable>
+                            <dock:LayoutAnchorable Title="Timeline" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                <ContentControl Content="{Binding timeLine}"/>
+                            </dock:LayoutAnchorable>
+                        </dock:LayoutAnchorablePane>
+                    </dock:LayoutAnchorablePaneGroup>
+                </dock:LayoutPanel>
+            </dock:LayoutRoot>
+        </dock:DockingManager>
     </Grid>
 </UserControl>
