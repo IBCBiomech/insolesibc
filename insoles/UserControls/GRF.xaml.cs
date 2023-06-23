@@ -79,6 +79,13 @@ namespace insoles.UserControls
         {
             InitializeComponent();
             DataContext = this;
+            plot.MouseDown += PlotControl_MouseDown;
+        }
+        // Desactiva el efecto por defecto de left click para que no se dibujen 2 lineas
+        private void PlotControl_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+                e.Handled = true;
         }
         private void setN()
         {
@@ -137,6 +144,7 @@ namespace insoles.UserControls
                 return;
             double[] dts_left = StdDevPointCalculation(ys_temp_left);
             double[] dts_right = StdDevPointCalculation(ys_temp_right);
+
 
             plot.MouseLeftButtonUp += new MouseButtonEventHandler(MouseTracking);
 
@@ -213,8 +221,8 @@ namespace insoles.UserControls
             int indexFirstClosest = xs_temp_left.IndexOf(FirstClosest);
             int indexLastClosest = xs_temp_left.IndexOf(LastClosest);
 
-            List<double> listXleft = xs_temp_left.GetRange(indexFirstClosest, indexLastClosest);
-            List<double> listYleft = ys_temp_left.GetRange(indexFirstClosest, indexLastClosest);
+            List<double> listXleft = xs_temp_left.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
+            List<double> listYleft = ys_temp_left.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
 
             double[] dataXleft = listXleft.ToArray();
             double[] dataYleft = listYleft.ToArray();
@@ -223,8 +231,8 @@ namespace insoles.UserControls
             plot2.Plot.AddScatterLines(dataXleft, dataYleft, System.Drawing.Color.DarkOrange, 5);
             plot2.Plot.AddFillError(dataXleft, dataYleft, stddevleft, System.Drawing.Color.FromArgb(50, System.Drawing.Color.Green));
 
-            List<double> listXright = xs_temp_right.GetRange(indexFirstClosest, indexLastClosest);
-            List<double> listYright = ys_temp_right.GetRange(indexFirstClosest, indexLastClosest);
+            List<double> listXright = xs_temp_right.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
+            List<double> listYright = ys_temp_right.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
 
             double[] dataXright = listXright.ToArray();
             double[] dataYright = listYright.ToArray();
