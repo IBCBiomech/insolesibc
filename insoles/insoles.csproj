@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\analytics_icon.png" />
     <None Remove="Images\bio.png" />
     <None Remove="Images\bio2.png" />
     <None Remove="Images\bitmap.png" />
@@ -18,9 +19,12 @@
     <None Remove="Images\close_icon.png" />
     <None Remove="Images\connect-icon.png" />
     <None Remove="Images\customer_page.png" />
+    <None Remove="Images\Document_Icon.png" />
+    <None Remove="Images\drive_icon.png" />
     <None Remove="Images\fast-backward-icon.png" />
     <None Remove="Images\fast-forward-icon.png" />
     <None Remove="Images\green-circle-icon.png" />
+    <None Remove="Images\Home_Icon.png" />
     <None Remove="Images\home_page.png" />
     <None Remove="Images\img_customer.png" />
     <None Remove="Images\img_home.png" />
@@ -36,6 +40,7 @@
     <None Remove="Images\shutdown_def.png" />
     <None Remove="Images\shutdown_mo.png" />
     <None Remove="Images\stop-icon.png" />
+    <None Remove="Images\toggle.png" />
     <None Remove="Precalculus\inverse_distances_background.mtx" />
   </ItemGroup>
 
@@ -81,6 +86,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\analytics_icon.png" />
     <Resource Include="Images\bio.png" />
     <Resource Include="Images\bio2.png" />
     <Resource Include="Images\bitmap.png">
@@ -99,6 +105,8 @@
     <Resource Include="Images\customer_page.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\Document_Icon.png" />
+    <Resource Include="Images\drive_icon.png" />
     <Resource Include="Images\fast-backward-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -108,6 +116,7 @@
     <Resource Include="Images\green-circle-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\Home_Icon.png" />
     <Resource Include="Images\home_page.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -153,6 +162,7 @@
     <Resource Include="Images\stop-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\toggle.png" />
     <Resource Include="Precalculus\inverse_distances_background.mtx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
