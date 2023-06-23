@@ -68,5 +68,13 @@ namespace insoles.Utilities
             dist_y = dist_y * dist_y;
             return dist_x + dist_y;
         }
+        public static float SquareDistance(float x1, float y1, float x2, float y2)
+        {
+            float dist_x = x1 - x2;
+            float dist_y = y1 - y2;
+            dist_x = dist_x * dist_x;
+            dist_y = dist_y * dist_y;
+            return dist_x + dist_y;
+        }
     }
 }
