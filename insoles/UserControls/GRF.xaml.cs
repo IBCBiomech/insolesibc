@@ -199,7 +199,9 @@ namespace insoles.UserControls
                 // Elevar al cuadrado la diferencia
                 double diferenciaCuadrada = Math.Pow(diferencia, 2);
 
+                //El sqrt para que el gráfico no se vaya con valores grandes
                 double diferenciaSqrt = Math.Sqrt(diferenciaCuadrada);
+                
                 // Agregar la diferencia cuadrada a la lista
                 desviacionesTipicas.Add(diferenciaSqrt);
             }
@@ -210,9 +212,7 @@ namespace insoles.UserControls
         }
         private void StdDevButton1_Click(object sender, RoutedEventArgs e)
         {
-            WpfPlot plot2 = new WpfPlot();
-            //double[] dataX = new double[] { 1, 2, 3, 4, 5 };
-            //double[] dataY = new double[] { 1, 4, 9, 16, 25 };
+            WpfPlot plot2 = new WpfPlot();  
             Trace.WriteLine(XPoints[0]);
             Trace.WriteLine(XPoints[1]);
 

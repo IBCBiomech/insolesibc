@@ -34,7 +34,7 @@
                 <dock:LayoutPanel>
                     <dock:LayoutAnchorablePaneGroup Orientation="Vertical">
                         <dock:LayoutAnchorablePaneGroup Orientation="Horizontal">
-                            <dock:LayoutAnchorablePane>
+                            <dock:LayoutAnchorablePane DockWidth="2*" DockHeight="100">
                                 <dock:LayoutAnchorable Title="GRF" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
                                     <DockPanel>
                                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Grid.Row="0">
@@ -72,11 +72,20 @@
                                 </dock:LayoutAnchorablePane>
                             </dock:LayoutAnchorablePaneGroup>
                         </dock:LayoutAnchorablePaneGroup>
-                        <dock:LayoutAnchorablePane>
-                            <dock:LayoutAnchorable Title="Dispositivos" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                        
+                        <dock:LayoutAnchorablePane DockHeight="*" >
+                            <dock:LayoutAnchorable Title="Dispositivos" 
+                                                   
+                                                   CanMove="True"
+                                                   CanClose="False" 
+                                                   CanFloat="True"                
+                                                   CanHide="True" CanAutoHide="False">
+                                
                                 <userControls:Dispositivos Insoles="{Binding Insoles}" Cameras="{Binding Cameras}"/>
                             </dock:LayoutAnchorable>
-                            <dock:LayoutAnchorable Title="Sujetos" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                            <dock:LayoutAnchorable Title="Sujetos" 
+                                                   CanMove="True"
+                                                   CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
                                 <userControls:PacientesUserControl Pacientes="{Binding Pacientes}"/>
                             </dock:LayoutAnchorable>
                         </dock:LayoutAnchorablePane>
