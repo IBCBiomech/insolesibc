@@ -11,7 +11,7 @@ namespace insoles.Services
 {
     public class FileExtractorService : IFileExtractorService
     {
-        public GraphData ExtractCSV(string path)
+        public async Task<GraphData> ExtractCSV(string path)
         {
             using (var reader = new StreamReader(path))
             {

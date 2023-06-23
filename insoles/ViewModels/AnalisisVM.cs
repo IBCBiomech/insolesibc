@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace insoles.ViewModel
 {
@@ -77,17 +78,18 @@ namespace insoles.ViewModel
                 {
                     if(state.test != null)
                     {
-                        GraphData data = fileExtractor.ExtractCSV(state.test.csv);
-                        timeLine.ChangeLimits(data.maxTime);
+                        GraphData data = await fileExtractor.ExtractCSV(state.test.csv);
+                        await Application.Current.Dispatcher.BeginInvoke(() => timeLine.ChangeLimits(data.maxTime));
                         FramePressures[] frames;
                         List<Tuple<double, double>> cps_left;
                         List<Tuple<double, double>> cps_right;
-                        butterfly.Calculate(data, out frames, out cps_left, out cps_right);
-                        grafoMariposa.DrawData(frames);
+                        await butterfly.Calculate(data, out frames, out cps_left, out cps_right);
+                        await grafoMariposa.DrawData(frames);
 
                         if(state.test.video1 != null)
                         {
-                            camaraViewport1.videoPath = state.test.video1;
+                            await Application.Current.Dispatcher.BeginInvoke(() =>
+                                camaraViewport1.videoPath = state.test.video1);
                         }
                         else
                         {
@@ -95,7 +97,8 @@ namespace insoles.ViewModel
                         }
                         if(state.test.video2 != null)
                         {
-                            camaraViewport2.videoPath = state.test.video2;
+                            await Application.Current.Dispatcher.BeginInvoke(() =>
+                                camaraViewport2.videoPath = state.test.video2);
                         }
                         else
                         {
@@ -105,9 +108,9 @@ namespace insoles.ViewModel
                         await heatmap.UpdateLimits(data);
                         await heatmap.CalculateCenters(cps_left, cps_right);
                         var pressureMaps = await pressureMap.CalculateMetrics(data);
-                        heatmap.pressure_maps_metrics = pressureMaps;
+                        await Task.Run(() => heatmap.pressure_maps_metrics = pressureMaps);
                         var pressureMapsLive = await pressureMap.CalculateLive(data);
-                        heatmap.pressure_maps_live = pressureMapsLive;
+                        await Task.Run(() => heatmap.pressure_maps_live = pressureMapsLive);
                     }         
                 }
             };

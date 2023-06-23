@@ -3,8 +3,7 @@ using insoles.Enums;
 using insoles.Utilities;
 using System;
 using System.Collections.Generic;
-
-
+using System.Threading.Tasks;
 
 namespace insoles.Services
 {
@@ -46,7 +45,7 @@ namespace insoles.Services
             }
 
         }
-        public void Calculate(GraphData graphData, out FramePressures[] frames, 
+        public Task Calculate(GraphData graphData, out FramePressures[] frames, 
             out List<Tuple<double, double>> cps_left, out List<Tuple<double, double>> cps_right)
         {
             FramePressures.Reset();
@@ -113,6 +112,7 @@ namespace insoles.Services
 
                 frames[i] = new FramePressures(i, pressure_center_left, pressure_center_right, total_pressure_left, total_pressure_right);
             }
+            return Task.CompletedTask;
         }
     }
 }

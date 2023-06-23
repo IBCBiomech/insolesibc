@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Resources;
@@ -66,7 +67,7 @@ namespace insoles.UserControls
                 plot.Plot.SetAxisLimits(xMin, xMax, yMin, yMax);
             };
         }
-        public void DrawData(FramePressures[] data)
+        public Task DrawData(FramePressures[] data)
         {
             List<double> x = new List<double>();
             List<double> y = new List<double>();
@@ -94,6 +95,7 @@ namespace insoles.UserControls
                 }
             }
             DrawData(x, y, colors);
+            return Task.CompletedTask;
         }
         private void DrawData(List<double> x_list, List<double> y_list, List<Color> colors)
         {
