@@ -55,6 +55,8 @@
                                                 <Image Source="../Images/record-icon.png" Style="{StaticResource Icon_Style}"/>
                                             </Button>
                                         </StackPanel>
+                                        <ComboBox DockPanel.Dock="Top" HorizontalAlignment="Center" VerticalAlignment="Top" ItemsSource="{Binding units}"
+                                            SelectedItem="{Binding selectedUnits, Mode=TwoWay}" DisplayMemberPath="." />
                                         <ContentControl DockPanel.Dock="Bottom" Content="{Binding Plot}"/>
                                     </DockPanel>
                                 </dock:LayoutAnchorable>

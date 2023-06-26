@@ -8,6 +8,7 @@ namespace insoles.Utilities
 {
     public static class UnitsConversions
     {
+        private const float G = 9.80665f;
         public static int ADC_neg(int VALUE_digital)
         {
             return 4095 - VALUE_digital;
@@ -31,6 +32,10 @@ namespace insoles.Utilities
         public static float N_from_VALUE_digital(int VALUE_digital)
         {
             return N(VALUE_mbar(ADC_neg(VALUE_digital)));
+        }
+        public static float Kg_from_N(float N)
+        {
+            return N / G;
         }
     }
 }

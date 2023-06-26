@@ -14,6 +14,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using insoles.Commands;
 using insoles.States;
+using System;
 
 namespace insoles.ViewModel
 {
@@ -72,6 +73,29 @@ namespace insoles.ViewModel
             {
                 return databaseBridge.Pacientes;
             }
+        }
+        private UserControls.Units _selectedUnits;
+
+        public UserControls.Units selectedUnits
+        {
+            get { return _selectedUnits; }
+            set
+            {
+                _selectedUnits = value;
+                OnPropertyChanged();
+                if (value == UserControls.Units.N)
+                {
+                    
+                }
+                else if (value == UserControls.Units.Kg)
+                {
+                    
+                }
+            }
+        }
+        public IEnumerable<UserControls.Units> units
+        {
+            get { return Enum.GetValues(typeof(UserControls.Units)).Cast<UserControls.Units>(); }
         }
         public RegistroVM()
         {
@@ -167,7 +191,22 @@ namespace insoles.ViewModel
                     float[] metricLeft, float[] metricRight
                 ) =>
             {
-                GraphModel.UpdateData(metricLeft, metricRight);
+                if(selectedUnits == UserControls.Units.N)
+                    GraphModel.UpdateData(metricLeft, metricRight);
+                else if(selectedUnits == UserControls.Units.Kg)
+                {
+                    float[] metricLeftKg = new float[metricLeft.Length];
+                    float[] metricRightKg = new float[metricRight.Length];
+                    for(int i = 0; i < metricLeft.Length; i++)
+                    {
+                        metricLeftKg[i] = UnitsConversions.Kg_from_N(metricLeft[i]);
+                    }
+                    for (int i = 0; i < metricRight.Length; i++)
+                    {
+                        metricRightKg[i] = UnitsConversions.Kg_from_N(metricRight[i]);
+                    }
+                    GraphModel.UpdateData(metricLeftKg, metricRightKg);
+                }
                 saveService.AppendCSV(left, right, metricLeft, metricRight);
             };
             Plot = new WpfPlot();

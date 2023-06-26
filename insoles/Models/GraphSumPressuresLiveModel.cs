@@ -27,6 +27,7 @@ namespace insoles.Model
             signalPlotRight.MarkerSize = 0;
             plot.Plot.SetAxisLimitsY(-10, 500);
             plot.Plot.SetAxisLimitsX(xMin: 0, xMax: CAPACITY);
+            plot.Plot.Legend(location : Alignment.UpperRight);
             lineFrame = plot.Plot.AddVerticalLine(0, color: Color.Green, width: 1, style: LineStyle.Dash);
             plot.Refresh();
         }
