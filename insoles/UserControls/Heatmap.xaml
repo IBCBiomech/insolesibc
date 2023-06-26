@@ -35,9 +35,11 @@
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
             <TextBlock Text="Frames taken"/>
-            <ComboBox ItemsSource="{Binding posibleFramesTaken}" SelectedItem="{Binding state.framesTaken}" SelectedIndex="4">
+            <ComboBox ItemsSource="{Binding posibleFramesTaken}" 
+                      SelectedItem="{Binding state.framesTaken}" 
+                      IsEditable="True" IsReadOnly="True" Text="Selecciona Frames">
                 <ComboBox.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate >
                         <TextBlock Text="{Binding Converter={StaticResource fractionConverter}}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>

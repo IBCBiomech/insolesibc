@@ -27,6 +27,7 @@ namespace insoles.UserControls
     /// Lógica de interacción para GRF.xaml
     /// </summary>
     public enum Units { N, Kg}
+   
     public partial class GRF : UserControl, INotifyPropertyChanged
     {
         private List<double> xs_temp_left;
@@ -73,14 +74,31 @@ namespace insoles.UserControls
         {
             get { return Enum.GetValues(typeof(Units)).Cast<Units>(); }
         }
-        private ScatterPlot leftLines;
-        private ScatterPlot rightLines;
+ 
+       
+        private readonly ScottPlot.Plottable.MarkerPlot HighlightedPoint;
+        private int LastHighlightedIndex = -1;
+
         public GRF()
         {
             InitializeComponent();
             DataContext = this;
             plot.MouseDown += PlotControl_MouseDown;
+            plot.MouseMove += Plot_MouseMove;
+            
+            plot.Plot.Render();
+
         }
+
+        private void Plot_MouseMove(object sender, MouseEventArgs e)
+        {
+            (double x, double y) = plot.GetMouseCoordinates();
+            plot.Plot.XLabel($"X: {x}, Y: {y}");
+
+
+
+        }
+
         // Desactiva el efecto por defecto de left click para que no se dibujen 2 lineas
         private void PlotControl_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -146,7 +164,7 @@ namespace insoles.UserControls
             double[] dts_right = StdDevPointCalculation(ys_temp_right);
 
 
-            plot.MouseLeftButtonUp += new MouseButtonEventHandler(MouseTracking);
+            plot.MouseDoubleClick += new MouseButtonEventHandler(MouseTracking);
 
             plot.Plot.Palette = ScottPlot.Palette.Amber;
             plot.Plot.Style(ScottPlot.Style.Seaborn);
@@ -174,8 +192,6 @@ namespace insoles.UserControls
             vlabel.PositionLabel = true;
             vlabel.DragEnabled = true;
             plot.Render();
-
-
             XPoints.Add(x);
 
 
@@ -296,5 +312,7 @@ namespace insoles.UserControls
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-    }
+
+ 
+}
 }
