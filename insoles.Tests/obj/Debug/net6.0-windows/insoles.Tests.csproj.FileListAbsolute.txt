@@ -23,6 +23,7 @@ C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\Emgu.CV.dl
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\Emgu.CV.Bitmap.dll
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\Emgu.CV.Wpf.dll
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\MathNet.Numerics.dll
+C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\MathNet.Numerics.Data.Text.dll
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\Microsoft.VisualStudio.CodeCoverage.Shim.dll
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\Microsoft.Data.Sqlite.dll
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\Microsoft.EntityFrameworkCore.dll

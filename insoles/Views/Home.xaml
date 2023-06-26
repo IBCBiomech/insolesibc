@@ -10,7 +10,7 @@
 
         <Border CornerRadius="0,20,20,0" Margin="0,5,5,0">
 
-            <Image Source="/Images/bio2.png"
+            <Image Source="/Images/bio3.png"
                    Stretch="Fill" />
 
         </Border>

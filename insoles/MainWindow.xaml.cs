@@ -33,14 +33,15 @@ namespace insoles
             Close();
         }
         /// <summary>
+        /// Atención: este método hay que comentarlo si no, no funciona el Dock
         /// Necesario para mover la ventana sin controles
         /// </summary>
-        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
-        {
-            base.OnMouseLeftButtonDown(e);
+        //protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        //{
+        //    base.OnMouseLeftButtonDown(e);
 
-            // Begin dragging the window
-            this.DragMove();
-        }
+        //    // Begin dragging the window
+        //    this.DragMove();
+        //}
     }
 }

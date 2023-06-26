@@ -38,8 +38,9 @@
                                 </dock:LayoutAnchorablePane>
                             </dock:LayoutAnchorablePaneGroup>
                         </dock:LayoutAnchorablePaneGroup>
-                        <dock:LayoutAnchorablePane>
-                            <dock:LayoutAnchorable Title="Sujetos" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                        <dock:LayoutAnchorablePane DockHeight="20">
+                            <dock:LayoutAnchorable Title="Sujetos" CanClose="False" CanFloat="True" 
+                                                   CanHide="True" CanAutoHide="False">
                                 <userControls:PacientesUserControlAnalisis Pacientes="{Binding Pacientes}"/>
                             </dock:LayoutAnchorable>
                             <dock:LayoutAnchorable Title="Timeline" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">

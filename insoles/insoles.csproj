@@ -13,6 +13,7 @@
     <None Remove="Images\analytics_icon.png" />
     <None Remove="Images\bio.png" />
     <None Remove="Images\bio2.png" />
+    <None Remove="Images\bio3.png" />
     <None Remove="Images\bitmap.png" />
     <None Remove="Images\bitmap_mariposa.png" />
     <None Remove="Images\capture-icon.png" />
@@ -89,6 +90,7 @@
     <Resource Include="Images\analytics_icon.png" />
     <Resource Include="Images\bio.png" />
     <Resource Include="Images\bio2.png" />
+    <Resource Include="Images\bio3.png" />
     <Resource Include="Images\bitmap.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
