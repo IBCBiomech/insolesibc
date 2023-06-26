@@ -19,5 +19,6 @@ namespace insoles.States
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
+        public int framesTaken { get; set; }
     }
 }

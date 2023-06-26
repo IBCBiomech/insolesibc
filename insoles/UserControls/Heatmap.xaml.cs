@@ -1,5 +1,6 @@
 ﻿using insoles.Controlls;
 using insoles.DataHolders;
+using insoles.States;
 using insoles.Utilities;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.Statistics;
@@ -8,6 +9,7 @@ using ScottPlot.Plottable;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.DirectoryServices;
 using System.Drawing;
 using System.Linq;
@@ -99,6 +101,26 @@ namespace insoles.UserControls
         {
             get { return Enum.GetValues(typeof(Metric)).Cast<Metric>(); }
         }
+        public IEnumerable<int> posibleFramesTaken
+        {
+            get
+            {
+                return new List<int>() { 1, 10, 50, 100, 500 };
+            }
+        }
+        public int framesTaken
+        {
+            get
+            {
+                return state.framesTaken;
+            }
+            set
+            {
+                Trace.WriteLine(value);
+                state.framesTaken = value;
+                NotifyPropertyChanged();
+            }
+        }
         private bool _animate;
         public bool animate { 
             get
@@ -155,12 +177,11 @@ namespace insoles.UserControls
             }
         }
         private const double TIME_PER_FRAME = 0.01;
-        private int N_FRAMES;
         public double time
         {
             set
             {
-                frame = (int)Math.Floor(value / (N_FRAMES * TIME_PER_FRAME));
+                frame = (int)Math.Floor(value / (state.framesTaken * TIME_PER_FRAME));
             }
         }
         Dictionary<Metric, Matrix<float>>? _pressure_maps_metrics;
@@ -198,11 +219,12 @@ namespace insoles.UserControls
         }
         private double[] centersXs;
         private double[] centersYs;
-        public Heatmap(int N_FRAMES)
+        public AnalisisState state { get;set; }
+        public Heatmap(AnalisisState state)
         {
             InitializeComponent();
+            this.state = state;
             DataContext = this;
-            this.N_FRAMES = N_FRAMES;
         }
         public Task UpdateLimits(GraphData data)
         {

@@ -13,6 +13,8 @@ using System.Windows;
 using MathNet.Numerics.LinearAlgebra;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Controls;
+using insoles.States;
+using System.Threading;
 
 namespace insoles.Services
 {
@@ -40,10 +42,12 @@ namespace insoles.Services
 
         private bool isInitialized = false;
 
-        public PressureMapCentersService(Matrix<float> sensor_map, ICodesService codes,
+        private AnalisisState state;
+        public PressureMapCentersService(AnalisisState state, Matrix<float> sensor_map, ICodesService codes,
             Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_left,
             Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_right)
         {
+            this.state = state;
             this.sensor_map = sensor_map;
             this.codes = codes;
             Task.Run(() =>
@@ -284,11 +288,11 @@ namespace insoles.Services
                 await Task.Delay(1000);
             }
             List<Matrix<float>> pressureMapsLive = new();
-            for (int i = 0; i < graphData.length; i += N_FRAMES)
+            for (int i = 0; i < graphData.length; i += state.framesTaken)
             {
                 DataInsole left = new();
                 DataInsole right = new();
-                for (int j = i; j < Math.Min(i + N_FRAMES, graphData.length); j++)
+                for (int j = i; j < Math.Min(i + state.framesTaken, graphData.length); j++)
                 {
                     FrameDataInsoles frameData = (FrameDataInsoles)graphData[j];
                     foreach (Sensor sensor in Enum.GetValues(typeof(Sensor)))
@@ -299,8 +303,8 @@ namespace insoles.Services
                 }
                 foreach (Sensor sensor in Enum.GetValues(typeof(Sensor)))
                 {
-                    left[sensor] /= Math.Min(N_FRAMES, graphData.length - i);
-                    right[sensor] /= Math.Min(N_FRAMES, graphData.length - i);
+                    left[sensor] /= Math.Min(state.framesTaken, graphData.length - i);
+                    right[sensor] /= Math.Min(state.framesTaken, graphData.length - i);
                 }
                 pressureMapsLive.Add(CalculateOne(left, right));
             }

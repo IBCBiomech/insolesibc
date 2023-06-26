@@ -54,10 +54,10 @@ namespace insoles.ViewModel
             fileExtractor = new FileExtractorService();
             grf = new GRF();
             butterfly = new ButterflyService(plantilla);
-            pressureMap = new PressureMapCentersService(plantilla.sensor_map, codes,
+            pressureMap = new PressureMapCentersService(state, plantilla.sensor_map, codes,
                 plantilla.CalculateSensorPositionsLeft(), plantilla.CalculateSensorPositionsRight());
             grafoMariposa = new GrafoMariposa();
-            heatmap = new Heatmap(pressureMap.N_FRAMES);
+            heatmap = new Heatmap(state);
             camaraViewport1 = new CamaraReplay();
             camaraViewport2 = new CamaraReplay();
             databaseBridge = ((MainWindow)Application.Current.MainWindow).databaseBridge;

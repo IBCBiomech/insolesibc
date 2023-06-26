@@ -12,6 +12,7 @@ using Emgu.CV.Ocl;
 using System.Windows.Resources;
 using System.Windows;
 using System.IO;
+using insoles.States;
 
 namespace insoles.Services
 {
@@ -31,7 +32,8 @@ namespace insoles.Services
 
         private bool isInitialized = false;
 
-        public PressureMapService(Matrix<float> sensor_map, ICodesService codes,
+        public PressureMapService(AnalisisState state,
+            Matrix<float> sensor_map, ICodesService codes,
             Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_left,
             Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_right)
         {

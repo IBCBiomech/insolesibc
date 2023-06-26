@@ -17,6 +17,7 @@
         <converter:PreTextConverter x:Key="avgConverter" text="Avg: "/>
         <converter:TrueToVisibleConverter x:Key="trueVisibleConverter"/>
         <converter:FalseToVisibleConverter x:Key="falseVisibleConverter"/>
+        <converter:FractionConverter x:Key="fractionConverter"/>
     </UserControl.Resources>
     <Grid>
         <WpfPlot x:Name="plot" Visibility="{Binding graph_loaded, Converter={StaticResource trueVisibleConverter}}"/>
@@ -31,6 +32,16 @@
                 <CheckBox Margin="10 0" VerticalAlignment="Center" IsChecked="{Binding animate}"/>
                 <TextBlock>Animate</TextBlock>
             </StackPanel>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <TextBlock Text="Frames taken"/>
+            <ComboBox ItemsSource="{Binding posibleFramesTaken}" SelectedItem="{Binding state.framesTaken}" SelectedIndex="2">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource fractionConverter}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </StackPanel>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" 
                     Visibility="{Binding graph_loaded, Converter={StaticResource trueVisibleConverter}}">
