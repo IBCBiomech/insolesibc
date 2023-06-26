@@ -43,6 +43,7 @@
     <None Remove="Images\stop-icon.png" />
     <None Remove="Images\toggle.png" />
     <None Remove="Precalculus\inverse_distances_background.mtx" />
+    <None Remove="Precalculus\inverse_distances_reduced.mtx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -166,6 +167,9 @@
     </Resource>
     <Resource Include="Images\toggle.png" />
     <Resource Include="Precalculus\inverse_distances_background.mtx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Precalculus\inverse_distances_reduced.mtx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

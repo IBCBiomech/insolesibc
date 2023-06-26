@@ -11,10 +11,13 @@ using System.Threading.Tasks;
 using System.Windows.Resources;
 using System.Windows;
 using MathNet.Numerics.LinearAlgebra;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Controls;
 
 namespace insoles.Services
 {
-    public enum SensorHeelReduced
+    [Serializable]
+    public enum SensorHeelReduced : int
     {
         HALLUX,
         TOES,
@@ -56,16 +59,23 @@ namespace insoles.Services
                     }
                     return (sum1 / centers.Count, sum2 / centers.Count);
                 }
-                Dictionary<Sensor, (float, float)> centersLeft;
-                Dictionary<Sensor, (float, float)> centersRight;
-                CalculateCenters(sensor_positions_left, sensor_positions_right,
-                    out centersLeft, out centersRight);
-                Dictionary<SensorHeelReduced, (float, float)> centersLeftReduced = 
-                ReduceSensorsHeel(centersLeft, reduceSensorsFunc);
-                Dictionary<SensorHeelReduced, (float, float)> centersRightReduced = 
-                ReduceSensorsHeel(centersRight, reduceSensorsFunc);
-                inverse_reduced_distances = CalculateMinDistances(sensor_map, codes,
-                    centersLeftReduced, centersRightReduced);
+                try
+                {
+                    inverse_reduced_distances = LoadMatrixDictionary();
+                }
+                catch (IOException) {
+                    MessageBox.Show("No se ha encontrado el fichero de la matrix\nSe va a proceder a recalcularla", "inverse_distances_reduced.mtx not found", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.Yes);
+                    Dictionary<Sensor, (float, float)> centersLeft;
+                    Dictionary<Sensor, (float, float)> centersRight;
+                    CalculateCenters(sensor_positions_left, sensor_positions_right,
+                        out centersLeft, out centersRight);
+                    Dictionary<SensorHeelReduced, (float, float)> centersLeftReduced =
+                    ReduceSensorsHeel(centersLeft, reduceSensorsFunc);
+                    Dictionary<SensorHeelReduced, (float, float)> centersRightReduced =
+                    ReduceSensorsHeel(centersRight, reduceSensorsFunc);
+                    inverse_reduced_distances = CalculateMinDistances(sensor_map, codes,
+                        centersLeftReduced, centersRightReduced);
+                }
                 try
                 {
                     Uri uri = new Uri("pack://application:,,,/Precalculus/inverse_distances_background.mtx");
@@ -81,6 +91,29 @@ namespace insoles.Services
                 }
                 isInitialized = true;
             });
+        }
+        private void SaveMatrixDictionary(Dictionary<SensorHeelReduced, Matrix<float>> dictionary, string filePath)
+        {
+            using (FileStream stream = File.OpenWrite(filePath))
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(stream, dictionary);
+            }
+        }
+        private Dictionary<SensorHeelReduced, Matrix<float>> LoadMatrixDictionary()
+        {
+            Dictionary<SensorHeelReduced, Matrix<float>> dictionary;
+
+            Uri uri = new Uri("pack://application:,,,/Precalculus/inverse_distances_reduced.mtx");
+            StreamResourceInfo sri = Application.GetResourceStream(uri);
+
+            using (Stream stream = sri.Stream)
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                dictionary = (Dictionary<SensorHeelReduced, Matrix<float>>)formatter.Deserialize(stream);
+            }
+
+            return dictionary;
         }
         private Dictionary<SensorHeelReduced, T> ReduceSensorsHeel<T>(Dictionary<Sensor, T> centers, Func<List<T>, T> transformFuncion)
         {
