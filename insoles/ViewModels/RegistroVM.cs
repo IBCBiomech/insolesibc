@@ -97,7 +97,9 @@ namespace insoles.ViewModel
             state = new RegistroState(databaseBridge);
             //currentFrames.Add(CurrentFrameTop); currentFrames.Add(CurrentFrameBottom);
             //Init services
-            apiService = new FakeApiService(state);
+            
+           /* apiService = new FakeApiService(state)*/; //Fake API
+            apiService = new ApiService(state); // Real API
             cameraService = new CameraService();
             liveCalculationsService = new LiveCalculationsService();
             saveService = new SaveService(state);

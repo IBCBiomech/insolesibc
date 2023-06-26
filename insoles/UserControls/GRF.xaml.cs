@@ -153,12 +153,12 @@ namespace insoles.UserControls
 
             double[] xs_left = xs_temp_left.ToArray();
             double[] ys_left = ys_temp_left.ToArray();
-            plot.Plot.AddScatterLines(xs_left, ys_left, System.Drawing.Color.DarkOrange, 5, label: "left");
+            plot.Plot.AddScatterLines(xs_left, ys_left, System.Drawing.Color.DarkOrange, 2, label: "left");
             //plot.Plot.AddFillError(xs_left, ys_left, dts_left, System.Drawing.Color.FromArgb(50, System.Drawing.Color.IndianRed));
 
             double[] xs_right = xs_temp_right.ToArray();
             double[] ys_right = ys_temp_right.ToArray();
-            plot.Plot.AddScatterLines(xs_right, ys_right, System.Drawing.Color.DarkBlue, 5, label: "right");
+            plot.Plot.AddScatterLines(xs_right, ys_right, System.Drawing.Color.DarkBlue, 2, label: "right");
             //plot.Plot.AddFillError(xs_right, ys_right, dts_right, System.Drawing.Color.FromArgb(50, System.Drawing.Color.SkyBlue));
 
             plot.Plot.Legend();
@@ -230,7 +230,7 @@ namespace insoles.UserControls
             double[] dataYleft = listYleft.ToArray();
 
             double[] stddevleft = StdDevPointCalculation(listYleft);
-            plot2.Plot.AddScatterLines(dataXleft, dataYleft, System.Drawing.Color.DarkOrange, 5);
+            plot2.Plot.AddScatterLines(dataXleft, dataYleft, System.Drawing.Color.DarkOrange, 2);
             plot2.Plot.AddFillError(dataXleft, dataYleft, stddevleft, System.Drawing.Color.FromArgb(50, System.Drawing.Color.Green));
 
             List<double> listXright = xs_temp_right.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
@@ -240,7 +240,7 @@ namespace insoles.UserControls
             double[] dataYright = listYright.ToArray();
 
             double[] stddevright = StdDevPointCalculation(listYleft);
-            plot2.Plot.AddScatterLines(dataXright, dataYright, System.Drawing.Color.DarkBlue, 5);
+            plot2.Plot.AddScatterLines(dataXright, dataYright, System.Drawing.Color.DarkBlue, 2);
             plot2.Plot.AddFillError(dataXright, dataYright, stddevright, System.Drawing.Color.FromArgb(50, System.Drawing.Color.SkyBlue));
 
             plot2.Render();
