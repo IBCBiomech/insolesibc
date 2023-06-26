@@ -43,8 +43,8 @@ namespace insoles.Services
         {
             List<Dictionary<Sensor, double>> N_left = new();
             List<Dictionary<Sensor, double>> N_right = new();
-            float[] metric_left = new float[left.Count];
-            float[] metric_right = new float[right.Count];
+            float[]? metric_left = new float[left.Count];
+            float[]? metric_right = new float[right.Count];
 
             int numPackets = left.Count;
             for (int i = 0; i < numPackets; i++)
