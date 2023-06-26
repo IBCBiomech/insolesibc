@@ -83,20 +83,14 @@ namespace insoles.ViewModel
             {
                 _selectedUnits = value;
                 OnPropertyChanged();
-                if (value == UserControls.Units.N)
-                {
-                    
-                }
-                else if (value == UserControls.Units.Kg)
-                {
-                    
-                }
             }
         }
         public IEnumerable<UserControls.Units> units
         {
             get { return Enum.GetValues(typeof(UserControls.Units)).Cast<UserControls.Units>(); }
         }
+        public bool FC { get; set; }
+        private const float DEFAULT_WEIGHT = 70;
         public RegistroVM()
         {
             databaseBridge = ((MainWindow)Application.Current.MainWindow).databaseBridge;
@@ -191,7 +185,19 @@ namespace insoles.ViewModel
                     float[] metricLeft, float[] metricRight
                 ) =>
             {
-                if(selectedUnits == UserControls.Units.N)
+                if (FC)
+                {
+                    float G = 9.80665f;
+                    float FNominal = state.selectedPaciente.Peso.GetValueOrDefault(DEFAULT_WEIGHT) * G;
+                    for (int i = 0; i < metricLeft.Length; i++)
+                    {
+                        float FRegistrada = metricLeft[i] + metricRight[i];
+                        float fc = FNominal / FRegistrada;
+                        metricLeft[i] *= fc;
+                        metricRight[i] *= fc;
+                    }
+                }
+                if (selectedUnits == UserControls.Units.N)
                     GraphModel.UpdateData(metricLeft, metricRight);
                 else if(selectedUnits == UserControls.Units.Kg)
                 {

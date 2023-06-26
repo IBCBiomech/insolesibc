@@ -37,26 +37,32 @@
                             <dock:LayoutAnchorablePane DockWidth="1.5*" DockHeight="100">
                                 <dock:LayoutAnchorable Title="GRF" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
                                     <DockPanel>
-                                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Grid.Row="0">
-                                            <!-- Capture -->
-                                            <Button Command="{Binding captureCommand}" Style="{StaticResource BtnIconStyle}">
-                                                <Image Source="../Images/capture-icon.png" Style="{StaticResource Icon_Style}"/>
-                                            </Button>
-                                            <!-- Pause -->
-                                            <Button Command="{Binding pauseCommand}" Style="{StaticResource BtnIconStyle}">
-                                                <Image Source="../Images/pause-icon.png" Style="{StaticResource Icon_Style}"/>
-                                            </Button>
-                                            <!-- Stop -->
-                                            <Button Command="{Binding stopCommand}" Style="{StaticResource BtnIconStyle}">
-                                                <Image Source="../Images/stop-icon.png" Style="{StaticResource Icon_Style}"/>
-                                            </Button>
-                                            <!-- Record -->
-                                            <Button Command="{Binding recordCommand}" Style="{StaticResource BtnIconStyle}">
-                                                <Image Source="../Images/record-icon.png" Style="{StaticResource Icon_Style}"/>
-                                            </Button>
-                                        </StackPanel>
-                                        <ComboBox DockPanel.Dock="Top" HorizontalAlignment="Center" VerticalAlignment="Top" ItemsSource="{Binding units}"
+                                        <DockPanel DockPanel.Dock="Top">
+                                            <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Grid.Row="0">
+                                                <!-- Capture -->
+                                                <Button Command="{Binding captureCommand}" Style="{StaticResource BtnIconStyle}">
+                                                    <Image Source="../Images/capture-icon.png" Style="{StaticResource Icon_Style}"/>
+                                                </Button>
+                                                <!-- Pause -->
+                                                <Button Command="{Binding pauseCommand}" Style="{StaticResource BtnIconStyle}">
+                                                    <Image Source="../Images/pause-icon.png" Style="{StaticResource Icon_Style}"/>
+                                                </Button>
+                                                <!-- Stop -->
+                                                <Button Command="{Binding stopCommand}" Style="{StaticResource BtnIconStyle}">
+                                                    <Image Source="../Images/stop-icon.png" Style="{StaticResource Icon_Style}"/>
+                                                </Button>
+                                                <!-- Record -->
+                                                <Button Command="{Binding recordCommand}" Style="{StaticResource BtnIconStyle}">
+                                                    <Image Source="../Images/record-icon.png" Style="{StaticResource Icon_Style}"/>
+                                                </Button>
+                                            </StackPanel>
+                                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock Text="FC"/>
+                                                <CheckBox IsChecked="{Binding FC}"/>
+                                            </StackPanel>
+                                            <ComboBox DockPanel.Dock="Right" HorizontalAlignment="Center" VerticalAlignment="Center" ItemsSource="{Binding units}"
                                             SelectedItem="{Binding selectedUnits, Mode=TwoWay}" DisplayMemberPath="." />
+                                        </DockPanel>
                                         <ContentControl DockPanel.Dock="Bottom" Content="{Binding Plot}"/>
                                     </DockPanel>
                                 </dock:LayoutAnchorable>
