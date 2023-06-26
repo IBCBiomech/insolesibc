@@ -171,7 +171,7 @@ namespace insoles.ViewModel
                 saveService.AppendCSV(left, right, metricLeft, metricRight);
             };
             Plot = new WpfPlot();
-            Plot.Plot.Title("test plot");
+            Plot.Plot.Title("GRF");
             GraphModel = new(Plot);
         }
     }

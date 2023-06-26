@@ -33,8 +33,8 @@
             <dock:LayoutRoot>
                 <dock:LayoutPanel>
                     <dock:LayoutAnchorablePaneGroup Orientation="Vertical">
-                        <dock:LayoutAnchorablePaneGroup Orientation="Horizontal">
-                            <dock:LayoutAnchorablePane DockWidth="2*" DockHeight="100">
+                        <dock:LayoutAnchorablePaneGroup Orientation="Horizontal" DockHeight="3*">
+                            <dock:LayoutAnchorablePane DockWidth="1.5*" DockHeight="100">
                                 <dock:LayoutAnchorable Title="GRF" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
                                     <DockPanel>
                                         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Grid.Row="0">
