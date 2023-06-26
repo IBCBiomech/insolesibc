@@ -200,8 +200,10 @@ namespace insoles.UserControls
                 double diferenciaCuadrada = Math.Pow(diferencia, 2);
 
                 double diferenciaSqrt = Math.Sqrt(diferenciaCuadrada);
+
+                double std = Math.Min(diferenciaSqrt, valor);
                 // Agregar la diferencia cuadrada a la lista
-                desviacionesTipicas.Add(diferenciaSqrt);
+                desviacionesTipicas.Add(std);
             }
 
             double[] dts = desviacionesTipicas.ToArray();
