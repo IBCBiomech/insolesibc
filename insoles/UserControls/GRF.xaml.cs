@@ -259,7 +259,7 @@ namespace insoles.UserControls
             double[] dataXright = listXright.ToArray();
             double[] dataYright = listYright.ToArray();
 
-            double[] stddevright = StdDevPointCalculation(listYleft);
+            double[] stddevright = StdDevPointCalculation(listYright);
             rangePlot.Plot.AddScatterLines(dataXright, dataYright, System.Drawing.Color.DarkBlue, 2);
             rangePlot.Plot.AddFillError(dataXright, dataYright, stddevright, System.Drawing.Color.FromArgb(50, System.Drawing.Color.SkyBlue));
 
