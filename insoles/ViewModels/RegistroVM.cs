@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using insoles.Commands;
 using insoles.States;
 using System;
+using MathNet.Numerics;
 
 namespace insoles.ViewModel
 {
@@ -91,6 +92,8 @@ namespace insoles.ViewModel
         }
         public bool FC { get; set; }
         private const float DEFAULT_WEIGHT = 70;
+        private string _total;
+        public string total { get { return _total; } set { _total = value; OnPropertyChanged(); } }
         public RegistroVM()
         {
             databaseBridge = ((MainWindow)Application.Current.MainWindow).databaseBridge;
@@ -200,12 +203,16 @@ namespace insoles.ViewModel
                     }
                 }
                 if (selectedUnits == UserControls.Units.N)
+                {
                     GraphModel.UpdateData(metricLeft, metricRight);
-                else if(selectedUnits == UserControls.Units.Kg)
+                    float totalN = metricLeft[metricLeft.Length - 1] + metricRight[metricRight.Length - 1];
+                    total = totalN.Round(2) + " N";
+                }
+                else if (selectedUnits == UserControls.Units.Kg)
                 {
                     float[] metricLeftKg = new float[metricLeft.Length];
                     float[] metricRightKg = new float[metricRight.Length];
-                    for(int i = 0; i < metricLeft.Length; i++)
+                    for (int i = 0; i < metricLeft.Length; i++)
                     {
                         metricLeftKg[i] = UnitsConversions.Kg_from_N(metricLeft[i]);
                     }
@@ -214,6 +221,8 @@ namespace insoles.ViewModel
                         metricRightKg[i] = UnitsConversions.Kg_from_N(metricRight[i]);
                     }
                     GraphModel.UpdateData(metricLeftKg, metricRightKg);
+                    float totalKg = metricLeftKg[metricLeft.Length - 1] + metricRightKg[metricRight.Length - 1];
+                    total = totalKg.Round(2) + " Kg";
                 }
                 saveService.AppendCSV(left, right, metricLeft, metricRight);
             };

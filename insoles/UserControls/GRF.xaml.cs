@@ -20,6 +20,9 @@ using System.Diagnostics;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using ScottPlot.Plottable;
+using System.Xml.Linq;
+using System.Data;
+using MathNet.Numerics;
 
 namespace insoles.UserControls
 {
@@ -78,7 +81,38 @@ namespace insoles.UserControls
         {
             get { return Enum.GetValues(typeof(Units)).Cast<Units>(); }
         }
-
+        private const double MIN_REFRESH = 0.1;
+        private double lastTime = 0;
+        public double time
+        {
+            set
+            {
+                timeLine.X = value;
+                if (Math.Abs(value - lastTime) > MIN_REFRESH)
+                {
+                    lastTime = value;
+                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        plot.Refresh();
+                    }));
+                    double closest = FindClosest(xs_temp_left, value);
+                    int indexClosest = xs_temp_left.IndexOf(closest);
+                    leftPlot.Label = "Left = " + ys_temp_left[indexClosest].ToString("0.##");
+                    rightPlot.Label = "Right = " + ys_temp_right[indexClosest].ToString("0.##");
+                    total = (ys_temp_left[indexClosest] + ys_temp_right[indexClosest]).Round(2).ToString() +
+                        selectedUnits.ToString();
+                }
+            }
+        }
+        private string _total;
+        public string total
+        {
+            get { return _total; }
+            set { _total = value; NotifyPropertyChanged(); }
+        }
+        private VLine timeLine;
+        private ScatterPlot leftPlot;
+        private ScatterPlot rightPlot;
         // Inicializa eventos
         public GRF()
         {
@@ -86,9 +120,8 @@ namespace insoles.UserControls
             DataContext = this;
             plot.MouseDown += PlotControl_MouseDown;
             plot.MouseMove += Plot_MouseMove;
-            
-            plot.Plot.Render();
 
+            plot.Plot.Render();
         }
 
         // Imprime en el Xlabel las coordenadas XY (temporalmente)
@@ -173,15 +206,17 @@ namespace insoles.UserControls
 
             double[] xs_left = xs_temp_left.ToArray();
             double[] ys_left = ys_temp_left.ToArray();
-            plot.Plot.AddScatterLines(xs_left, ys_left, System.Drawing.Color.DarkOrange, 2, label: "left");
+            leftPlot = plot.Plot.AddScatterLines(xs_left, ys_left, System.Drawing.Color.DarkOrange, 2, label: "left");
             //plot.Plot.AddFillError(xs_left, ys_left, dts_left, System.Drawing.Color.FromArgb(50, System.Drawing.Color.IndianRed));
 
             double[] xs_right = xs_temp_right.ToArray();
             double[] ys_right = ys_temp_right.ToArray();
-            plot.Plot.AddScatterLines(xs_right, ys_right, System.Drawing.Color.DarkBlue, 2, label: "right");
+            rightPlot = plot.Plot.AddScatterLines(xs_right, ys_right, System.Drawing.Color.DarkBlue, 2, label: "right");
             //plot.Plot.AddFillError(xs_right, ys_right, dts_right, System.Drawing.Color.FromArgb(50, System.Drawing.Color.SkyBlue));
 
             plot.Plot.Legend();
+
+            timeLine = plot.Plot.AddVerticalLine(0, color: System.Drawing.Color.DeepSkyBlue);
 
             plot.Render();
         }

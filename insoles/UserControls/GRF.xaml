@@ -16,6 +16,7 @@
             <ColumnDefinition Width="50" />
         </Grid.ColumnDefinitions>
         <WpfPlot x:Name="plot" Grid.Row="0"/>
+        <TextBlock Grid.Row="0" Text="{Binding total}" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Top"/>
         <ComboBox HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Row="0" ItemsSource="{Binding units}"
           SelectedItem="{Binding selectedUnits, Mode=TwoWay}"
           DisplayMemberPath="." />

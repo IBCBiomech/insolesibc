@@ -63,7 +63,11 @@
                                             <ComboBox DockPanel.Dock="Right" HorizontalAlignment="Center" VerticalAlignment="Center" ItemsSource="{Binding units}"
                                             SelectedItem="{Binding selectedUnits, Mode=TwoWay}" DisplayMemberPath="." />
                                         </DockPanel>
-                                        <ContentControl DockPanel.Dock="Bottom" Content="{Binding Plot}"/>
+                                        <Grid DockPanel.Dock="Bottom">
+                                            <ContentControl  Content="{Binding Plot}"/>
+                                            <TextBlock Text="{Binding total}" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                                        </Grid>
+                                        
                                     </DockPanel>
                                 </dock:LayoutAnchorable>
                             </dock:LayoutAnchorablePane>

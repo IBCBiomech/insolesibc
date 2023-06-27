@@ -71,6 +71,7 @@ namespace insoles.ViewModel
             {
                 camaraViewport1.time = time;
                 camaraViewport2.time = time;
+                grf.time = time;
                 heatmap.time = time;
             };
             state.PropertyChanged += async(object sender, PropertyChangedEventArgs e) =>
