@@ -21,19 +21,17 @@
                             </dock:LayoutAnchorablePane>
                             <dock:LayoutAnchorablePaneGroup Orientation="Vertical">
                                 <dock:LayoutAnchorablePane>
-                                    <dock:LayoutAnchorable Title="Cam1" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
-                                        <ContentControl Content="{Binding camaraViewport1}"/>
-                                    </dock:LayoutAnchorable>
-                                    <dock:LayoutAnchorable Title="Cam2" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
-                                        <ContentControl Content="{Binding camaraViewport2}"/>
-                                    </dock:LayoutAnchorable>
-                                </dock:LayoutAnchorablePane>
-                                <dock:LayoutAnchorablePane>
                                     <dock:LayoutAnchorable Title="Butterfly" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
                                         <ContentControl Content="{Binding grafoMariposa}"/>
                                     </dock:LayoutAnchorable>
                                     <dock:LayoutAnchorable Title="Pressure map" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
                                         <ContentControl Content="{Binding heatmap}"/>
+                                    </dock:LayoutAnchorable>
+                                    <dock:LayoutAnchorable Title="Cam1" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                        <ContentControl Content="{Binding camaraViewport1}"/>
+                                    </dock:LayoutAnchorable>
+                                    <dock:LayoutAnchorable Title="Cam2" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                        <ContentControl Content="{Binding camaraViewport2}"/>
                                     </dock:LayoutAnchorable>
                                 </dock:LayoutAnchorablePane>
                             </dock:LayoutAnchorablePaneGroup>
