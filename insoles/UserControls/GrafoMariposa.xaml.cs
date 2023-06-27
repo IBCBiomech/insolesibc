@@ -80,6 +80,10 @@ namespace insoles.UserControls
             while (data[index].totalCenter == null)
             {
                 index++;
+                if(index == data.Length)
+                {
+                    return Task.CompletedTask;
+                }
             }
             FramePressures firstFrame = data[index];
             Tuple<double, double> firstPoint = firstFrame.totalCenter;
