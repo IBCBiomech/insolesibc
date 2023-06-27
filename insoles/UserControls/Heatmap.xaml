@@ -22,7 +22,7 @@
     <Grid>
         <WpfPlot x:Name="plot" Visibility="{Binding graph_loaded, Converter={StaticResource trueVisibleConverter}}"/>
         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36"
-                   Visibility="{Binding graph_loaded, Converter={StaticResource falseVisibleConverter}}" Text="Calculating..."/>
+                   Visibility="{Binding graph_loaded, Converter={StaticResource falseVisibleConverter}}" Text="Pressure Map"/>
         <TextBlock Text="N/m&#x00B2;" TextAlignment="Right" Padding="0 0 70 0"
                    Visibility="{Binding graph_loaded, Converter={StaticResource trueVisibleConverter}}"/>
         <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left">
