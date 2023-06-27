@@ -16,6 +16,7 @@ using insoles.Commands;
 using insoles.States;
 using System;
 using MathNet.Numerics;
+using System.Windows.Documents;
 
 namespace insoles.ViewModel
 {
@@ -197,9 +198,11 @@ namespace insoles.ViewModel
                     for (int i = 0; i < metricLeft.Length; i++)
                     {
                         float FRegistrada = metricLeft[i] + metricRight[i];
-                        float fc = FNominal / FRegistrada;
-                        metricLeft[i] *= fc;
-                        metricRight[i] *= fc;
+                        if (FRegistrada > 0) {
+                            float fc = FNominal / FRegistrada;
+                            metricLeft[i] *= fc;
+                            metricRight[i] *= fc;
+                        }
                     }
                 }
                 if (selectedUnits == UserControls.Units.N)
