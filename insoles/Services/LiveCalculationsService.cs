@@ -34,7 +34,7 @@ namespace insoles.Services
                 right = data;
                 counter++;
             }
-            if (counter % 2 == 0)
+            if (counter % 2 == 0 && left.Count > 0 && right.Count > 0)
             {
                 Calculate();
             }
