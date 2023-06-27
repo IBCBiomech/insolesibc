@@ -28,6 +28,9 @@ namespace insoles.UserControls
     /// </summary>
     public enum Units { N, Kg}
    
+    /// <summary>
+    /// Clase para controlar GRF
+    /// </summary>
     public partial class GRF : UserControl, INotifyPropertyChanged
     {
         private List<double> xs_temp_left;
@@ -48,7 +51,8 @@ namespace insoles.UserControls
         List<double> XPoints = new List<double>();
 
         private Units _selectedUnits;
-
+        private WpfPlot rangePlot;
+        private VLine rangeVlabel;
         public Units selectedUnits
         {
             get { return _selectedUnits; }
@@ -74,11 +78,8 @@ namespace insoles.UserControls
         {
             get { return Enum.GetValues(typeof(Units)).Cast<Units>(); }
         }
- 
-       
-        private readonly ScottPlot.Plottable.MarkerPlot HighlightedPoint;
-        private int LastHighlightedIndex = -1;
 
+        // Inicializa eventos
         public GRF()
         {
             InitializeComponent();
@@ -90,13 +91,11 @@ namespace insoles.UserControls
 
         }
 
+        // Imprime en el Xlabel las coordenadas XY (temporalmente)
         private void Plot_MouseMove(object sender, MouseEventArgs e)
         {
             (double x, double y) = plot.GetMouseCoordinates();
-            plot.Plot.XLabel($"X: {x}, Y: {y}");
-
-
-
+            plot.Plot.XLabel($"X: {x:F2}, Y: {y:F2}");
         }
 
         // Desactiva el efecto por defecto de left click para que no se dibujen 2 lineas
@@ -131,6 +130,7 @@ namespace insoles.UserControls
             ys_left_Kg = new();
             xs_right_Kg = new();
             ys_right_Kg = new();
+
             foreach (var frame in data.frames)
             {
                 FrameDataInsoles frameInsoles = (FrameDataInsoles)frame;
@@ -147,15 +147,17 @@ namespace insoles.UserControls
                 ys_left_Kg.Add(left.totalPressure / 9.8);
                 ys_right_Kg.Add(right.totalPressure / 9.8);
             }
-            if(selectedUnits == Units.N)
+            if (selectedUnits == Units.N)
                 setN();
-            else if(selectedUnits == Units.Kg) 
+            else if (selectedUnits == Units.Kg) 
                 setKg();
 
             render();
 
             return Task.CompletedTask;
         }
+
+        //Este método habría que refactorizar el nombre, se confunde con plot.render()
         private void render()
         {
             if (ys_temp_left == null)
@@ -183,24 +185,26 @@ namespace insoles.UserControls
 
             plot.Render();
         }
+
         // Este método es el que añade las barras verticales
         private void MouseTracking(object sender, MouseButtonEventArgs e)
         {
 
             (double x, double y) = plot.GetMouseCoordinates();
-            var vlabel = plot.Plot.AddVerticalLine(x, color: System.Drawing.Color.IndianRed, style: ScottPlot.LineStyle.Solid);
-            vlabel.PositionLabel = true;
-            vlabel.DragEnabled = true;
+            rangeVlabel = plot.Plot.AddVerticalLine(x, color: System.Drawing.Color.IndianRed, style: ScottPlot.LineStyle.Solid);
+            rangeVlabel.PositionLabel = true;
+            rangeVlabel.DragEnabled = true;
             plot.Render();
             XPoints.Add(x);
 
+            if (XPoints.Count >= 2)
+            {
+                MessageBox.Show("Rango seleccionado");
+            }
 
         }
-        /// <summary>
-        /// Cálculo de la desviación estándar de cada punto
-        /// </summary>
-        /// <param name="ys_temp">Array de entrada: valores YE</param>
-        /// <returns>double[]</returns>
+
+        // Cálculo de la desviación estándar de cada punto
         private double[] StdDevPointCalculation(List<double> ys_temp)
         {
             double media = ys_temp.Average();
@@ -229,7 +233,7 @@ namespace insoles.UserControls
         }
         private void StdDevButton1_Click(object sender, RoutedEventArgs e)
         {
-            WpfPlot plot2 = new WpfPlot();  
+            rangePlot = new WpfPlot();  
             Trace.WriteLine(XPoints[0]);
             Trace.WriteLine(XPoints[1]);
 
@@ -246,8 +250,8 @@ namespace insoles.UserControls
             double[] dataYleft = listYleft.ToArray();
 
             double[] stddevleft = StdDevPointCalculation(listYleft);
-            plot2.Plot.AddScatterLines(dataXleft, dataYleft, System.Drawing.Color.DarkOrange, 2);
-            plot2.Plot.AddFillError(dataXleft, dataYleft, stddevleft, System.Drawing.Color.FromArgb(50, System.Drawing.Color.Green));
+            rangePlot.Plot.AddScatterLines(dataXleft, dataYleft, System.Drawing.Color.DarkOrange, 2);
+            rangePlot.Plot.AddFillError(dataXleft, dataYleft, stddevleft, System.Drawing.Color.FromArgb(50, System.Drawing.Color.Green));
 
             List<double> listXright = xs_temp_right.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
             List<double> listYright = ys_temp_right.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
@@ -256,13 +260,13 @@ namespace insoles.UserControls
             double[] dataYright = listYright.ToArray();
 
             double[] stddevright = StdDevPointCalculation(listYleft);
-            plot2.Plot.AddScatterLines(dataXright, dataYright, System.Drawing.Color.DarkBlue, 2);
-            plot2.Plot.AddFillError(dataXright, dataYright, stddevright, System.Drawing.Color.FromArgb(50, System.Drawing.Color.SkyBlue));
+            rangePlot.Plot.AddScatterLines(dataXright, dataYright, System.Drawing.Color.DarkBlue, 2);
+            rangePlot.Plot.AddFillError(dataXright, dataYright, stddevright, System.Drawing.Color.FromArgb(50, System.Drawing.Color.SkyBlue));
 
-            plot2.Render();
+            rangePlot.Render();
 
-            plot2.SetValue(Grid.RowProperty, 1);
-            grid.Children.Add(plot2);
+            rangePlot.SetValue(Grid.RowProperty, 1);
+            grid.Children.Add(rangePlot);
 
 
 
@@ -313,6 +317,10 @@ namespace insoles.UserControls
             }
         }
 
- 
-}
+        private void ClearGraphButton_Click(object sender, RoutedEventArgs e)
+        {
+            grid.Children.Remove(rangePlot);
+            plot.Plot.Remove(rangeVlabel);
+        }
+    }
 }
