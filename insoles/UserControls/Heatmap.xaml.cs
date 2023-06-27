@@ -16,6 +16,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Markup;
 
 namespace insoles.UserControls
 {
@@ -194,6 +195,8 @@ namespace insoles.UserControls
             set
             {
                 _pressure_maps_metrics = value;
+                if(pressure_maps_metrics != null)
+                    SetAxisLimits(pressure_maps_metrics[Metric.Avg]);
                 if (pressure_maps_metrics != null && !animate)
                 {
                     DrawData(pressure_maps_metrics[selectedMetric]);
@@ -253,6 +256,22 @@ namespace insoles.UserControls
             maxTime = data.maxTime;
             return Task.CompletedTask;
         }
+        private void SetAxisLimits(Matrix<float> matrix)
+        {
+            double xMin = 0;
+            double xMax = matrix.ColumnCount;
+            double yMin = 0;
+            double yMax = matrix.RowCount;
+            plot.Plot.SetInnerViewLimits(xMin, xMax, yMin, yMax);
+            plot.Plot.SetOuterViewLimits(yMin: 0);
+
+            plot.Plot.SetAxisLimits(xMin, xMax, yMin, yMax);
+            plot.Plot.AxisScaleLock(true);
+            if (L == null)
+                L = plot.Plot.AddText("L", matrix.ColumnCount * 0.2, matrix.RowCount * 0.25, size: 50, color: Color.DarkGray);
+            if (R == null)
+                R = plot.Plot.AddText("R", matrix.ColumnCount * 1.05, matrix.RowCount * 0.25, size: 50, color: Color.DarkGray);
+        }
         public void ClearData()
         {
             pressure_maps_metrics = null;
@@ -269,10 +288,6 @@ namespace insoles.UserControls
             max = (int)filtered.Maximum();
             min = (int)filtered.Minimum();
             Dispatcher.Invoke(() => Draw(dataNull));
-            if(L == null)
-                L = plot.Plot.AddText("L", 0, data.RowCount / 2, size: 25, color: Color.DarkGray);
-            if(R == null)
-                R = plot.Plot.AddText("R", data.ColumnCount * 1.25, data.RowCount / 2, size: 25, color: Color.DarkGray);
         }
         private void Draw(double?[,] data)
         {
