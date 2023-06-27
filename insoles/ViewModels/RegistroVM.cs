@@ -202,6 +202,14 @@ namespace insoles.ViewModel
                             float fc = FNominal / FRegistrada;
                             metricLeft[i] *= fc;
                             metricRight[i] *= fc;
+                            foreach (Sensor sensor in left[i].Keys)
+                            {
+                                left[i][sensor] *= fc;
+                            }
+                            foreach (Sensor sensor in right[i].Keys)
+                            {
+                                right[i][sensor] *= fc;
+                            }
                         }
                     }
                 }
