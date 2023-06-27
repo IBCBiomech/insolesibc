@@ -14,6 +14,7 @@ namespace insoles.Services
         void Stop();
         void Pause();
         void Resume();
+        string GetMac(byte handler);
         public delegate void InsoleScanEventHandler(List<InsoleScan> data);
         public delegate void InsoleDataEventHandler(byte handler, List<InsoleData> data);
         public delegate void MACEventHandler(string mac);

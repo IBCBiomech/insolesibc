@@ -1,8 +1,10 @@
 ﻿using insoles.Enums;
 using insoles.Messages;
+using insoles.Model;
 using insoles.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace insoles.Services
 {
@@ -15,9 +17,13 @@ namespace insoles.Services
         private byte handlerRight = 1;
 
         private int counter = 0;
-        public LiveCalculationsService()
+
+        private ObservableCollection<InsoleModel> insoles;
+        private IApiService apiService;
+        public LiveCalculationsService(ObservableCollection<InsoleModel> insoles, IApiService apiService)
         {
-            
+            this.insoles = insoles;
+            this.apiService = apiService;
         }
 
         public event ILiveCalculationsService.ResultEventHandler ResultReady;

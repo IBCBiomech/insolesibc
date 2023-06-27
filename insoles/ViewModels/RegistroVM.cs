@@ -103,9 +103,9 @@ namespace insoles.ViewModel
             //Init services
 
            /* apiService = new FakeApiService(state); *///Fake API
-            apiService = new ApiService(state); // Real API
+            apiService = new FakeApiService(state); // Real API
             cameraService = new CameraService();
-            liveCalculationsService = new LiveCalculationsService();
+            liveCalculationsService = new LiveCalculationsService(Insoles, apiService);
             saveService = new SaveService(state);
             //Init commands
             scanCommand = new ScanCommand(apiService, cameraService);

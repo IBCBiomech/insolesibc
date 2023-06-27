@@ -213,5 +213,9 @@ namespace insoles.Services
                 Trace.WriteLine(error);
             }
         }
+        public string GetMac(byte handler)
+        {
+            return devicesConnected[handler.ToString()].Id;
+        }
     }
 }
