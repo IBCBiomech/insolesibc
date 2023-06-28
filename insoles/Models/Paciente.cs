@@ -39,6 +39,8 @@ namespace insoles.Model
                 OnPropertyChanged();
             } }
         [NotMapped]
+        public EditarPacienteCommand editarPacienteCommand { get; set; }
+        [NotMapped]
         public BorrarPacienteCommand borrarPacienteCommand { get; set; }
         public Paciente(string nombre, string? apellidos, DateTime? fechaNacimiento,
             string? lugar, float? peso, float? altura, float? longitudPie, int? numeroPie,
@@ -54,6 +56,7 @@ namespace insoles.Model
             NumeroPie = numeroPie;
             Profesion = profesion;
             Tests = new ObservableCollection<Test>();
+            editarPacienteCommand = new EditarPacienteCommand();
             borrarPacienteCommand = new BorrarPacienteCommand();
         }
     }

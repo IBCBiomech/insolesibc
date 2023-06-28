@@ -35,6 +35,7 @@
                         <TreeViewItem Header="{Binding Nombre}">
                             <TreeViewItem.ContextMenu>
                                 <ContextMenu>
+                                    <MenuItem Header="Editar" Command="{Binding editarPacienteCommand}" CommandParameter="{Binding}"/>
                                     <MenuItem Header="Borrar" Command="{Binding borrarPacienteCommand}" CommandParameter="{Binding}"/>
                                 </ContextMenu>
                             </TreeViewItem.ContextMenu>

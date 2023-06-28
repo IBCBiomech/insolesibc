@@ -1,0 +1,61 @@
+﻿<Window x:Class="insoles.Forms.EditarPacienteForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:insoles.Forms"
+        mc:Ignorable="d"
+        Title="EditarPacienteForm" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical">
+            <TextBlock Text="Nombre"/>
+            <TextBox Text="{Binding nombre}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical">
+            <TextBlock Text="Apellidos"/>
+            <TextBox Text="{Binding apellidos}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical">
+            <TextBlock Text="Fecha Nacimiento"/>
+            <DatePicker SelectedDate="{Binding fechaNacimiento}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Vertical">
+            <TextBlock Text="Lugar"/>
+            <TextBox Text="{Binding lugar}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Vertical">
+            <TextBlock Text="Peso(kg)"/>
+            <TextBox Text="{Binding peso}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical">
+            <TextBlock Text="Altura(cm)"/>
+            <TextBox Text="{Binding altura}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="4" Grid.Column="0" Orientation="Vertical">
+            <TextBlock Text="Longitud pie"/>
+            <TextBox Text="{Binding longitudPie}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Vertical">
+            <TextBlock Text="Número pie"/>
+            <TextBox Text="{Binding numeroPie}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Orientation="Vertical">
+            <TextBlock Text="Profesión"/>
+            <TextBox Text="{Binding profesion}"/>
+        </StackPanel>
+        <Button Grid.Row="7" Grid.ColumnSpan="2" Command="{Binding acceptarCommand}" Content="Acceptar"/>
+    </Grid>
+</Window>

@@ -82,6 +82,14 @@ namespace insoles.Services
                 await dbContext.SaveChangesAsync();
             }
         }
+        public async Task UpdatePaciente(Paciente paciente)
+        {
+            using (var dbContext = new DBContextSqlLite())
+            {
+                dbContext.Pacientes.Update(paciente);
+                await dbContext.SaveChangesAsync();
+            }
+        }
         public async Task DeletePaciente(Paciente paciente)
         {
             using (var dbContext = new DBContextSqlLite())
