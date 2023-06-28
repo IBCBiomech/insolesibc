@@ -199,8 +199,8 @@ namespace insoles.UserControls
         {
             if (ys_temp_left == null)
                 return;
-            double[] dts_left = StdDevPointCalculation(ys_temp_left);
-            double[] dts_right = StdDevPointCalculation(ys_temp_right);
+            double[] dts_left = StdDevCalculation(ys_temp_left);
+            double[] dts_right = StdDevCalculation(ys_temp_right);
 
 
             plot.MouseDoubleClick += new MouseButtonEventHandler(MouseTracking);
@@ -273,6 +273,15 @@ namespace insoles.UserControls
 
             return dts;
         }
+        // Cálculo de la desviación estándar
+        private double[] StdDevCalculation(List<double> ys_temp)
+        {
+            double avg = ys_temp.Average();
+            double sum = ys_temp.Select(x => (avg - x) * (avg - x)).Sum();
+
+            double std = Math.Sqrt(sum / ys_temp.Count);
+            return Enumerable.Repeat(std, ys_temp.Count).ToArray();
+        }
         private void StdDevButton1_Click(object sender, RoutedEventArgs e)
         {
             rangePlot = new WpfPlot();  
@@ -289,7 +298,7 @@ namespace insoles.UserControls
             double[] dataXleft = listXleft.ToArray();
             double[] dataYleft = listYleft.ToArray();
 
-            double[] stddevleft = StdDevPointCalculation(listYleft);
+            double[] stddevleft = StdDevCalculation(listYleft);
             rangePlot.Plot.AddScatterLines(dataXleft, dataYleft, System.Drawing.Color.DarkOrange, 2);
             rangePlot.Plot.AddFillError(dataXleft, dataYleft, stddevleft, System.Drawing.Color.FromArgb(50, System.Drawing.Color.Green));
 
@@ -299,7 +308,7 @@ namespace insoles.UserControls
             double[] dataXright = listXright.ToArray();
             double[] dataYright = listYright.ToArray();
 
-            double[] stddevright = StdDevPointCalculation(listYright);
+            double[] stddevright = StdDevCalculation(listYright);
             rangePlot.Plot.AddScatterLines(dataXright, dataYright, System.Drawing.Color.DarkBlue, 2);
             rangePlot.Plot.AddFillError(dataXright, dataYright, stddevright, System.Drawing.Color.FromArgb(50, System.Drawing.Color.SkyBlue));
 
