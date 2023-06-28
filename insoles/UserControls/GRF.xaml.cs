@@ -23,6 +23,7 @@ using ScottPlot.Plottable;
 using System.Xml.Linq;
 using System.Data;
 using MathNet.Numerics;
+using insoles.States;
 
 namespace insoles.UserControls
 {
@@ -51,6 +52,16 @@ namespace insoles.UserControls
         private List<double> xs_right_Kg;
         private List<double> ys_right_Kg;
 
+        private List<double> xs_left_N_FC;
+        private List<double> ys_left_N_FC;
+        private List<double> xs_right_N_FC;
+        private List<double> ys_right_N_FC;
+
+        private List<double> xs_left_Kg_FC;
+        private List<double> ys_left_Kg_FC;
+        private List<double> xs_right_Kg_FC;
+        private List<double> ys_right_Kg_FC;
+
         List<double> XPoints = new List<double>();
 
         private Units _selectedUnits;
@@ -67,16 +78,59 @@ namespace insoles.UserControls
                 NotifyPropertyChanged();
                 if(value == Units.N)
                 {
-                    setN();
+                    if(fc)
+                        setN_FC();
+                    else
+                        setN();
                     plot.Plot.Clear();
                     render();
                 }
                 else if(value == Units.Kg)
                 {
-                    setKg();
+                    if(fc)
+                        setKg_FC();
+                    else
+                        setKg();
                     plot.Plot.Clear();
                     render();
                 }
+            }
+        }
+        private bool _fc;
+        public bool fc
+        {
+            get
+            {
+                return _fc;
+            }
+            set
+            {
+                _fc = value;
+                if (value)
+                {
+                    if(selectedUnits == Units.N)
+                    {
+                        setN_FC();
+                    }
+                    else if(selectedUnits == Units.Kg)
+                    {
+                        setKg_FC();
+                    }
+                }
+                else
+                {
+                    if (selectedUnits == Units.N)
+                    {
+                        setN();
+                    }
+                    else if (selectedUnits == Units.Kg)
+                    {
+                        setKg();
+                    }
+                }
+                plot.Plot.Clear();
+                render();
+                NotifyPropertyChanged();
             }
         }
         public IEnumerable<Units> units
@@ -116,12 +170,14 @@ namespace insoles.UserControls
         private ScatterPlot leftPlot;
         private ScatterPlot rightPlot;
 
+        private AnalisisState state;
 
         // Inicializa eventos
-        public GRF()
+        public GRF(AnalisisState state)
         {
             InitializeComponent();
             DataContext = this;
+            this.state = state;
             plot.MouseDown += PlotControl_MouseDown;
             plot.MouseMove += Plot_MouseMove;
 
@@ -155,8 +211,26 @@ namespace insoles.UserControls
             xs_temp_right = xs_right_Kg;
             ys_temp_right = ys_right_Kg;
         }
+        private void setN_FC()
+        {
+            xs_temp_left = xs_left_N_FC;
+            ys_temp_left = ys_left_N_FC;
+            xs_temp_right = xs_right_N_FC;
+            ys_temp_right = ys_right_N_FC;
+        }
+        private void setKg_FC()
+        {
+            xs_temp_left = xs_left_Kg_FC;
+            ys_temp_left = ys_left_Kg_FC;
+            xs_temp_right = xs_right_Kg_FC;
+            ys_temp_right = ys_right_Kg_FC;
+        }
         public Task Update(GraphData data)
         {
+            float G = 9.80665f;
+            float peso = state.test.Paciente.Peso.GetValueOrDefault(70);
+            float FNominal = peso * G;
+
             plot.Plot.Clear();
             xs_left_N = new();
             ys_left_N = new();
@@ -168,11 +242,24 @@ namespace insoles.UserControls
             xs_right_Kg = new();
             ys_right_Kg = new();
 
+            xs_left_N_FC = new();
+            ys_left_N_FC = new();
+            xs_right_N_FC = new();
+            ys_right_N_FC = new();
+
+            xs_left_Kg_FC = new();
+            ys_left_Kg_FC = new();
+            xs_right_Kg_FC = new();
+            ys_right_Kg_FC = new();
+
             foreach (var frame in data.frames)
             {
                 FrameDataInsoles frameInsoles = (FrameDataInsoles)frame;
                 DataInsole left = frameInsoles.left;
                 DataInsole right = frameInsoles.right;
+
+                float FRegistrada = left.totalPressure + right.totalPressure;
+                float fc = FNominal / FRegistrada;
 
                 xs_left_N.Add(frameInsoles.time);
                 xs_right_N.Add(frameInsoles.time);
@@ -183,11 +270,31 @@ namespace insoles.UserControls
                 xs_right_Kg.Add(frameInsoles.time);
                 ys_left_Kg.Add(left.totalPressure / 9.8);
                 ys_right_Kg.Add(right.totalPressure / 9.8);
+
+                xs_left_N_FC.Add(frameInsoles.time);
+                xs_right_N_FC.Add(frameInsoles.time);
+                ys_left_N_FC.Add(left.totalPressure * fc);
+                ys_right_N_FC.Add(right.totalPressure * fc);
+
+                xs_left_Kg_FC.Add(frameInsoles.time);
+                xs_right_Kg_FC.Add(frameInsoles.time);
+                ys_left_Kg_FC.Add(left.totalPressure / 9.8 * fc);
+                ys_right_Kg_FC.Add(right.totalPressure / 9.8 * fc);
             }
             if (selectedUnits == Units.N)
-                setN();
-            else if (selectedUnits == Units.Kg) 
-                setKg();
+            {
+                if (fc)
+                    setN_FC();
+                else
+                    setN();
+            }
+            else if (selectedUnits == Units.Kg)
+            {
+                if (fc)
+                    setKg_FC();
+                else
+                    setKg();
+            }
 
             render();
 

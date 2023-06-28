@@ -21,6 +21,10 @@
           SelectedItem="{Binding selectedUnits, Mode=TwoWay}"
           DisplayMemberPath="." />
         <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Width="50" >
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="FC"/>
+                <CheckBox IsChecked="{Binding fc}"/>
+            </StackPanel>
             <Button x:Name="StdDevButton1" 
                     Background="AliceBlue"
                     Content="STDEV" Click="StdDevButton1_Click"/>

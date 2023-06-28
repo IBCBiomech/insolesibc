@@ -52,7 +52,7 @@ namespace insoles.ViewModel
             codes = new CodesService();
             plantilla = new PlantillaService(codes);
             fileExtractor = new FileExtractorService();
-            grf = new GRF();
+            grf = new GRF(state);
             butterfly = new ButterflyService(plantilla);
             pressureMap = new PressureMapCentersService(state, plantilla.sensor_map, codes,
                 plantilla.CalculateSensorPositionsLeft(), plantilla.CalculateSensorPositionsRight());
