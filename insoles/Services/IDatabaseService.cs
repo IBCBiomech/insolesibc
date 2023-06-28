@@ -14,6 +14,7 @@ namespace insoles.Services
         Task AddTest(Paciente paciente, Test test);
         Task UpdateTest(Test test);
         Task DeleteTest(Test test);
+        Task DeletePaciente(Paciente paciente);
         Task<List<Paciente>> GetPacientes();
     }
 }

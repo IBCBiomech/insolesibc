@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using insoles.Commands;
 using insoles.Model;
 using insoles.Utilities;
 
@@ -37,6 +38,8 @@ namespace insoles.Model
                 isSelected = value;
                 OnPropertyChanged();
             } }
+        [NotMapped]
+        public BorrarPacienteCommand borrarPacienteCommand { get; set; }
         public Paciente(string nombre, string? apellidos, DateTime? fechaNacimiento,
             string? lugar, float? peso, float? altura, float? longitudPie, int? numeroPie,
             string? profesion)
@@ -51,6 +54,7 @@ namespace insoles.Model
             NumeroPie = numeroPie;
             Profesion = profesion;
             Tests = new ObservableCollection<Test>();
+            borrarPacienteCommand = new BorrarPacienteCommand();
         }
     }
 }

@@ -82,6 +82,21 @@ namespace insoles.Services
                 await dbContext.SaveChangesAsync();
             }
         }
+        public async Task DeletePaciente(Paciente paciente)
+        {
+            using (var dbContext = new DBContextSqlLite())
+            {
+                dbContext.Pacientes.Remove(paciente);
+                foreach (Test test in paciente.Tests)
+                {
+                    dbContext.Tests.Remove(test);
+                    dbContext.Entry(test).State = EntityState.Deleted;
+                }
+                dbContext.Entry(paciente).State = EntityState.Deleted;
+
+                await dbContext.SaveChangesAsync();
+            }
+        }
         public async Task<List<Paciente>> GetPacientes()
         {
             using (var dbContext = new DBContextSqlLite())

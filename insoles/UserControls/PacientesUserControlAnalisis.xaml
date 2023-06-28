@@ -33,6 +33,11 @@
                 <TreeViewItem.ItemTemplate>
                     <DataTemplate DataType="{x:Type model:Paciente}">
                         <TreeViewItem Header="{Binding Nombre}">
+                            <TreeViewItem.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Borrar" Command="{Binding borrarPacienteCommand}" CommandParameter="{Binding}"/>
+                                </ContextMenu>
+                            </TreeViewItem.ContextMenu>
                             <TreeViewItem Header="Pruebas">
                                 <TreeViewItem Header="Tests">
                                     <TreeViewItem.ItemsSource>
