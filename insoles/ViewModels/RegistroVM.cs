@@ -97,13 +97,17 @@ namespace insoles.ViewModel
         public string total { get { return _total; } set { _total = value; OnPropertyChanged(); } }
         public RegistroVM()
         {
+            //Init Collections
+            Cameras = new ObservableCollection<CameraModel>();
+            Insoles = new ObservableCollection<InsoleModel>();
+
             databaseBridge = ((MainWindow)Application.Current.MainWindow).databaseBridge;
             state = new RegistroState(databaseBridge);
             //currentFrames.Add(CurrentFrameTop); currentFrames.Add(CurrentFrameBottom);
             //Init services
 
            /* apiService = new FakeApiService(state); *///Fake API
-            apiService = new FakeApiService(state); // Real API
+            apiService = new ApiService(state); // Real API
             cameraService = new CameraService();
             liveCalculationsService = new LiveCalculationsService(Insoles, apiService);
             saveService = new SaveService(state);
@@ -119,9 +123,6 @@ namespace insoles.ViewModel
             stopCommand = new StopCommand(state, apiService, saveService, databaseBridge);
             crearPacienteCommand = new CrearPacienteCommand(databaseBridge);
             obtenerPacientesCommand = new ObtenerPacientesCommand(databaseBridge);
-            //Init Collections
-            Cameras = new ObservableCollection<CameraModel>();
-            Insoles = new ObservableCollection<InsoleModel>();
             //Init listeners
             apiService.ScanReceived += (List<InsoleScan> insolesReceived) =>
             {

@@ -44,11 +44,14 @@ namespace insoles.Messages
             raw[Sensor.HeelL] = sole.heel_L;
             raw[Sensor.HeelR] = sole.heel_R;
         }
-        public InsoleData(Random random)
+        public InsoleData(Random random, byte handler)
         {
             foreach (Sensor sensor in Enum.GetValues(typeof(Sensor)))
             {
-                raw[sensor] = random.Next(3500, 4095);
+                if(handler == 0)
+                    raw[sensor] = random.Next(3500, 4095);
+                else
+                    raw[sensor] = random.Next(3000, 3500);
             }
         }
         public string ToString(List<Sensor> order)

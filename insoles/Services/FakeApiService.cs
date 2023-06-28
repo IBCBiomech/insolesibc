@@ -75,7 +75,7 @@ namespace insoles.Services
             for (int i = 0; i < 4; i++)
             {
                 Random random = new Random();
-                measures.Add(new InsoleData(random));
+                measures.Add(new InsoleData(random, (byte)handler));
             }
             DataReceived?.Invoke((byte)handler, measures);
         }
@@ -109,6 +109,11 @@ namespace insoles.Services
             {
                 timer.Start();
             }
+        }
+
+        public string GetMac(byte handler)
+        {
+            return Insoles[handler].MAC;
         }
     }
 }

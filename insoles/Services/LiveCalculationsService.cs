@@ -5,6 +5,8 @@ using insoles.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
 
 namespace insoles.Services
 {
@@ -30,17 +32,22 @@ namespace insoles.Services
 
         public void ProcessPacket(byte handler, List<InsoleData> data)
         {
-            if (handler == handlerLeft)
+            string mac = apiService.GetMac(handler);
+            InsoleModel insole = insoles.Where((i) => i.MAC == mac).FirstOrDefault();
+            if (insole != null)
             {
-                left = data;
-                counter++;
+                if(insole.side == Side.Left)
+                {
+                    left = data;
+                    counter++;
+                }
+                else if (insole.side == Side.Right)
+                {
+                    right = data;
+                    counter++;
+                }
             }
-            else if (handler == handlerRight)
-            {
-                right = data;
-                counter++;
-            }
-            if (counter % 2 == 0 && left.Count > 0 && right.Count > 0)
+            if (counter % 2 == 0 && left != null && right != null)
             {
                 Calculate();
             }
