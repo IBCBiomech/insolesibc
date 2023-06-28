@@ -56,6 +56,8 @@ namespace insoles.UserControls
         private Units _selectedUnits;
         private WpfPlot rangePlot;
         private VLine rangeVlabel;
+        private List<VLine> listOfVlabels = new List<VLine>();
+
         public Units selectedUnits
         {
             get { return _selectedUnits; }
@@ -113,6 +115,8 @@ namespace insoles.UserControls
         private VLine timeLine;
         private ScatterPlot leftPlot;
         private ScatterPlot rightPlot;
+
+
         // Inicializa eventos
         public GRF()
         {
@@ -224,18 +228,21 @@ namespace insoles.UserControls
         // Este método es el que añade las barras verticales
         private void MouseTracking(object sender, MouseButtonEventArgs e)
         {
-
-            (double x, double y) = plot.GetMouseCoordinates();
-            rangeVlabel = plot.Plot.AddVerticalLine(x, color: System.Drawing.Color.IndianRed, style: ScottPlot.LineStyle.Solid);
-            rangeVlabel.PositionLabel = true;
-            rangeVlabel.DragEnabled = true;
-            plot.Render();
-            XPoints.Add(x);
-
-            if (XPoints.Count >= 2)
+            if ( XPoints.Count >= 0 && XPoints.Count <2)
             {
-                MessageBox.Show("Rango seleccionado");
+                (double x, double y) = plot.GetMouseCoordinates();
+                rangeVlabel = plot.Plot.AddVerticalLine(x, color: System.Drawing.Color.IndianRed, style: ScottPlot.LineStyle.Solid);
+                rangeVlabel.PositionLabel = true;
+                rangeVlabel.DragEnabled = true;
+                plot.Render();
+                listOfVlabels.Add(rangeVlabel);
+                XPoints.Add(x);
             }
+            else
+            {
+                MessageBox.Show("No se puede hacer rango con más de dos puntos. Elimina la STDDEV actual","Info",MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+       
 
         }
 
@@ -269,9 +276,7 @@ namespace insoles.UserControls
         private void StdDevButton1_Click(object sender, RoutedEventArgs e)
         {
             rangePlot = new WpfPlot();  
-            Trace.WriteLine(XPoints[0]);
-            Trace.WriteLine(XPoints[1]);
-
+        
             double FirstClosest = FindClosest(xs_temp_left, XPoints[0]);
             double LastClosest = FindClosest(xs_temp_left, XPoints[1]);
 
@@ -302,8 +307,6 @@ namespace insoles.UserControls
 
             rangePlot.SetValue(Grid.RowProperty, 1);
             grid.Children.Add(rangePlot);
-
-
 
         }
         // Función que sí utilizamos para obtener el número más cercano de una lista
@@ -354,8 +357,18 @@ namespace insoles.UserControls
 
         private void ClearGraphButton_Click(object sender, RoutedEventArgs e)
         {
+            
             grid.Children.Remove(rangePlot);
-            plot.Plot.Remove(rangeVlabel);
+          
+            foreach (var el in listOfVlabels)
+            {
+                plot.Plot.Remove(el);
+
+            }
+            listOfVlabels.Clear();
+            XPoints.Clear();
+            plot.Render();
+            rangePlot.Render();
         }
     }
 }
