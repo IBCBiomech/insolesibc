@@ -58,6 +58,11 @@ namespace insoles.States
             await databaseService.UpdateTest(test);
             await LoadPacientes();
         }
+        public async Task DeleteTest(Test test)
+        {
+            await databaseService.DeleteTest(test);
+            await LoadPacientes();
+        }
         public Paciente? GetSelectedPaciente()
         {
             foreach(Paciente paciente in Pacientes)

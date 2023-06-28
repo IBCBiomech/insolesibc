@@ -32,6 +32,8 @@ namespace insoles.Model
         [NotMapped]
         public RenombrarCarpetaTestCommand renombrarCarpetaTestCommand { get; set; }
         [NotMapped]
+        public BorrarTestCommand borrarTestCommand { get; set; }
+        [NotMapped]
         public RenombrarFicheroCSVTestCommand renombrarFicheroCSVTestCommand { get; set; }
         [NotMapped]
         public RenombrarFicheroVideo1TestCommand renombrarFicheroVideo1TestCommand { get; set; }
@@ -45,6 +47,7 @@ namespace insoles.Model
             this.Date = date;
             this.csv = csv;
             renombrarCarpetaTestCommand = new RenombrarCarpetaTestCommand();
+            borrarTestCommand = new BorrarTestCommand();
             renombrarFicheroCSVTestCommand = new RenombrarFicheroCSVTestCommand();
             renombrarFicheroVideo1TestCommand = new RenombrarFicheroVideo1TestCommand();
             renombrarFicheroVideo2TestCommand = new RenombrarFicheroVideo2TestCommand();
