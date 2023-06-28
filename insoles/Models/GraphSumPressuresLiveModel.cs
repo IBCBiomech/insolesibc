@@ -25,7 +25,7 @@ namespace insoles.Model
             signalPlotRight = plot.Plot.AddSignal(right, color: Color.Blue, label: "Right");
             signalPlotLeft.MarkerSize = 0;
             signalPlotRight.MarkerSize = 0;
-            plot.Plot.SetAxisLimitsY(-10, 500);
+            plot.Plot.AxisAutoY();
             plot.Plot.SetAxisLimitsX(xMin: 0, xMax: CAPACITY);
             plot.Plot.Legend(location : Alignment.UpperRight);
             lineFrame = plot.Plot.AddVerticalLine(0, color: Color.Green, width: 1, style: LineStyle.Dash);
@@ -43,6 +43,7 @@ namespace insoles.Model
             signalPlotRight.Label = "Right = " + dataRight[dataRight.Length - 1].ToString("0.##");
             nextIndex += dataLeft.Length;
             lineFrame.X = nextIndex % CAPACITY;
+            plot.Plot.AxisAutoY();
             if (render)
             {
                 Application.Current.Dispatcher.Invoke(() => plot.Render());
