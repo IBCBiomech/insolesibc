@@ -55,6 +55,7 @@
                                                 <ContextMenu>
                                                     <MenuItem Header="Renombrar" Command="{Binding renombrarCarpetaTestCommand}" CommandParameter="{Binding}"/>
                                                     <MenuItem Header="Borrar" Command="{Binding borrarTestCommand}" CommandParameter="{Binding}"/>
+                                                    <MenuItem Header="Importar" Command="{Binding importarTestCommand}" CommandParameter="{Binding}"/>
                                                 </ContextMenu>
                                             </TreeViewItem.ContextMenu>
                                             <Grid>

@@ -16,10 +16,15 @@ namespace insoles.Commands
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
+        private Test test;
+        public CargarTestCommand(Test test)
+        {
+            this.test = test;
+        }
 
         public bool CanExecute(object? parameter)
         {
-            return true;
+            return test.csv != null;
         }
 
         public void Execute(object? parameter)

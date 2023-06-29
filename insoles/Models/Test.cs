@@ -41,6 +41,8 @@ namespace insoles.Model
         public RenombrarFicheroVideo2TestCommand renombrarFicheroVideo2TestCommand { get; set; }
         [NotMapped]
         public CargarTestCommand cargarTestCommand { get; set; }
+        [NotMapped]
+        public ImportarTestCommand importarTestCommand { get; set; }
         public Test()
         {
             this.Nombre = "Test";
@@ -49,19 +51,13 @@ namespace insoles.Model
             renombrarFicheroCSVTestCommand = new RenombrarFicheroCSVTestCommand();
             renombrarFicheroVideo1TestCommand = new RenombrarFicheroVideo1TestCommand();
             renombrarFicheroVideo2TestCommand = new RenombrarFicheroVideo2TestCommand();
-            cargarTestCommand = new CargarTestCommand();
+            cargarTestCommand = new CargarTestCommand(this);
+            importarTestCommand = new ImportarTestCommand(this);
         }
-        public Test(DateTime date, string csv)
+        public Test(DateTime date, string csv) : this()
         {
-            this.Nombre = "Test";
             this.Date = date;
             this.csv = csv;
-            renombrarCarpetaTestCommand = new RenombrarCarpetaTestCommand();
-            borrarTestCommand = new BorrarTestCommand();
-            renombrarFicheroCSVTestCommand = new RenombrarFicheroCSVTestCommand();
-            renombrarFicheroVideo1TestCommand = new RenombrarFicheroVideo1TestCommand();
-            renombrarFicheroVideo2TestCommand = new RenombrarFicheroVideo2TestCommand();
-            cargarTestCommand = new CargarTestCommand();
         }
         public Test(DateTime date, string csv, List<string> videos) : this(date, csv)
         {
