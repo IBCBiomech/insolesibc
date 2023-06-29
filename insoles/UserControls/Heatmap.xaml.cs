@@ -227,6 +227,7 @@ namespace insoles.UserControls
         {
             InitializeComponent();
             this.state = state;
+            framesTaken = 500;
             DataContext = this;
         }
         public Task UpdateLimits(GraphData data)
