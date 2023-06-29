@@ -11,7 +11,7 @@ using insoles.Database;
 namespace insoles.Migrations
 {
     [DbContext(typeof(DBContextSqlLite))]
-    [Migration("20230616071736_InitialCreate")]
+    [Migration("20230629101732_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -65,7 +65,7 @@ namespace insoles.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime?>("Date")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nombre")
@@ -76,7 +76,6 @@ namespace insoles.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("csv")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("video1")

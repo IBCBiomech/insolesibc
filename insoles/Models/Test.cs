@@ -12,7 +12,7 @@ namespace insoles.Model
         public int Id { get; set; }
         public int PacienteId { get; set; }
         public Paciente Paciente { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
         [NotMapped]
         private string nombre;
         public string Nombre {
@@ -26,7 +26,7 @@ namespace insoles.Model
                 OnPropertyChanged();
             }
         }
-        public string csv { get; set; }
+        public string? csv { get; set; }
         public string? video1 { get; set; }
         public string? video2 { get; set; }
         [NotMapped]
@@ -41,6 +41,16 @@ namespace insoles.Model
         public RenombrarFicheroVideo2TestCommand renombrarFicheroVideo2TestCommand { get; set; }
         [NotMapped]
         public CargarTestCommand cargarTestCommand { get; set; }
+        public Test()
+        {
+            this.Nombre = "Test";
+            renombrarCarpetaTestCommand = new RenombrarCarpetaTestCommand();
+            borrarTestCommand = new BorrarTestCommand();
+            renombrarFicheroCSVTestCommand = new RenombrarFicheroCSVTestCommand();
+            renombrarFicheroVideo1TestCommand = new RenombrarFicheroVideo1TestCommand();
+            renombrarFicheroVideo2TestCommand = new RenombrarFicheroVideo2TestCommand();
+            cargarTestCommand = new CargarTestCommand();
+        }
         public Test(DateTime date, string csv)
         {
             this.Nombre = "Test";

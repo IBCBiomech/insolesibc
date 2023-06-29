@@ -105,6 +105,28 @@ namespace insoles.Services
                 await dbContext.SaveChangesAsync();
             }
         }
+        public async Task CrearCarpetaTest(Paciente paciente)
+        {
+            using (var dbContext = new DBContextSqlLite())
+            {
+                Paciente? existingPaciente = dbContext.Pacientes.FirstOrDefault(p => p.Id == paciente.Id);
+
+                if (existingPaciente != null)
+                {
+                    existingPaciente.Tests.Add(new Test());
+                    try
+                    {
+                        await dbContext.SaveChangesAsync();
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        Exception innerException = ex.InnerException;
+                        Trace.WriteLine(innerException.Message);
+                        throw innerException;
+                    }
+                }
+            }
+        }
         public async Task<List<Paciente>> GetPacientes()
         {
             using (var dbContext = new DBContextSqlLite())

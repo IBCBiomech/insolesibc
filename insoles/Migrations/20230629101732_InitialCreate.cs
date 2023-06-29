@@ -39,9 +39,9 @@ namespace insoles.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     PacienteId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Date = table.Column<DateTime>(type: "TEXT", nullable: true),
                     Nombre = table.Column<string>(type: "TEXT", nullable: false),
-                    csv = table.Column<string>(type: "TEXT", nullable: false),
+                    csv = table.Column<string>(type: "TEXT", nullable: true),
                     video1 = table.Column<string>(type: "TEXT", nullable: true),
                     video2 = table.Column<string>(type: "TEXT", nullable: true)
                 },

@@ -40,6 +40,11 @@
                                 </ContextMenu>
                             </TreeViewItem.ContextMenu>
                             <TreeViewItem Header="Tests">
+                                <TreeViewItem.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Crear carpeta" Command="{Binding crearCarpetaTestCommand}" CommandParameter="{Binding}"/>
+                                    </ContextMenu>
+                                </TreeViewItem.ContextMenu>
                                 <TreeViewItem.ItemsSource>
                                     <Binding Path="Tests" />
                                 </TreeViewItem.ItemsSource>

@@ -42,6 +42,8 @@ namespace insoles.Model
         public EditarPacienteCommand editarPacienteCommand { get; set; }
         [NotMapped]
         public BorrarPacienteCommand borrarPacienteCommand { get; set; }
+        [NotMapped]
+        public CrearCarpetaTestCommand crearCarpetaTestCommand { get; set; }
         public Paciente(string nombre, string? apellidos, DateTime? fechaNacimiento,
             string? lugar, float? peso, float? altura, float? longitudPie, int? numeroPie,
             string? profesion)
@@ -58,6 +60,7 @@ namespace insoles.Model
             Tests = new ObservableCollection<Test>();
             editarPacienteCommand = new EditarPacienteCommand();
             borrarPacienteCommand = new BorrarPacienteCommand();
+            crearCarpetaTestCommand = new CrearCarpetaTestCommand();
         }
     }
 }

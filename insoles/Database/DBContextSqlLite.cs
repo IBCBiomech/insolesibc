@@ -56,6 +56,22 @@ namespace insoles.Database
             modelBuilder.Entity<Paciente>()
                 .Property(p => p.Profesion)
                 .IsRequired(false);
+
+            modelBuilder.Entity<Test>()
+                .Property(t => t.Date)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Test>()
+                .Property(t => t.csv)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Test>()
+                .Property(t => t.video1)
+                .IsRequired(false);
+
+            modelBuilder.Entity<Test>()
+                .Property(t => t.video2)
+                .IsRequired(false);
         }
         public void ApplyMigrations()
         {
