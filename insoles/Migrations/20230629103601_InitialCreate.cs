@@ -33,6 +33,27 @@ namespace insoles.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Informes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    PacienteId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Date = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    Nombre = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Informes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Informes_Pacientes_PacienteId",
+                        column: x => x.PacienteId,
+                        principalTable: "Pacientes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tests",
                 columns: table => new
                 {
@@ -57,6 +78,11 @@ namespace insoles.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Informes_PacienteId",
+                table: "Informes",
+                column: "PacienteId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tests_PacienteId",
                 table: "Tests",
                 column: "PacienteId");
@@ -65,6 +91,9 @@ namespace insoles.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Informes");
+
             migrationBuilder.DropTable(
                 name: "Tests");
 

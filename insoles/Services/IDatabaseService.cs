@@ -17,6 +17,7 @@ namespace insoles.Services
         Task UpdatePaciente(Paciente paciente);
         Task DeletePaciente(Paciente paciente);
         Task CrearCarpetaTest(Paciente paciente);
+        Task CrearCarpetaInforme(Paciente paciente);
         Task<List<Paciente>> GetPacientes();
     }
 }

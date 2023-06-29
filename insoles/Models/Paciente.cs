@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using insoles.Commands;
-using insoles.Model;
 using insoles.Utilities;
 
 namespace insoles.Model
@@ -25,6 +24,7 @@ namespace insoles.Model
         public int? NumeroPie { get; set; }
         public string Profesion { get; set; }
         public ICollection<Test> Tests { get; set; }
+        public ICollection<Informe> Informes { get; set; }
         [NotMapped]
         private bool isSelected;
         [NotMapped]
@@ -44,6 +44,8 @@ namespace insoles.Model
         public BorrarPacienteCommand borrarPacienteCommand { get; set; }
         [NotMapped]
         public CrearCarpetaTestCommand crearCarpetaTestCommand { get; set; }
+        [NotMapped]
+        public CrearCarpetaInformeCommand crearCarpetaInformeCommand { get; set; }
         public Paciente(string nombre, string? apellidos, DateTime? fechaNacimiento,
             string? lugar, float? peso, float? altura, float? longitudPie, int? numeroPie,
             string? profesion)
@@ -58,9 +60,11 @@ namespace insoles.Model
             NumeroPie = numeroPie;
             Profesion = profesion;
             Tests = new ObservableCollection<Test>();
+            Informes = new ObservableCollection<Informe>();
             editarPacienteCommand = new EditarPacienteCommand();
             borrarPacienteCommand = new BorrarPacienteCommand();
             crearCarpetaTestCommand = new CrearCarpetaTestCommand();
+            crearCarpetaInformeCommand = new CrearCarpetaInformeCommand();
         }
     }
 }

@@ -127,11 +127,33 @@ namespace insoles.Services
                 }
             }
         }
+        public async Task CrearCarpetaInforme(Paciente paciente)
+        {
+            using (var dbContext = new DBContextSqlLite())
+            {
+                Paciente? existingPaciente = dbContext.Pacientes.FirstOrDefault(p => p.Id == paciente.Id);
+
+                if (existingPaciente != null)
+                {
+                    existingPaciente.Informes.Add(new Informe());
+                    try
+                    {
+                        await dbContext.SaveChangesAsync();
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        Exception innerException = ex.InnerException;
+                        Trace.WriteLine(innerException.Message);
+                        throw innerException;
+                    }
+                }
+            }
+        }
         public async Task<List<Paciente>> GetPacientes()
         {
             using (var dbContext = new DBContextSqlLite())
             {
-                return await dbContext.Pacientes.Include(p => p.Tests).ToListAsync();
+                return await dbContext.Pacientes.Include(p => p.Tests).Include(p => p.Informes).ToListAsync();
             }
         }
     }

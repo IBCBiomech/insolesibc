@@ -11,7 +11,7 @@ using insoles.Database;
 namespace insoles.Migrations
 {
     [DbContext(typeof(DBContextSqlLite))]
-    [Migration("20230629101732_InitialCreate")]
+    [Migration("20230629103601_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -19,6 +19,29 @@ namespace insoles.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.5");
+
+            modelBuilder.Entity("insoles.Model.Informe", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("PacienteId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PacienteId");
+
+                    b.ToTable("Informes");
+                });
 
             modelBuilder.Entity("insoles.Model.Paciente", b =>
                 {
@@ -91,6 +114,17 @@ namespace insoles.Migrations
                     b.ToTable("Tests");
                 });
 
+            modelBuilder.Entity("insoles.Model.Informe", b =>
+                {
+                    b.HasOne("insoles.Model.Paciente", "Paciente")
+                        .WithMany("Informes")
+                        .HasForeignKey("PacienteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Paciente");
+                });
+
             modelBuilder.Entity("insoles.Model.Test", b =>
                 {
                     b.HasOne("insoles.Model.Paciente", "Paciente")
@@ -104,6 +138,8 @@ namespace insoles.Migrations
 
             modelBuilder.Entity("insoles.Model.Paciente", b =>
                 {
+                    b.Navigation("Informes");
+
                     b.Navigation("Tests");
                 });
 #pragma warning restore 612, 618

@@ -98,7 +98,19 @@
                                 </TreeViewItem.ItemTemplate>
                             </TreeViewItem>
                             <TreeViewItem Header="Informes">
-
+                                <TreeViewItem.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Crear carpeta" Command="{Binding crearCarpetaInformeCommand}" CommandParameter="{Binding}"/>
+                                    </ContextMenu>
+                                </TreeViewItem.ContextMenu>
+                                <TreeViewItem.ItemsSource>
+                                    <Binding Path="Informes" />
+                                </TreeViewItem.ItemsSource>
+                                <TreeViewItem.ItemTemplate>
+                                    <DataTemplate DataType="{x:Type model:Informe}">
+                                        <TreeViewItem Header="{Binding Nombre}"/>
+                                    </DataTemplate>
+                                </TreeViewItem.ItemTemplate>
                             </TreeViewItem>
                         </TreeViewItem>
                     </DataTemplate>

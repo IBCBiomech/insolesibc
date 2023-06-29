@@ -9,6 +9,8 @@ namespace insoles.Database
 
         public DbSet<Test> Tests { get; set; }
 
+        public DbSet<Informe> Informes { get; set; }
+
         public DBContextSqlLite()
         {
             Database.EnsureCreated();
@@ -24,6 +26,11 @@ namespace insoles.Database
                 .HasOne(t => t.Paciente)
                 .WithMany(p => p.Tests)
                 .HasForeignKey(t => t.PacienteId);
+
+            modelBuilder.Entity<Informe>()
+                .HasOne(i => i.Paciente)
+                .WithMany(p => p.Informes)
+                .HasForeignKey(i => i.PacienteId);
 
             modelBuilder.Entity<Paciente>()
                 .Property(p => p.Apellidos)
