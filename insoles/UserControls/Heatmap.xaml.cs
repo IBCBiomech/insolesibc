@@ -260,9 +260,9 @@ namespace insoles.UserControls
         private void SetAxisLimits(Matrix<float> matrix)
         {
             double xMin = 0;
-            double xMax = matrix.ColumnCount;
+            double xMax = matrix.ColumnCount * 0.75;
             double yMin = 0;
-            double yMax = matrix.RowCount;
+            double yMax = matrix.RowCount * 0.75;
             plot.Plot.SetInnerViewLimits(xMin, xMax, yMin, yMax);
             plot.Plot.SetOuterViewLimits(yMin: 0);
 
