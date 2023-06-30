@@ -1,6 +1,7 @@
 ﻿using insoles.Enums;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,14 +22,14 @@ namespace insoles.DataHolders
         }
         public DataInsole(string[] values, int firstIndex)
         {
-            pressures[Sensor.Arch] = double.Parse(values[firstIndex]);
-            pressures[Sensor.Hallux] = double.Parse(values[firstIndex + 1]);
-            pressures[Sensor.HeelL] = double.Parse(values[firstIndex + 2]);
-            pressures[Sensor.HeelR] = double.Parse(values[firstIndex + 3]);
-            pressures[Sensor.Met1] = double.Parse(values[firstIndex + 4]);
-            pressures[Sensor.Met3] = double.Parse(values[firstIndex + 5]);
-            pressures[Sensor.Met5] = double.Parse(values[firstIndex + 6]);
-            pressures[Sensor.Toes] = double.Parse(values[firstIndex + 7]);
+            pressures[Sensor.Arch] = double.Parse(values[firstIndex], CultureInfo.InvariantCulture);
+            pressures[Sensor.Hallux] = double.Parse(values[firstIndex + 1], CultureInfo.InvariantCulture);
+            pressures[Sensor.HeelL] = double.Parse(values[firstIndex + 2], CultureInfo.InvariantCulture);
+            pressures[Sensor.HeelR] = double.Parse(values[firstIndex + 3], CultureInfo.InvariantCulture);
+            pressures[Sensor.Met1] = double.Parse(values[firstIndex + 4], CultureInfo.InvariantCulture);
+            pressures[Sensor.Met3] = double.Parse(values[firstIndex + 5], CultureInfo.InvariantCulture);
+            pressures[Sensor.Met5] = double.Parse(values[firstIndex + 6], CultureInfo.InvariantCulture);
+            pressures[Sensor.Toes] = double.Parse(values[firstIndex + 7], CultureInfo.InvariantCulture);
         }
         public DataInsole()
         {

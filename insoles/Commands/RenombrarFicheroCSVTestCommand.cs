@@ -28,6 +28,9 @@ namespace insoles.Commands
         {
             Test test = parameter as Test;
             TextInputForm inputForm = new TextInputForm();
+            Window mainWindow = Application.Current.MainWindow;
+            inputForm.Left = mainWindow.Left + mainWindow.Width * 0.2;
+            inputForm.Top = mainWindow.Top + mainWindow.Height * 0.85;
             inputForm.enterEvent += async (s, text) =>
             {
                 string directory = Path.GetDirectoryName(test.csv);

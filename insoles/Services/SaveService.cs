@@ -28,6 +28,12 @@ namespace insoles.Services
         private string fileName;
         private List<string> videoFileNames;
         DateTime testTime;
+        private const string header = @"DEFAULT	DEFAULT	DEFAULT	DEFAULT	DEFAULT	DEFAULT	DEFAULT	DEFAULT	DEFAULT	DEFAULT	DEFAULT	DEFAULT	DEFAULT	DEFAULT	DEFAULT	DEFAULT	DEFAULT	DEFAULT	DEFAULT	DEFAULT
+            TIME	TIME	LARCH	LHALLUX	LHEELR	LHEELL	LMET1	LMET3	LMET5	LTOES	RARCH	RHALLUX	RHEELR	RHEELL	RMET1	RMET3	RMET5	RTOES	RTOTAL	LTOTAL
+            FRAME_NUMBERS	ANALOG	ANALOG	ANALOG	ANALOG	ANALOG	ANALOG	ANALOG	ANALOG	ANALOG	ANALOG	ANALOG	ANALOG	ANALOG	ANALOG	ANALOG	ANALOG	ANALOG	ANALOG	ANALOG
+            ORIGINAL	ORIGINAL	ORIGINAL	ORIGINAL	ORIGINAL	ORIGINAL	ORIGINAL	ORIGINAL	ORIGINAL	ORIGINAL	ORIGINAL	ORIGINAL	ORIGINAL	ORIGINAL	ORIGINAL	ORIGINAL	ORIGINAL	ORIGINAL	ORIGINAL	ORIGINAL
+        ITEM	0	0	x	x	x	x	x	x	x	x	x	x	x	x	x	x	x	x	x	x"
+        + "\n";
         private string FileName
         {
             get
@@ -141,6 +147,7 @@ namespace insoles.Services
             frame = 0;
             fakets = 0;
             dataHolder = new StringBuilder();
+            dataHolder.Append(header);
         }
 
         public Test Stop()
