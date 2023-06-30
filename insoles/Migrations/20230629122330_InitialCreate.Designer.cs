@@ -11,7 +11,7 @@ using insoles.Database;
 namespace insoles.Migrations
 {
     [DbContext(typeof(DBContextSqlLite))]
-    [Migration("20230629103601_InitialCreate")]
+    [Migration("20230629122330_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

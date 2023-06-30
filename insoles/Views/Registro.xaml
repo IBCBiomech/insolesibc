@@ -95,7 +95,7 @@
                                 
                                 <userControls:Dispositivos Insoles="{Binding Insoles}" Cameras="{Binding Cameras}"/>
                             </dock:LayoutAnchorable>
-                            <dock:LayoutAnchorable Title="Sujetos" 
+                            <dock:LayoutAnchorable Title="Usuarios" 
                                                    CanMove="True"
                                                    CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
                                 <userControls:PacientesUserControl Pacientes="{Binding Pacientes}"/>

@@ -37,7 +37,7 @@
                             </dock:LayoutAnchorablePaneGroup>
                         </dock:LayoutAnchorablePaneGroup>
                         <dock:LayoutAnchorablePane DockHeight="0.25*">
-                            <dock:LayoutAnchorable Title="Sujetos" CanClose="False" CanFloat="True" 
+                            <dock:LayoutAnchorable Title="Usuarios" CanClose="False" CanFloat="True" 
                                                    CanHide="True" CanAutoHide="False">
                                 <userControls:PacientesUserControlAnalisis Pacientes="{Binding Pacientes}"/>
                             </dock:LayoutAnchorable>
