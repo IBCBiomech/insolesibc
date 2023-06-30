@@ -259,7 +259,7 @@ namespace insoles.UserControls
         }
         private void SetAxisLimits(Matrix<float> matrix)
         {
-            double xMin = 0;
+            double xMin = matrix.ColumnCount * 0.15;
             double xMax = matrix.ColumnCount * 0.75;
             double yMin = 0;
             double yMax = matrix.RowCount * 0.75;
