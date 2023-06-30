@@ -60,37 +60,37 @@
                                             </TreeViewItem.ContextMenu>
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="30"/>
                                                     <ColumnDefinition Width="150"/>
-                                                    <ColumnDefinition Width="120"/>
                                                 </Grid.ColumnDefinitions>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="auto"/>
                                                     <RowDefinition Height="auto"/>
                                                     <RowDefinition Height="auto"/>
                                                 </Grid.RowDefinitions>
-                                                <TextBlock Text="{Binding csv, Converter={StaticResource pathToFileNameConverter}}" Grid.Column="0" Grid.Row="0">
-                                                    <TextBlock.ContextMenu>
+                                                <Image Source="pack://application:,,,/Images/file-icon.png" Width="10" Height="10" HorizontalAlignment="Left" Visibility="{Binding csv, Converter={StaticResource nullToVisibilityConverter}}" Grid.Row="0" Grid.Column="0">
+                                                    <Image.ContextMenu>
                                                         <ContextMenu>
                                                             <MenuItem Header="Renombrar" Command="{Binding renombrarFicheroCSVTestCommand}" CommandParameter="{Binding}"/>
                                                         </ContextMenu>
-                                                    </TextBlock.ContextMenu>
-                                                </TextBlock>
+                                                    </Image.ContextMenu>
+                                                </Image>
                                                 <TextBlock Text="{Binding Date}" Grid.Column="1" Grid.Row="0"/>
-                                                <TextBlock Text="{Binding video1, Converter={StaticResource pathToFileNameConverter}}" Visibility="{Binding video1, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="0" Grid.Row="1">
-                                                    <TextBlock.ContextMenu>
+                                                <Image Source="pack://application:,,,/Images/video-icon.png" Width="10" Height="10" HorizontalAlignment="Left" Visibility="{Binding video1, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="0" Grid.Row="1">
+                                                    <Image.ContextMenu>
                                                         <ContextMenu>
                                                             <MenuItem Header="Renombrar" Command="{Binding renombrarFicheroVideo1TestCommand}" CommandParameter="{Binding}"/>
                                                         </ContextMenu>
-                                                    </TextBlock.ContextMenu>
-                                                </TextBlock>
+                                                    </Image.ContextMenu>
+                                                </Image>
                                                 <TextBlock Text="{Binding Date}" Visibility="{Binding video1, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="1" Grid.Row="1"/>
-                                                <TextBlock Text="{Binding video2, Converter={StaticResource pathToFileNameConverter}}" Visibility="{Binding video1, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="0" Grid.Row="2">
-                                                    <TextBlock.ContextMenu>
+                                                <Image Source="pack://application:,,,/Images/video-icon.png" Width="10" Height="10" HorizontalAlignment="Left" Visibility="{Binding video2, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="0" Grid.Row="2">
+                                                    <Image.ContextMenu>
                                                         <ContextMenu>
                                                             <MenuItem Header="Renombrar" Command="{Binding renombrarFicheroVideo2TestCommand}" CommandParameter="{Binding}"/>
                                                         </ContextMenu>
-                                                    </TextBlock.ContextMenu>
-                                                </TextBlock>
+                                                    </Image.ContextMenu>
+                                                </Image>
                                                 <TextBlock Text="{Binding Date}" Visibility="{Binding video2, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="1" Grid.Row="2"/>
                                             </Grid>
                                         </TreeViewItem>

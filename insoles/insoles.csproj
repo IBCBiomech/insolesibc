@@ -24,6 +24,7 @@
     <None Remove="Images\drive_icon.png" />
     <None Remove="Images\fast-backward-icon.png" />
     <None Remove="Images\fast-forward-icon.png" />
+    <None Remove="Images\file-icon.png" />
     <None Remove="Images\green-circle-icon.png" />
     <None Remove="Images\Home_Icon.png" />
     <None Remove="Images\home_page.png" />
@@ -42,6 +43,7 @@
     <None Remove="Images\shutdown_mo.png" />
     <None Remove="Images\stop-icon.png" />
     <None Remove="Images\toggle.png" />
+    <None Remove="Images\video-icon.png" />
     <None Remove="Precalculus\inverse_distances_background.mtx" />
     <None Remove="Precalculus\inverse_distances_reduced.mtx" />
   </ItemGroup>
@@ -116,6 +118,9 @@
     <Resource Include="Images\fast-forward-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\file-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\green-circle-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -166,6 +171,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\toggle.png" />
+    <Resource Include="Images\video-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Precalculus\inverse_distances_background.mtx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
