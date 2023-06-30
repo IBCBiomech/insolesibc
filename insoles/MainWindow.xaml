@@ -38,7 +38,7 @@
             <Grid HorizontalAlignment="Left"
                   Width="75">
 
-                <Border Background="#272B2F"
+                <Border Background="#f2f2f2"
                          />
 
                 <StackPanel Height="400" Margin="0,150,0,150">
@@ -115,6 +115,7 @@
                 </Grid.RowDefinitions>
 
                 <ContentControl x:Name="Pages"
+                                Background="#b3e6f5"
                                 Content="{Binding CurrentView}" Grid.RowSpan="2" />
 
             </Grid>
@@ -123,7 +124,7 @@
 
         <Button x:Name="CloseApp"
                 Style="{StaticResource ExitApp}"
-                Click="CloseApp_Click" />
+                Click="CloseApp_Click" RenderTransformOrigin="0.553,0.053" Margin="0,0,10,0" />
 
     </Grid>
 </Window>

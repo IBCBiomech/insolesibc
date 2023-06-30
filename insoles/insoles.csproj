@@ -32,6 +32,8 @@
     <None Remove="Images\img_home.png" />
     <None Remove="Images\img_order.png" />
     <None Remove="Images\img_shipment.png" />
+    <None Remove="Images\innerfeet.png" />
+    <None Remove="Images\menu.png" />
     <None Remove="Images\pause-icon-black.png" />
     <None Remove="Images\pause-icon.png" />
     <None Remove="Images\play-icon.png" />
@@ -46,6 +48,12 @@
     <None Remove="Images\video-icon.png" />
     <None Remove="Precalculus\inverse_distances_background.mtx" />
     <None Remove="Precalculus\inverse_distances_reduced.mtx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Images\menu.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -140,6 +148,9 @@
     <Resource Include="Images\img_shipment.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\innerfeet.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\pause-icon-black.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -186,6 +197,12 @@
     <Compile Update="UserControls\PacientesUserControlAnalisis.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Images\innerfeet.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

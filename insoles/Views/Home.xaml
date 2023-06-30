@@ -4,14 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:insoles.View"
+             xmlns:gif="http://wpfanimatedgif.codeplex.com"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="White">
 
         <Border CornerRadius="0,20,20,0" Margin="0,5,5,0">
 
-            <Image Source="/Images/bio3.png"
-                   Stretch="Fill" />
+            <Grid>
+                <Image Source="/Images/innerfeet.png"
+                              x:Name="homeImage"
+                            
+                              
+                              />
+            </Grid>
+
 
         </Border>
 
