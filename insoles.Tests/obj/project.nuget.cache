@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "4Rc7/Xdnp1TPi4Iz6oBmrR255Kd/mfTvyBHrnSWyhUGb6fIYeYnI9998CO4Km0N+YcK+ZDCp3EqHuUIQGHAMdw==",
+  "dgSpecHash": "2uVc7Ew4NYII868mh6pEo505+zf08e0Ols19xoNeK4sI4xpXO36uN4wH6TVk1xb25gf2pORRwMo1tTX06IF5wg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Deva\\wsibc\\insolesibc\\insoles.Tests\\insoles.Tests.csproj",
   "expectedPackageFiles": [
@@ -67,6 +67,11 @@
     "C:\\Users\\Deva\\.nuget\\packages\\sqlitepclraw.core\\2.1.4\\sqlitepclraw.core.2.1.4.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.4\\sqlitepclraw.lib.e_sqlite3.2.1.4.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.4\\sqlitepclraw.provider.e_sqlite3.2.1.4.nupkg.sha512",
+    "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.compression.base\\22.1.36\\syncfusion.compression.base.22.1.36.nupkg.sha512",
+    "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.docio.wpf\\22.1.36\\syncfusion.docio.wpf.22.1.36.nupkg.sha512",
+    "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.licensing\\22.1.36\\syncfusion.licensing.22.1.36.nupkg.sha512",
+    "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.officechart.base\\22.1.36\\syncfusion.officechart.base.22.1.36.nupkg.sha512",
+    "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.shared.wpf\\22.1.36\\syncfusion.shared.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\system.codedom\\7.0.0\\system.codedom.7.0.0.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\system.drawing.common\\7.0.0\\system.drawing.common.7.0.0.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\system.drawing.primitives\\4.3.0\\system.drawing.primitives.4.3.0.nupkg.sha512",

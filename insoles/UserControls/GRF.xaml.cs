@@ -24,6 +24,9 @@ using System.Xml.Linq;
 using System.Data;
 using MathNet.Numerics;
 using insoles.States;
+using System.Reflection.Metadata;
+using Syncfusion.DocIO.DLS;
+
 
 namespace insoles.UserControls
 {
@@ -68,6 +71,9 @@ namespace insoles.UserControls
         private WpfPlot rangePlot;
         private VLine rangeVlabel;
         private List<VLine> listOfVlabels = new List<VLine>();
+        private ScatterPlot leftInsolePlot;
+        private ScatterPlot leftInsoleErrorPlot;
+        private ScatterPlot rightInsolePlot;
 
         public Units selectedUnits
         {
@@ -406,8 +412,10 @@ namespace insoles.UserControls
             double[] dataYleft = listYleft.ToArray();
 
             double[] stddevleft = StdDevCalculation(listYleft);
-            rangePlot.Plot.AddScatterLines(dataXleft, dataYleft, System.Drawing.Color.DarkOrange, 2);
+            leftInsolePlot = rangePlot.Plot.AddScatterLines(dataXleft, dataYleft, System.Drawing.Color.DarkOrange, 2);
             rangePlot.Plot.AddFillError(dataXleft, dataYleft, stddevleft, System.Drawing.Color.FromArgb(50, System.Drawing.Color.Green));
+
+            
 
             List<double> listXright = xs_temp_right.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
             List<double> listYright = ys_temp_right.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
@@ -423,6 +431,7 @@ namespace insoles.UserControls
 
             rangePlot.SetValue(Grid.RowProperty, 1);
             grid.Children.Add(rangePlot);
+            
 
         }
         // Función que sí utilizamos para obtener el número más cercano de una lista
@@ -485,6 +494,56 @@ namespace insoles.UserControls
             XPoints.Clear();
             plot.Render();
             rangePlot.Render();
+        }
+
+        private void leftCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void ClearGraphButton_Copy_Click(object sender, RoutedEventArgs e)
+        {
+            rangePlot.Plot.SaveFig("range.png");
+            plot.Plot.SaveFig("GRF.png");
+
+            // Creating a new document.
+            WordDocument document = new WordDocument();
+            //Adding a new section to the document.
+            WSection section = document.AddSection() as WSection;
+            //Set Margin of the section
+            section.PageSetup.Margins.All = 72;
+            //Set page size of the section
+            section.PageSetup.PageSize = new System.Drawing.SizeF(612, 792);
+
+
+
+            IWParagraph paragraph = section.HeadersFooters.Header.AddParagraph();
+
+            paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Left;
+            WTextRange textRange = paragraph.AppendText("InnerFEET Pressure Register Tool") as WTextRange;
+            textRange.CharacterFormat.FontSize = 12f;
+            textRange.CharacterFormat.FontName = "Calibri";
+
+            
+
+            //Appends paragraph.
+            paragraph = section.AddParagraph();
+            paragraph.ParagraphFormat.FirstLineIndent = 36;
+            paragraph.BreakCharacterFormat.FontSize = 12f;
+            textRange = paragraph.AppendText("A continuación se muestra un informe con el Gráfico de GRF:") as WTextRange;
+            textRange.CharacterFormat.FontSize = 12f;
+
+            // Gets the image stream.
+            IWPicture picture = paragraph.AppendPicture(new System.Drawing.Bitmap(@"GRF.png")) as WPicture;
+
+
+            textRange = paragraph.AppendText("A continuación se muestra un informe con el Gráfico de STDDEV:") as WTextRange;
+            IWPicture picture2 = paragraph.AppendPicture(new System.Drawing.Bitmap(@"Range.png")) as WPicture;
+
+
+            document.Save("Sample.docx");
+
+
         }
     }
 }

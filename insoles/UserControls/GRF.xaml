@@ -31,6 +31,21 @@
             <Button x:Name="ClearGraphButton" 
                     Background="AliceBlue"
                     Content="CLEAR" Click="ClearGraphButton_Click" />
+            <Button x:Name="ClearGraphButton_Copy" 
+                Background="AliceBlue"
+                Content="Report" Click="ClearGraphButton_Copy_Click" />
+        </StackPanel>
+        <StackPanel Grid.Column="1" 
+                    VerticalAlignment="Center"
+                    Grid.Row="1">
+            <CheckBox x:Name="leftCheckBox" 
+                      IsChecked="False"
+                      Checked="leftCheckBox_Checked"
+                      Content="L" 
+                      />
+            <CheckBox x:Name="rightCheckBox" 
+                      
+                      Content="R" />
         </StackPanel>
     </Grid>
 </UserControl>
