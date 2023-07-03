@@ -3,14 +3,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:dock="https://github.com/Dirkster99/AvalonDock"
+             xmlns:userControls="clr-namespace:insoles.UserControls"
              xmlns:local="clr-namespace:insoles.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="AliceBlue">
-        <Border CornerRadius="0,20,20,0" Margin="0,5,5,0">
-
-            <Label Content="Informes" FontSize="40"/>
-
-        </Border>
+        <dock:DockingManager>
+            <dock:LayoutRoot>
+                <dock:LayoutPanel>
+                    <dock:LayoutAnchorablePane>
+                        <dock:LayoutAnchorable Title="Pacientes">
+                            <userControls:PacientesUserControl Pacientes="{Binding Pacientes}"/>
+                        </dock:LayoutAnchorable>
+                    </dock:LayoutAnchorablePane>
+                </dock:LayoutPanel>
+            </dock:LayoutRoot>
+        </dock:DockingManager>
     </Grid>
 </UserControl>
