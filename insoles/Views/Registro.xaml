@@ -32,9 +32,9 @@
         <dock:DockingManager>
             <dock:LayoutRoot>
                 <dock:LayoutPanel>
-                    <dock:LayoutAnchorablePaneGroup Orientation="Vertical">
-                        <dock:LayoutAnchorablePaneGroup Orientation="Horizontal" DockHeight="3*">
-                            <dock:LayoutAnchorablePane DockWidth="1.5*" DockHeight="100">
+                    <dock:LayoutAnchorablePaneGroup Orientation="Horizontal">
+                        <dock:LayoutAnchorablePaneGroup Orientation="Vertical" DockWidth="1.5*">
+                            <dock:LayoutAnchorablePane DockHeight="3*">
                                 <dock:LayoutAnchorable Title="GRF" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
                                     <DockPanel>
                                         <DockPanel DockPanel.Dock="Top">
@@ -67,47 +67,41 @@
                                             <ContentControl  Content="{Binding Plot}"/>
                                             <TextBlock Text="{Binding total}" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Top"/>
                                         </Grid>
-                                        
                                     </DockPanel>
                                 </dock:LayoutAnchorable>
                             </dock:LayoutAnchorablePane>
-                            <dock:LayoutAnchorablePaneGroup Orientation="Vertical">
-                                <dock:LayoutAnchorablePane>
-                                    <dock:LayoutAnchorable Title="Cam1" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
-                                        <Image Source="{Binding CurrentFrameTop}" Stretch="Uniform"/>
-                                    </dock:LayoutAnchorable>
-                                </dock:LayoutAnchorablePane>
-                                <dock:LayoutAnchorablePane>
-                                    <dock:LayoutAnchorable Title="Cam2" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
-                                        <Image Source="{Binding CurrentFrameBottom}" Stretch="Uniform"/>
-                                    </dock:LayoutAnchorable>
-                                </dock:LayoutAnchorablePane>
-                            </dock:LayoutAnchorablePaneGroup>
-                        </dock:LayoutAnchorablePaneGroup>
-                        
-                        <dock:LayoutAnchorablePane DockHeight="*" >
-                            <dock:LayoutAnchorable Title="Dispositivos" 
+                            <dock:LayoutAnchorablePane>
+                                <dock:LayoutAnchorable Title="Dispositivos" 
                                                    
                                                    CanMove="True"
                                                    CanClose="False" 
                                                    CanFloat="True"                
                                                    CanHide="True" CanAutoHide="False">
-                                
-                                <userControls:Dispositivos Insoles="{Binding Insoles}" Cameras="{Binding Cameras}"/>
-                            </dock:LayoutAnchorable>
-                            <dock:LayoutAnchorable Title="Usuarios" 
+
+                                    <userControls:Dispositivos Insoles="{Binding Insoles}" Cameras="{Binding Cameras}"/>
+                                </dock:LayoutAnchorable>
+                                <dock:LayoutAnchorable Title="Usuarios" 
                                                    CanMove="True"
                                                    CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
-                                <userControls:PacientesUserControl Pacientes="{Binding Pacientes}"/>
-                            </dock:LayoutAnchorable>
-                        </dock:LayoutAnchorablePane>
+                                    <userControls:PacientesUserControl Pacientes="{Binding Pacientes}"/>
+                                </dock:LayoutAnchorable>
+                            </dock:LayoutAnchorablePane>
+                        </dock:LayoutAnchorablePaneGroup>
+                        <dock:LayoutAnchorablePaneGroup Orientation="Vertical">
+                            <dock:LayoutAnchorablePane>
+                                <dock:LayoutAnchorable Title="Cam1" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                    <Image Source="{Binding CurrentFrameTop}" Stretch="Uniform"/>
+                                </dock:LayoutAnchorable>
+                            </dock:LayoutAnchorablePane>
+                            <dock:LayoutAnchorablePane>
+                                <dock:LayoutAnchorable Title="Cam2" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                    <Image Source="{Binding CurrentFrameBottom}" Stretch="Uniform"/>
+                                </dock:LayoutAnchorable>
+                            </dock:LayoutAnchorablePane>
+                        </dock:LayoutAnchorablePaneGroup>
                     </dock:LayoutAnchorablePaneGroup>
                 </dock:LayoutPanel>
             </dock:LayoutRoot>
         </dock:DockingManager>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
     </Grid>
 </UserControl>
