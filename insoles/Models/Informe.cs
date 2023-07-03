@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using insoles.Commands;
 
 namespace insoles.Model
 {
@@ -29,9 +30,12 @@ namespace insoles.Model
                 OnPropertyChanged();
             }
         }
+        [NotMapped]
+        public GenerarInformeCommand generarInformeCommand { get; set; }
         public Informe()
         {
             this.Nombre = "Informe";
+            generarInformeCommand = new GenerarInformeCommand();
         }
     }
 }

@@ -109,7 +109,13 @@
                                 </TreeViewItem.ItemsSource>
                                 <TreeViewItem.ItemTemplate>
                                     <DataTemplate DataType="{x:Type model:Informe}">
-                                        <TreeViewItem Header="{Binding Nombre}"/>
+                                        <TreeViewItem Header="{Binding Nombre}">
+                                            <TreeViewItem.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Generar informe" Command="{Binding generarInformeCommand}"/>
+                                                </ContextMenu>
+                                            </TreeViewItem.ContextMenu>
+                                        </TreeViewItem>
                                     </DataTemplate>
                                 </TreeViewItem.ItemTemplate>
                             </TreeViewItem>

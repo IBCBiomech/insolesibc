@@ -60,6 +60,7 @@ namespace insoles.ViewModel
             grafoMariposa = new GrafoMariposa();
             heatmap = new Heatmap(state);
             informesGeneratorService = new InformesGeneratorService(grf, grafoMariposa, heatmap);
+            ((MainWindow)Application.Current.MainWindow).informesGeneratorService = informesGeneratorService;
             camaraViewport1 = new CamaraReplay();
             camaraViewport2 = new CamaraReplay();
             databaseBridge = ((MainWindow)Application.Current.MainWindow).databaseBridge;

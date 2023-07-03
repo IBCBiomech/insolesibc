@@ -20,9 +20,8 @@ namespace insoles.Services
             this.grf = grf;
             this.grafoMariposa = grafoMariposa;
             this.heatmap = heatmap;
-            grf.ClearGraphButton_Copy.Click += ClearGraphButton_Copy_Click;
         }
-        private void ClearGraphButton_Copy_Click(object sender, RoutedEventArgs e)
+        public void GenerarInforme()
         {
             grf.rangePlot.Plot.SaveFig("range.png");
             grf.plot.Plot.SaveFig("GRF.png");

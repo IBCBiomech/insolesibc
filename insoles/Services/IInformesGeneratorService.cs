@@ -8,5 +8,6 @@ namespace insoles.Services
 {
     public interface IInformesGeneratorService
     {
+        void GenerarInforme();
     }
 }

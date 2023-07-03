@@ -1,4 +1,5 @@
-﻿using insoles.States;
+﻿using insoles.Services;
+using insoles.States;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace insoles
     {
         public DatabaseBridge databaseBridge { get; set; }
         public AnalisisState analisisState { get; set; }
+        public IInformesGeneratorService informesGeneratorService { get; set; }
         public MainWindow()
         {
             InitializeComponent();
