@@ -29,7 +29,7 @@
     </UserControl.Resources>
 
     <Grid Background="White">
-        <dock:DockingManager>
+        <dock:DockingManager x:Name="dockingManager">
             <dock:LayoutRoot>
                 <dock:LayoutPanel>
                     <dock:LayoutAnchorablePaneGroup Orientation="Horizontal">
