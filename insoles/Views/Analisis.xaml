@@ -12,39 +12,45 @@
         <dock:DockingManager>
             <dock:LayoutRoot>
                 <dock:LayoutPanel>
-                    <dock:LayoutAnchorablePaneGroup Orientation="Vertical">
-                        <dock:LayoutAnchorablePaneGroup Orientation="Horizontal">
-                            <dock:LayoutAnchorablePane>
+                    <dock:LayoutAnchorablePaneGroup Orientation="Horizontal">
+                        <dock:LayoutAnchorablePaneGroup Orientation="Vertical">
+                            <dock:LayoutAnchorablePane DockHeight="3*">
                                 <dock:LayoutAnchorable Title="GRF" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
                                     <ContentControl Content="{Binding grf}"/>
                                 </dock:LayoutAnchorable>
                             </dock:LayoutAnchorablePane>
-                            <dock:LayoutAnchorablePaneGroup Orientation="Vertical">
+                            <dock:LayoutAnchorablePane>
+                                <dock:LayoutAnchorable Title="Usuarios" CanClose="False" CanFloat="True" 
+                                                   CanHide="True" CanAutoHide="False">
+                                    <userControls:PacientesUserControlAnalisis Pacientes="{Binding Pacientes}"/>
+                                </dock:LayoutAnchorable>
+                                <dock:LayoutAnchorable Title="Timeline" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                    <ContentControl Content="{Binding timeLine}"/>
+                                </dock:LayoutAnchorable>
+                            </dock:LayoutAnchorablePane>
+                        </dock:LayoutAnchorablePaneGroup>
+                        <dock:LayoutAnchorablePaneGroup Orientation="Vertical">
+                            <dock:LayoutAnchorablePaneGroup Orientation="Horizontal">
                                 <dock:LayoutAnchorablePane>
-                                    <dock:LayoutAnchorable Title="Butterfly" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
-                                        <ContentControl Content="{Binding grafoMariposa}"/>
-                                    </dock:LayoutAnchorable>
-                                    <dock:LayoutAnchorable Title="Pressure map" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
-                                        <ContentControl Content="{Binding heatmap}"/>
-                                    </dock:LayoutAnchorable>
                                     <dock:LayoutAnchorable Title="Cam1" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
                                         <ContentControl Content="{Binding camaraViewport1}"/>
                                     </dock:LayoutAnchorable>
+                                </dock:LayoutAnchorablePane>
+                                <dock:LayoutAnchorablePane>
                                     <dock:LayoutAnchorable Title="Cam2" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
                                         <ContentControl Content="{Binding camaraViewport2}"/>
                                     </dock:LayoutAnchorable>
                                 </dock:LayoutAnchorablePane>
                             </dock:LayoutAnchorablePaneGroup>
+                            <dock:LayoutAnchorablePane>
+                                <dock:LayoutAnchorable Title="Butterfly" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                    <ContentControl Content="{Binding grafoMariposa}"/>
+                                </dock:LayoutAnchorable>
+                                <dock:LayoutAnchorable Title="Pressure map" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
+                                    <ContentControl Content="{Binding heatmap}"/>
+                                </dock:LayoutAnchorable>
+                            </dock:LayoutAnchorablePane>
                         </dock:LayoutAnchorablePaneGroup>
-                        <dock:LayoutAnchorablePane DockHeight="0.25*">
-                            <dock:LayoutAnchorable Title="Usuarios" CanClose="False" CanFloat="True" 
-                                                   CanHide="True" CanAutoHide="False">
-                                <userControls:PacientesUserControlAnalisis Pacientes="{Binding Pacientes}"/>
-                            </dock:LayoutAnchorable>
-                            <dock:LayoutAnchorable Title="Timeline" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
-                                <ContentControl Content="{Binding timeLine}"/>
-                            </dock:LayoutAnchorable>
-                        </dock:LayoutAnchorablePane>
                     </dock:LayoutAnchorablePaneGroup>
                 </dock:LayoutPanel>
             </dock:LayoutRoot>
