@@ -33,7 +33,7 @@
                     Content="CLEAR" Click="ClearGraphButton_Click" />
             <Button x:Name="ClearGraphButton_Copy" 
                 Background="AliceBlue"
-                Content="Report" Click="ClearGraphButton_Copy_Click" />
+                Content="Report" />
         </StackPanel>
         <StackPanel Grid.Column="1" 
                     VerticalAlignment="Center"

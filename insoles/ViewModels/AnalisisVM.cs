@@ -25,6 +25,7 @@ namespace insoles.ViewModel
         private IFileExtractorService fileExtractor;
         private IButterflyService butterfly;
         private IPressureMapService pressureMap;
+        private IInformesGeneratorService informesGeneratorService;
         public ObtenerPacientesCommand obtenerPacientesCommand { get; set; }
         public CrearPacienteCommand crearPacienteCommand { get; set; }
         public TimelinePlayCommand timelinePlayCommand { get; set; }
@@ -58,6 +59,7 @@ namespace insoles.ViewModel
                 plantilla.CalculateSensorPositionsLeft(), plantilla.CalculateSensorPositionsRight());
             grafoMariposa = new GrafoMariposa();
             heatmap = new Heatmap(state);
+            informesGeneratorService = new InformesGeneratorService(grf, grafoMariposa, heatmap);
             camaraViewport1 = new CamaraReplay();
             camaraViewport2 = new CamaraReplay();
             databaseBridge = ((MainWindow)Application.Current.MainWindow).databaseBridge;

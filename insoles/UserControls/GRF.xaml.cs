@@ -68,7 +68,7 @@ namespace insoles.UserControls
         List<double> XPoints = new List<double>();
 
         private Units _selectedUnits;
-        private WpfPlot rangePlot;
+        public WpfPlot rangePlot;
         private VLine rangeVlabel;
         private List<VLine> listOfVlabels = new List<VLine>();
         private ScatterPlot leftInsolePlot;
@@ -500,7 +500,8 @@ namespace insoles.UserControls
         {
             
         }
-
+        // Movido a InformesGeneratorService
+        /*
         private void ClearGraphButton_Copy_Click(object sender, RoutedEventArgs e)
         {
             rangePlot.Plot.SaveFig("range.png");
@@ -545,5 +546,6 @@ namespace insoles.UserControls
 
 
         }
+        */
     }
 }
