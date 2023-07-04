@@ -335,7 +335,8 @@ namespace insoles.UserControls
 
             timeLine = plot.Plot.AddVerticalLine(0, color: System.Drawing.Color.DeepSkyBlue);
 
-            plot.Render();
+            Application.Current.Dispatcher.Invoke(new Action(() => plot.Render()));
+            
         }
 
         // Este método es el que añade las barras verticales

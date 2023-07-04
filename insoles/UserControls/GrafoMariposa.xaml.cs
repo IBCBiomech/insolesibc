@@ -70,7 +70,7 @@ namespace insoles.UserControls
             plot.Plot.AddText("L", xMin + (xMax - xMin) * 0.2, yMin + (yMax - yMin) * 0.25, size:50, color:Color.DarkGray);
             plot.Plot.AddText("R", xMin + (xMax - xMin) * 0.75, yMin + (yMax - yMin) * 0.25, size:50, color: Color.DarkGray);
         }
-        public Task DrawData(FramePressures[] data)
+        public async Task DrawData(FramePressures[] data)
         {
             List<double> x = new List<double>();
             List<double> y = new List<double>();
@@ -82,7 +82,7 @@ namespace insoles.UserControls
                 index++;
                 if(index == data.Length)
                 {
-                    return Task.CompletedTask;
+                    return;
                 }
             }
             FramePressures firstFrame = data[index];
@@ -101,10 +101,9 @@ namespace insoles.UserControls
                     colors.Add(colormap.GetColor(frame.totalPressure / FramePressures.maxPressure));
                 }
             }
-            DrawData(x, y, colors);
-            return Task.CompletedTask;
+            await DrawData(x, y, colors);
         }
-        private void DrawData(List<double> x_list, List<double> y_list, List<Color> colors)
+        private async Task DrawData(List<double> x_list, List<double> y_list, List<Color> colors)
         {
             int calculateAlpha(int i, int length, int min = 128)
             {
@@ -134,7 +133,10 @@ namespace insoles.UserControls
                 plot.Plot.AddScatterLines(new double[] { x[i], x[i + 1] }, new double[] { y[i], y[i + 1] },
                     color);
             }
-            plot.Refresh();
+            await Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+            {
+                plot.Refresh();
+            }));
         }
     }
 }

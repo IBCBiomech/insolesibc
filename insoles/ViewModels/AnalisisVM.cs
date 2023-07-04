@@ -83,39 +83,42 @@ namespace insoles.ViewModel
                 {
                     if(state.test != null)
                     {
-                        GraphData data = await fileExtractor.ExtractCSV(state.test.csv);
-                        await Application.Current.Dispatcher.BeginInvoke(() => timeLine.ChangeLimits(data.maxTime));
-                        FramePressures[] frames;
-                        List<Tuple<double, double>> cps_left;
-                        List<Tuple<double, double>> cps_right;
-                        await butterfly.Calculate(data, out frames, out cps_left, out cps_right);
-                        await grafoMariposa.DrawData(frames);
+                        await Task.Run(async () =>
+                        {
+                            GraphData data = await fileExtractor.ExtractCSV(state.test.csv);
+                            await Application.Current.Dispatcher.BeginInvoke(() => timeLine.ChangeLimits(data.maxTime));
+                            FramePressures[] frames;
+                            List<Tuple<double, double>> cps_left;
+                            List<Tuple<double, double>> cps_right;
+                            await butterfly.Calculate(data, out frames, out cps_left, out cps_right);
+                            await grafoMariposa.DrawData(frames);
 
-                        if(state.test.video1 != null)
-                        {
-                            await Application.Current.Dispatcher.BeginInvoke(() =>
-                                camaraViewport1.videoPath = state.test.video1);
-                        }
-                        else
-                        {
-                            camaraViewport1.video = null;
-                        }
-                        if(state.test.video2 != null)
-                        {
-                            await Application.Current.Dispatcher.BeginInvoke(() =>
-                                camaraViewport2.videoPath = state.test.video2);
-                        }
-                        else
-                        {
-                            camaraViewport2.video = null;
-                        }
-                        await grf.Update(data);
-                        await heatmap.UpdateLimits(data);
-                        await heatmap.CalculateCenters(cps_left, cps_right);
-                        var pressureMaps = await pressureMap.CalculateMetrics(data);
-                        await Task.Run(() => heatmap.pressure_maps_metrics = pressureMaps);
-                        var pressureMapsLive = await pressureMap.CalculateLive(data);
-                        await Task.Run(() => heatmap.pressure_maps_live = pressureMapsLive);
+                            if (state.test.video1 != null)
+                            {
+                                await Application.Current.Dispatcher.BeginInvoke(() =>
+                                    camaraViewport1.videoPath = state.test.video1);
+                            }
+                            else
+                            {
+                                camaraViewport1.video = null;
+                            }
+                            if (state.test.video2 != null)
+                            {
+                                await Application.Current.Dispatcher.BeginInvoke(() =>
+                                    camaraViewport2.videoPath = state.test.video2);
+                            }
+                            else
+                            {
+                                camaraViewport2.video = null;
+                            }
+                            await grf.Update(data);
+                            await heatmap.UpdateLimits(data);
+                            await heatmap.CalculateCenters(cps_left, cps_right);
+                            var pressureMaps = await pressureMap.CalculateMetrics(data);
+                            await Task.Run(() => heatmap.pressure_maps_metrics = pressureMaps);
+                            var pressureMapsLive = await pressureMap.CalculateLive(data);
+                            await Task.Run(() => heatmap.pressure_maps_live = pressureMapsLive);
+                        });
                     }         
                 }
             };

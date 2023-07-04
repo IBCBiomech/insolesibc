@@ -237,7 +237,7 @@ namespace insoles.Services
         }
         public async Task<Dictionary<UserControls.Metric, Matrix<float>>> CalculateMetrics(GraphData graphData)
         {
-            Matrix<float> CalculateOne(GraphData graphData, ActionRef<GraphData, DataInsole, DataInsole> func, UserControls.Metric metric)
+            Task<Matrix<float>> CalculateOne(GraphData graphData, ActionRef<GraphData, DataInsole, DataInsole> func, UserControls.Metric metric)
             {
                 double reduceFunc(List<double> pressures)
                 {
@@ -261,14 +261,14 @@ namespace insoles.Services
                 await Task.Delay(1000);
             }
             Dictionary<UserControls.Metric, Matrix<float>> pressure_maps = new();
-            pressure_maps[UserControls.Metric.Avg] = CalculateOne(graphData, average, UserControls.Metric.Avg);
-            pressure_maps[UserControls.Metric.Max] = CalculateOne(graphData, max, UserControls.Metric.Max);
-            pressure_maps[UserControls.Metric.Min] = CalculateOne(graphData, min, UserControls.Metric.Min);
+            pressure_maps[UserControls.Metric.Avg] = await CalculateOne(graphData, average, UserControls.Metric.Avg);
+            pressure_maps[UserControls.Metric.Max] = await CalculateOne(graphData, max, UserControls.Metric.Max);
+            pressure_maps[UserControls.Metric.Min] = await CalculateOne(graphData, min, UserControls.Metric.Min);
             return pressure_maps;
         }
         public async Task<List<Matrix<float>>> CalculateLive(GraphData graphData)
         {
-            Matrix<float> CalculateOne(DataInsole leftInsole, DataInsole rightInsole)
+            Task<Matrix<float>> CalculateOne(DataInsole leftInsole, DataInsole rightInsole)
             {
                 double reduceFunc(List<double> pressures)
                 {
@@ -306,11 +306,11 @@ namespace insoles.Services
                     left[sensor] /= Math.Min(state.framesTaken, graphData.length - i);
                     right[sensor] /= Math.Min(state.framesTaken, graphData.length - i);
                 }
-                pressureMapsLive.Add(CalculateOne(left, right));
+                pressureMapsLive.Add(CalculateOne(left, right).Result);
             }
             return pressureMapsLive;
         }
-        private Matrix<float> CalculateFromPoint<T>(Matrix<float> sensor_map, ICodesService codes,
+        private async Task<Matrix<float>> CalculateFromPoint<T>(Matrix<float> sensor_map, ICodesService codes,
             Dictionary<T, double> left, Dictionary<T, double> right,
             Dictionary<T, Matrix<float>> inverse_distances,
             Matrix<float> inverse_distances_background) where T : Enum
