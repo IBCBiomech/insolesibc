@@ -74,6 +74,8 @@ namespace insoles.Commands
                     return;
                 }
                 test.csv = txtFiles[0];
+                FileInfo csvInfo = new FileInfo(txtFiles[0]);
+                test.Date = csvInfo.LastWriteTime;
                 if (aviFiles.Count >= 1)
                     test.video1 = aviFiles[0];
                 if(aviFiles.Count >= 2)
