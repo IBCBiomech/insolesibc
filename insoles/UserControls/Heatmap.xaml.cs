@@ -481,16 +481,8 @@ namespace insoles.UserControls
             return new CustomColormap(new Func<double, Color>(function),
                 colormapBase.Name + "Extended");
         }
-        public async Task SaveFigs()
+        public Task SaveFigs()
         {
-            FormsPlot plotTest = new();
-
-            // Customize the plot by adding data, setting labels, etc.
-            plotTest.Plot.AddSignal(new double[] { 1, 2, 3, 4, 3, 2, 1 });
-
-            // Save the plot to a file without displaying it
-            plotTest.Plot.SaveFig("figure.png");
-
             ScottPlot.Plottable.Heatmap heatmap = null;
             Colorbar colorbar = null;
 
@@ -502,6 +494,8 @@ namespace insoles.UserControls
             };
 
             FormsPlot plot = new();
+            plot.Height = 480;
+            plot.Width = 640;
             plot.Plot.SetInnerViewLimits(xMin, xMax, yMin, yMax);
             plot.Plot.SetOuterViewLimits(yMin: 0);
 
@@ -517,20 +511,23 @@ namespace insoles.UserControls
             R = plot.Plot.AddText("R", pressure_maps_metrics[Metric.Avg].ColumnCount * 1.05,
                 pressure_maps_metrics[Metric.Avg].RowCount * 0.25, size: 50, color: Color.DarkGray);
             DrawData(pressure_maps_metrics[Metric.Avg], plot.Plot, ref heatmap, ref colorbar);
+            plot.Plot.SetAxisLimits(xMin, xMax * 1.5, yMin, yMax);
             plot.Refresh();
             plot.Render();
-            await Task.Delay(1000);
             plot.Plot.SaveFig("heatmap_avg.png");  
             DrawData(pressure_maps_metrics[Metric.Max], plot.Plot, ref heatmap, ref colorbar);
+            plot.Plot.SetAxisLimits(xMin, xMax * 1.5, yMin, yMax);
             plot.Refresh();
             plot.Render();
-            await Task.Delay(1000);
             plot.Plot.SaveFig("heatmap_max.png");
             DrawData(pressure_maps_metrics[Metric.Min], plot.Plot, ref heatmap, ref colorbar);
+            plot.Plot.SetAxisLimits(xMin, xMax * 1.5, yMin, yMax);
             plot.Refresh();
             plot.Render();
-            await Task.Delay(1000);
             plot.Plot.SaveFig("heatmap_min.png");
+            plot.Dispose();
+            hiddenForm.Close();
+            return Task.CompletedTask;
         }
         public event PropertyChangedEventHandler? PropertyChanged;
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
