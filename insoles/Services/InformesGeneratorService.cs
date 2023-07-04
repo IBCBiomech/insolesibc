@@ -21,10 +21,14 @@ namespace insoles.Services
             this.grafoMariposa = grafoMariposa;
             this.heatmap = heatmap;
         }
-        public void GenerarInforme()
+        public async void GenerarInforme()
         {
             grf.rangePlot.Plot.SaveFig("range.png");
             grf.plot.Plot.SaveFig("GRF.png");
+
+            grafoMariposa.plot.Plot.SaveFig("butterfly.png");
+
+            await heatmap.SaveFigs();
 
             // Creating a new document.
             WordDocument document = new WordDocument();

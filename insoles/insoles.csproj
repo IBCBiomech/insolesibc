@@ -85,6 +85,7 @@
     <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.7.0.20230115" />
     <PackageReference Include="OpenCvSharp4.WpfExtensions" Version="4.7.0.20230115" />
     <PackageReference Include="ScottPlot" Version="4.1.64" />
+    <PackageReference Include="ScottPlot.WinForms" Version="4.1.64" />
     <PackageReference Include="ScottPlot.WPF" Version="4.1.64" />
     <PackageReference Include="Syncfusion.DocIO.Wpf" Version="22.1.36" />
     <PackageReference Include="Syncfusion.Licensing" Version="22.1.36" />

@@ -4,6 +4,7 @@ using insoles.States;
 using insoles.Utilities;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.Statistics;
+using ScottPlot;
 using ScottPlot.Drawing;
 using ScottPlot.Plottable;
 using System;
@@ -15,7 +16,9 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Markup;
 
 namespace insoles.UserControls
@@ -28,7 +31,7 @@ namespace insoles.UserControls
     {
         public Metric metric { get; set; }
     }
-    public partial class Heatmap : UserControl, INotifyPropertyChanged
+    public partial class Heatmap : System.Windows.Controls.UserControl, INotifyPropertyChanged
     {
         const int BACKGROUND = -1;
 
@@ -41,6 +44,11 @@ namespace insoles.UserControls
         private double maxTime;
 
         private int colorbarMax;
+
+        double xMin;
+        double xMax;
+        double yMin;
+        double yMax;
 
         private int avg_ = int.MinValue;
         private int max_ = int.MinValue;
@@ -92,8 +100,8 @@ namespace insoles.UserControls
                 _selectedMetric = value;
                 if(pressure_maps_metrics != null && !animate) 
                 {
-                    DrawData(pressure_maps_metrics[selectedMetric]);
-                    DrawCenters(centersXs, centersYs);
+                    DrawDataWPF(pressure_maps_metrics[selectedMetric], plot);
+                    DrawCenters(centersXs, centersYs, plot);
                 }
                 NotifyPropertyChanged();
             }
@@ -136,12 +144,12 @@ namespace insoles.UserControls
                 if (value)
                 {
                     if (graph_loaded)
-                        DrawData(pressure_maps_live[Math.Min(frame, pressure_maps_live.Count - 1)]);
+                        DrawDataWPF(pressure_maps_live[Math.Min(frame, pressure_maps_live.Count - 1)], plot);
                 }
                 else
                 {
                     if (graph_loaded)
-                        DrawData(pressure_maps_metrics[selectedMetric]);
+                        DrawDataWPF(pressure_maps_metrics[selectedMetric], plot);
                 }         
             }
         }
@@ -172,7 +180,7 @@ namespace insoles.UserControls
                     _frame = value;
                     if(animate && graph_loaded)
                     {
-                        DrawData(pressure_maps_live[Math.Min(value, pressure_maps_live.Count - 1)]);
+                        DrawDataWPF(pressure_maps_live[Math.Min(value, pressure_maps_live.Count - 1)], plot);
                     }
                 }
             }
@@ -199,8 +207,8 @@ namespace insoles.UserControls
                     SetAxisLimits(pressure_maps_metrics[Metric.Avg]);
                 if (pressure_maps_metrics != null && !animate)
                 {
-                    DrawData(pressure_maps_metrics[selectedMetric]);
-                    DrawCenters(centersXs, centersYs);
+                    DrawDataWPF(pressure_maps_metrics[selectedMetric], plot);
+                    DrawCenters(centersXs, centersYs, plot);
                 }
                 NotifyPropertyChanged();
                 NotifyPropertyChanged(nameof(graph_loaded));
@@ -259,10 +267,10 @@ namespace insoles.UserControls
         }
         private void SetAxisLimits(Matrix<float> matrix)
         {
-            double xMin = matrix.ColumnCount * 0.15;
-            double xMax = matrix.ColumnCount * 0.75;
-            double yMin = 0;
-            double yMax = matrix.RowCount * 0.75;
+            xMin = matrix.ColumnCount * 0.15;
+            xMax = matrix.ColumnCount * 0.75;
+            yMin = 0;
+            yMax = matrix.RowCount * 0.75;
             plot.Plot.SetInnerViewLimits(xMin, xMax, yMin, yMax);
             plot.Plot.SetOuterViewLimits(yMin: 0);
 
@@ -278,7 +286,13 @@ namespace insoles.UserControls
             pressure_maps_metrics = null;
             pressure_maps_live = null;
         }
-        public void DrawData(Matrix<float> data)
+        private void DrawDataWPF(Matrix<float> data, WpfPlot plot) 
+        {
+            DrawData(data, plot.Plot, ref heatmap, ref colorbar);
+            Dispatcher.Invoke(() => plot.Refresh());
+        }
+        public void DrawData(Matrix<float> data, Plot plot,
+            ref ScottPlot.Plottable.Heatmap heatmap, ref Colorbar colorbar)
         {
             Matrix<double> dataDouble = data.Map(Convert.ToDouble);
             dataDouble = dataDouble.Transpose();
@@ -288,26 +302,27 @@ namespace insoles.UserControls
             avg = (int)filtered.Average();
             max = (int)filtered.Maximum();
             min = (int)filtered.Minimum();
-            Dispatcher.Invoke(() => Draw(dataNull));
+            Draw(dataNull, plot, ref heatmap, ref colorbar);
         }
-        private void Draw(double?[,] data)
+        private void Draw(double?[,] data, Plot plot, 
+            ref ScottPlot.Plottable.Heatmap heatmap, ref Colorbar colorbar)
         {
             if (heatmap != null)
             {
-                plot.Plot.Clear(heatmap.GetType());
+                plot.Clear(heatmap.GetType());
             }
             if (colorbar != null)
             {
-                plot.Plot.Clear(colorbar.GetType());
+                plot.Clear(colorbar.GetType());
             }
             IColormap colormap = extendColormap(Colormap.Jet, Color.LightGray, (color, extended, ratio) => extended, extendSize: 1, totalSize: 256);
-            heatmap = plot.Plot.AddHeatmap(data, colormap: new Colormap(colormap));
+            heatmap = plot.AddHeatmap(data, colormap: new Colormap(colormap));
             heatmap.Update(data, min: 0, max: colorbarMax);
             heatmap.Smooth = true;
-            colorbar = plot.Plot.AddColorbar(heatmap);
-            plot.Plot.Margins(0, 0);
-            plot.Plot.MoveFirst(heatmap);
-            plot.Refresh();
+            colorbar = plot.AddColorbar(heatmap);
+            plot.Margins(0, 0);
+            plot.MoveFirst(heatmap);
+            plot.SetAxisLimits(xMin, xMax, yMin, yMax);
         }
         #region CPS
         public Task CalculateCenters(List<Tuple<double, double>> left, List<Tuple<double, double>> right)
@@ -434,7 +449,7 @@ namespace insoles.UserControls
             // Al hacer la division entera corta por abajo. Para que quede la media de los puntos le sumo la mitad del rango
         }
         #endregion CPs
-        public void DrawCenters(double[] xs, double[] ys)
+        public void DrawCenters(double[] xs, double[] ys, ScottPlot.WpfPlot plot)
         {
             if (centers != null)
             {
@@ -465,6 +480,57 @@ namespace insoles.UserControls
             }
             return new CustomColormap(new Func<double, Color>(function),
                 colormapBase.Name + "Extended");
+        }
+        public async Task SaveFigs()
+        {
+            FormsPlot plotTest = new();
+
+            // Customize the plot by adding data, setting labels, etc.
+            plotTest.Plot.AddSignal(new double[] { 1, 2, 3, 4, 3, 2, 1 });
+
+            // Save the plot to a file without displaying it
+            plotTest.Plot.SaveFig("figure.png");
+
+            ScottPlot.Plottable.Heatmap heatmap = null;
+            Colorbar colorbar = null;
+
+            Form hiddenForm = new Form
+            {
+                WindowState = FormWindowState.Minimized,
+                ShowInTaskbar = false,
+                Opacity = 0
+            };
+
+            FormsPlot plot = new();
+            plot.Plot.SetInnerViewLimits(xMin, xMax, yMin, yMax);
+            plot.Plot.SetOuterViewLimits(yMin: 0);
+
+            // Add the plot control to the hidden form
+            hiddenForm.Controls.Add(plot);
+
+            hiddenForm.Show();
+
+            plot.Plot.SetAxisLimits(xMin, xMax, yMin, yMax);
+            plot.Plot.AxisScaleLock(true);
+            L = plot.Plot.AddText("L", pressure_maps_metrics[Metric.Avg].ColumnCount * 0.2, 
+                pressure_maps_metrics[Metric.Avg].RowCount * 0.25, size: 50, color: Color.DarkGray);
+            R = plot.Plot.AddText("R", pressure_maps_metrics[Metric.Avg].ColumnCount * 1.05,
+                pressure_maps_metrics[Metric.Avg].RowCount * 0.25, size: 50, color: Color.DarkGray);
+            DrawData(pressure_maps_metrics[Metric.Avg], plot.Plot, ref heatmap, ref colorbar);
+            plot.Refresh();
+            plot.Render();
+            await Task.Delay(1000);
+            plot.Plot.SaveFig("heatmap_avg.png");  
+            DrawData(pressure_maps_metrics[Metric.Max], plot.Plot, ref heatmap, ref colorbar);
+            plot.Refresh();
+            plot.Render();
+            await Task.Delay(1000);
+            plot.Plot.SaveFig("heatmap_max.png");
+            DrawData(pressure_maps_metrics[Metric.Min], plot.Plot, ref heatmap, ref colorbar);
+            plot.Refresh();
+            plot.Render();
+            await Task.Delay(1000);
+            plot.Plot.SaveFig("heatmap_min.png");
         }
         public event PropertyChangedEventHandler? PropertyChanged;
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
