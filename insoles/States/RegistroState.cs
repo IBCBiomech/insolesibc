@@ -13,7 +13,7 @@ namespace insoles.States
         public bool paused { get; set; } = false;
         public bool capturing { get; set; } = false;
         public bool recording { get; set; } = false;
-
+        public bool calibrating { get; set; } = false;
         public Paciente? selectedPaciente
         {
             get

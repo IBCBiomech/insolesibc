@@ -53,6 +53,8 @@
                             <Image Source="../Images/record-icon.png" Style="{StaticResource Icon_Style}"/>
                         </Button>
                     </StackPanel>
+                    <Button DockPanel.Dock="Right" Content="Calibrar" HorizontalAlignment="Center"
+                            Command="{Binding calibrarCommand}"/>
                     <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <TextBlock Text="FC"/>
                         <CheckBox IsChecked="{Binding FC}"/>

@@ -39,6 +39,7 @@ namespace insoles.ViewModel
         public PauseCommand pauseCommand { get; set; }
         public ObtenerPacientesCommand obtenerPacientesCommand { get; set; }
         public CrearPacienteCommand crearPacienteCommand { get; set; }
+        public CalibrarCommand calibrarCommand { get; set; }
         public ObservableCollection<CameraModel> Cameras { get; set; }
         public ObservableCollection<InsoleModel> Insoles { get; set; }
         private BitmapSource currentFrameTop;
@@ -92,6 +93,9 @@ namespace insoles.ViewModel
             get { return Enum.GetValues(typeof(UserControls.Units)).Cast<UserControls.Units>(); }
         }
         public bool FC { get; set; }
+        private List<float> fcs = new List<float>();
+        private float? fc = null;
+        private const int FRAMES_TO_CALIBRATE = 50;
         private const float DEFAULT_WEIGHT = 70;
         private string _total;
         public string total { get { return _total; } set { _total = value; OnPropertyChanged(); } }
@@ -107,7 +111,7 @@ namespace insoles.ViewModel
             //Init services
 
            /* apiService = new FakeApiService(state); *///Fake API
-            apiService = new ApiService(state); // Real API
+            apiService = new FakeApiService(state); // Real API
             cameraService = new CameraService();
             liveCalculationsService = new LiveCalculationsService(Insoles, apiService);
             saveService = new SaveService(state);
@@ -123,6 +127,7 @@ namespace insoles.ViewModel
             stopCommand = new StopCommand(state, apiService, saveService, databaseBridge);
             crearPacienteCommand = new CrearPacienteCommand(databaseBridge);
             obtenerPacientesCommand = new ObtenerPacientesCommand(databaseBridge);
+            calibrarCommand = new CalibrarCommand(state);
             //Init listeners
             apiService.ScanReceived += (List<InsoleScan> insolesReceived) =>
             {
@@ -192,24 +197,41 @@ namespace insoles.ViewModel
                     float[] metricLeft, float[] metricRight
                 ) =>
             {
-                if (FC)
+                if (state.calibrating)
                 {
                     float G = 9.80665f;
                     float FNominal = state.selectedPaciente.Peso.GetValueOrDefault(DEFAULT_WEIGHT) * G;
                     for (int i = 0; i < metricLeft.Length; i++)
                     {
                         float FRegistrada = metricLeft[i] + metricRight[i];
-                        if (FRegistrada > 0) {
+                        if (FRegistrada > 0)
+                        {
                             float fc = FNominal / FRegistrada;
-                            metricLeft[i] *= fc;
-                            metricRight[i] *= fc;
+                            fcs.Add(fc);
+                        }
+                    }
+                    if(fcs.Count >= FRAMES_TO_CALIBRATE)
+                    {
+                        fc = fcs.Sum() / fcs.Count;
+                        fcs = new();
+                        state.calibrating = false;
+                    }
+                }
+                if (FC)
+                {
+                    if (fc != null)
+                    {
+                        for (int i = 0; i < metricLeft.Length; i++)
+                        {
+                            metricLeft[i] *= fc.Value;
+                            metricRight[i] *= fc.Value;
                             foreach (Sensor sensor in left[i].Keys)
                             {
-                                left[i][sensor] *= fc;
+                                left[i][sensor] *= fc.Value;
                             }
                             foreach (Sensor sensor in right[i].Keys)
                             {
-                                right[i][sensor] *= fc;
+                                right[i][sensor] *= fc.Value;
                             }
                         }
                     }
