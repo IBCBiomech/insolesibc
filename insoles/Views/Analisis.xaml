@@ -13,7 +13,9 @@
         <syncfusion:DockingManager>
             <ContentControl Content="{Binding grafoMariposa}" 
                             syncfusion:DockingManager.Header="Butterfly"
+                            syncfusion:DockingManager.SideInDockedMode="Right"
                             syncfusion:DockingManager.TargetNameInDockedMode="Butterfly"
+                            syncfusion:DockingManager.DesiredWidthInDockedMode="650"
                             x:Name="Butterfly"/>
             <ContentControl Content="{Binding heatmap}"
                             syncfusion:DockingManager.Header="Pressure Map"
@@ -22,16 +24,18 @@
             <userControls:PacientesUserControlAnalisis Pacientes="{Binding Pacientes}"
                                                        syncfusion:DockingManager.Header="Usuarios"
                                                        syncfusion:DockingManager.SideInDockedMode="Left"
-                                                       syncfusion:DockingManager.TargetNameInDockedMode="Butterfly"
+                                                       syncfusion:DockingManager.DesiredWidthInDockedMode="650"
                                                        x:Name="Usuarios"/>
             <ContentControl Content="{Binding timeLine}"
                             syncfusion:DockingManager.Header="Timeline"
                             syncfusion:DockingManager.SideInDockedMode="Tabbed"
-                            syncfusion:DockingManager.TargetNameInDockedMode="Usuarios"/>
+                            syncfusion:DockingManager.TargetNameInDockedMode="Usuarios"
+                            />
             <ContentControl Content="{Binding grf}"
                             syncfusion:DockingManager.Header="GRF"
                             syncfusion:DockingManager.SideInDockedMode="Top"
                             syncfusion:DockingManager.TargetNameInDockedMode="Usuarios"
+                            syncfusion:DockingManager.DesiredHeightInDockedMode="300"
                             x:Name="GRF"/>
             <ContentControl Content="{Binding camaraViewport1}"
                             syncfusion:DockingManager.Header="Cam1"

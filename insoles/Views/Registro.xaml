@@ -30,8 +30,10 @@
     </UserControl.Resources>
 
     <Grid Background="White">
-        <syncfusion:DockingManager MaximizeButtonEnabled="True">
-            <DockPanel syncfusion:DockingManager.Header="GRF" x:Name="GRF">
+        <syncfusion:DockingManager>
+            <DockPanel syncfusion:DockingManager.Header="GRF" x:Name="GRF"
+                       syncfusion:DockingManager.DesiredWidthInDockedMode="800"
+                       syncfusion:DockingManager.DesiredHeightInDockedMode="300">
                 <DockPanel DockPanel.Dock="Top">
                     <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Grid.Row="0">
                         <!-- Capture -->
@@ -75,7 +77,7 @@
                 Pacientes="{Binding Pacientes}"/>
             <Image syncfusion:DockingManager.Header="Cam1"
                    syncfusion:DockingManager.SideInDockedMode="Right"
-                   syncfusion:DockingManager.TargetNameInDockedMode="GRF"
+                   syncfusion:DockingManager.DesiredWidthInDockedMode="500"
                    x:Name="Cam1"
                 Source="{Binding CurrentFrameTop}" Stretch="Uniform"/>
             <Image syncfusion:DockingManager.Header="Cam2"
