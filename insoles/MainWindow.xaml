@@ -41,8 +41,21 @@
                 <Border Background="#f2f2f2"
                          />
 
-                <StackPanel Height="400" Margin="0,150,0,150">
+                <StackPanel Height="500" Margin="0,150,0,150">
 
+                    <Menu:Btn Style="{StaticResource BtnStyle}"
+                              Command="{Binding ResetLayoutCommand}"
+                              IsChecked="True" Width="72"
+                              HorizontalAlignment="Left">
+
+                        <Grid Margin="0,0,76,0">
+
+                            <Image Source="Images/reload-sync-icon.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                        </Grid>
+
+                    </Menu:Btn>
                     <!--// Home //-->
 
                     <Menu:Btn Style="{StaticResource BtnStyle}"

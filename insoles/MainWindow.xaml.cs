@@ -25,6 +25,7 @@ namespace insoles
         public DatabaseBridge databaseBridge { get; set; }
         public AnalisisState analisisState { get; set; }
         public IInformesGeneratorService informesGeneratorService { get; set; }
+        public event EventHandler viewChanged;
         public MainWindow()
         {
             InitializeComponent();
@@ -33,6 +34,10 @@ namespace insoles
         private void CloseApp_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+        public void triggerViewChanged()
+        {
+            viewChanged?.Invoke(this, EventArgs.Empty);
         }
         /// <summary>
         /// Atención: este método hay que comentarlo si no, no funciona el Dock

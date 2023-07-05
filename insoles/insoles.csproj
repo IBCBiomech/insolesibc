@@ -40,6 +40,7 @@
     <None Remove="Images\product_page.png" />
     <None Remove="Images\record-icon.png" />
     <None Remove="Images\red-circle-icon.png" />
+    <None Remove="Images\reload-sync-icon.png" />
     <None Remove="Images\shipment_page.png" />
     <None Remove="Images\shutdown_def.png" />
     <None Remove="Images\shutdown_mo.png" />
@@ -172,6 +173,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\red-circle-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\reload-sync-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\shipment_page.png">
