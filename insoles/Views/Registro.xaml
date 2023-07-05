@@ -14,6 +14,7 @@
              xmlns:controls="clr-namespace:System.Windows.Controls;assembly=MultiSelectTreeView"
              xmlns:userControls="clr-namespace:insoles.UserControls"
              xmlns:dock="https://github.com/Dirkster99/AvalonDock"
+             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              mc:Ignorable="d">
     <UserControl.Resources>
         <converter:BooleanToCircleConverter x:Key="booleanToCircleConverter"/>
@@ -29,79 +30,59 @@
     </UserControl.Resources>
 
     <Grid Background="White">
-        <dock:DockingManager>
-            <dock:LayoutRoot>
-                <dock:LayoutPanel>
-                    <dock:LayoutAnchorablePaneGroup Orientation="Horizontal">
-                        <dock:LayoutAnchorablePaneGroup Orientation="Vertical" DockWidth="1.5*">
-                            <dock:LayoutAnchorablePane DockHeight="3*">
-                                <dock:LayoutAnchorable Title="GRF" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
-                                    <DockPanel>
-                                        <DockPanel DockPanel.Dock="Top">
-                                            <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Grid.Row="0">
-                                                <!-- Capture -->
-                                                <Button Command="{Binding captureCommand}" Style="{StaticResource BtnIconStyle}">
-                                                    <Image Source="../Images/capture-icon.png" Style="{StaticResource Icon_Style}"/>
-                                                </Button>
-                                                <!-- Pause -->
-                                                <Button Command="{Binding pauseCommand}" Style="{StaticResource BtnIconStyle}">
-                                                    <Image Source="../Images/pause-icon.png" Style="{StaticResource Icon_Style}"/>
-                                                </Button>
-                                                <!-- Stop -->
-                                                <Button Command="{Binding stopCommand}" Style="{StaticResource BtnIconStyle}">
-                                                    <Image Source="../Images/stop-icon.png" Style="{StaticResource Icon_Style}"/>
-                                                </Button>
-                                                <!-- Record -->
-                                                <Button Command="{Binding recordCommand}" Style="{StaticResource BtnIconStyle}">
-                                                    <Image Source="../Images/record-icon.png" Style="{StaticResource Icon_Style}"/>
-                                                </Button>
-                                            </StackPanel>
-                                            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                <TextBlock Text="FC"/>
-                                                <CheckBox IsChecked="{Binding FC}"/>
-                                            </StackPanel>
-                                            <ComboBox DockPanel.Dock="Right" HorizontalAlignment="Center" VerticalAlignment="Center" ItemsSource="{Binding units}"
+        <syncfusion:DockingManager MaximizeButtonEnabled="True">
+            <DockPanel syncfusion:DockingManager.Header="GRF" x:Name="GRF">
+                <DockPanel DockPanel.Dock="Top">
+                    <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Grid.Row="0">
+                        <!-- Capture -->
+                        <Button Command="{Binding captureCommand}" Style="{StaticResource BtnIconStyle}">
+                            <Image Source="../Images/capture-icon.png" Style="{StaticResource Icon_Style}"/>
+                        </Button>
+                        <!-- Pause -->
+                        <Button Command="{Binding pauseCommand}" Style="{StaticResource BtnIconStyle}">
+                            <Image Source="../Images/pause-icon.png" Style="{StaticResource Icon_Style}"/>
+                        </Button>
+                        <!-- Stop -->
+                        <Button Command="{Binding stopCommand}" Style="{StaticResource BtnIconStyle}">
+                            <Image Source="../Images/stop-icon.png" Style="{StaticResource Icon_Style}"/>
+                        </Button>
+                        <!-- Record -->
+                        <Button Command="{Binding recordCommand}" Style="{StaticResource BtnIconStyle}">
+                            <Image Source="../Images/record-icon.png" Style="{StaticResource Icon_Style}"/>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Text="FC"/>
+                        <CheckBox IsChecked="{Binding FC}"/>
+                    </StackPanel>
+                    <ComboBox DockPanel.Dock="Right" HorizontalAlignment="Center" VerticalAlignment="Center" ItemsSource="{Binding units}"
                                             SelectedItem="{Binding selectedUnits, Mode=TwoWay}" DisplayMemberPath="." />
-                                        </DockPanel>
-                                        <Grid DockPanel.Dock="Bottom">
-                                            <ContentControl  Content="{Binding Plot}"/>
-                                            <TextBlock Text="{Binding total}" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Top"/>
-                                        </Grid>
-                                    </DockPanel>
-                                </dock:LayoutAnchorable>
-                            </dock:LayoutAnchorablePane>
-                            <dock:LayoutAnchorablePane>
-                                <dock:LayoutAnchorable Title="Dispositivos" 
-                                                   
-                                                   CanMove="True"
-                                                   CanClose="False" 
-                                                   CanFloat="True"                
-                                                   CanHide="True" CanAutoHide="False">
-
-                                    <userControls:Dispositivos Insoles="{Binding Insoles}" Cameras="{Binding Cameras}"/>
-                                </dock:LayoutAnchorable>
-                                <dock:LayoutAnchorable Title="Usuarios" 
-                                                   CanMove="True"
-                                                   CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
-                                    <userControls:PacientesUserControl Pacientes="{Binding Pacientes}"/>
-                                </dock:LayoutAnchorable>
-                            </dock:LayoutAnchorablePane>
-                        </dock:LayoutAnchorablePaneGroup>
-                        <dock:LayoutAnchorablePaneGroup Orientation="Vertical">
-                            <dock:LayoutAnchorablePane>
-                                <dock:LayoutAnchorable Title="Cam1" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
-                                    <Image Source="{Binding CurrentFrameTop}" Stretch="Uniform"/>
-                                </dock:LayoutAnchorable>
-                            </dock:LayoutAnchorablePane>
-                            <dock:LayoutAnchorablePane>
-                                <dock:LayoutAnchorable Title="Cam2" CanClose="False" CanFloat="True" CanHide="True" CanAutoHide="False">
-                                    <Image Source="{Binding CurrentFrameBottom}" Stretch="Uniform"/>
-                                </dock:LayoutAnchorable>
-                            </dock:LayoutAnchorablePane>
-                        </dock:LayoutAnchorablePaneGroup>
-                    </dock:LayoutAnchorablePaneGroup>
-                </dock:LayoutPanel>
-            </dock:LayoutRoot>
-        </dock:DockingManager>
+                </DockPanel>
+                <Grid DockPanel.Dock="Bottom">
+                    <ContentControl  Content="{Binding Plot}"/>
+                    <TextBlock Text="{Binding total}" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                </Grid>
+            </DockPanel>
+            <userControls:Dispositivos syncfusion:DockingManager.Header="Dispositivos"
+                                       syncfusion:DockingManager.SideInDockedMode="Bottom"
+                                       syncfusion:DockingManager.TargetNameInDockedMode="GRF"
+                                       x:Name="Dispositivos"
+                Insoles="{Binding Insoles}" Cameras="{Binding Cameras}"/>
+            <userControls:PacientesUserControl syncfusion:DockingManager.Header="Usuarios"
+                                               syncfusion:DockingManager.SideInDockedMode="Tabbed"
+                                               syncfusion:DockingManager.TargetNameInDockedMode="Dispositivos"
+                                               x:Name="Usuarios"
+                Pacientes="{Binding Pacientes}"/>
+            <Image syncfusion:DockingManager.Header="Cam1"
+                   syncfusion:DockingManager.SideInDockedMode="Right"
+                   syncfusion:DockingManager.TargetNameInDockedMode="GRF"
+                   x:Name="Cam1"
+                Source="{Binding CurrentFrameTop}" Stretch="Uniform"/>
+            <Image syncfusion:DockingManager.Header="Cam2"
+                   syncfusion:DockingManager.SideInDockedMode="Bottom"
+                   syncfusion:DockingManager.TargetNameInDockedMode="Cam1"
+                   x:Name="Cam2"
+                Source="{Binding CurrentFrameBottom}" Stretch="Uniform"/>
+        </syncfusion:DockingManager>
     </Grid>
 </UserControl>

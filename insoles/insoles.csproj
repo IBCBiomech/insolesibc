@@ -90,6 +90,7 @@
     <PackageReference Include="Syncfusion.DocIO.Wpf" Version="22.1.36" />
     <PackageReference Include="Syncfusion.Licensing" Version="22.1.36" />
     <PackageReference Include="Syncfusion.Shared.WPF" Version="22.1.36" />
+    <PackageReference Include="Syncfusion.Tools.WPF" Version="22.1.36" />
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
     <PackageReference Include="System.IO.Ports" Version="7.0.0" />
     <PackageReference Include="System.Management" Version="7.0.1" />
