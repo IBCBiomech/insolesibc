@@ -1195,6 +1195,21 @@
           }
         }
       },
+      "ScottPlot.WinForms/4.1.64": {
+        "type": "package",
+        "dependencies": {
+          "ScottPlot": "4.1.64"
+        },
+        "compile": {
+          "lib/net6.0-windows7.0/ScottPlot.WinForms.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/ScottPlot.WinForms.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WindowsForms"
+        ]
+      },
       "ScottPlot.WPF/4.1.64": {
         "type": "package",
         "dependencies": {
@@ -1421,6 +1436,23 @@
         },
         "runtime": {
           "lib/net6.0-windows7.0/Syncfusion.Shared.WPF.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Syncfusion.Tools.WPF/22.1.36": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "22.1.36",
+          "Syncfusion.Shared.WPF": "22.1.36"
+        },
+        "compile": {
+          "lib/net6.0-windows7.0/Syncfusion.Tools.WPF.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Syncfusion.Tools.WPF.dll": {
             "related": ".xml"
           }
         }
@@ -1856,9 +1888,11 @@
           "OpenCvSharp4.runtime.win": "4.7.0.20230115",
           "ScottPlot": "4.1.64",
           "ScottPlot.WPF": "4.1.64",
+          "ScottPlot.WinForms": "4.1.64",
           "Syncfusion.DocIO.Wpf": "22.1.36",
           "Syncfusion.Licensing": "22.1.36",
           "Syncfusion.Shared.WPF": "22.1.36",
+          "Syncfusion.Tools.WPF": "22.1.36",
           "System.Drawing.Common": "7.0.0",
           "System.IO.Ports": "7.0.0",
           "System.Management": "7.0.1"
@@ -3431,6 +3465,26 @@
         "scottplot.nuspec"
       ]
     },
+    "ScottPlot.WinForms/4.1.64": {
+      "sha512": "CrSNYwBHeZaNiOcyNgDkVxTTrjEegI65c4bTY7Y1v8aGCgtAcroqp9apYSL3ZQ+GFhUOQDCKyclfTJZtDc5jPw==",
+      "type": "package",
+      "path": "scottplot.winforms/4.1.64",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "icon.ico",
+        "icon.png",
+        "lib/net461/ScottPlot.WinForms.dll",
+        "lib/net472/ScottPlot.WinForms.dll",
+        "lib/net48/ScottPlot.WinForms.dll",
+        "lib/net5.0-windows7.0/ScottPlot.WinForms.dll",
+        "lib/net6.0-windows7.0/ScottPlot.WinForms.dll",
+        "lib/netcoreapp3.1/ScottPlot.WinForms.dll",
+        "scottplot.winforms.4.1.64.nupkg.sha512",
+        "scottplot.winforms.nuspec"
+      ]
+    },
     "ScottPlot.WPF/4.1.64": {
       "sha512": "33Vw9RVzvrQKMUqj+qiC6/MLdfWi2FORk5kQJLOHHLQT0D+FaGpwwnzzhDQym6Y+b3dIY1pkMFgV8vvkeIFPSg==",
       "type": "package",
@@ -3680,6 +3734,53 @@
         "lib/net6.0-windows7.0/Syncfusion.Shared.WPF.xml",
         "syncfusion.shared.wpf.22.1.36.nupkg.sha512",
         "syncfusion.shared.wpf.nuspec",
+        "syncfusion_logo.png",
+        "tools/VisualStudioToolsManifest.xml"
+      ]
+    },
+    "Syncfusion.Tools.WPF/22.1.36": {
+      "sha512": "7/ecd4EOgRl3Owy4bQWWhh3fATqrfnwoCQtCUyX2BSPQ7TeEI+Z19VH7gQMmxu+mAjTRlST3vEZVh/PaJTaKBg==",
+      "type": "package",
+      "path": "syncfusion.tools.wpf/22.1.36",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "lib/net40/Design/Syncfusion.Design.Wpf.dll",
+        "lib/net40/Design/Syncfusion.Tools.WPF.DesignTools.dll",
+        "lib/net40/Design/Syncfusion.Tools.Wpf.Expression.Design.dll",
+        "lib/net40/Design/Syncfusion.Tools.Wpf.VisualStudio.Design.dll",
+        "lib/net40/Design/Syncfusion.Tools.Wpf.dll.Design.dll",
+        "lib/net40/Syncfusion.Tools.WPF.dll",
+        "lib/net40/Syncfusion.Tools.WPF.xml",
+        "lib/net45/Design/Syncfusion.Design.Wpf.dll",
+        "lib/net45/Design/Syncfusion.Tools.WPF.DesignTools.dll",
+        "lib/net45/Design/Syncfusion.Tools.Wpf.Expression.Design.dll",
+        "lib/net45/Design/Syncfusion.Tools.Wpf.VisualStudio.Design.dll",
+        "lib/net45/Design/Syncfusion.Tools.Wpf.dll.Design.dll",
+        "lib/net45/Syncfusion.Tools.WPF.dll",
+        "lib/net45/Syncfusion.Tools.WPF.xml",
+        "lib/net451/Design/Syncfusion.Design.Wpf.dll",
+        "lib/net451/Design/Syncfusion.Tools.WPF.DesignTools.dll",
+        "lib/net451/Design/Syncfusion.Tools.Wpf.Expression.Design.dll",
+        "lib/net451/Design/Syncfusion.Tools.Wpf.VisualStudio.Design.dll",
+        "lib/net451/Design/Syncfusion.Tools.Wpf.dll.Design.dll",
+        "lib/net451/Syncfusion.Tools.WPF.dll",
+        "lib/net451/Syncfusion.Tools.WPF.xml",
+        "lib/net46/Design/Syncfusion.Design.Wpf.dll",
+        "lib/net46/Design/Syncfusion.Tools.WPF.DesignTools.dll",
+        "lib/net46/Design/Syncfusion.Tools.Wpf.Expression.Design.dll",
+        "lib/net46/Design/Syncfusion.Tools.Wpf.VisualStudio.Design.dll",
+        "lib/net46/Design/Syncfusion.Tools.Wpf.dll.Design.dll",
+        "lib/net46/Syncfusion.Tools.WPF.dll",
+        "lib/net46/Syncfusion.Tools.WPF.xml",
+        "lib/net6.0-windows7.0/Design/Syncfusion.Tools.WPF.DesignTools.dll",
+        "lib/net6.0-windows7.0/Syncfusion.Tools.WPF.dll",
+        "lib/net6.0-windows7.0/Syncfusion.Tools.WPF.xml",
+        "syncfusion.tools.wpf.22.1.36.nupkg.sha512",
+        "syncfusion.tools.wpf.nuspec",
         "syncfusion_logo.png",
         "tools/VisualStudioToolsManifest.xml"
       ]
@@ -5026,6 +5127,7 @@
   },
   "packageFolders": {
     "C:\\Users\\Deva\\.nuget\\packages\\": {},
+    "C:\\Program Files\\DevExpress 23.1\\Components\\Offline Packages": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
     "C:\\Program Files (x86)\\Syncfusion\\Essential Studio\\WPF\\21.1.35\\ToolboxNuGetPackages": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
@@ -5040,12 +5142,14 @@
       "outputPath": "C:\\Users\\Deva\\wsibc\\insolesibc\\insoles.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
+        "C:\\Program Files\\DevExpress 23.1\\Components\\Offline Packages",
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
         "C:\\Program Files (x86)\\Syncfusion\\Essential Studio\\WPF\\21.1.35\\ToolboxNuGetPackages",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
         "C:\\Users\\Deva\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 23.1.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Syncfusion Toolbox for WPF.config"
@@ -5055,6 +5159,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\DevExpress 23.1\\Components\\System\\Components\\Packages": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
