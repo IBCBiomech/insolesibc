@@ -85,6 +85,7 @@ namespace insoles.ViewModel
                     {
                         await Task.Run(async () =>
                         {
+                            VariablesData variables = fileExtractor.ExtractVariables(state.test.csv);
                             GraphData data = await fileExtractor.ExtractCSV(state.test.csv);
                             await Application.Current.Dispatcher.BeginInvoke(() => timeLine.ChangeLimits(data.maxTime));
                             FramePressures[] frames;
@@ -111,7 +112,7 @@ namespace insoles.ViewModel
                             {
                                 camaraViewport2.video = null;
                             }
-                            await grf.Update(data);
+                            await grf.Update(data, variables);
                             await heatmap.UpdateLimits(data);
                             await heatmap.CalculateCenters(cps_left, cps_right);
                             var pressureMaps = await pressureMap.CalculateMetrics(data);

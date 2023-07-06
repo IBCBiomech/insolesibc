@@ -231,7 +231,7 @@ namespace insoles.UserControls
             xs_temp_right = xs_right_Kg_FC;
             ys_temp_right = ys_right_Kg_FC;
         }
-        public Task Update(GraphData data)
+        public Task Update(GraphData data, VariablesData variables)
         {
             float G = 9.80665f;
             float peso = state.test.Paciente.Peso.GetValueOrDefault(70);
@@ -264,9 +264,6 @@ namespace insoles.UserControls
                 DataInsole left = frameInsoles.left;
                 DataInsole right = frameInsoles.right;
 
-                float FRegistrada = left.totalPressure + right.totalPressure;
-                float fc = FNominal / FRegistrada;
-
                 xs_left_N.Add(frameInsoles.time);
                 xs_right_N.Add(frameInsoles.time);
                 ys_left_N.Add(left.totalPressure);
@@ -279,13 +276,13 @@ namespace insoles.UserControls
 
                 xs_left_N_FC.Add(frameInsoles.time);
                 xs_right_N_FC.Add(frameInsoles.time);
-                ys_left_N_FC.Add(left.totalPressure * fc);
-                ys_right_N_FC.Add(right.totalPressure * fc);
+                ys_left_N_FC.Add(left.totalPressure * variables.fc);
+                ys_right_N_FC.Add(right.totalPressure * variables.fc);
 
                 xs_left_Kg_FC.Add(frameInsoles.time);
                 xs_right_Kg_FC.Add(frameInsoles.time);
-                ys_left_Kg_FC.Add(left.totalPressure / 9.8 * fc);
-                ys_right_Kg_FC.Add(right.totalPressure / 9.8 * fc);
+                ys_left_Kg_FC.Add(left.totalPressure / 9.8 * variables.fc);
+                ys_right_Kg_FC.Add(right.totalPressure / 9.8 * variables.fc);
             }
             if (selectedUnits == Units.N)
             {

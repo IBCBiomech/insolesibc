@@ -15,5 +15,6 @@ namespace insoles.Services
         void AppendVideo(Mat frame, int index);
         void AppendCSV(List<Dictionary<Sensor, double>> left, List<Dictionary<Sensor, double>> right,
                     float[] metricLeft, float[] metricRight);
+        void AddHeaderInfo(string key, string value);
     }
 }

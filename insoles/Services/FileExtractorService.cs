@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace insoles.Services
 {
@@ -16,6 +17,15 @@ namespace insoles.Services
             using (var reader = new StreamReader(path))
             {
                 int headerLines = 5; //Hay un salto de linea al final del header
+                try
+                {
+                    string config = reader.ReadLine();
+                    Dictionary<string, string> variables = JsonConvert.DeserializeObject<Dictionary<string, string>>(config);
+                }
+                catch(JsonReaderException)
+                {
+                    headerLines--; //No habia header de variables
+                }
                 string header = "";
                 for (int _ = 0; _ < headerLines; _++)
                 {
@@ -28,6 +38,23 @@ namespace insoles.Services
                     factory.addLine(line);
                 }
                 return factory.getData();
+            }
+        }
+
+        public VariablesData ExtractVariables(string path)
+        {
+            using (var reader = new StreamReader(path))
+            {
+                try
+                {
+                    string config = reader.ReadLine();
+                    Dictionary<string, string> variables = JsonConvert.DeserializeObject<Dictionary<string, string>>(config);
+                    return new VariablesData(variables);
+                }
+                catch (JsonReaderException)
+                {
+                    return new VariablesData();
+                }
             }
         }
     }
