@@ -11,7 +11,7 @@ namespace insoles.Model
 {
     public class TestsTreeView : ModelBase
     {
-        public ICollection<TestTreeView> Tests;
+        public ICollection<TestTreeView> Tests { get; set; }
         public TestsTreeView(ICollection<Test> tests) 
         {
             Tests = new ObservableCollection<TestTreeView>();

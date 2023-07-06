@@ -10,7 +10,7 @@ namespace insoles.Model
 {
     public class TestTreeView : ModelBase
     {
-        public Test testDB;
+        public Test testDB {get;set;}    
         public TestTreeView(Test test) 
         { 
             testDB = test;

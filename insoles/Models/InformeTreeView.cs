@@ -9,7 +9,7 @@ namespace insoles.Model
 {
     public class InformeTreeView : ModelBase
     {
-        public Informe informeDB;
+        public Informe informeDB { get; set; }
         public InformeTreeView(Informe informe)
         {
             informeDB = informe;

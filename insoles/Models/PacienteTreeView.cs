@@ -10,7 +10,7 @@ namespace insoles.Model
 {
     public class PacienteTreeView : ModelBase
     {
-        public Paciente pacienteDB;
+        public Paciente pacienteDB { get; set; }
         public TestsTreeView Tests { get; set; }
         public InformesTreeView Informes { get; set; }
         public PacienteTreeView(Paciente paciente) 

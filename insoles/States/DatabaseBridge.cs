@@ -35,6 +35,7 @@ namespace insoles.States
                     {
                         Pacientes.Add(paciente);
                     }
+                    PacientesTreeView = new PacientesTreeView(pacientesDB);
                 });
             }
             catch (SqliteException ex)
