@@ -16,6 +16,7 @@ namespace insoles.States
     {
         private IDatabaseService databaseService;
         public ObservableCollection<Paciente> Pacientes { get; set; } = new ObservableCollection<Paciente>();
+        public PacientesTreeView PacientesTreeView { get; set; }
         public DatabaseBridge()
         {
             databaseService = new SQLiteDatabaseService();
