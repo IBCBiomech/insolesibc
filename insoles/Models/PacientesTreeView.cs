@@ -20,5 +20,9 @@ namespace insoles.Model
                 Pacientes.Add(new PacienteTreeView(paciente));
             }
         }
+        public PacientesTreeView()
+        {
+            Pacientes = new ObservableCollection<PacienteTreeView>();
+        }
     }
 }

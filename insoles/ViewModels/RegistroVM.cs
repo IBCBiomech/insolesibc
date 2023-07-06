@@ -71,11 +71,11 @@ namespace insoles.ViewModel
         }
         public WpfPlot Plot { get; set; }
         private GraphSumPressuresLiveModel GraphModel;
-        public ObservableCollection<Paciente> Pacientes
+        public PacientesTreeView Pacientes
         {
             get
             {
-                return databaseBridge.Pacientes;
+                return databaseBridge.PacientesTreeView;
             }
         }
         private UserControls.Units _selectedUnits;

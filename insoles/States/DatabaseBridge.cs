@@ -20,6 +20,7 @@ namespace insoles.States
         public DatabaseBridge()
         {
             databaseService = new SQLiteDatabaseService();
+            PacientesTreeView = new();
         }
         public async Task LoadPacientes()
         {
