@@ -14,12 +14,14 @@
         "outputPath": "C:\\Users\\Deva\\wsibc\\insolesibc\\insoles.Tests\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
+          "C:\\Program Files\\DevExpress 23.1\\Components\\Offline Packages",
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
           "C:\\Program Files (x86)\\Syncfusion\\Essential Studio\\WPF\\21.1.35\\ToolboxNuGetPackages",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
           "C:\\Users\\Deva\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 23.1.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Syncfusion Toolbox for WPF.config"
@@ -29,6 +31,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\DevExpress 23.1\\Components\\System\\Components\\Packages": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -114,12 +117,14 @@
         "outputPath": "C:\\Users\\Deva\\wsibc\\insolesibc\\insoles\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
+          "C:\\Program Files\\DevExpress 23.1\\Components\\Offline Packages",
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
           "C:\\Program Files (x86)\\Syncfusion\\Essential Studio\\WPF\\21.1.35\\ToolboxNuGetPackages",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
           "C:\\Users\\Deva\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 23.1.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Syncfusion Toolbox for WPF.config"
@@ -129,6 +134,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\DevExpress 23.1\\Components\\System\\Components\\Packages": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -243,6 +249,10 @@
               "target": "Package",
               "version": "[4.1.64, )"
             },
+            "ScottPlot.WinForms": {
+              "target": "Package",
+              "version": "[4.1.64, )"
+            },
             "Syncfusion.DocIO.Wpf": {
               "target": "Package",
               "version": "[22.1.36, )"
@@ -252,6 +262,10 @@
               "version": "[22.1.36, )"
             },
             "Syncfusion.Shared.WPF": {
+              "target": "Package",
+              "version": "[22.1.36, )"
+            },
+            "Syncfusion.Tools.WPF": {
               "target": "Package",
               "version": "[22.1.36, )"
             },

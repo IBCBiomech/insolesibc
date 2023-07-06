@@ -14,6 +14,7 @@ using insoles.States;
 using System.Diagnostics;
 using System.Windows.Documents;
 using insoles.Model;
+using Newtonsoft.Json;
 
 namespace insoles.Services
 {
@@ -22,6 +23,7 @@ namespace insoles.Services
         private RegistroState state;
         private DatabaseBridge databaseBridge;
         private VideoWriter[] videoWriters;
+        private Dictionary<string, string> headerHolder = new();
         private StringBuilder dataHolder;
         private int frame;
         private float fakets;
@@ -89,8 +91,8 @@ namespace insoles.Services
                             " " + frame.ToString() + " " +
                             DictionaryToString(left[i], order) + " " +
                             DictionaryToString(right[i], order) + " " +
-                            metricLeft[i].ToString("F2", CultureInfo.InvariantCulture) + " " +
-                            metricRight[i].ToString("F2", CultureInfo.InvariantCulture);
+                            metricRight[i].ToString("F2", CultureInfo.InvariantCulture) + " " +
+                            metricLeft[i].ToString("F2", CultureInfo.InvariantCulture);
                         lines.AppendLine(line);
                         frame++;
                         fakets += 0.01f;
@@ -160,10 +162,24 @@ namespace insoles.Services
             string userName = Environment.UserName;
             string path = "C:\\Users\\" + userName + "\\Documents";
             string filePath = path + Path.DirectorySeparatorChar + FileName + ".txt";
-            File.WriteAllTextAsync(filePath, dataHolder.ToString());
+            if (headerHolder.Count > 0)
+            {
+                string headerSerialized = JsonConvert.SerializeObject(headerHolder, Formatting.None);
+                File.WriteAllTextAsync(filePath, headerSerialized + "\n" + dataHolder.ToString());
+            }
+            else
+            {
+                File.WriteAllTextAsync(filePath, dataHolder.ToString());
+            }
             FileName = null;
+            headerHolder = new();
             Test test = new Test(testTime, filePath, videoFileNames);
             return test;
+        }
+
+        public void AddHeaderInfo(string key, string value)
+        {
+            headerHolder[key] = value;
         }
     }
 }

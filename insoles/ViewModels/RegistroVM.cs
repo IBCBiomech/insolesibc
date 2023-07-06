@@ -17,6 +17,7 @@ using insoles.States;
 using System;
 using MathNet.Numerics;
 using System.Windows.Documents;
+using System.Globalization;
 
 namespace insoles.ViewModel
 {
@@ -111,6 +112,7 @@ namespace insoles.ViewModel
             //Init services
 
            /* apiService = new FakeApiService(state); *///Fake API
+           
             apiService = new FakeApiService(state); // Real API
             cameraService = new CameraService();
             liveCalculationsService = new LiveCalculationsService(Insoles, apiService);
@@ -197,6 +199,10 @@ namespace insoles.ViewModel
                     float[] metricLeft, float[] metricRight
                 ) =>
             {
+                List<Dictionary<Sensor, double>> left_pure = DeepCopy.Clone(left);
+                List<Dictionary<Sensor, double>> right_pure = DeepCopy.Clone(right);
+                float[] metricLeft_pure = (float[])metricLeft.Clone();
+                float[] metricRight_pure = (float[])metricRight.Clone();
                 if (state.calibrating)
                 {
                     float G = 9.80665f;
@@ -215,6 +221,7 @@ namespace insoles.ViewModel
                         fc = fcs.Sum() / fcs.Count;
                         fcs = new();
                         state.calibrating = false;
+                        saveService.AddHeaderInfo("fc", fc.Value.ToString("F2", CultureInfo.InvariantCulture));
                     }
                 }
                 if (FC)
@@ -258,7 +265,7 @@ namespace insoles.ViewModel
                     float totalKg = metricLeftKg[metricLeft.Length - 1] + metricRightKg[metricRight.Length - 1];
                     total = totalKg.Round(2) + " Kg";
                 }
-                saveService.AppendCSV(left, right, metricLeft, metricRight);
+                saveService.AppendCSV(left_pure, right_pure, metricLeft_pure, metricRight_pure);
             };
             Plot = new WpfPlot();
             Plot.Plot.Title("GRF");

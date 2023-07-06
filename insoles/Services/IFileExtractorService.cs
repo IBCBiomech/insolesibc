@@ -9,6 +9,7 @@ namespace insoles.Services
 {
     public interface IFileExtractorService
     {
+        VariablesData ExtractVariables(string path);
         Task<GraphData> ExtractCSV(string path);
     }
 }

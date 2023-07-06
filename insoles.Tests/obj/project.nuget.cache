@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "2uVc7Ew4NYII868mh6pEo505+zf08e0Ols19xoNeK4sI4xpXO36uN4wH6TVk1xb25gf2pORRwMo1tTX06IF5wg==",
+  "dgSpecHash": "4UE1RjW5YFwTu6QN04Sq0gWD/ozIgqgCODDZZlmX5H9ZGuct2Z2DGPhbaiY+0C9n6zexy62i/EQSLUwDP8KVpQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Deva\\wsibc\\insolesibc\\insoles.Tests\\insoles.Tests.csproj",
   "expectedPackageFiles": [
@@ -62,6 +62,7 @@
     "C:\\Users\\Deva\\.nuget\\packages\\runtime.osx-arm64.runtime.native.system.io.ports\\7.0.0\\runtime.osx-arm64.runtime.native.system.io.ports.7.0.0.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\runtime.osx-x64.runtime.native.system.io.ports\\7.0.0\\runtime.osx-x64.runtime.native.system.io.ports.7.0.0.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\scottplot\\4.1.64\\scottplot.4.1.64.nupkg.sha512",
+    "C:\\Users\\Deva\\.nuget\\packages\\scottplot.winforms\\4.1.64\\scottplot.winforms.4.1.64.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\scottplot.wpf\\4.1.64\\scottplot.wpf.4.1.64.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.4\\sqlitepclraw.bundle_e_sqlite3.2.1.4.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\sqlitepclraw.core\\2.1.4\\sqlitepclraw.core.2.1.4.nupkg.sha512",
@@ -72,6 +73,7 @@
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.licensing\\22.1.36\\syncfusion.licensing.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.officechart.base\\22.1.36\\syncfusion.officechart.base.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.shared.wpf\\22.1.36\\syncfusion.shared.wpf.22.1.36.nupkg.sha512",
+    "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.tools.wpf\\22.1.36\\syncfusion.tools.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\system.codedom\\7.0.0\\system.codedom.7.0.0.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\system.drawing.common\\7.0.0\\system.drawing.common.7.0.0.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\system.drawing.primitives\\4.3.0\\system.drawing.primitives.4.3.0.nupkg.sha512",

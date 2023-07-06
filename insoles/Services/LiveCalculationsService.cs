@@ -68,8 +68,8 @@ namespace insoles.Services
                 metric_right[i] = 0;
                 foreach (Sensor sensor in Enum.GetValues(typeof(Sensor)))
                 {
-                    N_left_i[sensor] = left[i].N(sensor);
-                    N_right_i[sensor] = right[i].N(sensor);
+                    N_left_i[sensor] = 2 * left[i].N(sensor); // Para que salgan bien los N
+                    N_right_i[sensor] = 2 * right[i].N(sensor); // Para que salgan bien los N
                     metric_left[i] += (float)N_left_i[sensor];
                     metric_right[i] += (float)N_right_i[sensor];
                 }
