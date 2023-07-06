@@ -89,8 +89,8 @@ namespace insoles.Services
                             " " + frame.ToString() + " " +
                             DictionaryToString(left[i], order) + " " +
                             DictionaryToString(right[i], order) + " " +
-                            metricLeft[i].ToString("F2", CultureInfo.InvariantCulture) + " " +
-                            metricRight[i].ToString("F2", CultureInfo.InvariantCulture);
+                            metricRight[i].ToString("F2", CultureInfo.InvariantCulture) + " " +
+                            metricLeft[i].ToString("F2", CultureInfo.InvariantCulture);
                         lines.AppendLine(line);
                         frame++;
                         fakets += 0.01f;
