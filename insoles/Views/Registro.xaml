@@ -77,11 +77,6 @@
                                                syncfusion:DockingManager.TargetNameInDockedMode="Dispositivos"
                                                x:Name="Usuarios"
                 Pacientes="{Binding Pacientes}"/>
-            <userControls:PacientesUserControlTest syncfusion:DockingManager.Header="UsuariosTest"
-                                               syncfusion:DockingManager.SideInDockedMode="Tabbed"
-                                               syncfusion:DockingManager.TargetNameInDockedMode="Dispositivos"
-                                               x:Name="UsuariosTest"
-                />
             <Image syncfusion:DockingManager.Header="Cam1"
                    syncfusion:DockingManager.SideInDockedMode="Right"
                    syncfusion:DockingManager.DesiredWidthInDockedMode="500"

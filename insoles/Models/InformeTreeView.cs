@@ -14,5 +14,9 @@ namespace insoles.Model
         {
             informeDB = informe;
         }
+        public InformeTreeView()
+        {
+            informeDB = new();
+        }
     }
 }

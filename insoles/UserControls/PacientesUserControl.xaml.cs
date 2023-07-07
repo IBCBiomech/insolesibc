@@ -13,11 +13,11 @@ namespace insoles.UserControls
     public partial class PacientesUserControl : UserControl
     {
         public static readonly DependencyProperty PacientesProperty =
-            DependencyProperty.Register("Pacientes", typeof(PacientesTreeView), typeof(PacientesUserControl), new PropertyMetadata(null));
+            DependencyProperty.Register("Pacientes", typeof(ObservableCollection<PacientesTreeView>), typeof(PacientesUserControl), new PropertyMetadata(null));
 
-        public PacientesTreeView Pacientes
+        public ObservableCollection<PacientesTreeView> Pacientes
         {
-            get { return (PacientesTreeView)GetValue(PacientesProperty); }
+            get { return (ObservableCollection<PacientesTreeView>)GetValue(PacientesProperty); }
             set { SetValue(PacientesProperty, value); }
         }
         public PacientesUserControl()

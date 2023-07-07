@@ -71,7 +71,7 @@ namespace insoles.ViewModel
         }
         public WpfPlot Plot { get; set; }
         private GraphSumPressuresLiveModel GraphModel;
-        public PacientesTreeView Pacientes
+        public ObservableCollection<PacientesTreeView> Pacientes
         {
             get
             {

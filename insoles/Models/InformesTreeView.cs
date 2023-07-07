@@ -1,4 +1,5 @@
 ﻿using insoles.Model;
+using insoles.Models;
 using insoles.Utilities;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace insoles.Model
 {
-    public class InformesTreeView : ModelBase
+    public class InformesTreeView : MetaFolderTreeView
     {
         public ICollection<InformeTreeView> Informes {  get; set; }
         public InformesTreeView(ICollection<Informe> informes) 
@@ -19,6 +20,10 @@ namespace insoles.Model
             {
                 Informes.Add(new InformeTreeView(informe));
             }
+        }
+        public InformesTreeView()
+        {
+            Informes = new ObservableCollection<InformeTreeView>();
         }
     }
 }

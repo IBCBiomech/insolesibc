@@ -1,6 +1,8 @@
 ﻿using insoles.Model;
+using Syncfusion.UI.Xaml.TreeView.Engine;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,29 +22,33 @@ namespace insoles.DataTemplateSelectors
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if (item is PacientesTreeView)
+            if (item is TreeViewNode)
             {
-                return PacientesTemplate;
-            }
-            else if (item is PacienteTreeView)
-            {
-                return PacienteTemplate;
-            }
-            else if (item is TestsTreeView)
-            {
-                return TestsTemplate;
-            }
-            else if (item is InformesTreeView)
-            {
-                return InformesTemplate;
-            }
-            else if (item is TestTreeView)
-            {
-                return TestTemplate;
-            }
-            else if (item is InformeTreeView)
-            {
-                return InformeTemplate;
+                var node = (TreeViewNode)item;
+                if (node.Content is PacientesTreeView)
+                {
+                    return PacientesTemplate;
+                }
+                else if (node.Content is PacienteTreeView)
+                {
+                    return PacienteTemplate;
+                }
+                else if (node.Content is TestsTreeView)
+                {
+                    return TestsTemplate;
+                }
+                else if (node.Content is InformesTreeView)
+                {
+                    return InformesTemplate;
+                }
+                else if (node.Content is TestTreeView)
+                {
+                    return TestTemplate;
+                }
+                else if (node.Content is InformeTreeView)
+                {
+                    return InformeTemplate;
+                }
             }
 
             // Return a default template if the item type is not recognized

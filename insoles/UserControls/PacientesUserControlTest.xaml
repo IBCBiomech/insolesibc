@@ -21,7 +21,7 @@
         </DataTemplate>
 
         <DataTemplate x:Key="PacienteTemplate">
-            <TextBlock Text="{Binding pacienteDB.Nombre}"/>
+            <TextBlock Text="{Binding Nombre}"/>
         </DataTemplate>
 
         <DataTemplate x:Key="TestsTemplate">
@@ -50,15 +50,13 @@
                                                             />
     </UserControl.Resources>
     <Grid>
-        <syncfusion:SfTreeView ItemsSource="{Binding Pacientes}">
+        <syncfusion:SfTreeView ItemsSource="{Binding Pacientes}" ItemTemplateSelector="{StaticResource PacientesDataTemplateSelector}">
             <syncfusion:SfTreeView.HierarchyPropertyDescriptors>
                 <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:PacientesTreeView}" ChildPropertyName="Pacientes"/>
+                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:PacienteTreeView}" ChildPropertyName="MetaFolders"/>
+                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:TestsTreeView}" ChildPropertyName="Tests"/>
+                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:InformesTreeView}" ChildPropertyName="Informes"/>
             </syncfusion:SfTreeView.HierarchyPropertyDescriptors>
-            <syncfusion:SfTreeView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Nombre}" VerticalAlignment="Center" />
-                </DataTemplate>
-            </syncfusion:SfTreeView.ItemTemplate>
         </syncfusion:SfTreeView>
 
     </Grid>

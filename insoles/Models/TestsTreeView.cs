@@ -1,4 +1,5 @@
 ﻿using insoles.Model;
+using insoles.Models;
 using insoles.Utilities;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace insoles.Model
 {
-    public class TestsTreeView : ModelBase
+    public class TestsTreeView : MetaFolderTreeView
     {
         public ICollection<TestTreeView> Tests { get; set; }
         public TestsTreeView(ICollection<Test> tests) 
@@ -19,6 +20,10 @@ namespace insoles.Model
             {
                 Tests.Add(new TestTreeView(test));
             }
+        }
+        public TestsTreeView()
+        {
+            Tests = new ObservableCollection<TestTreeView>();
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <_LastSelectedProfileId>C:\Users\berna\source\repos\insolesibc\insoles\Properties\PublishProfiles\FolderProfile2.pubxml</_LastSelectedProfileId>
+    <_LastSelectedProfileId>C:\Users\berna\source\repos\insolesibc\insoles\Properties\PublishProfiles\FolderProfile3.pubxml</_LastSelectedProfileId>
   </PropertyGroup>
   <ItemGroup>
     <ApplicationDefinition Update="App.xaml">
@@ -99,9 +99,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\Heatmap.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="UserControls\PacientesUserControlTest.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="UserControls\PacientesUserControlAnalisis.xaml">

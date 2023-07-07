@@ -15,5 +15,9 @@ namespace insoles.Model
         { 
             testDB = test;
         }
+        public TestTreeView() 
+        { 
+            testDB = new Test();
+        }
     }
 }

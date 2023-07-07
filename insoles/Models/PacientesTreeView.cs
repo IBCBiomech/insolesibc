@@ -1,4 +1,6 @@
-﻿using insoles.Model;
+﻿using insoles.Commands;
+using insoles.Model;
+using insoles.States;
 using insoles.Utilities;
 using System;
 using System.Collections.Generic;
@@ -13,17 +15,23 @@ namespace insoles.Model
     {
         public ICollection<PacienteTreeView> Pacientes { get; set; }
         public string Nombre { get; set; } = "Pacientes";
-        public PacientesTreeView(List<Paciente> pacientes) 
+        public ObtenerPacientesCommand obtenerPacientesCommand { get; set; }
+        public CrearPacienteCommand crearPacienteCommand { get; set; }
+        public PacientesTreeView(List<Paciente> pacientes, DatabaseBridge databaseBridge) 
         {
             Pacientes = new ObservableCollection<PacienteTreeView>();
             foreach(Paciente paciente in pacientes)
             {
                 Pacientes.Add(new PacienteTreeView(paciente));
             }
+            obtenerPacientesCommand = new(databaseBridge);
+            crearPacienteCommand = new(databaseBridge);
         }
-        public PacientesTreeView()
+        public PacientesTreeView(DatabaseBridge databaseBridge)
         {
             Pacientes = new ObservableCollection<PacienteTreeView>();
+            obtenerPacientesCommand = new(databaseBridge);
+            crearPacienteCommand = new(databaseBridge);
         }
     }
 }

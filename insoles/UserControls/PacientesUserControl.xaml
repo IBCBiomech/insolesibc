@@ -7,6 +7,7 @@
              xmlns:model="clr-namespace:insoles.Model"
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              xmlns:Engine="clr-namespace:Syncfusion.UI.Xaml.TreeView.Engine;assembly=Syncfusion.SfTreeView.WPF"
+             xmlns:treeViewEngine="clr-namespace:Syncfusion.UI.Xaml.TreeView.Engine;assembly=Syncfusion.SfTreeView.WPF"
              xmlns:converter="clr-namespace:insoles.Converter"
              xmlns:dataTemplateSelector="clr-namespace:insoles.DataTemplateSelectors"
              mc:Ignorable="d" 
@@ -16,11 +17,18 @@
         <converter:NullToVisibilityConverter x:Key="nullToVisibilityConverter"/>
         
         <DataTemplate x:Key="PacientesTemplate">
-            <TextBlock Text="Pacientes"/>
+            <TextBlock Text="Pacientes">
+                <TextBlock.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Obtener" Command="{Binding obtenerPacientesCommand}"/>
+                        <MenuItem Header="Crear" Command="{Binding crearPacienteCommand}"/>
+                    </ContextMenu>
+                </TextBlock.ContextMenu>
+            </TextBlock>
         </DataTemplate>
 
         <DataTemplate x:Key="PacienteTemplate">
-            <TextBlock Text="{Binding pacienteDB.Nombre}"/>
+            <TextBlock Text="{Binding Nombre}"/>
         </DataTemplate>
 
         <DataTemplate x:Key="TestsTemplate">
@@ -51,6 +59,13 @@
     <Grid>
         <syncfusion:SfTreeView
             ItemTemplateSelector="{StaticResource PacientesDataTemplateSelector}"
-            ItemsSource="{Binding Pacientes, RelativeSource={RelativeSource AncestorType={x:Type local:PacientesUserControl}}}"/>
+            ItemsSource="{Binding Pacientes, RelativeSource={RelativeSource AncestorType={x:Type local:PacientesUserControl}}}">
+            <syncfusion:SfTreeView.HierarchyPropertyDescriptors>
+                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:PacientesTreeView}" ChildPropertyName="Pacientes"/>
+                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:PacienteTreeView}" ChildPropertyName="MetaFolders"/>
+                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:TestsTreeView}" ChildPropertyName="Tests"/>
+                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:InformesTreeView}" ChildPropertyName="Informes"/>
+            </syncfusion:SfTreeView.HierarchyPropertyDescriptors>
+        </syncfusion:SfTreeView>
     </Grid>
 </UserControl>
