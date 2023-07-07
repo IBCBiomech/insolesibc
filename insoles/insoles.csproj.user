@@ -101,6 +101,9 @@
     <Page Update="UserControls\Heatmap.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="UserControls\PacientesUserControlTest.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="UserControls\PacientesUserControlAnalisis.xaml">
       <SubType>Designer</SubType>
     </Page>

@@ -12,6 +12,7 @@ namespace insoles.Model
     public class PacientesTreeView : ModelBase
     {
         public ICollection<PacienteTreeView> Pacientes { get; set; }
+        public string Nombre { get; set; } = "Pacientes";
         public PacientesTreeView(List<Paciente> pacientes) 
         {
             Pacientes = new ObservableCollection<PacienteTreeView>();

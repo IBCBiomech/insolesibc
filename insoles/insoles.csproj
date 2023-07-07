@@ -206,6 +206,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="UserControls\PacientesUserControlTest.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\PacientesUserControlAnalisis.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
