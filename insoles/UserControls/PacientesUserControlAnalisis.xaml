@@ -57,6 +57,7 @@
                                                     <MenuItem Header="Borrar" Command="{Binding borrarTestCommand}" CommandParameter="{Binding}"/>
                                                     <MenuItem Header="Importar" Command="{Binding importarTestCommand}" CommandParameter="{Binding}"/>
                                                     <MenuItem Header="Cargar" Command="{Binding cargarTestCommand}" CommandParameter="{Binding}"/>
+                                                    <MenuItem Header="Exportar FC" Command="{Binding exportarFCTestCommand}" CommandParameter="{Binding}"/>
                                                 </ContextMenu>
                                             </TreeViewItem.ContextMenu>
                                             <Grid>

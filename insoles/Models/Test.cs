@@ -43,6 +43,8 @@ namespace insoles.Model
         public CargarTestCommand cargarTestCommand { get; set; }
         [NotMapped]
         public ImportarTestCommand importarTestCommand { get; set; }
+        [NotMapped]
+        public ExportarFCTestCommand exportarFCTestCommand { get; set; }
         public Test()
         {
             this.Nombre = "Test";
@@ -53,6 +55,7 @@ namespace insoles.Model
             renombrarFicheroVideo2TestCommand = new RenombrarFicheroVideo2TestCommand();
             cargarTestCommand = new CargarTestCommand(this);
             importarTestCommand = new ImportarTestCommand(this);
+            exportarFCTestCommand = new ExportarFCTestCommand(this);
         }
         public Test(DateTime date, string csv) : this()
         {
