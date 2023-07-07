@@ -12,7 +12,7 @@ namespace insoles.UserControls
     /// </summary>
     public partial class PacientesUserControlTest : UserControl
     {
-        public PacientesTreeView Pacientes
+        public ObservableCollection<PacientesTreeView> Pacientes
         {
             get;
             set;
@@ -20,11 +20,13 @@ namespace insoles.UserControls
         public PacientesUserControlTest()
         {
             InitializeComponent();
-            Pacientes = new PacientesTreeView();
+            Pacientes = new();
+            PacientesTreeView pacientes = new();
             PacienteTreeView paciente1 = new PacienteTreeView("Carlos");
             PacienteTreeView paciente2 = new PacienteTreeView("Juan");
-            Pacientes.Pacientes.Add(paciente1);
-            Pacientes.Pacientes.Add(paciente2);
+            pacientes.Pacientes.Add(paciente1);
+            pacientes.Pacientes.Add(paciente2);
+            Pacientes.Add(pacientes);
             DataContext = this;
         }
     }
