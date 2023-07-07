@@ -25,6 +25,7 @@ namespace insoles.UserControls
             PacienteTreeView paciente2 = new PacienteTreeView("Juan");
             Pacientes.Pacientes.Add(paciente1);
             Pacientes.Pacientes.Add(paciente2);
+            DataContext = this;
         }
     }
 }
