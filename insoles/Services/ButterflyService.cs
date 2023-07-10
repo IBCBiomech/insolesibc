@@ -17,6 +17,8 @@ namespace insoles.Services
 
 
         private IPlantillaService foot;
+
+        private double MIN_N = 20;
         public ButterflyService(IPlantillaService foot)
         {
             this.foot = foot;
@@ -61,12 +63,12 @@ namespace insoles.Services
                 Tuple<double, double>? pressure_center_left;
                 Tuple<double, double>? pressure_center_right;
 
-                int total_pressure_left = 0;
+                double total_pressure_left = 0;
                 foreach (Sensor sensor in (Sensor[])Enum.GetValues(typeof(Sensor)))
                 {
-                    total_pressure_left += (int)pressure_left[sensor] * area_sensors_left[sensor];
+                    total_pressure_left += pressure_left[sensor] * area_sensors_left[sensor];
                 }
-                if (total_pressure_left > 0)
+                if (total_pressure_left > MIN_N)
                 {
                     double row_left = 0;
                     double col_left = 0;
@@ -85,12 +87,12 @@ namespace insoles.Services
                     pressure_center_left = null;
                 }
 
-                int total_pressure_right = 0;
+                double total_pressure_right = 0;
                 foreach (Sensor sensor in (Sensor[])Enum.GetValues(typeof(Sensor)))
                 {
-                    total_pressure_right += (int)pressure_right[sensor] * area_sensors_right[sensor];
+                    total_pressure_right += pressure_right[sensor] * area_sensors_right[sensor];
                 }
-                if (total_pressure_right > 0)
+                if (total_pressure_right > MIN_N)
                 {
                     double row_right = 0;
                     double col_right = 0;

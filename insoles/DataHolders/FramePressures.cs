@@ -10,7 +10,7 @@ namespace insoles.DataHolders
         public Tuple<double, double>? centerLeft { get; private set; }
         public Tuple<double, double>? centerRight { get; private set; }
         public double totalPressure { get; private set; }
-        public FramePressures(int frame, Tuple<double, double>? centerLeft, Tuple<double, double>? centerRight, int total_pressure_left, int total_pressure_right)
+        public FramePressures(int frame, Tuple<double, double>? centerLeft, Tuple<double, double>? centerRight, double total_pressure_left, double total_pressure_right)
         {
             this.frame = frame;
             this.centerLeft = centerLeft;
