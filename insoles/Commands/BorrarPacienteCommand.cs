@@ -24,12 +24,12 @@ namespace insoles.Commands
 
         public void Execute(object? parameter)
         {
-            Paciente paciente = parameter as Paciente;
+            PacienteTreeView paciente = parameter as PacienteTreeView;
             ((MainWindow)Application.Current.MainWindow).Dispatcher.BeginInvoke(async () =>
             {
                 try
                 {
-                    await ((MainWindow)Application.Current.MainWindow).databaseBridge.DeletePaciente(paciente);
+                    await ((MainWindow)Application.Current.MainWindow).databaseBridge.DeletePaciente(paciente.pacienteDB);
                 }
                 catch (Exception e)
                 {

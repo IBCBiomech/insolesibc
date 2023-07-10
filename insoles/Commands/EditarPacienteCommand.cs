@@ -26,9 +26,9 @@ namespace insoles.Commands
 
         public void Execute(object? parameter)
         {
-            Paciente paciente = parameter as Paciente;
+            PacienteTreeView paciente = parameter as PacienteTreeView;
             DatabaseBridge databaseBridge = ((MainWindow)Application.Current.MainWindow).databaseBridge;
-            EditarPacienteForm form = new EditarPacienteForm(paciente, databaseBridge);
+            EditarPacienteForm form = new EditarPacienteForm(paciente.pacienteDB, databaseBridge);
             form.ShowDialog();
         }
     }

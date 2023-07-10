@@ -28,7 +28,14 @@
         </DataTemplate>
 
         <DataTemplate x:Key="PacienteTemplate">
-            <TextBlock Text="{Binding Nombre}"/>
+            <TextBlock Text="{Binding Nombre}">
+                <TextBlock.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Editar" Command="{Binding pacienteDB.editarPacienteCommand}" CommandParameter="{Binding}"/>
+                        <MenuItem Header="Borrar" Command="{Binding pacienteDB.borrarPacienteCommand}" CommandParameter="{Binding}"/>
+                    </ContextMenu>
+                </TextBlock.ContextMenu>
+            </TextBlock>
         </DataTemplate>
 
         <DataTemplate x:Key="TestsTemplate">
