@@ -7,24 +7,107 @@ using ScottPlot.Drawing;
 using ScottPlot.Plottable;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Resources;
+using static System.Windows.Forms.AxHost;
 
 namespace insoles.UserControls
 {
     /// <summary>
     /// Lógica de interacción para GrafoMariposa.xaml
     /// </summary>
-    public partial class GrafoMariposa : UserControl
+    public partial class GrafoMariposa : UserControl, INotifyPropertyChanged
     {
         private ScottPlot.Plottable.Image image;
         private double scale = 1;
         private const double PLANTILLA_HEIGHT = 445;
         private const double PLANTILLA_WIDTH = 615;
+        private const int N_FRAMES_ANIMATE = 200;
+
+        private FramePressures[]? _framePressures = null;
+        public FramePressures[]? framePressures
+        {
+            get
+            {
+                return _framePressures;
+            }
+            set
+            {
+                _framePressures = value;
+                if (animate)
+                {
+                    if (value != null) 
+                        DrawData(value, Math.Max(0, frame - N_FRAMES_ANIMATE), frame);
+                }
+                else
+                {
+                    if (value != null)
+                        DrawData(value, 0, value.Length - 1);
+                }
+            }
+        }
+
+        private bool _animate;
+        public bool animate
+        {
+            get
+            {
+                return _animate;
+            }
+            set
+            {
+                _animate = value;
+                NotifyPropertyChanged();
+                //NotifyPropertyChanged(nameof(graph_loaded));
+                if (value)
+                {
+                    if (framePressures != null)
+                        DrawData(framePressures, Math.Max(0, frame - N_FRAMES_ANIMATE), frame);
+                }
+                else
+                {
+                    if (framePressures != null)
+                        DrawData(framePressures, 0, framePressures.Length - 1);
+                }
+            }
+        }
+        private const double TIME_PER_FRAME = 0.01;
+        public double time
+        {
+            set
+            {
+                frame = (int)Math.Floor(value / TIME_PER_FRAME);
+            }
+        }
+
+        private int _frame = 0;
+        private int frame
+        {
+            get
+            {
+                return _frame;
+            }
+            set
+            {
+                if (value != _frame)
+                {
+                    _frame = value;
+                    if (animate && framePressures != null && !drawing)
+                    {
+                        DrawData(framePressures, Math.Max(0, frame - N_FRAMES_ANIMATE), frame);
+                    }
+                }
+            }
+        }
+        private bool drawing = false;
         public GrafoMariposa()
         {
             InitializeComponent();
@@ -70,17 +153,18 @@ namespace insoles.UserControls
             plot.Plot.AddText("L", xMin + (xMax - xMin) * 0.2, yMin + (yMax - yMin) * 0.25, size:50, color:Color.DarkGray);
             plot.Plot.AddText("R", xMin + (xMax - xMin) * 0.75, yMin + (yMax - yMin) * 0.25, size:50, color: Color.DarkGray);
         }
-        public async Task DrawData(FramePressures[] data)
+        public async void DrawData(FramePressures[] data, int initFrame, int lastFrame)
         {
+            drawing = true;
             List<double> x = new List<double>();
             List<double> y = new List<double>();
             List<Color> colors = new List<Color>();
-            int index = 0;
+            int index = initFrame;
             Colormap colormap = Colormap.Jet;
             while (data[index].totalCenter == null)
             {
                 index++;
-                if(index == data.Length)
+                if(index == lastFrame + 1)
                 {
                     return;
                 }
@@ -90,7 +174,7 @@ namespace insoles.UserControls
             x.Add(firstPoint.Item1);
             y.Add(firstPoint.Item2);
             colors.Add(colormap.GetColor(firstFrame.totalPressure / FramePressures.maxPressure));
-            for (int i = index + 1; i < data.Length; i++)
+            for (int i = index + 1; i < lastFrame; i++)
             {
                 if (data[i].totalCenter != null)
                 {
@@ -102,6 +186,7 @@ namespace insoles.UserControls
                 }
             }
             await DrawData(x, y, colors);
+            drawing = false;
         }
         private async Task DrawData(List<double> x_list, List<double> y_list, List<Color> colors)
         {
@@ -135,8 +220,16 @@ namespace insoles.UserControls
             }
             await Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
-                plot.Refresh();
+                    plot.Refresh();
             }));
+        }
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
     }
 }

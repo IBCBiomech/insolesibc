@@ -8,5 +8,11 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <WpfPlot x:Name="plot"/>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <StackPanel Orientation="Horizontal">
+                <CheckBox Margin="10 0" VerticalAlignment="Center" IsChecked="{Binding animate}"/>
+                <TextBlock>Animate</TextBlock>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </UserControl>

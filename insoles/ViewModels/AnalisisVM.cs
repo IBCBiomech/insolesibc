@@ -76,6 +76,7 @@ namespace insoles.ViewModel
                 camaraViewport2.time = time;
                 grf.time = time;
                 heatmap.time = time;
+                grafoMariposa.time = time;
             };
             state.PropertyChanged += async(object sender, PropertyChangedEventArgs e) =>
             {
@@ -92,7 +93,7 @@ namespace insoles.ViewModel
                             List<Tuple<double, double>> cps_left;
                             List<Tuple<double, double>> cps_right;
                             await butterfly.Calculate(data, out frames, out cps_left, out cps_right);
-                            await grafoMariposa.DrawData(frames);
+                            await Task.Run(() => grafoMariposa.framePressures = frames);
 
                             if (state.test.video1 != null)
                             {
