@@ -41,7 +41,7 @@ namespace insoles.UserControls
             this.state = state;
             plot.Plot.XAxis2.SetSizeLimit(pad: 0);
             plot.Plot.XAxis2.SetSizeLimit(pad: 0);
-            plot.Plot.SetInnerViewLimits(xMin: minX, xMax: maxX, yMin: minY, yMax: maxY);
+            //plot.Plot.SetInnerViewLimits(xMin: minX, xMax: maxX, yMin: minY, yMax: maxY);
             plot.Plot.SetOuterViewLimits(xMin: minX, xMax: maxX, yMin: minY, yMax: maxY);
             line = plot.Plot.AddHorizontalSpan(pos - width, pos + width, Color.DeepSkyBlue);
             line.DragEnabled = true;
@@ -118,7 +118,7 @@ namespace insoles.UserControls
         {
             minX = min;
             maxX = max;
-            plot.Plot.SetInnerViewLimits(xMin: minX, xMax: maxX, yMin: minY, yMax: maxY);
+            //plot.Plot.SetInnerViewLimits(xMin: minX, xMax: maxX, yMin: minY, yMax: maxY);
             plot.Plot.SetOuterViewLimits(xMin: minX, xMax: maxX, yMin: minY, yMax: maxY);
             plot.Plot.SetAxisLimitsX(minX, maxX);
             plot.Refresh();
