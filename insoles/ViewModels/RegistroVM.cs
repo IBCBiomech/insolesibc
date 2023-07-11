@@ -100,6 +100,7 @@ namespace insoles.ViewModel
         private const float DEFAULT_WEIGHT = 70;
         private string _total;
         public string total { get { return _total; } set { _total = value; OnPropertyChanged(); } }
+        private Stopwatch stopwatch = new Stopwatch();
         public RegistroVM()
         {
             //Init Collections
@@ -178,7 +179,14 @@ namespace insoles.ViewModel
                     {
                         CurrentFrameTop = FormatConversions.ToBitmapSource(frame);
                     });
-                    saveService.AppendVideo(frame, index);
+                    if (state.recording)
+                    {
+                        saveService.AppendVideo(frame, index);
+                        if(state.timeDiference == null)
+                        {
+                            stopwatch.Restart();
+                        }
+                    }
                 }
                 else if(index == 1)
                 {
@@ -186,7 +194,14 @@ namespace insoles.ViewModel
                     {
                         CurrentFrameBottom = FormatConversions.ToBitmapSource(frame);
                     });
-                    saveService.AppendVideo(frame, index);
+                    if (state.recording)
+                    {
+                        saveService.AppendVideo(frame, index);
+                        if (state.timeDiference == null)
+                        {
+                            stopwatch.Restart();
+                        }
+                    }
                 }
             };
             apiService.DataReceived += (byte handler, List<InsoleData> packet) =>
@@ -265,7 +280,15 @@ namespace insoles.ViewModel
                     float totalKg = metricLeftKg[metricLeft.Length - 1] + metricRightKg[metricRight.Length - 1];
                     total = totalKg.Round(2) + " Kg";
                 }
-                saveService.AppendCSV(left_pure, right_pure, metricLeft_pure, metricRight_pure);
+                if (state.recording)
+                {
+                    if(state.timeDiference == null)
+                    {
+                        state.timeDiference = stopwatch.Elapsed.TotalSeconds;
+                        stopwatch.Reset();
+                    }
+                    saveService.AppendCSV(left_pure, right_pure, metricLeft_pure, metricRight_pure);
+                }
             };
             Plot = new WpfPlot();
             Plot.Plot.Title("GRF");

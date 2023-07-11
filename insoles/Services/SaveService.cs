@@ -79,15 +79,16 @@ namespace insoles.Services
             List<Dictionary<Sensor, double>> right, 
             float[] metricLeft, float[] metricRight)
         {
-            if (!state.paused)
+            if (!state.paused && dataHolder != null && state.timeDiference != null)
             {
-                if (dataHolder != null)
+                StringBuilder lines = new StringBuilder();
+                for (int i = 0; i < left.Count; i++)
                 {
-                    StringBuilder lines = new StringBuilder();
-                    for (int i = 0; i < left.Count; i++)
+                    float syncFakets = fakets + (float)state.timeDiference - 0.01f * (left.Count - 1);
+                    if (syncFakets >= 0)
                     {
                         string line = "1 " +
-                            fakets.ToString("F2", CultureInfo.InvariantCulture) +
+                            syncFakets.ToString("F3", CultureInfo.InvariantCulture) +
                             " " + frame.ToString() + " " +
                             DictionaryToString(left[i], order) + " " +
                             DictionaryToString(right[i], order) + " " +
@@ -95,10 +96,10 @@ namespace insoles.Services
                             metricLeft[i].ToString("F2", CultureInfo.InvariantCulture);
                         lines.AppendLine(line);
                         frame++;
-                        fakets += 0.01f;
                     }
-                    dataHolder.Append(lines);
+                    fakets += 0.01f;
                 }
+                dataHolder.Append(lines);
             }
         }
         private string DictionaryToString(Dictionary<Sensor, double> dict,

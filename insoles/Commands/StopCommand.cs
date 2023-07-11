@@ -42,6 +42,7 @@ namespace insoles.Commands
             Test test = saveService.Stop();
             state.capturing = false;
             state.recording = false;
+            state.timeDiference = null;
             Task.Run(async () =>
             {
                 await databaseBridge.AddTest(state.fixedPaciente, test);

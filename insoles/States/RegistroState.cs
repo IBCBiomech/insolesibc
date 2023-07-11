@@ -3,6 +3,7 @@ using insoles.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -20,6 +21,7 @@ namespace insoles.States
         public bool recording { get { return _recording; } set { _recording = value; OnPropertyChanged(); } }
         private bool _calibrating = false;
         public bool calibrating { get { return _calibrating; } set { _calibrating = value; OnPropertyChanged(); } }
+        public double? timeDiference { get; set; } = null;
         public Paciente? selectedPaciente
         {
             get
