@@ -29,7 +29,6 @@ namespace insoles.Commands
 
         public void Execute(object? parameter)
         {
-            Test test = parameter as Test;
             ((MainWindow)Application.Current.MainWindow).analisisState.test = test;
         }
     }

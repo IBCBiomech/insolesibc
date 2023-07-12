@@ -20,9 +20,11 @@ namespace insoles.Commands
             remove { CommandManager.RequerySuggested -= value; }
         }
         private DatabaseBridge databaseBridge;
-        public RenombrarFicheroCSVTestCommand(DatabaseBridge databaseBridge)
+        private Test test;
+        public RenombrarFicheroCSVTestCommand(DatabaseBridge databaseBridge, Test test)
         {
             this.databaseBridge = databaseBridge;
+            this.test = test;
         }
         public bool CanExecute(object? parameter)
         {
@@ -31,8 +33,6 @@ namespace insoles.Commands
 
         public void Execute(object? parameter)
         {
-            TestTreeView testTreeView = parameter as TestTreeView;
-            Test test = testTreeView.testDB;
             TextInputForm inputForm = new TextInputForm();
             Window mainWindow = Application.Current.MainWindow;
             inputForm.Left = mainWindow.Left + mainWindow.Width * 0.2;

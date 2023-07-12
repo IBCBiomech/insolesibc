@@ -75,6 +75,40 @@
             </TextBlock>
         </DataTemplate>
 
+        <DataTemplate x:Key="TextTestTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+                <Image Source="pack://application:,,,/Images/file-icon.png" Width="10" Height="10" HorizontalAlignment="Left" Grid.Column="0">
+                    <Image.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Renombrar" Command="{Binding RenombrarCommand}" CommandParameter="{Binding}"/>
+                        </ContextMenu>
+                    </Image.ContextMenu>
+                </Image>
+                <TextBlock Text="{Binding Date}" Grid.Column="1"/>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="VideoTestTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+                <Image Source="pack://application:,,,/Images/video-icon.png" Width="10" Height="10" HorizontalAlignment="Left" Grid.Column="0">
+                    <Image.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Renombrar" Command="{Binding RenombrarCommand}" CommandParameter="{Binding}"/>
+                        </ContextMenu>
+                    </Image.ContextMenu>
+                </Image>
+                <TextBlock Text="{Binding Date}" Grid.Column="1"/>
+            </Grid>
+        </DataTemplate>
+
         <dataTemplateSelector:PacientesDataTemplateSelector x:Key="PacientesDataTemplateSelector"
                                                             PacientesTemplate="{StaticResource PacientesTemplate}"
                                                             PacienteTemplate="{StaticResource PacienteTemplate}"
@@ -82,6 +116,8 @@
                                                             InformesTemplate="{StaticResource InformesTemplate}"
                                                             TestTemplate="{StaticResource TestTemplate}"
                                                             InformeTemplate="{StaticResource InformeTemplate}"
+                                                            TextTestFileTemplate="{StaticResource TextTestTemplate}"
+                                                            VideoTestFileTemplate="{StaticResource VideoTestTemplate}"
                                                             />
     </UserControl.Resources>
     <Grid>
@@ -93,6 +129,7 @@
                 <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:PacienteTreeView}" ChildPropertyName="MetaFolders"/>
                 <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:TestsTreeView}" ChildPropertyName="Tests"/>
                 <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:InformesTreeView}" ChildPropertyName="Informes"/>
+                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:TestTreeView}" ChildPropertyName="Files"/>
             </syncfusion:SfTreeView.HierarchyPropertyDescriptors>
         </syncfusion:SfTreeView>
     </Grid>

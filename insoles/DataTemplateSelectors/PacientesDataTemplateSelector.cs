@@ -1,4 +1,5 @@
 ﻿using insoles.Model;
+using insoles.Models;
 using Syncfusion.UI.Xaml.TreeView.Engine;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,8 @@ namespace insoles.DataTemplateSelectors
         public DataTemplate InformesTemplate { get; set; }
         public DataTemplate TestTemplate { get; set; }
         public DataTemplate InformeTemplate { get; set; }
+        public DataTemplate TextTestFileTemplate { get; set; }
+        public DataTemplate VideoTestFileTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
@@ -48,6 +51,14 @@ namespace insoles.DataTemplateSelectors
                 else if (node.Content is InformeTreeView)
                 {
                     return InformeTemplate;
+                }
+                else if(node.Content is TextTestFileTreeView)
+                {
+                    return TextTestFileTemplate;
+                }
+                else if (node.Content is VideoTestFileTreeView)
+                {
+                    return VideoTestFileTemplate;
                 }
             }
 
