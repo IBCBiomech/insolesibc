@@ -31,27 +31,48 @@
             <TextBlock Text="{Binding Nombre}">
                 <TextBlock.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Editar" Command="{Binding pacienteDB.editarPacienteCommand}" CommandParameter="{Binding}"/>
-                        <MenuItem Header="Borrar" Command="{Binding pacienteDB.borrarPacienteCommand}" CommandParameter="{Binding}"/>
+                        <MenuItem Header="Editar" Command="{Binding editarPacienteCommand}" CommandParameter="{Binding}"/>
+                        <MenuItem Header="Borrar" Command="{Binding borrarPacienteCommand}" CommandParameter="{Binding}"/>
                     </ContextMenu>
                 </TextBlock.ContextMenu>
             </TextBlock>
         </DataTemplate>
 
         <DataTemplate x:Key="TestsTemplate">
-            <TextBlock Text="Tests"/>
+            <TextBlock Text="Tests">
+                <TextBlock.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Crear carpeta" Command="{Binding crearCarpetaTestCommand}" CommandParameter="{Binding}"/>
+                    </ContextMenu>
+                </TextBlock.ContextMenu>
+            </TextBlock>
         </DataTemplate>
 
         <DataTemplate x:Key="InformesTemplate">
-            <TextBlock Text="Informes"/>
+            <TextBlock Text="Informes">
+                <TextBlock.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Crear carpeta" Command="{Binding crearCarpetaInformeCommand}" CommandParameter="{Binding}"/>
+                    </ContextMenu>
+                </TextBlock.ContextMenu>
+            </TextBlock>
         </DataTemplate>
 
         <DataTemplate x:Key="TestTemplate">
-            <TextBlock Text="{Binding testDB.Nombre}"/>
+            <TextBlock Text="{Binding testDB.Nombre}">
+                <TextBlock.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Renombrar" Command="{Binding renombrarCarpetaTestCommand}" CommandParameter="{Binding}"/>
+                        <MenuItem Header="Borrar" Command="{Binding borrarTestCommand}" CommandParameter="{Binding}"/>
+                        <MenuItem Header="Importar" Command="{Binding importarTestCommand}" CommandParameter="{Binding}"/>
+                    </ContextMenu>
+                </TextBlock.ContextMenu>
+            </TextBlock>
         </DataTemplate>
 
         <DataTemplate x:Key="InformeTemplate">
-            <TextBlock Text="{Binding informeDB.Nombre}"/>
+            <TextBlock Text="{Binding informeDB.Nombre}">
+            </TextBlock>
         </DataTemplate>
 
         <dataTemplateSelector:PacientesDataTemplateSelector x:Key="PacientesDataTemplateSelector"

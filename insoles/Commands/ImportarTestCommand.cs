@@ -1,5 +1,6 @@
 ﻿using insoles.Forms;
 using insoles.Model;
+using insoles.States;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -20,9 +21,11 @@ namespace insoles.Commands
             remove { CommandManager.RequerySuggested -= value; }
         }
         private Test test;
-        public ImportarTestCommand(Test test)
+        private DatabaseBridge databaseBridge;
+        public ImportarTestCommand(Test test, DatabaseBridge databaseBridge)
         {
             this.test = test;
+            this.databaseBridge = databaseBridge;
         }
 
         public bool CanExecute(object? parameter)
@@ -32,7 +35,8 @@ namespace insoles.Commands
 
         public void Execute(object? parameter)
         {
-            Test test = parameter as Test;
+            TestTreeView testTreeView = parameter as TestTreeView;
+            Test test = testTreeView.testDB;
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Multiselect = true;
             openFileDialog.Filter = "Text and AVI Files (*.txt;*.avi)|*.txt;*.avi";
@@ -80,7 +84,7 @@ namespace insoles.Commands
                     test.video1 = aviFiles[0];
                 if(aviFiles.Count >= 2)
                     test.video2 = aviFiles[1];
-                ((MainWindow)Application.Current.MainWindow).databaseBridge.UpdateTest(test);
+                databaseBridge.UpdateTest(test);
             }
         }
     }

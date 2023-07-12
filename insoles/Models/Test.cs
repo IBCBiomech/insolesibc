@@ -29,30 +29,9 @@ namespace insoles.Model
         public string? csv { get; set; }
         public string? video1 { get; set; }
         public string? video2 { get; set; }
-        [NotMapped]
-        public RenombrarCarpetaTestCommand renombrarCarpetaTestCommand { get; set; }
-        [NotMapped]
-        public BorrarTestCommand borrarTestCommand { get; set; }
-        [NotMapped]
-        public RenombrarFicheroCSVTestCommand renombrarFicheroCSVTestCommand { get; set; }
-        [NotMapped]
-        public RenombrarFicheroVideo1TestCommand renombrarFicheroVideo1TestCommand { get; set; }
-        [NotMapped]
-        public RenombrarFicheroVideo2TestCommand renombrarFicheroVideo2TestCommand { get; set; }
-        [NotMapped]
-        public CargarTestCommand cargarTestCommand { get; set; }
-        [NotMapped]
-        public ImportarTestCommand importarTestCommand { get; set; }
         public Test()
         {
             this.Nombre = "Test";
-            renombrarCarpetaTestCommand = new RenombrarCarpetaTestCommand();
-            borrarTestCommand = new BorrarTestCommand();
-            renombrarFicheroCSVTestCommand = new RenombrarFicheroCSVTestCommand();
-            renombrarFicheroVideo1TestCommand = new RenombrarFicheroVideo1TestCommand();
-            renombrarFicheroVideo2TestCommand = new RenombrarFicheroVideo2TestCommand();
-            cargarTestCommand = new CargarTestCommand(this);
-            importarTestCommand = new ImportarTestCommand(this);
         }
         public Test(DateTime date, string csv) : this()
         {

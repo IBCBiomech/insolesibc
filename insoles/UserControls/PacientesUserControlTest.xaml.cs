@@ -22,11 +22,12 @@ namespace insoles.UserControls
         {
             InitializeComponent();
             Pacientes = new();
-            PacientesTreeView pacientes = new(new DatabaseBridge());
-            PacienteTreeView paciente1 = new PacienteTreeView("Carlos");
+            DatabaseBridge databaseBridge = new DatabaseBridge();
+            PacientesTreeView pacientes = new(databaseBridge);
+            PacienteTreeView paciente1 = new PacienteTreeView("Carlos", databaseBridge);
             paciente1.Informes.Informes.Add(new InformeTreeView());
             paciente1.Tests.Tests.Add(new TestTreeView());
-            PacienteTreeView paciente2 = new PacienteTreeView("Juan");
+            PacienteTreeView paciente2 = new PacienteTreeView("Juan", databaseBridge);
             pacientes.Pacientes.Add(paciente1);
             pacientes.Pacientes.Add(paciente2);
             Pacientes.Add(pacientes);

@@ -22,7 +22,7 @@ namespace insoles.Model
             Pacientes = new ObservableCollection<PacienteTreeView>();
             foreach(Paciente paciente in pacientes)
             {
-                Pacientes.Add(new PacienteTreeView(paciente));
+                Pacientes.Add(new PacienteTreeView(paciente, databaseBridge));
             }
             obtenerPacientesCommand = new(databaseBridge);
             crearPacienteCommand = new(databaseBridge);

@@ -19,6 +19,13 @@ namespace insoles.Commands
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
+        private DatabaseBridge databaseBridge;
+        private Paciente paciente;
+        public CrearCarpetaTestCommand(DatabaseBridge databaseBridge, Paciente paciente) 
+        {
+            this.databaseBridge = databaseBridge;
+            this.paciente = paciente;
+        }
 
         public bool CanExecute(object? parameter)
         {
@@ -27,12 +34,11 @@ namespace insoles.Commands
 
         public void Execute(object? parameter)
         {
-            Paciente paciente = parameter as Paciente;
             ((MainWindow)Application.Current.MainWindow).Dispatcher.BeginInvoke(async () =>
             {
                 try
                 {
-                    await ((MainWindow)Application.Current.MainWindow).databaseBridge.CrearCarpetaTest(paciente);
+                    await databaseBridge.CrearCarpetaTest(paciente);
                 }
                 catch (Exception e)
                 {

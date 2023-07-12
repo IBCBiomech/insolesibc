@@ -1,4 +1,5 @@
 ﻿using insoles.Model;
+using insoles.States;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,7 +18,13 @@ namespace insoles.Commands
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
-
+        private DatabaseBridge databaseBridge;
+        private Paciente paciente;
+        public CrearCarpetaInformeCommand(DatabaseBridge databaseBridge, Paciente paciente)
+        {
+            this.databaseBridge = databaseBridge;
+            this.paciente = paciente;
+        }
         public bool CanExecute(object? parameter)
         {
             return true;
@@ -25,12 +32,11 @@ namespace insoles.Commands
 
         public void Execute(object? parameter)
         {
-            Paciente paciente = parameter as Paciente;
             ((MainWindow)Application.Current.MainWindow).Dispatcher.BeginInvoke(async () =>
             {
                 try
                 {
-                    await ((MainWindow)Application.Current.MainWindow).databaseBridge.CrearCarpetaInforme(paciente);
+                    await databaseBridge.CrearCarpetaInforme(paciente);
                 }
                 catch (Exception e)
                 {

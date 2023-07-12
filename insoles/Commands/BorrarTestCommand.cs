@@ -18,6 +18,11 @@ namespace insoles.Commands
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
+        private DatabaseBridge databaseBridge;
+        public BorrarTestCommand(DatabaseBridge databaseBridge)
+        {
+            this.databaseBridge = databaseBridge;
+        }
         public bool CanExecute(object? parameter)
         {
             return true;
@@ -25,12 +30,13 @@ namespace insoles.Commands
 
         public void Execute(object? parameter)
         {
-            Test test = parameter as Test;
+            TestTreeView testTreeView = parameter as TestTreeView;
+            Test test = testTreeView.testDB;
             ((MainWindow)Application.Current.MainWindow).Dispatcher.BeginInvoke(async () =>
             {
                 try
                 {
-                    await ((MainWindow)Application.Current.MainWindow).databaseBridge.DeleteTest(test);
+                    databaseBridge.DeleteTest(test);
                 }
                 catch (Exception e)
                 {

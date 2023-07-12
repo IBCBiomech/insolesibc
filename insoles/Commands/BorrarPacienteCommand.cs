@@ -1,4 +1,5 @@
 ﻿using insoles.Model;
+using insoles.States;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,6 +18,11 @@ namespace insoles.Commands
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
+        private DatabaseBridge databaseBridge;
+        public BorrarPacienteCommand(DatabaseBridge databaseBridge)
+        {
+            this.databaseBridge = databaseBridge;
+        }
         public bool CanExecute(object? parameter)
         {
             return true;
@@ -29,7 +35,7 @@ namespace insoles.Commands
             {
                 try
                 {
-                    await ((MainWindow)Application.Current.MainWindow).databaseBridge.DeletePaciente(paciente.pacienteDB);
+                    await databaseBridge.DeletePaciente(paciente.pacienteDB);
                 }
                 catch (Exception e)
                 {
