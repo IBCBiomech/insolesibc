@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace insoles.Model
 {
-    public class InsoleModel : ModelBase
+    public class InsoleModel : ModelBase, IDisposable
     {
         private static HashSet<int> idsUsed = new HashSet<int>();
         private static Dictionary<Side, InsoleModel> sidesUsed = new Dictionary<Side, InsoleModel>();
@@ -83,6 +83,16 @@ namespace insoles.Model
             int id = idsUsed.Count;
             idsUsed.Add(id);
             return id;
+        }
+        ~InsoleModel()
+        {
+            idsUsed.Remove(id);
+        }
+
+        public void Dispose()
+        {
+            idsUsed.Remove(id);
+            GC.SuppressFinalize(this);
         }
     }
 }

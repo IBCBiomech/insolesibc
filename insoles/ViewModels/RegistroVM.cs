@@ -136,6 +136,10 @@ namespace insoles.ViewModel
             {
                 Application.Current.Dispatcher.BeginInvoke(() =>
                 {
+                    foreach(InsoleModel insole in Insoles)
+                    {
+                        insole.Dispose();
+                    }
                     Insoles.Clear();
                     for (int i = 0; i < insolesReceived.Count; i++)
                     {
