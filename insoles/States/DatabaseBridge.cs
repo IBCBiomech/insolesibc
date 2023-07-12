@@ -91,9 +91,9 @@ namespace insoles.States
         }
         public Paciente? GetSelectedPaciente()
         {
-            foreach(Paciente paciente in Pacientes)
+            foreach(PacienteTreeView paciente in PacientesTreeView[0].Pacientes)
             {
-                if(paciente.IsSelected) return paciente;
+                if (paciente.IsSelected) return paciente.pacienteDB;
             }
             return null;
         }

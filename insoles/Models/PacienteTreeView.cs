@@ -31,6 +31,19 @@ namespace insoles.Model
                 pacienteDB.Nombre = value;
             }
         }
+        private bool isSelected;
+        public bool IsSelected
+        {
+            get
+            {
+                return isSelected;
+            }
+            set
+            {
+                isSelected = value;
+                OnPropertyChanged();
+            }
+        }
         public PacienteTreeView(Paciente paciente, DatabaseBridge databaseBridge) 
         {
             pacienteDB = paciente;
