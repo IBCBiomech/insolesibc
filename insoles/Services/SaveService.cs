@@ -88,7 +88,7 @@ namespace insoles.Services
                     if (syncFakets >= 0)
                     {
                         string line = "1 " +
-                            syncFakets.ToString("F3", CultureInfo.InvariantCulture) +
+                            syncFakets.ToString("F2", CultureInfo.InvariantCulture) +
                             " " + frame.ToString() + " " +
                             DictionaryToString(left[i], order) + " " +
                             DictionaryToString(right[i], order) + " " +

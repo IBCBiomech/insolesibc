@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using WisewalkSDK;
 using static WisewalkSDK.Wisewalk;
 
@@ -40,6 +41,7 @@ namespace insoles.Services
             api.updateDeviceRTC += updateDeviceRTCCallback;
             api.dataReceived += dataReceivedCallback;
             devicesConnected = new Dictionary<string, Device>();
+            ((MainWindow)Application.Current.MainWindow).Closing += (s, e) => api.Close();
         }
         public void ShowPorts()
         {
