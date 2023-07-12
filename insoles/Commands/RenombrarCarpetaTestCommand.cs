@@ -1,5 +1,6 @@
 ﻿using insoles.Forms;
 using insoles.Model;
+using insoles.States;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -19,7 +20,11 @@ namespace insoles.Commands
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
-
+        private DatabaseBridge databaseBridge;
+        public RenombrarCarpetaTestCommand(DatabaseBridge databaseBridge)
+        {
+            this.databaseBridge = databaseBridge;
+        }
         public bool CanExecute(object? parameter)
         {
             return true;
@@ -27,7 +32,8 @@ namespace insoles.Commands
 
         public void Execute(object? parameter)
         {
-            Test test = parameter as Test;
+            TestTreeView testTreeView = parameter as TestTreeView;
+            Test test = testTreeView.testDB;
             TextInputForm inputForm = new TextInputForm();
             Window mainWindow = Application.Current.MainWindow;
             inputForm.Left = mainWindow.Left + mainWindow.Width * 0.2;
@@ -36,7 +42,7 @@ namespace insoles.Commands
             {
                 Trace.WriteLine(text);
                 test.Nombre = text;
-                await ((MainWindow)Application.Current.MainWindow).databaseBridge.UpdateTest(test);
+                await databaseBridge.UpdateTest(test);
             };
             inputForm.ShowDialog();
         }

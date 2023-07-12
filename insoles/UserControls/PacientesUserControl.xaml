@@ -7,117 +7,131 @@
              xmlns:model="clr-namespace:insoles.Model"
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              xmlns:Engine="clr-namespace:Syncfusion.UI.Xaml.TreeView.Engine;assembly=Syncfusion.SfTreeView.WPF"
+             xmlns:treeViewEngine="clr-namespace:Syncfusion.UI.Xaml.TreeView.Engine;assembly=Syncfusion.SfTreeView.WPF"
              xmlns:converter="clr-namespace:insoles.Converter"
+             xmlns:dataTemplateSelector="clr-namespace:insoles.DataTemplateSelectors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <converter:PathToFileNameConverter x:Key="pathToFileNameConverter"/>
         <converter:NullToVisibilityConverter x:Key="nullToVisibilityConverter"/>
+        
+        <DataTemplate x:Key="PacientesTemplate">
+            <TextBlock Text="Pacientes">
+                <TextBlock.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Obtener" Command="{Binding obtenerPacientesCommand}"/>
+                        <MenuItem Header="Crear" Command="{Binding crearPacienteCommand}"/>
+                    </ContextMenu>
+                </TextBlock.ContextMenu>
+            </TextBlock>
+        </DataTemplate>
+
+        <DataTemplate x:Key="PacienteTemplate">
+            <TextBlock Text="{Binding Nombre}">
+                <TextBlock.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Editar" Command="{Binding editarPacienteCommand}" CommandParameter="{Binding}"/>
+                        <MenuItem Header="Borrar" Command="{Binding borrarPacienteCommand}" CommandParameter="{Binding}"/>
+                    </ContextMenu>
+                </TextBlock.ContextMenu>
+            </TextBlock>
+        </DataTemplate>
+
+        <DataTemplate x:Key="TestsTemplate">
+            <TextBlock Text="Tests">
+                <TextBlock.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Crear carpeta" Command="{Binding crearCarpetaTestCommand}" CommandParameter="{Binding}"/>
+                    </ContextMenu>
+                </TextBlock.ContextMenu>
+            </TextBlock>
+        </DataTemplate>
+
+        <DataTemplate x:Key="InformesTemplate">
+            <TextBlock Text="Informes">
+                <TextBlock.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Crear carpeta" Command="{Binding crearCarpetaInformeCommand}" CommandParameter="{Binding}"/>
+                    </ContextMenu>
+                </TextBlock.ContextMenu>
+            </TextBlock>
+        </DataTemplate>
+
+        <DataTemplate x:Key="TestTemplate">
+            <TextBlock Text="{Binding testDB.Nombre}">
+                <TextBlock.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Renombrar" Command="{Binding renombrarCarpetaTestCommand}" CommandParameter="{Binding}"/>
+                        <MenuItem Header="Borrar" Command="{Binding borrarTestCommand}" CommandParameter="{Binding}"/>
+                        <MenuItem Header="Importar" Command="{Binding importarTestCommand}" CommandParameter="{Binding}"/>
+                        <MenuItem Header="Exportar FC" Command="{Binding exportarFCTestCommand}" CommandParameter="{Binding}"/>
+                    </ContextMenu>
+                </TextBlock.ContextMenu>
+            </TextBlock>
+        </DataTemplate>
+
+        <DataTemplate x:Key="InformeTemplate">
+            <TextBlock Text="{Binding informeDB.Nombre}">
+            </TextBlock>
+        </DataTemplate>
+
+        <DataTemplate x:Key="TextTestTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+                <Image Source="pack://application:,,,/Images/file-icon.png" Width="10" Height="10" HorizontalAlignment="Left" Grid.Column="0">
+                    <Image.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Renombrar" Command="{Binding RenombrarCommand}" CommandParameter="{Binding}"/>
+                        </ContextMenu>
+                    </Image.ContextMenu>
+                </Image>
+                <TextBlock Text="{Binding Date}" Grid.Column="1"/>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="VideoTestTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+                <Image Source="pack://application:,,,/Images/video-icon.png" Width="10" Height="10" HorizontalAlignment="Left" Grid.Column="0">
+                    <Image.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Renombrar" Command="{Binding RenombrarCommand}" CommandParameter="{Binding}"/>
+                        </ContextMenu>
+                    </Image.ContextMenu>
+                </Image>
+                <TextBlock Text="{Binding Date}" Grid.Column="1"/>
+            </Grid>
+        </DataTemplate>
+
+        <dataTemplateSelector:PacientesDataTemplateSelector x:Key="PacientesDataTemplateSelector"
+                                                            PacientesTemplate="{StaticResource PacientesTemplate}"
+                                                            PacienteTemplate="{StaticResource PacienteTemplate}"
+                                                            TestsTemplate="{StaticResource TestsTemplate}"
+                                                            InformesTemplate="{StaticResource InformesTemplate}"
+                                                            TestTemplate="{StaticResource TestTemplate}"
+                                                            InformeTemplate="{StaticResource InformeTemplate}"
+                                                            TextTestFileTemplate="{StaticResource TextTestTemplate}"
+                                                            VideoTestFileTemplate="{StaticResource VideoTestTemplate}"
+                                                            />
     </UserControl.Resources>
     <Grid>
-        <TreeView>
-            <TreeViewItem ItemsSource="{Binding Pacientes, RelativeSource={RelativeSource AncestorType={x:Type local:PacientesUserControl}}}">
-                <TreeViewItem.ItemContainerStyle>
-                    <Style TargetType="{x:Type TreeViewItem}">
-                        <Setter Property="IsSelected" Value="{Binding IsSelected}" />
-                    </Style>
-                </TreeViewItem.ItemContainerStyle>
-                <TreeViewItem.Header>
-                    <TextBlock Text="Pacientes">
-                        <TextBlock.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="Obtener" Command="{Binding obtenerPacientesCommand}"/>
-                                <MenuItem Header="Crear" Command="{Binding crearPacienteCommand}"/>
-                            </ContextMenu>
-                        </TextBlock.ContextMenu>
-                    </TextBlock>
-                </TreeViewItem.Header>
-                <TreeViewItem.ItemTemplate>
-                    <DataTemplate DataType="{x:Type model:Paciente}">
-                        <TreeViewItem Header="{Binding Nombre}">
-                            <TreeViewItem.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Header="Editar" Command="{Binding editarPacienteCommand}" CommandParameter="{Binding}"/>
-                                    <MenuItem Header="Borrar" Command="{Binding borrarPacienteCommand}" CommandParameter="{Binding}"/>
-                                </ContextMenu>
-                            </TreeViewItem.ContextMenu>
-                            <TreeViewItem Header="Tests">
-                                <TreeViewItem.ContextMenu>
-                                    <ContextMenu>
-                                        <MenuItem Header="Crear carpeta" Command="{Binding crearCarpetaTestCommand}" CommandParameter="{Binding}"/>
-                                    </ContextMenu>
-                                </TreeViewItem.ContextMenu>
-                                <TreeViewItem.ItemsSource>
-                                    <Binding Path="Tests" />
-                                </TreeViewItem.ItemsSource>
-                                <TreeViewItem.ItemTemplate>
-                                    <DataTemplate DataType="{x:Type model:Test}">
-                                        <TreeViewItem Header="{Binding Nombre}">
-                                            <TreeViewItem.ContextMenu>
-                                                <ContextMenu>
-                                                    <MenuItem Header="Renombrar" Command="{Binding renombrarCarpetaTestCommand}" CommandParameter="{Binding}"/>
-                                                    <MenuItem Header="Borrar" Command="{Binding borrarTestCommand}" CommandParameter="{Binding}"/>
-                                                    <MenuItem Header="Importar" Command="{Binding importarTestCommand}" CommandParameter="{Binding}"/>
-                                                </ContextMenu>
-                                            </TreeViewItem.ContextMenu>
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="30"/>
-                                                    <ColumnDefinition Width="150"/>
-                                                </Grid.ColumnDefinitions>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="auto"/>
-                                                    <RowDefinition Height="auto"/>
-                                                    <RowDefinition Height="auto"/>
-                                                </Grid.RowDefinitions>
-                                                <Image Source="pack://application:,,,/Images/file-icon.png" Width="10" Height="10" HorizontalAlignment="Left" Visibility="{Binding csv, Converter={StaticResource nullToVisibilityConverter}}" Grid.Row="0" Grid.Column="0">
-                                                    <Image.ContextMenu>
-                                                        <ContextMenu>
-                                                            <MenuItem Header="Renombrar" Command="{Binding renombrarFicheroCSVTestCommand}" CommandParameter="{Binding}"/>
-                                                        </ContextMenu>
-                                                    </Image.ContextMenu>
-                                                </Image>
-                                                <TextBlock Text="{Binding Date}" Grid.Column="1" Grid.Row="0"/>
-                                                <Image Source="pack://application:,,,/Images/video-icon.png" Width="10" Height="10" HorizontalAlignment="Left" Visibility="{Binding video1, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="0" Grid.Row="1">
-                                                    <Image.ContextMenu>
-                                                        <ContextMenu>
-                                                            <MenuItem Header="Renombrar" Command="{Binding renombrarFicheroVideo1TestCommand}" CommandParameter="{Binding}"/>
-                                                        </ContextMenu>
-                                                    </Image.ContextMenu>
-                                                </Image>
-                                                <TextBlock Text="{Binding Date}" Visibility="{Binding video1, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="1" Grid.Row="1"/>
-                                                <Image Source="pack://application:,,,/Images/video-icon.png" Width="10" Height="10" HorizontalAlignment="Left" Visibility="{Binding video2, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="0" Grid.Row="2">
-                                                    <Image.ContextMenu>
-                                                        <ContextMenu>
-                                                            <MenuItem Header="Renombrar" Command="{Binding renombrarFicheroVideo2TestCommand}" CommandParameter="{Binding}"/>
-                                                        </ContextMenu>
-                                                    </Image.ContextMenu>
-                                                </Image>
-                                                <TextBlock Text="{Binding Date}" Visibility="{Binding video2, Converter={StaticResource nullToVisibilityConverter}}" Grid.Column="1" Grid.Row="2"/>
-                                            </Grid>
-                                        </TreeViewItem>
-                                    </DataTemplate>
-                                </TreeViewItem.ItemTemplate>
-                            </TreeViewItem>
-                            <TreeViewItem Header="Informes">
-                                <TreeViewItem.ContextMenu>
-                                    <ContextMenu>
-                                        <MenuItem Header="Crear carpeta" Command="{Binding crearCarpetaInformeCommand}" CommandParameter="{Binding}"/>
-                                    </ContextMenu>
-                                </TreeViewItem.ContextMenu>
-                                <TreeViewItem.ItemsSource>
-                                    <Binding Path="Informes" />
-                                </TreeViewItem.ItemsSource>
-                                <TreeViewItem.ItemTemplate>
-                                    <DataTemplate DataType="{x:Type model:Informe}">
-                                        <TreeViewItem Header="{Binding Nombre}"/>
-                                    </DataTemplate>
-                                </TreeViewItem.ItemTemplate>
-                            </TreeViewItem>
-                        </TreeViewItem>
-                    </DataTemplate>
-                </TreeViewItem.ItemTemplate>
-            </TreeViewItem>
-        </TreeView>
+        <syncfusion:SfTreeView
+            ItemTemplateSelector="{StaticResource PacientesDataTemplateSelector}"
+            ItemsSource="{Binding Pacientes, RelativeSource={RelativeSource AncestorType={x:Type local:PacientesUserControl}}}">
+            <syncfusion:SfTreeView.HierarchyPropertyDescriptors>
+                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:PacientesTreeView}" ChildPropertyName="Pacientes"/>
+                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:PacienteTreeView}" ChildPropertyName="MetaFolders"/>
+                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:TestsTreeView}" ChildPropertyName="Tests"/>
+                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:InformesTreeView}" ChildPropertyName="Informes"/>
+                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:TestTreeView}" ChildPropertyName="Files"/>
+            </syncfusion:SfTreeView.HierarchyPropertyDescriptors>
+        </syncfusion:SfTreeView>
     </Grid>
 </UserControl>

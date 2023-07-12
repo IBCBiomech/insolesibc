@@ -38,14 +38,6 @@ namespace insoles.Model
                 isSelected = value;
                 OnPropertyChanged();
             } }
-        [NotMapped]
-        public EditarPacienteCommand editarPacienteCommand { get; set; }
-        [NotMapped]
-        public BorrarPacienteCommand borrarPacienteCommand { get; set; }
-        [NotMapped]
-        public CrearCarpetaTestCommand crearCarpetaTestCommand { get; set; }
-        [NotMapped]
-        public CrearCarpetaInformeCommand crearCarpetaInformeCommand { get; set; }
         public Paciente(string nombre, string? apellidos, DateTime? fechaNacimiento,
             string? lugar, float? peso, float? altura, float? longitudPie, int? numeroPie,
             string? profesion)
@@ -61,10 +53,6 @@ namespace insoles.Model
             Profesion = profesion;
             Tests = new ObservableCollection<Test>();
             Informes = new ObservableCollection<Informe>();
-            editarPacienteCommand = new EditarPacienteCommand();
-            borrarPacienteCommand = new BorrarPacienteCommand();
-            crearCarpetaTestCommand = new CrearCarpetaTestCommand();
-            crearCarpetaInformeCommand = new CrearCarpetaInformeCommand();
         }
     }
 }

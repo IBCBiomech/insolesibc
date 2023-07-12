@@ -18,6 +18,11 @@ namespace insoles.Commands
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
+        private DatabaseBridge databaseBridge;
+        public EditarPacienteCommand(DatabaseBridge databaseBridge) 
+        { 
+            this.databaseBridge = databaseBridge;
+        }
 
         public bool CanExecute(object? parameter)
         {
@@ -26,9 +31,8 @@ namespace insoles.Commands
 
         public void Execute(object? parameter)
         {
-            Paciente paciente = parameter as Paciente;
-            DatabaseBridge databaseBridge = ((MainWindow)Application.Current.MainWindow).databaseBridge;
-            EditarPacienteForm form = new EditarPacienteForm(paciente, databaseBridge);
+            PacienteTreeView paciente = parameter as PacienteTreeView;
+            EditarPacienteForm form = new EditarPacienteForm(paciente.pacienteDB, databaseBridge);
             form.ShowDialog();
         }
     }

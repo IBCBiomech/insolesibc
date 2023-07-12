@@ -32,11 +32,11 @@ namespace insoles.ViewModel
         public TimelinePauseCommand timelinePauseCommand { get; set; }
         public TimelineFastBackwardCommand timelineFastBackwardCommand { get; set; }
         public TimelineFastForwardCommand timelineFastForwardCommand { get; set; }
-        public ObservableCollection<Paciente> Pacientes
+        public ObservableCollection<PacientesTreeView> Pacientes
         {
             get
             {
-                return databaseBridge.Pacientes;
+                return databaseBridge.PacientesTreeView;
             }
         }
         public TimeLine timeLine { get; set; }

@@ -23,26 +23,16 @@ namespace insoles.UserControls
     public partial class PacientesUserControlAnalisis : UserControl
     {
         public static readonly DependencyProperty PacientesProperty =
-            DependencyProperty.Register("Pacientes", typeof(ObservableCollection<Paciente>), typeof(PacientesUserControlAnalisis), new PropertyMetadata(null));
+            DependencyProperty.Register("Pacientes", typeof(ObservableCollection<PacientesTreeView>), typeof(PacientesUserControlAnalisis), new PropertyMetadata(null));
 
-        public ObservableCollection<Paciente> Pacientes
+        public ObservableCollection<PacientesTreeView> Pacientes
         {
-            get { return (ObservableCollection<Paciente>)GetValue(PacientesProperty); }
+            get { return (ObservableCollection<PacientesTreeView>)GetValue(PacientesProperty); }
             set { SetValue(PacientesProperty, value); }
         }
         public PacientesUserControlAnalisis()
         {
             InitializeComponent();
-        }
-        public void EnableCargarTest()
-        {
-            MenuItem menuItem = new MenuItem() {
-                Header = "Cargar test",
-                Command = (ICommand)new Binding("cargarTestCommand"),
-                CommandParameter = new Binding(".")
-                };
-            //ContextMenu contextMenu = (ContextMenu)test.ContextMenu;
-            //contextMenu.Items.Add(menuItem);
         }
     }
 }

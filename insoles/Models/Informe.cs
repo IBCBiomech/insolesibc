@@ -30,12 +30,9 @@ namespace insoles.Model
                 OnPropertyChanged();
             }
         }
-        [NotMapped]
-        public GenerarInformeCommand generarInformeCommand { get; set; }
         public Informe()
         {
             this.Nombre = "Informe";
-            generarInformeCommand = new GenerarInformeCommand();
         }
     }
 }

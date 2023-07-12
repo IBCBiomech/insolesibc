@@ -16,10 +16,14 @@ namespace insoles.States
     {
         private IDatabaseService databaseService;
         public ObservableCollection<Paciente> Pacientes { get; set; } = new ObservableCollection<Paciente>();
-        public PacientesTreeView PacientesTreeView { get; set; }
+        public ObservableCollection<PacientesTreeView> PacientesTreeView { get; set; }
         public DatabaseBridge()
         {
             databaseService = new SQLiteDatabaseService();
+            PacientesTreeView = new()
+            {
+                new(this)
+            };
         }
         public async Task LoadPacientes()
         {
@@ -35,6 +39,7 @@ namespace insoles.States
                     {
                         Pacientes.Add(paciente);
                     }
+                    PacientesTreeView[0] = new PacientesTreeView(pacientesDB, this);
                 });
             }
             catch (SqliteException ex)
