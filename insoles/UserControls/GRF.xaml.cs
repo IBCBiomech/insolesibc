@@ -153,10 +153,6 @@ namespace insoles.UserControls
                 if (Math.Abs(value - lastTime) > MIN_REFRESH)
                 {
                     lastTime = value;
-                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                    {
-                        plot.Refresh();
-                    }));
                     double closest = FindClosest(xs_temp_left, value);
                     int indexClosest = xs_temp_left.IndexOf(closest);
                     leftPlot.Label = "Left = " + ys_temp_left[indexClosest].ToString("0.##");
@@ -164,6 +160,10 @@ namespace insoles.UserControls
                     total = (ys_temp_left[indexClosest] + ys_temp_right[indexClosest]).Round(2).ToString() +
                         selectedUnits.ToString();
                 }
+                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    plot.Refresh();
+                }));
             }
         }
         private string _total;

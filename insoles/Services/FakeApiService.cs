@@ -115,5 +115,9 @@ namespace insoles.Services
         {
             return Insoles[handler].MAC;
         }
+        public float Latency()
+        {
+            return 0;
+        }
     }
 }

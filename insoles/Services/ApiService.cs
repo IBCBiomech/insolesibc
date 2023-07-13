@@ -22,6 +22,10 @@ namespace insoles.Services
         private Dictionary<string, Device> devicesConnected;
         public string? port_selected;
         public string? error;
+        private List<float> latencies = new();
+        private const int N_LATENCIES_AVG = 5;
+        private float latency = 0.4f;
+        private Stopwatch stopwatch = new();
 
         public event IApiService.InsoleScanEventHandler ScanReceived;
         public event IApiService.InsoleDataEventHandler DataReceived;
@@ -107,6 +111,19 @@ namespace insoles.Services
 
         private void dataReceivedCallback(byte deviceHandler, WisewalkSDK.WisewalkData data)
         {
+            if (stopwatch.IsRunning)
+            {
+                latencies.Add((float)stopwatch.Elapsed.TotalSeconds);
+                if(latencies.Count >= N_LATENCIES_AVG)
+                {
+                    for(int i = 0; i < latencies.Count; i++)
+                    {
+                        latency += latencies[i] - 0.04f * i;
+                    }
+                    latency /= latencies.Count;
+                    stopwatch.Reset();
+                }
+            }
             List<InsoleData> measures = new List<InsoleData>();
             foreach (var sole in data.Sole)
             {
@@ -127,6 +144,7 @@ namespace insoles.Services
             api.SetDeviceConfiguration(1, 100, 3, out error);
             await Task.Delay(2000);
             api.StartStream(out error);
+            stopwatch.Restart();
         }
         private Dev findInsole(string mac)
         {
@@ -218,6 +236,10 @@ namespace insoles.Services
         public string GetMac(byte handler)
         {
             return devicesConnected[handler.ToString()].Id;
+        }
+        public float Latency()
+        {
+            return latency;
         }
     }
 }

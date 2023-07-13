@@ -117,7 +117,7 @@ namespace insoles.ViewModel
             apiService = new ApiService(state); // Real API
             cameraService = new CameraService();
             liveCalculationsService = new LiveCalculationsService(Insoles, apiService);
-            saveService = new SaveService(state);
+            saveService = new SaveService(state, apiService);
             //Init commands
             scanCommand = new ScanCommand(apiService, cameraService);
             connectCommand = new ConnectCommand(apiService);

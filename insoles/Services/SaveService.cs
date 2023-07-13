@@ -22,6 +22,7 @@ namespace insoles.Services
     {
         private RegistroState state;
         private DatabaseBridge databaseBridge;
+        private IApiService apiService;
         private VideoWriter[] videoWriters;
         private Dictionary<string, string> headerHolder = new();
         private StringBuilder dataHolder;
@@ -57,9 +58,10 @@ namespace insoles.Services
             Sensor.Arch, Sensor.Hallux, Sensor.HeelR, Sensor.HeelL, Sensor.Met1,
             Sensor.Met3, Sensor.Met5, Sensor.Toes
         };
-        public SaveService(RegistroState state)
+        public SaveService(RegistroState state, IApiService apiService)
         {
             this.state = state;
+            this.apiService = apiService;
         }
         private string FileNameGenerator()
         {
@@ -84,7 +86,8 @@ namespace insoles.Services
                 StringBuilder lines = new StringBuilder();
                 for (int i = 0; i < left.Count; i++)
                 {
-                    float syncFakets = fakets + (float)state.timeDiference - 0.01f * (left.Count - 1);
+                    float syncFakets = fakets + (float)state.timeDiference - 0.01f * (left.Count - 1) - 
+                        apiService.Latency();
                     if (syncFakets >= 0)
                     {
                         string line = "1 " +
