@@ -65,10 +65,11 @@ namespace insoles.Services
             this.apiService = apiService;
             ((MainWindow)Application.Current.MainWindow).Closing += (s, e) => 
             {
-                foreach (VideoWriter videoWriter in videoWriters)
-                {
-                    videoWriter.Dispose();
-                }
+                if(videoWriters != null)
+                    foreach (VideoWriter videoWriter in videoWriters)
+                    {
+                        videoWriter.Dispose();
+                    }
             };
         }
         private string FileNameGenerator()
