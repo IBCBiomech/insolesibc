@@ -15,6 +15,7 @@ using System.Diagnostics;
 using System.Windows.Documents;
 using insoles.Model;
 using Newtonsoft.Json;
+using System.Windows;
 
 namespace insoles.Services
 {
@@ -62,6 +63,13 @@ namespace insoles.Services
         {
             this.state = state;
             this.apiService = apiService;
+            ((MainWindow)Application.Current.MainWindow).Closing += (s, e) => 
+            {
+                foreach (VideoWriter videoWriter in videoWriters)
+                {
+                    videoWriter.Dispose();
+                }
+            };
         }
         private string FileNameGenerator()
         {

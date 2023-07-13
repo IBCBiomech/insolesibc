@@ -4,6 +4,8 @@ using System.Drawing;
 using Emgu.CV.CvEnum;
 using System;
 using System.Diagnostics;
+using System.Windows;
+using Size = System.Drawing.Size;
 
 namespace insoles.Services
 {
@@ -55,6 +57,7 @@ namespace insoles.Services
             videoCapture.Start();
             //Task.Run(() => { DisplayCameraCallback(); });
             this.cameraService = cameraService;
+            ((MainWindow)Application.Current.MainWindow).Closing += (s, e) => Stop();
         }
         private void ImageGrabbedCallback(object? sender, EventArgs eventArgs)
         {
