@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace insoles.Model
 {
-    public class PacienteTreeView : ModelBase
+    public class PacienteTreeView : PacientesTreeViewBase
     {
         public Paciente pacienteDB { get; set; }
         public ObservableCollection<MetaFolderTreeView> MetaFolders { get; set; }
@@ -29,19 +29,6 @@ namespace insoles.Model
             set
             {
                 pacienteDB.Nombre = value;
-            }
-        }
-        private bool isSelected;
-        public bool IsSelected
-        {
-            get
-            {
-                return isSelected;
-            }
-            set
-            {
-                isSelected = value;
-                OnPropertyChanged();
             }
         }
         public PacienteTreeView(Paciente paciente, DatabaseBridge databaseBridge) 

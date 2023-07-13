@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace insoles.Model
 {
-    public class TestTreeView : ModelBase
+    public class TestTreeView : PacientesTreeViewBase
     {
         public Test testDB {get;set;}
         public ObservableCollection<TestFileTreeView> Files { get; set; }

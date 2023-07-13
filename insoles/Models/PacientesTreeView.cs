@@ -1,5 +1,6 @@
 ﻿using insoles.Commands;
 using insoles.Model;
+using insoles.Models;
 using insoles.States;
 using insoles.Utilities;
 using System;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace insoles.Model
 {
-    public class PacientesTreeView : ModelBase
+    public class PacientesTreeView : PacientesTreeViewBase
     {
         public ICollection<PacienteTreeView> Pacientes { get; set; }
         public string Nombre { get; set; } = "Pacientes";

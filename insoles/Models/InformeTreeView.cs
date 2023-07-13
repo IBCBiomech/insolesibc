@@ -1,4 +1,5 @@
 ﻿using insoles.Commands;
+using insoles.Models;
 using insoles.Utilities;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace insoles.Model
 {
-    public class InformeTreeView : ModelBase
+    public class InformeTreeView : PacientesTreeViewBase
     {
         public Informe informeDB { get; set; }
         public GenerarInformeCommand generarInformeCommand { get; set; }

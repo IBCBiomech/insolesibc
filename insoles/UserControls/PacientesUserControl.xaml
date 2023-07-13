@@ -126,12 +126,16 @@
             ItemTemplateSelector="{StaticResource PacientesDataTemplateSelector}"
             ItemsSource="{Binding Pacientes, RelativeSource={RelativeSource AncestorType={x:Type local:PacientesUserControl}}}">
             <syncfusion:SfTreeView.HierarchyPropertyDescriptors>
-                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:PacientesTreeView}" ChildPropertyName="Pacientes"/>
+                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:PacientesTreeView}" ChildPropertyName="Pacientes"
+                                                            IsSelectedPropertyName="IsSelected"/>
                 <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:PacienteTreeView}" ChildPropertyName="MetaFolders"
                                                             IsSelectedPropertyName="IsSelected"/>
-                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:TestsTreeView}" ChildPropertyName="Tests"/>
-                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:InformesTreeView}" ChildPropertyName="Informes"/>
-                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:TestTreeView}" ChildPropertyName="Files"/>
+                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:TestsTreeView}" ChildPropertyName="Tests"
+                                                            IsSelectedPropertyName="IsSelected"/>
+                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:InformesTreeView}" ChildPropertyName="Informes"
+                                                            IsSelectedPropertyName="IsSelected"/>
+                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:TestTreeView}" ChildPropertyName="Files"
+                                                            IsSelectedPropertyName="IsSelected"/>
             </syncfusion:SfTreeView.HierarchyPropertyDescriptors>
         </syncfusion:SfTreeView>
     </Grid>

@@ -25,19 +25,6 @@ namespace insoles.Model
         public string Profesion { get; set; }
         public ICollection<Test> Tests { get; set; }
         public ICollection<Informe> Informes { get; set; }
-        [NotMapped]
-        private bool isSelected;
-        [NotMapped]
-        public bool IsSelected { 
-            get 
-            {
-                return isSelected;
-            }
-            set 
-            { 
-                isSelected = value;
-                OnPropertyChanged();
-            } }
         public Paciente(string nombre, string? apellidos, DateTime? fechaNacimiento,
             string? lugar, float? peso, float? altura, float? longitudPie, int? numeroPie,
             string? profesion)

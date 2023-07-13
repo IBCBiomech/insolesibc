@@ -1,4 +1,5 @@
-﻿using insoles.Utilities;
+﻿using insoles.Model;
+using insoles.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace insoles.Models
 {
-    public class MetaFolderTreeView : ModelBase
+    public class MetaFolderTreeView : PacientesTreeViewBase
     {
     }
 }
