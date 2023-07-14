@@ -111,17 +111,22 @@ namespace insoles.Services
 
         private void dataReceivedCallback(byte deviceHandler, WisewalkSDK.WisewalkData data)
         {
-            
+            // Stopwatch comienza en StartStream en el método Capture (ApiService)
+
             if (stopwatch.IsRunning)
             {
+                // Después de 100 paquetes que se tienen que capturar 2 segundos.
+                
+
                 latencies.Add((float)stopwatch.Elapsed.TotalSeconds);
                 if(latencies.Count >= N_LATENCIES_AVG)
                 {
                     for(int i = 0; i < latencies.Count; i++)
                     {
-                        latency += latencies[i] - 0.04f * (i / 2);
+                        latency += latencies[i] - 0.04f * (i / 2); // Cada grupo paquete de cuatro datos recibidos son 0.04s e i/2 por las plantillas L y R
                     }
-                    latency /= latencies.Count;
+                    latency /= latencies.Count;  // Calculas la media.
+
                     Trace.WriteLine("latency = " + latency);
                     stopwatch.Reset();
                 }
