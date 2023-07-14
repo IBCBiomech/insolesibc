@@ -30,6 +30,7 @@ namespace insoles.Model
                 OnPropertyChanged();
             }
         }
+        public string? path { get; set; }
         public Informe()
         {
             this.Nombre = "Informe";

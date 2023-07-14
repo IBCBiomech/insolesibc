@@ -33,6 +33,9 @@ namespace insoles.Migrations
                     b.Property<int>("PacienteId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("path")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PacienteId");

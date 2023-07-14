@@ -3,10 +3,12 @@ using ScottPlot;
 using Syncfusion.DocIO.DLS;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace insoles.Services
 {
@@ -21,7 +23,20 @@ namespace insoles.Services
             this.grafoMariposa = grafoMariposa;
             this.heatmap = heatmap;
         }
-        public async void GenerarInforme()
+        private string FileNameGenerator()
+        {
+            DateTime now = DateTime.Now;
+            string year = now.Year.ToString();
+            string month = now.Month.ToString().PadLeft(2, '0');
+            string day = now.Day.ToString().PadLeft(2, '0');
+            string hour = now.Hour.ToString().PadLeft(2, '0');
+            string minute = now.Minute.ToString().PadLeft(2, '0');
+            string second = now.Second.ToString().PadLeft(2, '0');
+            string milisecond = now.Millisecond.ToString().PadLeft(3, '0');
+            string filename = year + month + day + '-' + hour + '-' + minute + '-' + second + '-' + milisecond;
+            return filename;
+        }
+        public async Task<string> GenerarInforme()
         {
             grf.rangePlot.Plot.SaveFig("range.png");
             grf.plot.Plot.SaveFig("GRF.png");
@@ -76,9 +91,12 @@ namespace insoles.Services
             textRange = paragraph.AppendText("A continuación se muestra un informe con el Gráfico de Presiones Mínimo:") as WTextRange;
             IWPicture picture6 = paragraph.AppendPicture(new System.Drawing.Bitmap(@"heatmap_min.png")) as WPicture;
 
-            document.Save("Sample.docx");
+            string path = "C:\\Users\\" + Environment.UserName + "\\Documents";
+            string filename = FileNameGenerator() + ".docx";
+            string filenamePath = path + Path.DirectorySeparatorChar + filename;
+            document.Save(filenamePath);
 
-
+            return filenamePath;
         }
     }
 }

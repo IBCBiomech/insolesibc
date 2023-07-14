@@ -16,12 +16,12 @@ namespace insoles.Model
         public InformeTreeView(Informe informe)
         {
             informeDB = informe;
-            generarInformeCommand = new GenerarInformeCommand();
+            generarInformeCommand = new GenerarInformeCommand(informeDB);
         }
         public InformeTreeView()
         {
             informeDB = new();
-            generarInformeCommand = new GenerarInformeCommand();
+            generarInformeCommand = new GenerarInformeCommand(informeDB);
         }
     }
 }

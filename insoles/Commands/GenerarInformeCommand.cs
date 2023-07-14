@@ -19,16 +19,21 @@ namespace insoles.Commands
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
+        private Informe informe;
+        public GenerarInformeCommand(Informe informe)
+        {
+            this.informe = informe;
+        }
         public bool CanExecute(object? parameter)
         {
-            return true;
+            return informe.path == null;
         }
 
         public void Execute(object? parameter)
         {
             IInformesGeneratorService informesGeneratorService =
                 ((MainWindow)Application.Current.MainWindow).informesGeneratorService;
-            informesGeneratorService.GenerarInforme();
+            informe.path = informesGeneratorService.GenerarInforme().Result;
         }
     }
 }

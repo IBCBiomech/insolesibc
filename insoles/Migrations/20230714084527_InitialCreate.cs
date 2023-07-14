@@ -40,7 +40,8 @@ namespace insoles.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     PacienteId = table.Column<int>(type: "INTEGER", nullable: false),
                     Date = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Nombre = table.Column<string>(type: "TEXT", nullable: false)
+                    Nombre = table.Column<string>(type: "TEXT", nullable: false),
+                    path = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
