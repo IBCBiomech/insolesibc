@@ -20,21 +20,40 @@ namespace insoles.ViewModel
         public ICommand InformesCommand { get; set; }
         public ResetLayoutCommand ResetLayoutCommand { get; set; }
 
-
+        private HomeVM homeVM;
+        private RegistroVM registroVM;
+        private AnalisisVM analisisVM;
+        private InformesVM informesVM;
         private void Home(object obj){
-            CurrentView = new HomeVM();
+            if(homeVM == null)
+            {
+                homeVM = new HomeVM();
+            }
+            CurrentView = homeVM;
         }
         private void Registro(object obj)
         {
-            CurrentView = new RegistroVM();
+            if (registroVM == null)
+            {
+                registroVM = new RegistroVM();
+            }
+            CurrentView = registroVM;
         }
         private void Analisis(object obj)
         {
-            CurrentView = new AnalisisVM();
+            if (analisisVM == null)
+            {
+                analisisVM = new AnalisisVM();
+            }
+            CurrentView = analisisVM;
         }
         private void Informes(object obj)
         {
-            CurrentView = new InformesVM();
+            if (informesVM == null)
+            {
+                informesVM = new InformesVM();
+            }
+            CurrentView = informesVM;
         }
         public NavigationVM()
         {

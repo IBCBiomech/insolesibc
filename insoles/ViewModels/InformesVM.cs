@@ -10,11 +10,11 @@ namespace insoles.ViewModel
     public class InformesVM : ViewModelBase
     {
         private DatabaseBridge databaseBridge;
-        public ObservableCollection<Paciente> Pacientes
+        public ObservableCollection<PacientesTreeView> Pacientes
         {
             get
             {
-                return databaseBridge.Pacientes;
+                return databaseBridge.PacientesTreeView;
             }
         }
         public ObtenerPacientesCommand obtenerPacientesCommand { get; set; }
