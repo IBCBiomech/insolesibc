@@ -149,8 +149,9 @@ namespace insoles.UserControls
         {
             set
             {
-                timeLine.X = value;
-                if (Math.Abs(value - lastTime) > MIN_REFRESH)
+                if(timeLine != null)
+                    timeLine.X = value;
+                if (Math.Abs(value - lastTime) > MIN_REFRESH && xs_temp_left != null)
                 {
                     lastTime = value;
                     double closest = FindClosest(xs_temp_left, value);

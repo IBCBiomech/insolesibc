@@ -63,7 +63,7 @@ namespace insoles.Services
         {
             this.state = state;
             this.apiService = apiService;
-            ((MainWindow)Application.Current.MainWindow).Closing += (s, e) => 
+            ((MainWindow)Application.Current.MainWindow).Closed += (s, e) => 
             {
                 if(videoWriters != null)
                     foreach (VideoWriter videoWriter in videoWriters)

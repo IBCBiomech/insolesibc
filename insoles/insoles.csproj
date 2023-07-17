@@ -92,6 +92,7 @@
     <PackageReference Include="Syncfusion.DocIO.Wpf" Version="22.1.36" />
     <PackageReference Include="Syncfusion.Licensing" Version="22.1.36" />
     <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="22.1.36" />
+    <PackageReference Include="Syncfusion.SfInput.WPF" Version="22.1.36" />
     <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="22.1.36" />
     <PackageReference Include="Syncfusion.Shared.WPF" Version="22.1.36" />
     <PackageReference Include="Syncfusion.Tools.WPF" Version="22.1.36" />

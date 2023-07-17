@@ -57,7 +57,7 @@ namespace insoles.Services
             videoCapture.Start();
             //Task.Run(() => { DisplayCameraCallback(); });
             this.cameraService = cameraService;
-            ((MainWindow)Application.Current.MainWindow).Closing += (s, e) => Stop();
+            ((MainWindow)Application.Current.MainWindow).Closed += (s, e) => Stop();
         }
         private void ImageGrabbedCallback(object? sender, EventArgs eventArgs)
         {

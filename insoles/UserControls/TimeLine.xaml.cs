@@ -17,9 +17,8 @@ namespace insoles.UserControls
     {
         private AnalisisState state;
 
-        private const int TICK_MS = 10;
+        private const int TICK_MS = 20;
         private Timer timer;
-        private Stopwatch stopwatch;
         private double deltaTime = 0;
 
         private HSpan line;
@@ -39,17 +38,7 @@ namespace insoles.UserControls
         {
             InitializeComponent();
             this.state = state;
-            plot.Plot.XAxis2.SetSizeLimit(pad: 0);
-            plot.Plot.XAxis2.SetSizeLimit(pad: 0);
-            //plot.Plot.SetInnerViewLimits(xMin: minX, xMax: maxX, yMin: minY, yMax: maxY);
-            plot.Plot.SetOuterViewLimits(xMin: minX, xMax: maxX, yMin: minY, yMax: maxY);
-            line = plot.Plot.AddHorizontalSpan(pos - width, pos + width, Color.DeepSkyBlue);
-            line.DragEnabled = true;
-            line.DragFixedSize = true;
-            line.DragLimitMin = minX;
-            line.DragLimitMax = maxX;
-            plot.Plot.SetAxisLimitsX(minX, maxX);
-            plot.Plot.SetAxisLimitsY(minY, maxY);
+            /*
             plot.Plot.XAxis.TickLabelFormat((time) =>
             {
                 TimeSpan timeSpan = TimeSpan.FromSeconds(time);
@@ -68,106 +57,43 @@ namespace insoles.UserControls
                     timeSpan.Seconds);
                 }
             });
-            plot.Plot.YAxis.TickLabelFormat((_) =>
+            */
+            slider.ValueChanged += (sender, e) =>
             {
-                return "";
-            });
-            line.Dragged += (sender, e) =>
-            {
-                deltaTime = line.X1;
-                InvokeTimeChanged(deltaTime);
-                if (stopwatch.IsRunning)
-                {
-                    stopwatch.Restart();
-                }
-                else
-                {
-                    stopwatch.Reset();
-                }
+                InvokeTimeChanged(e.NewValue);
             };
-            plot.Refresh();
 
             timer = new Timer();
             timer.Interval = TICK_MS;
             timer.Elapsed += (object sender, ElapsedEventArgs e)=>
             {
-                TimeSpan time = stopwatch.Elapsed;
-                double totalTime = time.TotalSeconds + deltaTime;
-                if(totalTime > maxX)
+                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    totalTime = maxX;
-                    state.paused = true;
-                    stopwatch.Reset();
-                    timer.Stop();
-                }
-                InvokeTimeChanged(totalTime);
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    line.X1 = totalTime - width / 2;
-                    line.X2 = totalTime + width / 2;
-                    plot.Refresh();
-                });
+                    slider.Value += TICK_MS / 1000.0;
+                }));
             };
-            stopwatch = new Stopwatch();
-        }
-        public void ChangeLimits(double max)
-        {
-            ChangeLimits(0, max);
-        }
-        public void ChangeLimits(double min, double max)
-        {
-            minX = min;
-            maxX = max;
-            //plot.Plot.SetInnerViewLimits(xMin: minX, xMax: maxX, yMin: minY, yMax: maxY);
-            plot.Plot.SetOuterViewLimits(xMin: minX, xMax: maxX, yMin: minY, yMax: maxY);
-            plot.Plot.SetAxisLimitsX(minX, maxX);
-            plot.Refresh();
         }
         public void Play()
         {
             timer.Start();
-            stopwatch.Start();
             state.paused = false;
         }
         public void Pause()
         {
             timer.Stop();
-            stopwatch.Stop();
             state.paused = true;
         }
         public void FastForward()
         {
             Trace.WriteLine("FastForward from TimeLine");
-            if (stopwatch.IsRunning)
-            {
-                stopwatch.Restart();
-            }
-            else
-            {
-                stopwatch.Reset();
-            }
-            deltaTime = maxX;
-            InvokeTimeChanged(deltaTime);
-            line.X1 = maxX - width;
-            line.X2 = maxX;
-            plot.Refresh();
+            deltaTime = slider.Maximum;
+            slider.Value = slider.Maximum;
         }
         public void FastBackward()
         {
             Trace.WriteLine("FastBackward from TimeLine");
-            if (stopwatch.IsRunning)
-            {
-                stopwatch.Restart();
-            }
-            else
-            {
-                stopwatch.Reset();
-            }
-            deltaTime = minX;
-            InvokeTimeChanged(deltaTime);
-            line.X1 = minX;
-            line.X2 = minX + width;
-            plot.Refresh();
+            deltaTime = slider.Minimum;
+            slider.Value = slider.Minimum;
         }
         private void InvokeTimeChanged(double time)
         {
@@ -176,6 +102,11 @@ namespace insoles.UserControls
                 TimeChanged?.Invoke(this, time);
                 lastTime = time;
             }
+        }
+        public void ChangeLimits(double max)
+        {
+            slider.Maximum = max;
+            slider.TickFrequency = Math.Round(slider.Maximum / 10);
         }
     }
 }
