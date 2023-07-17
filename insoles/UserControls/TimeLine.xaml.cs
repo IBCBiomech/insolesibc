@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Windows.Threading;
 using insoles.States;
 using System.Windows;
+using System.Windows.Input;
 
 namespace insoles.UserControls
 {
@@ -17,7 +18,7 @@ namespace insoles.UserControls
     {
         private AnalisisState state;
 
-        private const int TICK_MS = 20;
+        private const int TICK_MS = 10;
         private Timer timer;
         private double deltaTime = 0;
 
@@ -31,6 +32,8 @@ namespace insoles.UserControls
         private double maxY = 1;
         private double lastTime;
         private double MIN_CHANGE_TO_NOTIFY;
+
+        private double MOUSE_SENSITIVITY = 0.5;
 
         public delegate void TimeEventHandler(object sender, double time);
         public event TimeEventHandler TimeChanged;
@@ -108,5 +111,45 @@ namespace insoles.UserControls
             slider.Maximum = max;
             slider.TickFrequency = Math.Round(slider.Maximum / 10);
         }
+
+        private void slider_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Left || e.Key == Key.Right)
+            {
+                double increment = 0.01; // Set your desired increment value
+
+                if (e.Key == Key.Left)
+                {
+                    slider.Value -= increment;
+                }
+                else if (e.Key == Key.Right)
+                {
+                    slider.Value += increment;
+                }
+
+                e.Handled = true; // Set to true to prevent default slider behavior
+            }
+        }
+        /*
+private void slider_PreviewMouseMove(object sender, MouseEventArgs e)
+{
+   if (e.LeftButton == MouseButtonState.Pressed)
+   {
+       var mousePosition = e.GetPosition(slider);
+       double totalWidth = slider.ActualWidth;
+       double valueRange = slider.Maximum - slider.Minimum;
+
+       double relativeMousePosition = mousePosition.X / totalWidth;
+       double mouseMovement = relativeMousePosition * valueRange - slider.Value;
+       double newValue = slider.Value + mouseMovement * MOUSE_SENSITIVITY;
+
+       // Ensure the new value stays within the valid range
+       newValue = Math.Min(Math.Max(newValue, slider.Minimum), slider.Maximum);
+
+       // Update the value
+       slider.Value = newValue;
+   }
+}
+*/
     }
 }

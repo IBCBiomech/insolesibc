@@ -44,6 +44,6 @@
             </StackPanel>
             <TextBlock x:Name="time" Grid.Row="1" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Top" Text="{Binding ElementName=slider, Path=Value, Converter={StaticResource timespanConverter}}" />
         </Grid>
-        <syncfusion:SfRangeSlider x:Name="slider" Grid.Column="1" Minimum="0" Maximum="100"  ShowValueLabels="True" TickFrequency="5" Width="400"/>
+        <syncfusion:SfRangeSlider x:Name="slider" PreviewKeyDown="slider_PreviewKeyDown" Grid.Column="1" Minimum="0" Maximum="100"  ShowValueLabels="True" TickFrequency="5" Width="400"/>
     </Grid>
 </UserControl>
