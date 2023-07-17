@@ -292,6 +292,8 @@ namespace insoles.Services
             {
                 DataInsole left = new();
                 DataInsole right = new();
+                // AVG
+                /*
                 for (int j = i; j < Math.Min(i + state.framesTaken, graphData.length); j++)
                 {
                     FrameDataInsoles frameData = (FrameDataInsoles)graphData[j];
@@ -305,6 +307,23 @@ namespace insoles.Services
                 {
                     left[sensor] /= Math.Min(state.framesTaken, graphData.length - i);
                     right[sensor] /= Math.Min(state.framesTaken, graphData.length - i);
+                }
+                */
+                //Max
+                for (int j = i; j < Math.Min(i + state.framesTaken, graphData.length); j++)
+                {
+                    FrameDataInsoles frameData = (FrameDataInsoles)graphData[j];
+                    foreach (Sensor sensor in Enum.GetValues(typeof(Sensor)))
+                    {
+                        if (frameData.left[sensor] > left[sensor])
+                        {
+                            left[sensor] = frameData.left[sensor];
+                        }
+                        if (frameData.right[sensor] > right[sensor])
+                        {
+                            right[sensor] = frameData.right[sensor];
+                        }
+                    }
                 }
                 pressureMapsLive.Add(CalculateOne(left, right).Result);
             }
