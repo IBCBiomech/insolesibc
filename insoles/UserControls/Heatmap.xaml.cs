@@ -315,7 +315,7 @@ namespace insoles.UserControls
             {
                 plot.Clear(colorbar.GetType());
             }
-            IColormap colormap = extendColormap(Colormap.Jet, Color.LightGray, (color, extended, ratio) => extended, extendSize: 1, totalSize: 256);
+            IColormap colormap = extendColormap(Colormap.Jet, Color.Black, HelperFunctions.Interpolate, extendSize: 10, totalSize: 256);
             heatmap = plot.AddHeatmap(data, colormap: new Colormap(colormap));
             heatmap.Update(data, min: 0, max: colorbarMax);
             heatmap.Smooth = true;
