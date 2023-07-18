@@ -34,6 +34,7 @@ namespace insoles.UserControls
     public partial class Heatmap : System.Windows.Controls.UserControl, INotifyPropertyChanged
     {
         const int BACKGROUND = -1;
+        const int PERCENTIL_MAX = 10;
 
         private ScottPlot.Plottable.Heatmap heatmap;
         private Colorbar colorbar;
@@ -240,6 +241,24 @@ namespace insoles.UserControls
         }
         public Task UpdateLimits(GraphData data)
         {
+            List<int> pressures = new List<int>();
+            for (int i = 0; i < data.length; i++)
+            {
+                FrameDataInsoles frame = (FrameDataInsoles)data[i];
+                DataInsole left = frame.left;
+                foreach (var pressure in left.pressures.Values)
+                {
+                    pressures.Add((int)pressure);
+                }
+                DataInsole right = frame.right;
+                foreach (var pressure in right.pressures.Values)
+                {
+                    pressures.Add((int)pressure);
+                }
+            }
+            pressures.Sort((x, y) => y.CompareTo(x));
+            colorbarMax = pressures[pressures.Count * PERCENTIL_MAX / 100];
+            /* MAX Pressure
             int max = 0;
             for(int i = 0; i < data.length; i++)
             {
@@ -262,6 +281,7 @@ namespace insoles.UserControls
                 }
             }
             colorbarMax = max;
+            */
             maxTime = data.maxTime;
             return Task.CompletedTask;
         }
