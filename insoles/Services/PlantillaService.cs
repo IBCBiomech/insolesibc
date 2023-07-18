@@ -21,7 +21,7 @@ namespace insoles.Services
         private ICodesService codes { get; set; }
         public PlantillaService(ICodesService codes)
         {
-            Uri uri = new Uri("pack://application:,,,/Images/bitmap.png");
+            Uri uri = new Uri("pack://application:,,,/Images/bitmap_reduced.png");
             StreamResourceInfo sri = Application.GetResourceStream(uri);
             Stream stream = sri.Stream;
             Bitmap bmp = new Bitmap(stream);

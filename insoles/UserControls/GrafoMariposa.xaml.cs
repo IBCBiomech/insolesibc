@@ -1,6 +1,7 @@
 ﻿#define ALPHA
 
 using insoles.DataHolders;
+using insoles.Services;
 using insoles.Utilities;
 using ScottPlot;
 using ScottPlot.Drawing;
@@ -27,7 +28,8 @@ namespace insoles.UserControls
     public partial class GrafoMariposa : UserControl, INotifyPropertyChanged
     {
         private ScottPlot.Plottable.Image image;
-        private double scale = 1;
+        private double scaleX;
+        private double scaleY;
         private const double PLANTILLA_HEIGHT = 445;
         private const double PLANTILLA_WIDTH = 615;
         private const int N_FRAMES_ANIMATE = 200;
@@ -108,12 +110,15 @@ namespace insoles.UserControls
             }
         }
         private bool drawing = false;
-        public GrafoMariposa()
+        public GrafoMariposa(IPlantillaService plantilla)
         {
             InitializeComponent();
             ConfigurePlot();
             DibujarPlantilla();
             plot.Refresh();
+            scaleX = PLANTILLA_WIDTH / plantilla.getLength(0);
+            scaleY = PLANTILLA_HEIGHT / plantilla.getLength(1);
+            Trace.WriteLine(scaleX + " " + scaleY);
             DataContext = this;
         }
         public void ConfigurePlot()
@@ -132,12 +137,12 @@ namespace insoles.UserControls
             Stream stream = sri.Stream;
             Bitmap bitmap = new Bitmap(stream);
             image = plot.Plot.AddImage(bitmap, 0, 0, anchor: Alignment.LowerCenter);
-            image.HeightInAxisUnits = PLANTILLA_HEIGHT * scale;
-            image.WidthInAxisUnits = PLANTILLA_WIDTH * scale;
-            double xMin = -PLANTILLA_WIDTH * scale / 2;
-            double xMax = PLANTILLA_WIDTH * scale / 2;
+            image.HeightInAxisUnits = PLANTILLA_HEIGHT;
+            image.WidthInAxisUnits = PLANTILLA_WIDTH;
+            double xMin = -PLANTILLA_WIDTH / 2;
+            double xMax = PLANTILLA_WIDTH / 2;
             double yMin = 0;
-            double yMax = PLANTILLA_HEIGHT * scale;
+            double yMax = PLANTILLA_HEIGHT;
             plot.Plot.SetInnerViewLimits(xMin, xMax, yMin, yMax);
             plot.Plot.SetOuterViewLimits(yMin: 0);
 
@@ -199,14 +204,13 @@ namespace insoles.UserControls
             double[] x = new double[x_list.Count];
             double[] y = new double[y_list.Count];
 
-            double qualityMult = 1;
             for (int i = 0; i < x_list.Count; i++)
             {
-                x[i] = (x_list[i] * qualityMult - PLANTILLA_WIDTH / 2) * scale;
+                x[i] = (x_list[i] * scaleX - PLANTILLA_WIDTH / 2);
             }
             for (int i = 0; i < y_list.Count; i++)
             {
-                y[i] = y_list[i] * qualityMult * scale;
+                y[i] = y_list[i] * scaleY;
             }
             for (int i = 0; i < Math.Min(x.Length, y.Length) - 1; i++)
             {

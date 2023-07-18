@@ -68,7 +68,7 @@ namespace insoles.Services
                     inverse_reduced_distances = LoadMatrixDictionary();
                 }
                 catch (IOException) {
-                    MessageBox.Show("No se ha encontrado el fichero de la matrix\nSe va a proceder a recalcularla", "inverse_distances_reduced.mtx not found", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.Yes);
+                    MessageBox.Show("No se ha encontrado el fichero de la matrix\nSe va a proceder a recalcularla", "inverse_distances_from_reduced.mtx not found", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.Yes);
                     Dictionary<Sensor, (float, float)> centersLeft;
                     Dictionary<Sensor, (float, float)> centersRight;
                     CalculateCenters(sensor_positions_left, sensor_positions_right,
@@ -79,10 +79,11 @@ namespace insoles.Services
                     ReduceSensorsHeel(centersRight, reduceSensorsFunc);
                     inverse_reduced_distances = CalculateMinDistances(sensor_map, codes,
                         centersLeftReduced, centersRightReduced);
+                    SaveMatrixDictionary(inverse_reduced_distances, "C:\\Users\\" + Environment.UserName + "\\Documents" + "\\inverse_distances_from_reduced.mtx");
                 }
                 try
                 {
-                    Uri uri = new Uri("pack://application:,,,/Precalculus/inverse_distances_background.mtx");
+                    Uri uri = new Uri("pack://application:,,,/Precalculus/inverse_distances_background_from_reduced.mtx");
                     StreamResourceInfo sri = Application.GetResourceStream(uri);
                     Stream stream = sri.Stream;
                     inverse_distances_background = MatrixMarketReader.ReadMatrix<float>(stream);
@@ -91,7 +92,7 @@ namespace insoles.Services
                 {
                     MessageBox.Show("No se ha encontrado el fichero de la matrix\nSe va a proceder a recalcularla", "inverse_distances_background.mtx not found", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.Yes);
                     inverse_distances_background = CalculateMinDistancesBackground(sensor_map, codes);
-                    //MatrixMarketWriter.WriteMatrix("C:\\Users\\" + Environment.UserName + "\\Documents" + "\\inverse_distances_background.mtx", inverse_distances_background);
+                    MatrixMarketWriter.WriteMatrix("C:\\Users\\" + Environment.UserName + "\\Documents" + "\\inverse_distances_background_from_reduced.mtx", inverse_distances_background);
                 }
                 isInitialized = true;
             });
@@ -108,7 +109,7 @@ namespace insoles.Services
         {
             Dictionary<SensorHeelReduced, Matrix<float>> dictionary;
 
-            Uri uri = new Uri("pack://application:,,,/Precalculus/inverse_distances_reduced.mtx");
+            Uri uri = new Uri("pack://application:,,,/Precalculus/inverse_distances_reduced_from_reduced.mtx");
             StreamResourceInfo sri = Application.GetResourceStream(uri);
 
             using (Stream stream = sri.Stream)

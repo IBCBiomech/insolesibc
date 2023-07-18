@@ -57,7 +57,7 @@ namespace insoles.ViewModel
             butterfly = new ButterflyService(plantilla);
             pressureMap = new PressureMapCentersService(state, plantilla.sensor_map, codes,
                 plantilla.CalculateSensorPositionsLeft(), plantilla.CalculateSensorPositionsRight());
-            grafoMariposa = new GrafoMariposa();
+            grafoMariposa = new GrafoMariposa(plantilla);
             heatmap = new Heatmap(state);
             informesGeneratorService = new InformesGeneratorService(grf, grafoMariposa, heatmap);
             ((MainWindow)Application.Current.MainWindow).informesGeneratorService = informesGeneratorService;

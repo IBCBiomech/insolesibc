@@ -16,6 +16,7 @@
     <None Remove="Images\bio3.png" />
     <None Remove="Images\bitmap.png" />
     <None Remove="Images\bitmap_mariposa.png" />
+    <None Remove="Images\bitmap_reduced.png" />
     <None Remove="Images\capture-icon.png" />
     <None Remove="Images\close_icon.png" />
     <None Remove="Images\connect-icon.png" />
@@ -48,7 +49,9 @@
     <None Remove="Images\toggle.png" />
     <None Remove="Images\video-icon.png" />
     <None Remove="Precalculus\inverse_distances_background.mtx" />
+    <None Remove="Precalculus\inverse_distances_background_from_reduced.mtx" />
     <None Remove="Precalculus\inverse_distances_reduced.mtx" />
+    <None Remove="Precalculus\inverse_distances_reduced_from_reduced.mtx" />
   </ItemGroup>
 
   <ItemGroup>
@@ -116,6 +119,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\bitmap_mariposa.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\bitmap_reduced.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\capture-icon.png">
@@ -199,6 +205,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Precalculus\inverse_distances_background.mtx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Precalculus\inverse_distances_background_from_reduced.mtx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Precalculus\inverse_distances_reduced_from_reduced.mtx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Precalculus\inverse_distances_reduced.mtx">
