@@ -39,6 +39,12 @@ namespace insoles
         {
             viewChanged?.Invoke(this, EventArgs.Empty);
         }
+
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
+        }
+
         /// <summary>
         /// Atención: este método hay que comentarlo si no, no funciona el Dock
         /// Necesario para mover la ventana sin controles
@@ -50,5 +56,7 @@ namespace insoles
         //    // Begin dragging the window
         //    this.DragMove();
         //}
+
+
     }
 }
