@@ -45,6 +45,7 @@ namespace insoles.UserControls
         private double maxTime;
 
         private int colorbarMax;
+        private int colorbarPercentile;
 
         double xMin;
         double xMax;
@@ -257,7 +258,8 @@ namespace insoles.UserControls
                 }
             }
             pressures.Sort((x, y) => y.CompareTo(x));
-            colorbarMax = pressures[pressures.Count * PERCENTIL_MAX / 100];
+            colorbarPercentile = pressures[pressures.Count * PERCENTIL_MAX / 100];
+            colorbarMax = pressures[0];
             /* MAX Pressure
             int max = 0;
             for(int i = 0; i < data.length; i++)
@@ -337,7 +339,16 @@ namespace insoles.UserControls
             }
             IColormap colormap = extendColormap(Colormap.Jet, Color.Black, HelperFunctions.Interpolate, extendSize: 10, totalSize: 256);
             heatmap = plot.AddHeatmap(data, colormap: new Colormap(colormap));
-            heatmap.Update(data, min: 0, max: colorbarMax);
+            int max;
+            if(selectedMetric == Metric.Max && !animate)
+            {
+                max = colorbarMax;
+            }
+            else
+            {
+                max = colorbarPercentile;
+            }
+            heatmap.Update(data, min: 0, max: max);
             heatmap.Smooth = true;
             colorbar = plot.AddColorbar(heatmap);
             plot.Margins(0, 0);
