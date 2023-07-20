@@ -11,6 +11,8 @@ namespace insoles.Database
 
         public DbSet<Informe> Informes { get; set; }
 
+        public DbSet<InformeFile> InformeFiles { get; set; }
+
         public DBContextSqlLite()
         {
             Database.EnsureCreated();
@@ -31,6 +33,11 @@ namespace insoles.Database
                 .HasOne(i => i.Paciente)
                 .WithMany(p => p.Informes)
                 .HasForeignKey(i => i.PacienteId);
+
+            modelBuilder.Entity<InformeFile>()
+                .HasOne(f => f.Informe)
+                .WithMany(i => i.Files)
+                .HasForeignKey(f => f.InformeId);
 
             modelBuilder.Entity<Paciente>()
                 .Property(p => p.Apellidos)

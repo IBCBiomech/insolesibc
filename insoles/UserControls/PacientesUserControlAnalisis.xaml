@@ -116,6 +116,23 @@
             </Grid>
         </DataTemplate>
 
+        <DataTemplate x:Key="InformeFileTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+                <Image Source="pack://application:,,,/Images/file-icon.png" Width="10" Height="10" HorizontalAlignment="Left" Grid.Column="0">
+                    <Image.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Cargar" Command="{Binding cargarInformeCommand}" CommandParameter="{Binding}"/>
+                        </ContextMenu>
+                    </Image.ContextMenu>
+                </Image>
+                <TextBlock Text="{Binding informeDB.Date}" Grid.Column="1"/>
+            </Grid>
+        </DataTemplate>
+
         <dataTemplateSelector:PacientesDataTemplateSelector x:Key="PacientesDataTemplateSelector"
                                                             PacientesTemplate="{StaticResource PacientesTemplate}"
                                                             PacienteTemplate="{StaticResource PacienteTemplate}"
@@ -125,6 +142,7 @@
                                                             InformeTemplate="{StaticResource InformeTemplate}"
                                                             TextTestFileTemplate="{StaticResource TextTestTemplate}"
                                                             VideoTestFileTemplate="{StaticResource VideoTestTemplate}"
+                                                            InformeFileTemplate="{StaticResource InformeFileTemplate}"
                                                             />
     </UserControl.Resources>
     <Grid>
@@ -137,6 +155,7 @@
                 <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:TestsTreeView}" ChildPropertyName="Tests"/>
                 <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:InformesTreeView}" ChildPropertyName="Informes"/>
                 <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:TestTreeView}" ChildPropertyName="Files"/>
+                <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:InformeTreeView}" ChildPropertyName="Files"/>
             </syncfusion:SfTreeView.HierarchyPropertyDescriptors>
         </syncfusion:SfTreeView>
     </Grid>

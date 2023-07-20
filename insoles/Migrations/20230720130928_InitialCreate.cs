@@ -39,9 +39,7 @@ namespace insoles.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     PacienteId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Date = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    Nombre = table.Column<string>(type: "TEXT", nullable: false),
-                    path = table.Column<string>(type: "TEXT", nullable: true)
+                    Nombre = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -78,6 +76,32 @@ namespace insoles.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "InformeFiles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    InformeId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    path = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InformeFiles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InformeFiles_Informes_InformeId",
+                        column: x => x.InformeId,
+                        principalTable: "Informes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InformeFiles_InformeId",
+                table: "InformeFiles",
+                column: "InformeId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_Informes_PacienteId",
                 table: "Informes",
@@ -93,10 +117,13 @@ namespace insoles.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Informes");
+                name: "InformeFiles");
 
             migrationBuilder.DropTable(
                 name: "Tests");
+
+            migrationBuilder.DropTable(
+                name: "Informes");
 
             migrationBuilder.DropTable(
                 name: "Pacientes");

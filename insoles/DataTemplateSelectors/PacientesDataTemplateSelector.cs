@@ -22,6 +22,7 @@ namespace insoles.DataTemplateSelectors
         public DataTemplate InformeTemplate { get; set; }
         public DataTemplate TextTestFileTemplate { get; set; }
         public DataTemplate VideoTestFileTemplate { get; set; }
+        public DataTemplate InformeFileTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
@@ -59,6 +60,10 @@ namespace insoles.DataTemplateSelectors
                 else if (node.Content is VideoTestFileTreeView)
                 {
                     return VideoTestFileTemplate;
+                }
+                else if(node.Content is InformeFileTreeView)
+                {
+                    return InformeFileTemplate;
                 }
             }
 

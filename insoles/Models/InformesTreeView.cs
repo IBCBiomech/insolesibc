@@ -21,7 +21,7 @@ namespace insoles.Model
             Informes = new ObservableCollection<InformeTreeView>();
             foreach(Informe informe in informes)
             {
-                Informes.Add(new InformeTreeView(informe));
+                Informes.Add(new InformeTreeView(databaseBridge, informe));
             }
             crearCarpetaInformeCommand = new CrearCarpetaInformeCommand(databaseBridge, paciente);
         }

@@ -11,7 +11,7 @@ using insoles.Database;
 namespace insoles.Migrations
 {
     [DbContext(typeof(DBContextSqlLite))]
-    [Migration("20230714084527_InitialCreate")]
+    [Migration("20230720130928_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -26,9 +26,6 @@ namespace insoles.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("Date")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -36,14 +33,34 @@ namespace insoles.Migrations
                     b.Property<int>("PacienteId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("path")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PacienteId");
 
                     b.ToTable("Informes");
+                });
+
+            modelBuilder.Entity("insoles.Model.InformeFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("InformeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("path")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InformeId");
+
+                    b.ToTable("InformeFiles");
                 });
 
             modelBuilder.Entity("insoles.Model.Paciente", b =>
@@ -128,6 +145,17 @@ namespace insoles.Migrations
                     b.Navigation("Paciente");
                 });
 
+            modelBuilder.Entity("insoles.Model.InformeFile", b =>
+                {
+                    b.HasOne("insoles.Model.Informe", "Informe")
+                        .WithMany("Files")
+                        .HasForeignKey("InformeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Informe");
+                });
+
             modelBuilder.Entity("insoles.Model.Test", b =>
                 {
                     b.HasOne("insoles.Model.Paciente", "Paciente")
@@ -137,6 +165,11 @@ namespace insoles.Migrations
                         .IsRequired();
 
                     b.Navigation("Paciente");
+                });
+
+            modelBuilder.Entity("insoles.Model.Informe", b =>
+                {
+                    b.Navigation("Files");
                 });
 
             modelBuilder.Entity("insoles.Model.Paciente", b =>

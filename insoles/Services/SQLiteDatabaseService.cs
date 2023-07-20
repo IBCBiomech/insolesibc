@@ -153,7 +153,31 @@ namespace insoles.Services
         {
             using (var dbContext = new DBContextSqlLite())
             {
-                return await dbContext.Pacientes.Include(p => p.Tests).Include(p => p.Informes).ToListAsync();
+                return await dbContext.Pacientes.Include(p => p.Tests).Include(p => p.Informes)
+                    .ThenInclude(i => i.Files).ToListAsync();
+            }
+        }
+
+        public async Task GenerarInforme(Informe informe, InformeFile file)
+        {
+            using (var dbContext = new DBContextSqlLite())
+            {
+                Informe? existingInforme = dbContext.Informes.FirstOrDefault(i => i.Id == informe.Id);
+
+                if (existingInforme != null)
+                {
+                    existingInforme.Files.Add(file);
+                    try
+                    {
+                        await dbContext.SaveChangesAsync();
+                    }
+                    catch (DbUpdateException ex)
+                    {
+                        Exception innerException = ex.InnerException;
+                        Trace.WriteLine(innerException.Message);
+                        throw innerException;
+                    }
+                }
             }
         }
     }
