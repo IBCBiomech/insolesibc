@@ -22,6 +22,8 @@ namespace insoles.States
         private bool _calibrating = false;
         public bool calibrating { get { return _calibrating; } set { _calibrating = value; OnPropertyChanged(); } }
         public double? timeDiference { get; set; } = null;
+        public double? timeDiferenceCamera { get; set; } = null;
+        public int? firstIndex { get; set; } = null;
         public Paciente? selectedPaciente
         {
             get
