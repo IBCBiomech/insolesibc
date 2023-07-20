@@ -24,6 +24,7 @@
     <None Remove="Images\customer_page.png" />
     <None Remove="Images\Document_Icon.png" />
     <None Remove="Images\drive_icon.png" />
+    <None Remove="Images\exit_icon.png" />
     <None Remove="Images\fast-backward-icon.png" />
     <None Remove="Images\fast-forward-icon.png" />
     <None Remove="Images\file-icon.png" />
@@ -43,6 +44,7 @@
     <None Remove="Images\record-icon.png" />
     <None Remove="Images\red-circle-icon.png" />
     <None Remove="Images\reload-sync-icon.png" />
+    <None Remove="Images\reset_dock_icon.png" />
     <None Remove="Images\shipment_page.png" />
     <None Remove="Images\shutdown_def.png" />
     <None Remove="Images\shutdown_mo.png" />
@@ -142,6 +144,9 @@
     </Resource>
     <Resource Include="Images\Document_Icon.png" />
     <Resource Include="Images\drive_icon.png" />
+    <Resource Include="Images\exit_icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\fast-backward-icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -192,6 +197,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\reload-sync-icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\reset_dock_icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\shipment_page.png">

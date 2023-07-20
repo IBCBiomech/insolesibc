@@ -41,21 +41,23 @@
                 <Border Background="#f2f2f2"
                          />
 
-                <StackPanel Height="500" Margin="0,150,0,150">
-
-                    <Menu:Btn Style="{StaticResource BtnStyle}"
+                <Menu:Btn Style="{StaticResource BtnStyle}"
                               Command="{Binding ResetLayoutCommand}"
                               IsChecked="True" Width="72"
-                              HorizontalAlignment="Left">
+                              HorizontalAlignment="Left" VerticalAlignment="Top">
 
-                        <Grid Margin="0,0,76,0">
+                    <Grid Margin="0,0,76,0">
 
-                            <Image Source="Images/reload-sync-icon.png"
+                        <Image Source="Images/reset_dock_icon.png"
                                    Style="{StaticResource Image_Style}" />
 
-                        </Grid>
+                    </Grid>
 
-                    </Menu:Btn>
+                </Menu:Btn>
+
+                <StackPanel Height="500" Margin="0,150,0,150">
+
+
                     <!--// Home //-->
 
                     <Menu:Btn Style="{StaticResource BtnStyle}"
@@ -119,6 +121,20 @@
 
                 </StackPanel>
 
+                <Menu:Btn Style="{StaticResource BtnStyle}"
+                              Click="CloseApp_Click"
+                              IsChecked="True" Width="72"
+                              HorizontalAlignment="Left" VerticalAlignment="Bottom">
+
+                    <Grid Margin="0,0,76,0">
+
+                        <Image Source="Images/exit_icon.png"
+                                   Style="{StaticResource Image_Style}" />
+
+                    </Grid>
+
+                </Menu:Btn>
+
             </Grid>
 
             <Grid Grid.Column="1">
@@ -134,10 +150,6 @@
             </Grid>
 
         </Grid>
-
-        <Button x:Name="CloseApp"
-                Style="{StaticResource ExitApp}"
-                Click="CloseApp_Click" RenderTransformOrigin="0.553,0.053" Margin="0,0,10,0" />
 
     </Grid>
 </Window>
