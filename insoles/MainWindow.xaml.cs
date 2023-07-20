@@ -26,6 +26,8 @@ namespace insoles
         public AnalisisState analisisState { get; set; }
         public IInformesGeneratorService informesGeneratorService { get; set; }
         public event EventHandler viewChanged;
+
+        private DateTime lastClickTime = DateTime.Now;
         public MainWindow()
         {
             InitializeComponent();
@@ -42,7 +44,26 @@ namespace insoles
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this.DragMove();
+            TimeSpan elapsed = DateTime.Now - lastClickTime;
+            if (elapsed.TotalMilliseconds < 300)
+            {
+                if(WindowState == WindowState.Normal)
+                {
+                    WindowState = WindowState.Maximized;
+                }
+                else if(WindowState == WindowState.Maximized) 
+                {
+                    WindowState = WindowState.Normal;
+                }
+                lastClickTime = DateTime.Now.AddMilliseconds(-500);
+            }
+            else
+            {
+                this.DragMove();
+            }
+
+            lastClickTime = DateTime.Now;
+            
         }
 
         /// <summary>
