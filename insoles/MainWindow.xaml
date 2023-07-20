@@ -11,7 +11,7 @@
         WindowStartupLocation="CenterScreen"
         AllowsTransparency="True"
         Background="Transparent"
-        Title="MainWindow" Height="700" Width="1400">
+        Title="MainWindow" Height="700" Width="1400" ResizeMode="CanResizeWithGrip">
 
     <Window.DataContext>
         <vm:NavigationVM />
