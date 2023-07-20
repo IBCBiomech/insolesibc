@@ -310,11 +310,20 @@ namespace insoles.UserControls
         }
         private void DrawDataWPF(Matrix<float> data, WpfPlot plot) 
         {
-            DrawData(data, plot.Plot, ref heatmap, ref colorbar);
+            int max;
+            if (selectedMetric == Metric.Max && !animate)
+            {
+                max = colorbarMax;
+            }
+            else
+            {
+                max = colorbarPercentile;
+            }
+            DrawData(data, plot.Plot, ref heatmap, ref colorbar, max);
             Dispatcher.Invoke(() => plot.Refresh());
         }
         public void DrawData(Matrix<float> data, Plot plot,
-            ref ScottPlot.Plottable.Heatmap heatmap, ref Colorbar colorbar)
+            ref ScottPlot.Plottable.Heatmap heatmap, ref Colorbar colorbar, int maxBar)
         {
             Matrix<double> dataDouble = data.Map(Convert.ToDouble);
             dataDouble = dataDouble.Transpose();
@@ -324,10 +333,10 @@ namespace insoles.UserControls
             avg = (int)filtered.Average();
             max = (int)filtered.Maximum();
             min = (int)filtered.Minimum();
-            Draw(dataNull, plot, ref heatmap, ref colorbar);
+            Draw(dataNull, plot, ref heatmap, ref colorbar, maxBar);
         }
         private void Draw(double?[,] data, Plot plot, 
-            ref ScottPlot.Plottable.Heatmap heatmap, ref Colorbar colorbar)
+            ref ScottPlot.Plottable.Heatmap heatmap, ref Colorbar colorbar, int maxBar)
         {
             if (heatmap != null)
             {
@@ -339,16 +348,7 @@ namespace insoles.UserControls
             }
             IColormap colormap = extendColormap(Colormap.Jet, Color.Black, HelperFunctions.Interpolate, extendSize: 10, totalSize: 256);
             heatmap = plot.AddHeatmap(data, colormap: new Colormap(colormap));
-            int max;
-            if(selectedMetric == Metric.Max && !animate)
-            {
-                max = colorbarMax;
-            }
-            else
-            {
-                max = colorbarPercentile;
-            }
-            heatmap.Update(data, min: 0, max: max);
+            heatmap.Update(data, min: 0, max: maxBar);
             heatmap.Smooth = true;
             colorbar = plot.AddColorbar(heatmap);
             plot.Margins(0, 0);
@@ -541,17 +541,17 @@ namespace insoles.UserControls
                 pressure_maps_metrics[Metric.Avg].RowCount * 0.25, size: 50, color: Color.DarkGray);
             R = plot.Plot.AddText("R", pressure_maps_metrics[Metric.Avg].ColumnCount * 1.05,
                 pressure_maps_metrics[Metric.Avg].RowCount * 0.25, size: 50, color: Color.DarkGray);
-            DrawData(pressure_maps_metrics[Metric.Avg], plot.Plot, ref heatmap, ref colorbar);
+            DrawData(pressure_maps_metrics[Metric.Avg], plot.Plot, ref heatmap, ref colorbar, colorbarPercentile);
             plot.Plot.SetAxisLimits(xMin, xMax * 1.5, yMin, yMax);
             plot.Refresh();
             plot.Render();
             plot.Plot.SaveFig("heatmap_avg.png");  
-            DrawData(pressure_maps_metrics[Metric.Max], plot.Plot, ref heatmap, ref colorbar);
+            DrawData(pressure_maps_metrics[Metric.Max], plot.Plot, ref heatmap, ref colorbar, colorbarMax);
             plot.Plot.SetAxisLimits(xMin, xMax * 1.5, yMin, yMax);
             plot.Refresh();
             plot.Render();
             plot.Plot.SaveFig("heatmap_max.png");
-            DrawData(pressure_maps_metrics[Metric.Min], plot.Plot, ref heatmap, ref colorbar);
+            DrawData(pressure_maps_metrics[Metric.Min], plot.Plot, ref heatmap, ref colorbar, colorbarPercentile);
             plot.Plot.SetAxisLimits(xMin, xMax * 1.5, yMin, yMax);
             plot.Refresh();
             plot.Render();
