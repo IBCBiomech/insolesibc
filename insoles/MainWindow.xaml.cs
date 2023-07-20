@@ -76,7 +76,7 @@ namespace insoles
 
         //    // Begin dragging the window
         //    this.DragMove();
-        //}
+        //} 
 
 
     }
