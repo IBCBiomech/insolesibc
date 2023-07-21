@@ -98,7 +98,7 @@ namespace insoles.ViewModel
                             if (state.test.video1 != null)
                             {
                                 await Application.Current.Dispatcher.BeginInvoke(() =>
-                                    camaraViewport1.videoPath = state.test.video1);
+                                    camaraViewport1.videoPath = Environment.ExpandEnvironmentVariables(state.test.video1));
                             }
                             else
                             {
@@ -107,7 +107,7 @@ namespace insoles.ViewModel
                             if (state.test.video2 != null)
                             {
                                 await Application.Current.Dispatcher.BeginInvoke(() =>
-                                    camaraViewport2.videoPath = state.test.video2);
+                                    camaraViewport2.videoPath = Environment.ExpandEnvironmentVariables(state.test.video2));
                             }
                             else
                             {

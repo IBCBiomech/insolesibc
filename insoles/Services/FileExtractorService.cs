@@ -14,7 +14,7 @@ namespace insoles.Services
     {
         public async Task<GraphData> ExtractCSV(string path)
         {
-            using (var reader = new StreamReader(path))
+            using (var reader = new StreamReader(Environment.ExpandEnvironmentVariables(path)))
             {
                 int headerLines = 5; //Hay un salto de linea al final del header
                 try
@@ -43,7 +43,7 @@ namespace insoles.Services
 
         public VariablesData ExtractVariables(string path)
         {
-            using (var reader = new StreamReader(path))
+            using (var reader = new StreamReader(Environment.ExpandEnvironmentVariables(path)))
             {
                 try
                 {

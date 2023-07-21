@@ -27,13 +27,15 @@ namespace insoles
             base.OnStartup(e);
 
             string userName = Environment.UserName;
-            string path = "C:\\Users\\" + userName + "\\insoles";
+            string path = @"%HOMEDRIVE%%HOMEPATH%\insoles";
+            string expandedPath = Environment.ExpandEnvironmentVariables(path);
+            Trace.WriteLine(expandedPath);
 
-            if (!Directory.Exists(path))
+            if (!Directory.Exists(expandedPath))
             {
                 try
                 {
-                    Directory.CreateDirectory(path);
+                    Directory.CreateDirectory(expandedPath);
                     Trace.WriteLine("Creada carpeta insoles");
                 }
                 catch (Exception ex)
@@ -43,7 +45,7 @@ namespace insoles
             }
             else
             {
-                Trace.WriteLine("Creada carpeta insoles ya existe");
+                Trace.WriteLine("Carpeta insoles ya existe");
             }
 
             // Aquí puedes continuar con la lógica de inicio de tu aplicación.

@@ -150,14 +150,14 @@ namespace insoles.Services
         {
             videoFileNames = new List<string>();
             string userName = Environment.UserName;
-            string path = "C:\\Users\\" + userName + "\\insoles";
+            string path = @"%HOMEDRIVE%%HOMEPATH%\insoles";
             string filePath = path + Path.DirectorySeparatorChar + FileName;
             videoWriters = new VideoWriter[cameraService.NumCamerasOpened];
             for(int i = 0; i < videoWriters.Length; i++)
             {
                 string filePath_i = filePath + "cam" + i + ".avi";
                 videoFileNames.Add(filePath_i);
-                videoWriters[i] = new VideoWriter(filePath_i, 
+                videoWriters[i] = new VideoWriter(Environment.ExpandEnvironmentVariables(filePath_i), 
                     cameraService.getFourcc(i), cameraService.getFps(i), 
                     cameraService.getResolution(i), true);
             }  
@@ -175,16 +175,16 @@ namespace insoles.Services
             }
             videoWriters = null;
             string userName = Environment.UserName;
-            string path = "C:\\Users\\" + userName + "\\insoles";
+            string path = @"%HOMEDRIVE%%HOMEPATH%\insoles";
             string filePath = path + Path.DirectorySeparatorChar + FileName + ".txt";
             if (headerHolder.Count > 0)
             {
                 string headerSerialized = JsonConvert.SerializeObject(headerHolder, Formatting.None);
-                File.WriteAllTextAsync(filePath, headerSerialized + "\n" + dataHolder.ToString());
+                File.WriteAllTextAsync(Environment.ExpandEnvironmentVariables(filePath), headerSerialized + "\n" + dataHolder.ToString());
             }
             else
             {
-                File.WriteAllTextAsync(filePath, dataHolder.ToString());
+                File.WriteAllTextAsync(Environment.ExpandEnvironmentVariables(filePath), dataHolder.ToString());
             }
             FileName = null;
             headerHolder = new();

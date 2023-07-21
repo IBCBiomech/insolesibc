@@ -79,7 +79,7 @@ namespace insoles.Services
                     ReduceSensorsHeel(centersRight, reduceSensorsFunc);
                     inverse_reduced_distances = CalculateMinDistances(sensor_map, codes,
                         centersLeftReduced, centersRightReduced);
-                    SaveMatrixDictionary(inverse_reduced_distances, "C:\\Users\\" + Environment.UserName + "\\insoles" + "\\inverse_distances_from_reduced2.mtx");
+                    SaveMatrixDictionary(inverse_reduced_distances, @"%HOMEDRIVE%%HOMEPATH%\insoles" + @"\inverse_distances_from_reduced2.mtx");
                 }
                 try
                 {
@@ -92,7 +92,7 @@ namespace insoles.Services
                 {
                     MessageBox.Show("No se ha encontrado el fichero de la matrix\nSe va a proceder a recalcularla", "inverse_distances_background.mtx not found", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.Yes);
                     inverse_distances_background = CalculateMinDistancesBackground(sensor_map, codes);
-                    MatrixMarketWriter.WriteMatrix("C:\\Users\\" + Environment.UserName + "\\insoles" + "\\inverse_distances_background_from_reduced2.mtx", inverse_distances_background);
+                    MatrixMarketWriter.WriteMatrix(@"%HOMEDRIVE%%HOMEPATH%\insoles" + @"\inverse_distances_background_from_reduced2.mtx", inverse_distances_background);
                 }
                 isInitialized = true;
             });
