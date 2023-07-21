@@ -16,11 +16,13 @@ namespace insoles.Model
     {
         public Informe informeDB { get; set; }
         public GenerarInformeCommand generarInformeCommand { get; set; }
+        public RenombrarCarpetaInformeCommand renombrarCommand { get; set; }
         public ObservableCollection<InformeFileTreeView> Files { get; set; }
         public InformeTreeView(DatabaseBridge databaseBridge, Informe informe)
         {
             informeDB = informe;
             generarInformeCommand = new GenerarInformeCommand(databaseBridge, informeDB);
+            renombrarCommand = new RenombrarCarpetaInformeCommand(databaseBridge);
             Files = new ObservableCollection<InformeFileTreeView>();
             foreach (InformeFile file in informe.Files)
             {

@@ -149,6 +149,14 @@ namespace insoles.Services
                 }
             }
         }
+        public async Task UpdateInforme(Informe informe)
+        {
+            using (var dbContext = new DBContextSqlLite())
+            {
+                dbContext.Informes.Update(informe);
+                await dbContext.SaveChangesAsync();
+            }
+        }
         public async Task<List<Paciente>> GetPacientes()
         {
             using (var dbContext = new DBContextSqlLite())

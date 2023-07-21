@@ -76,6 +76,7 @@
             <TextBlock Text="{Binding informeDB.Nombre}">
                 <TextBlock.ContextMenu>
                     <ContextMenu>
+                        <MenuItem Header="Renombrar Informe" Command="{Binding renombrarCommand}" CommandParameter="{Binding}"/>
                         <MenuItem Header="Generar Informe" Command="{Binding generarInformeCommand}" CommandParameter="{Binding}"/>
                     </ContextMenu>
                 </TextBlock.ContextMenu>

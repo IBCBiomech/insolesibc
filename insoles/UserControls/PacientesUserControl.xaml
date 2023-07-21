@@ -73,6 +73,11 @@
 
         <DataTemplate x:Key="InformeTemplate">
             <TextBlock Text="{Binding informeDB.Nombre}">
+                <TextBlock.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Renombrar Informe" Command="{Binding renombrarCommand}" CommandParameter="{Binding}"/>
+                    </ContextMenu>
+                </TextBlock.ContextMenu>
             </TextBlock>
         </DataTemplate>
 

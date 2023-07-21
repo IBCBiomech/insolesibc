@@ -89,6 +89,11 @@ namespace insoles.States
             await databaseService.CrearCarpetaInforme(paciente);
             await LoadPacientes();
         }
+        public async Task UpdateInforme(Informe informe)
+        {
+            await databaseService.UpdateInforme(informe);
+            await LoadPacientes();
+        }
         public async Task GenerarInforme(Informe informe, InformeFile file)
         {
             await databaseService.GenerarInforme(informe, file);
