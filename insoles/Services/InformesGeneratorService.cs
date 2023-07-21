@@ -91,7 +91,7 @@ namespace insoles.Services
             textRange = paragraph.AppendText("A continuación se muestra un informe con el Gráfico de Presiones Mínimo:") as WTextRange;
             IWPicture picture6 = paragraph.AppendPicture(new System.Drawing.Bitmap(@"heatmap_min.png")) as WPicture;
 
-            string path = "C:\\Users\\" + Environment.UserName + "\\Documents";
+            string path = "C:\\Users\\" + Environment.UserName + "\\insoles";
             string filename = FileNameGenerator() + ".docx";
             string filenamePath = path + Path.DirectorySeparatorChar + filename;
             document.Save(filenamePath);

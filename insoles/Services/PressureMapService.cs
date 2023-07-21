@@ -52,7 +52,7 @@ namespace insoles.Services
                 {
                     MessageBox.Show("No se ha encontrado el fichero de la matrix\nSe va a proceder a recalcularla", "inverse_distances_background.mtx not found", MessageBoxButton.OK, MessageBoxImage.Warning, MessageBoxResult.Yes);
                     inverse_distances_background = CalculateMinDistancesBackground(sensor_map, codes);
-                    //MatrixMarketWriter.WriteMatrix("C:\\Users\\" + Environment.UserName + "\\Documents" + "\\inverse_distances_background.mtx", inverse_distances_background);
+                    //MatrixMarketWriter.WriteMatrix("C:\\Users\\" + Environment.UserName + "\\insoles" + "\\inverse_distances_background.mtx", inverse_distances_background);
                 }
                 isInitialized = true;
             });

@@ -150,7 +150,7 @@ namespace insoles.Services
         {
             videoFileNames = new List<string>();
             string userName = Environment.UserName;
-            string path = "C:\\Users\\" + userName + "\\Documents";
+            string path = "C:\\Users\\" + userName + "\\insoles";
             string filePath = path + Path.DirectorySeparatorChar + FileName;
             videoWriters = new VideoWriter[cameraService.NumCamerasOpened];
             for(int i = 0; i < videoWriters.Length; i++)
@@ -175,7 +175,7 @@ namespace insoles.Services
             }
             videoWriters = null;
             string userName = Environment.UserName;
-            string path = "C:\\Users\\" + userName + "\\Documents";
+            string path = "C:\\Users\\" + userName + "\\insoles";
             string filePath = path + Path.DirectorySeparatorChar + FileName + ".txt";
             if (headerHolder.Count > 0)
             {
