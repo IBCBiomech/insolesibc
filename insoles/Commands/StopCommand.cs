@@ -43,8 +43,6 @@ namespace insoles.Commands
             state.capturing = false;
             state.recording = false;
             state.timeDiference = null;
-            state.firstIndex = null;
-            state.timeDiferenceCamera = null;
             Task.Run(async () =>
             {
                 await databaseBridge.AddTest(state.fixedPaciente, test);
