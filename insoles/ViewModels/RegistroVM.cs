@@ -186,14 +186,9 @@ namespace insoles.ViewModel
                     if (state.recording)
                     {
                         saveService.AppendVideo(frame, index);
-                        if (state.firstIndex == null)
+                        if(state.timeDiference == null)
                         {
-                            state.firstIndex = index;
                             stopwatch.Restart();
-                        }
-                        else if (state.firstIndex != index && state.timeDiferenceCamera == null)
-                        {
-                            state.timeDiferenceCamera = stopwatch.Elapsed.TotalSeconds;
                         }
                     }
                 }
@@ -206,14 +201,9 @@ namespace insoles.ViewModel
                     if (state.recording)
                     {
                         saveService.AppendVideo(frame, index);
-                        if (state.firstIndex == null)
+                        if (state.timeDiference == null)
                         {
-                            state.firstIndex = index;
                             stopwatch.Restart();
-                        }
-                        else if (state.firstIndex != index && state.timeDiferenceCamera == null)
-                        {
-                            state.timeDiferenceCamera = stopwatch.Elapsed.TotalSeconds;
                         }
                     }
                 }
@@ -296,15 +286,12 @@ namespace insoles.ViewModel
                 }
                 if (state.recording)
                 {
-                    if (state.firstIndex != null)
+                    if(state.timeDiference == null)
                     {
-                        if (state.timeDiference == null)
-                        {
-                            state.timeDiference = stopwatch.Elapsed.TotalSeconds;
-                            stopwatch.Reset();
-                        }
-                        saveService.AppendCSV(left_pure, right_pure, metricLeft_pure, metricRight_pure);
+                        state.timeDiference = stopwatch.Elapsed.TotalSeconds;
+                        stopwatch.Reset();
                     }
+                    saveService.AppendCSV(left_pure, right_pure, metricLeft_pure, metricRight_pure);
                 }
             };
             Plot = new WpfPlot();
