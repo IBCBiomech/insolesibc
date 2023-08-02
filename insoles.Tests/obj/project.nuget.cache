@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "UOYu6otcq8ogPf+9qiFTPzQtn8dio29zpUefy+LW2OgKmrtOsOhkh52T6ljFww+C1LTkOJDrA5NDzJ0dXMragQ==",
+  "dgSpecHash": "mjbldSZS7RZ7QRPSbxEHyGcl8OI1lJWEDiiAbuH8lqSCQ20AzNv3NRBm5fraK9Xc43RhgoyuswlPAyD78GyfVQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Deva\\wsibc\\insolesibc\\insoles.Tests\\insoles.Tests.csproj",
   "expectedPackageFiles": [
@@ -75,6 +75,7 @@
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfbusyindicator.wpf\\22.1.36\\syncfusion.sfbusyindicator.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfgridcommon.wpf\\22.1.36\\syncfusion.sfgridcommon.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfinput.wpf\\22.1.36\\syncfusion.sfinput.wpf.22.1.36.nupkg.sha512",
+    "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfskinmanager.wpf\\22.1.36\\syncfusion.sfskinmanager.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sftreeview.wpf\\22.1.36\\syncfusion.sftreeview.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.shared.wpf\\22.1.36\\syncfusion.shared.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.tools.wpf\\22.1.36\\syncfusion.tools.wpf.22.1.36.nupkg.sha512",

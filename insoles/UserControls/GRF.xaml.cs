@@ -68,7 +68,6 @@ namespace insoles.UserControls
         List<double> XPoints = new List<double>();
 
         private Units _selectedUnits;
-        public WpfPlot rangePlot;
         private VLine rangeVlabel;
         private List<VLine> listOfVlabels = new List<VLine>();
         private ScatterPlot leftInsolePlot;
@@ -188,7 +187,16 @@ namespace insoles.UserControls
             plot.MouseDown += PlotControl_MouseDown;
             plot.MouseMove += Plot_MouseMove;
 
-            plot.Plot.Render();
+            plot.Plot.Title("Raw Signal");
+            plot.Plot.Style(ScottPlot.Style.Seaborn);
+            plot.Plot.Palette = ScottPlot.Palette.Amber;
+
+            rangePlot.Plot.Title("Range Selected");
+            rangePlot.Plot.Style(ScottPlot.Style.Seaborn);
+            rangePlot.Plot.Palette = ScottPlot.Palette.Amber;
+
+            plot.Render();
+            rangePlot.Render();
         }
 
         // Imprime en el Xlabel las coordenadas XY (temporalmente)
@@ -321,12 +329,12 @@ namespace insoles.UserControls
 
             double[] xs_left = xs_temp_left.ToArray();
             double[] ys_left = ys_temp_left.ToArray();
-            leftPlot = plot.Plot.AddScatterLines(xs_left, ys_left, System.Drawing.Color.DarkOrange, 2, label: "left");
+            leftPlot = plot.Plot.AddScatterLines(xs_left, ys_left, System.Drawing.Color.Red, 2, label: "left");
             //plot.Plot.AddFillError(xs_left, ys_left, dts_left, System.Drawing.Color.FromArgb(50, System.Drawing.Color.IndianRed));
 
             double[] xs_right = xs_temp_right.ToArray();
             double[] ys_right = ys_temp_right.ToArray();
-            rightPlot = plot.Plot.AddScatterLines(xs_right, ys_right, System.Drawing.Color.DarkBlue, 2, label: "right");
+            rightPlot = plot.Plot.AddScatterLines(xs_right, ys_right, System.Drawing.Color.Green, 2, label: "right");
             //plot.Plot.AddFillError(xs_right, ys_right, dts_right, System.Drawing.Color.FromArgb(50, System.Drawing.Color.SkyBlue));
 
             plot.Plot.Legend();
@@ -395,9 +403,7 @@ namespace insoles.UserControls
             return Enumerable.Repeat(std, ys_temp.Count).ToArray();
         }
         private void StdDevButton1_Click(object sender, RoutedEventArgs e)
-        {
-            rangePlot = new WpfPlot();  
-        
+        {    
             double FirstClosest = FindClosest(xs_temp_left, XPoints[0]);
             double LastClosest = FindClosest(xs_temp_left, XPoints[1]);
 
@@ -428,8 +434,7 @@ namespace insoles.UserControls
 
             rangePlot.Render();
 
-            rangePlot.SetValue(Grid.RowProperty, 1);
-            grid.Children.Add(rangePlot);
+          
             
 
         }
@@ -499,6 +504,13 @@ namespace insoles.UserControls
         {
             
         }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+      
         // Movido a InformesGeneratorService
         /*
         private void ClearGraphButton_Copy_Click(object sender, RoutedEventArgs e)

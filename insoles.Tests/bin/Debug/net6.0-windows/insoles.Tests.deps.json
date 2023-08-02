@@ -12,6 +12,10 @@
           "NUnit": "3.13.3",
           "NUnit.Analyzers": "3.6.1",
           "NUnit3TestAdapter": "4.4.2",
+          "Syncfusion.DocIO.Wpf": "22.1.36",
+          "Syncfusion.Licensing": "22.1.36",
+          "Syncfusion.SfSkinManager.WPF": "22.1.36",
+          "Syncfusion.Shared.WPF": "22.1.36",
           "coverlet.collector": "3.2.0",
           "insoles": "1.0.0"
         },
@@ -634,7 +638,7 @@
       "Microsoft.TestPlatform.TestHost/17.5.0": {
         "dependencies": {
           "Microsoft.TestPlatform.ObjectModel": "17.5.0",
-          "Newtonsoft.Json": "13.0.1"
+          "Newtonsoft.Json": "13.0.3"
         },
         "runtime": {
           "lib/netcoreapp3.1/Microsoft.TestPlatform.CommunicationUtilities.dll": {
@@ -807,11 +811,11 @@
           "Microsoft.NETCore.Platforms": "1.1.1"
         }
       },
-      "Newtonsoft.Json/13.0.1": {
+      "Newtonsoft.Json/13.0.3": {
         "runtime": {
-          "lib/netstandard2.0/Newtonsoft.Json.dll": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
             "assemblyVersion": "13.0.0.0",
-            "fileVersion": "13.0.1.25517"
+            "fileVersion": "13.0.3.27908"
           }
         }
       },
@@ -952,6 +956,17 @@
         },
         "runtime": {
           "lib/net6.0/ScottPlot.dll": {
+            "assemblyVersion": "4.1.64.0",
+            "fileVersion": "4.1.64.0"
+          }
+        }
+      },
+      "ScottPlot.WinForms/4.1.64": {
+        "dependencies": {
+          "ScottPlot": "4.1.64"
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/ScottPlot.WinForms.dll": {
             "assemblyVersion": "4.1.64.0",
             "fileVersion": "4.1.64.0"
           }
@@ -1118,6 +1133,128 @@
           "lib/net6.0-windows7.0/SQLitePCLRaw.provider.e_sqlite3.dll": {
             "assemblyVersion": "2.1.4.1835",
             "fileVersion": "2.1.4.1835"
+          }
+        }
+      },
+      "Syncfusion.Compression.Base/22.1.36": {
+        "runtime": {
+          "lib/net6.0-windows7.0/Syncfusion.Compression.Base.dll": {
+            "assemblyVersion": "22.1.36.0",
+            "fileVersion": "22.1.36.0"
+          }
+        }
+      },
+      "Syncfusion.DocIO.Wpf/22.1.36": {
+        "dependencies": {
+          "Syncfusion.Compression.Base": "22.1.36",
+          "Syncfusion.Licensing": "22.1.36",
+          "Syncfusion.OfficeChart.Base": "22.1.36"
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Syncfusion.DocIO.Base.dll": {
+            "assemblyVersion": "22.1.36.0",
+            "fileVersion": "22.1.36.0"
+          }
+        }
+      },
+      "Syncfusion.Licensing/22.1.36": {
+        "runtime": {
+          "lib/net6.0/Syncfusion.Licensing.dll": {
+            "assemblyVersion": "22.1.36.0",
+            "fileVersion": "22.1.36.0"
+          }
+        }
+      },
+      "Syncfusion.OfficeChart.Base/22.1.36": {
+        "dependencies": {
+          "Syncfusion.Compression.Base": "22.1.36"
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Syncfusion.OfficeChart.Base.dll": {
+            "assemblyVersion": "22.1.36.0",
+            "fileVersion": "22.1.36.0"
+          }
+        }
+      },
+      "Syncfusion.SfBusyIndicator.WPF/22.1.36": {
+        "dependencies": {
+          "Syncfusion.Licensing": "22.1.36"
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Syncfusion.SfBusyIndicator.WPF.dll": {
+            "assemblyVersion": "22.1.36.0",
+            "fileVersion": "22.1.36.0"
+          }
+        }
+      },
+      "Syncfusion.SfGridCommon.WPF/22.1.36": {
+        "dependencies": {
+          "Syncfusion.Licensing": "22.1.36"
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Syncfusion.SfGridCommon.WPF.dll": {
+            "assemblyVersion": "22.1.36.0",
+            "fileVersion": "22.1.36.0"
+          }
+        }
+      },
+      "Syncfusion.SfInput.WPF/22.1.36": {
+        "dependencies": {
+          "Syncfusion.Licensing": "22.1.36",
+          "Syncfusion.Shared.WPF": "22.1.36"
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Syncfusion.SfInput.WPF.dll": {
+            "assemblyVersion": "22.1.36.0",
+            "fileVersion": "22.1.36.0"
+          }
+        }
+      },
+      "Syncfusion.SfSkinManager.WPF/22.1.36": {
+        "dependencies": {
+          "Syncfusion.Licensing": "22.1.36"
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Syncfusion.SfSkinManager.WPF.dll": {
+            "assemblyVersion": "22.1.36.0",
+            "fileVersion": "22.1.36.0"
+          }
+        }
+      },
+      "Syncfusion.SfTreeView.WPF/22.1.36": {
+        "dependencies": {
+          "Syncfusion.Licensing": "22.1.36",
+          "Syncfusion.SfBusyIndicator.WPF": "22.1.36",
+          "Syncfusion.SfGridCommon.WPF": "22.1.36",
+          "Syncfusion.Shared.WPF": "22.1.36"
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Syncfusion.SfTreeView.WPF.dll": {
+            "assemblyVersion": "22.1.36.0",
+            "fileVersion": "22.1.36.0"
+          }
+        }
+      },
+      "Syncfusion.Shared.WPF/22.1.36": {
+        "dependencies": {
+          "Syncfusion.Licensing": "22.1.36"
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Syncfusion.Shared.WPF.dll": {
+            "assemblyVersion": "22.1.36.0",
+            "fileVersion": "22.1.36.0"
+          }
+        }
+      },
+      "Syncfusion.Tools.WPF/22.1.36": {
+        "dependencies": {
+          "Syncfusion.Licensing": "22.1.36",
+          "Syncfusion.Shared.WPF": "22.1.36"
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Syncfusion.Tools.WPF.dll": {
+            "assemblyVersion": "22.1.36.0",
+            "fileVersion": "22.1.36.0"
           }
         }
       },
@@ -1360,12 +1497,22 @@
           "Microsoft.EntityFrameworkCore.Sqlite": "7.0.5",
           "Microsoft.Win32.SystemEvents": "7.0.0",
           "MultiSelectTreeView": "1.0.9",
+          "Newtonsoft.Json": "13.0.3",
           "OpenCvSharp4": "4.7.0.20230115",
           "OpenCvSharp4.Extensions": "4.7.0.20230115",
           "OpenCvSharp4.WpfExtensions": "4.7.0.20230115",
           "OpenCvSharp4.runtime.win": "4.7.0.20230115",
           "ScottPlot": "4.1.64",
           "ScottPlot.WPF": "4.1.64",
+          "ScottPlot.WinForms": "4.1.64",
+          "Syncfusion.DocIO.Wpf": "22.1.36",
+          "Syncfusion.Licensing": "22.1.36",
+          "Syncfusion.SfBusyIndicator.WPF": "22.1.36",
+          "Syncfusion.SfInput.WPF": "22.1.36",
+          "Syncfusion.SfSkinManager.WPF": "22.1.36",
+          "Syncfusion.SfTreeView.WPF": "22.1.36",
+          "Syncfusion.Shared.WPF": "22.1.36",
+          "Syncfusion.Tools.WPF": "22.1.36",
           "System.Drawing.Common": "7.0.0",
           "System.IO.Ports": "7.0.0",
           "System.Management": "7.0.1"
@@ -1677,12 +1824,12 @@
       "path": "netstandard.library/2.0.0",
       "hashPath": "netstandard.library.2.0.0.nupkg.sha512"
     },
-    "Newtonsoft.Json/13.0.1": {
+    "Newtonsoft.Json/13.0.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
-      "path": "newtonsoft.json/13.0.1",
-      "hashPath": "newtonsoft.json.13.0.1.nupkg.sha512"
+      "sha512": "sha512-HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
+      "path": "newtonsoft.json/13.0.3",
+      "hashPath": "newtonsoft.json.13.0.3.nupkg.sha512"
     },
     "NuGet.Frameworks/5.11.0": {
       "type": "package",
@@ -1796,6 +1943,13 @@
       "path": "scottplot/4.1.64",
       "hashPath": "scottplot.4.1.64.nupkg.sha512"
     },
+    "ScottPlot.WinForms/4.1.64": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-CrSNYwBHeZaNiOcyNgDkVxTTrjEegI65c4bTY7Y1v8aGCgtAcroqp9apYSL3ZQ+GFhUOQDCKyclfTJZtDc5jPw==",
+      "path": "scottplot.winforms/4.1.64",
+      "hashPath": "scottplot.winforms.4.1.64.nupkg.sha512"
+    },
     "ScottPlot.WPF/4.1.64": {
       "type": "package",
       "serviceable": true,
@@ -1830,6 +1984,83 @@
       "sha512": "sha512-CSlb5dUp1FMIkez9Iv5EXzpeq7rHryVNqwJMWnpq87j9zWZexaEMdisDktMsnnrzKM6ahNrsTkjqNodTBPBxtQ==",
       "path": "sqlitepclraw.provider.e_sqlite3/2.1.4",
       "hashPath": "sqlitepclraw.provider.e_sqlite3.2.1.4.nupkg.sha512"
+    },
+    "Syncfusion.Compression.Base/22.1.36": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-wSDmP3pV/btYrAK0xnKpiwZzifUUlgEwiYTl61GbN5JMrAhlZM08I7ro4f3a36w15PW7aD3SXW3oLrrhvij8jA==",
+      "path": "syncfusion.compression.base/22.1.36",
+      "hashPath": "syncfusion.compression.base.22.1.36.nupkg.sha512"
+    },
+    "Syncfusion.DocIO.Wpf/22.1.36": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-skcrsaRCiVV1a6JYhCk77zs/agmHACxBD1sSSowTldjCEzBzLsuMrDy8lnXtL2OCMlPCTemlN+us6VMyGymagg==",
+      "path": "syncfusion.docio.wpf/22.1.36",
+      "hashPath": "syncfusion.docio.wpf.22.1.36.nupkg.sha512"
+    },
+    "Syncfusion.Licensing/22.1.36": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-d5W9c8+dXp16WYU3ZdoFQsf3xQziChiD52L+yuoNrfI2pdy6ys0Sykvaw/i5iNCdjhe+C9zb9v7s25/Ad6qeRA==",
+      "path": "syncfusion.licensing/22.1.36",
+      "hashPath": "syncfusion.licensing.22.1.36.nupkg.sha512"
+    },
+    "Syncfusion.OfficeChart.Base/22.1.36": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-nttXp4Z70XcrleHaP7r87SFEyqfjx0yQ9Tt9qUi3GnlqmChSPms15jSlwCGiWC8WvSYG78HDA1IUC7QxV2Ld9A==",
+      "path": "syncfusion.officechart.base/22.1.36",
+      "hashPath": "syncfusion.officechart.base.22.1.36.nupkg.sha512"
+    },
+    "Syncfusion.SfBusyIndicator.WPF/22.1.36": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qHbl+c8yVpMrwi24I+POuKe01DTNjAvsVQHqveFaSyvW5bwyaDC2lv1hqsyEllN5HCo/Pscyd9UwMISz/vktFg==",
+      "path": "syncfusion.sfbusyindicator.wpf/22.1.36",
+      "hashPath": "syncfusion.sfbusyindicator.wpf.22.1.36.nupkg.sha512"
+    },
+    "Syncfusion.SfGridCommon.WPF/22.1.36": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-flKF8460cvlBFeCup/MGeG05gC6Mjy5TFo3dnUiOd/PGKLnj3WjdK/6ywiRP8vDKFjKrou5D1U7jgltO7bgX+Q==",
+      "path": "syncfusion.sfgridcommon.wpf/22.1.36",
+      "hashPath": "syncfusion.sfgridcommon.wpf.22.1.36.nupkg.sha512"
+    },
+    "Syncfusion.SfInput.WPF/22.1.36": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-CNBsvdZp8kQ+aF//qXyWXYdUyhQcwd90qN3t8XGiCCzVzC3SJQNodgE/rH4PYGE7x34uqVZMMRC3wOt+Vf0CsA==",
+      "path": "syncfusion.sfinput.wpf/22.1.36",
+      "hashPath": "syncfusion.sfinput.wpf.22.1.36.nupkg.sha512"
+    },
+    "Syncfusion.SfSkinManager.WPF/22.1.36": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Mnr43S8OdOfHqVwYlJQTA/b7dMHyssPGeVm+EMH7chHgtDgKVa9hMXYvEhfPFRkNXIN6WJBTF/Yi16ejtnCDjg==",
+      "path": "syncfusion.sfskinmanager.wpf/22.1.36",
+      "hashPath": "syncfusion.sfskinmanager.wpf.22.1.36.nupkg.sha512"
+    },
+    "Syncfusion.SfTreeView.WPF/22.1.36": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LUngsmsgzfZr3hBt3aqE8/yjzcov70F/Vn8PB+MVLwzUJiJk5XHEKissnGXyOps0HQ4zpW1N2ZcAY/mx+qS0FQ==",
+      "path": "syncfusion.sftreeview.wpf/22.1.36",
+      "hashPath": "syncfusion.sftreeview.wpf.22.1.36.nupkg.sha512"
+    },
+    "Syncfusion.Shared.WPF/22.1.36": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-VznrjwMyV8SfDLz6kXs789jJcD/BNzWfkvUXhzbuLLy4ZnA6zLbSnFepA6BPrO+CgTknJWn1dMaJGj7asCyEBQ==",
+      "path": "syncfusion.shared.wpf/22.1.36",
+      "hashPath": "syncfusion.shared.wpf.22.1.36.nupkg.sha512"
+    },
+    "Syncfusion.Tools.WPF/22.1.36": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7/ecd4EOgRl3Owy4bQWWhh3fATqrfnwoCQtCUyX2BSPQ7TeEI+Z19VH7gQMmxu+mAjTRlST3vEZVh/PaJTaKBg==",
+      "path": "syncfusion.tools.wpf/22.1.36",
+      "hashPath": "syncfusion.tools.wpf.22.1.36.nupkg.sha512"
     },
     "System.CodeDom/7.0.0": {
       "type": "package",

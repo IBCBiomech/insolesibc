@@ -1473,6 +1473,22 @@
           }
         }
       },
+      "Syncfusion.SfSkinManager.WPF/22.1.36": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "22.1.36"
+        },
+        "compile": {
+          "lib/net6.0-windows7.0/Syncfusion.SfSkinManager.WPF.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Syncfusion.SfSkinManager.WPF.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Syncfusion.SfTreeView.WPF/22.1.36": {
         "type": "package",
         "dependencies": {
@@ -1962,6 +1978,7 @@
           "Syncfusion.Licensing": "22.1.36",
           "Syncfusion.SfBusyIndicator.WPF": "22.1.36",
           "Syncfusion.SfInput.WPF": "22.1.36",
+          "Syncfusion.SfSkinManager.WPF": "22.1.36",
           "Syncfusion.SfTreeView.WPF": "22.1.36",
           "Syncfusion.Shared.WPF": "22.1.36",
           "Syncfusion.Tools.WPF": "22.1.36",
@@ -3875,6 +3892,30 @@
         "tools/VisualStudioToolsManifest.xml"
       ]
     },
+    "Syncfusion.SfSkinManager.WPF/22.1.36": {
+      "sha512": "Mnr43S8OdOfHqVwYlJQTA/b7dMHyssPGeVm+EMH7chHgtDgKVa9hMXYvEhfPFRkNXIN6WJBTF/Yi16ejtnCDjg==",
+      "type": "package",
+      "path": "syncfusion.sfskinmanager.wpf/22.1.36",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "lib/net40/Syncfusion.SfSkinManager.WPF.dll",
+        "lib/net40/Syncfusion.SfSkinManager.WPF.xml",
+        "lib/net45/Syncfusion.SfSkinManager.WPF.dll",
+        "lib/net45/Syncfusion.SfSkinManager.WPF.xml",
+        "lib/net451/Syncfusion.SfSkinManager.WPF.dll",
+        "lib/net451/Syncfusion.SfSkinManager.WPF.xml",
+        "lib/net46/Syncfusion.SfSkinManager.WPF.dll",
+        "lib/net46/Syncfusion.SfSkinManager.WPF.xml",
+        "lib/net6.0-windows7.0/Syncfusion.SfSkinManager.WPF.dll",
+        "lib/net6.0-windows7.0/Syncfusion.SfSkinManager.WPF.xml",
+        "syncfusion.sfskinmanager.wpf.22.1.36.nupkg.sha512",
+        "syncfusion.sfskinmanager.wpf.nuspec",
+        "syncfusion_logo.png"
+      ]
+    },
     "Syncfusion.SfTreeView.WPF/22.1.36": {
       "sha512": "LUngsmsgzfZr3hBt3aqE8/yjzcov70F/Vn8PB+MVLwzUJiJk5XHEKissnGXyOps0HQ4zpW1N2ZcAY/mx+qS0FQ==",
       "type": "package",
@@ -5347,6 +5388,7 @@
       "NUnit3TestAdapter >= 4.4.2",
       "Syncfusion.DocIO.Wpf >= 22.1.36",
       "Syncfusion.Licensing >= 22.1.36",
+      "Syncfusion.SfSkinManager.WPF >= 22.1.36",
       "Syncfusion.Shared.WPF >= 22.1.36",
       "coverlet.collector >= 3.2.0",
       "insoles >= 1.0.0"
@@ -5430,6 +5472,10 @@
             "version": "[22.1.36, )"
           },
           "Syncfusion.Licensing": {
+            "target": "Package",
+            "version": "[22.1.36, )"
+          },
+          "Syncfusion.SfSkinManager.WPF": {
             "target": "Package",
             "version": "[22.1.36, )"
           },
