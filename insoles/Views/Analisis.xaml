@@ -26,6 +26,7 @@
                                                        syncfusion:DockingManager.Header="Usuarios"
                                                        syncfusion:DockingManager.SideInDockedMode="Left"
                                                        syncfusion:DockingManager.DesiredWidthInDockedMode="800"
+                                                       syncfusion:DockingManager.DesiredHeightInDockedMode="200"
                                                        x:Name="Usuarios"/>
             <ContentControl Content="{Binding timeLine}"
                             syncfusion:DockingManager.Header="Timeline"

@@ -21,7 +21,7 @@
 
         <!--// Window Border //-->
 
-        <Border Background="#212529"
+        <Border Background="GhostWhite"
                 CornerRadius="20" />
 
         <Grid>

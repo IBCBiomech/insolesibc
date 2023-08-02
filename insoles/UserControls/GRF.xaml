@@ -16,15 +16,18 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" >
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="4,4,632,0" HorizontalAlignment="Center" VerticalAlignment="Top">
             <Button x:Name="StdDevButton1" 
                     Background="AliceBlue"
+                    Margin="2"
                     Content="STDEV" Click="StdDevButton1_Click"/>
             <Button x:Name="ClearGraphButton" 
                     Background="AliceBlue"
+                    Margin="2"
                     Content="CLEAR" Click="ClearGraphButton_Click" />
             <Button x:Name="ClearGraphButton_Copy" 
                 Background="AliceBlue"
+                Margin="2"
                 Content="Report" />
 
         </StackPanel>
