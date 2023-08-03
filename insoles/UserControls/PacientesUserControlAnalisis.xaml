@@ -149,6 +149,8 @@
     <Grid>
         <syncfusion:SfTreeView
             ItemTemplateSelector="{StaticResource PacientesDataTemplateSelector}"
+            ShowLines="True"
+            ShowRootLines="True"
             ItemsSource="{Binding Pacientes, RelativeSource={RelativeSource AncestorType={x:Type local:PacientesUserControlAnalisis}}}">
             <syncfusion:SfTreeView.HierarchyPropertyDescriptors>
                 <treeViewEngine:HierarchyPropertyDescriptor TargetType="{x:Type model:PacientesTreeView}" ChildPropertyName="Pacientes"/>

@@ -169,6 +169,10 @@
               "target": "Package",
               "version": "[2.2.5, )"
             },
+            "CsvHelper": {
+              "target": "Package",
+              "version": "[30.0.1, )"
+            },
             "DirectShowLib": {
               "target": "Package",
               "version": "[1.0.0, )"

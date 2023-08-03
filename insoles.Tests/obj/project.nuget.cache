@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "mjbldSZS7RZ7QRPSbxEHyGcl8OI1lJWEDiiAbuH8lqSCQ20AzNv3NRBm5fraK9Xc43RhgoyuswlPAyD78GyfVQ==",
+  "dgSpecHash": "2FnIsVDf72jG/tCVjkhUJ4vG6IJcHxba9C8ab5eaJ4J5M26VYfg5/NQLxEPeufASafk3whQ0puQnyS1F1vT2BA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Deva\\wsibc\\insolesibc\\insoles.Tests\\insoles.Tests.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\Deva\\.nuget\\packages\\aforge.video\\2.2.5\\aforge.video.2.2.5.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\aforge.video.directshow\\2.2.5\\aforge.video.directshow.2.2.5.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\coverlet.collector\\3.2.0\\coverlet.collector.3.2.0.nupkg.sha512",
+    "C:\\Users\\Deva\\.nuget\\packages\\csvhelper\\30.0.1\\csvhelper.30.0.1.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\directshowlib\\1.0.0\\directshowlib.1.0.0.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\dirkster.avalondock\\4.72.0\\dirkster.avalondock.4.72.0.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\emgu.cv\\4.7.0.5276\\emgu.cv.4.7.0.5276.nupkg.sha512",

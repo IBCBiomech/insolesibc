@@ -26,7 +26,9 @@ using MathNet.Numerics;
 using insoles.States;
 using System.Reflection.Metadata;
 using Syncfusion.DocIO.DLS;
-
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using stdgraph.Lib;
+using MathNet.Numerics.Statistics;
 
 namespace insoles.UserControls
 {
@@ -65,7 +67,7 @@ namespace insoles.UserControls
         private List<double> xs_right_Kg_FC;
         private List<double> ys_right_Kg_FC;
 
-        List<double> XPoints = new List<double>();
+        double[] XPoints = new double[2];
 
         private Units _selectedUnits;
         private VLine rangeVlabel;
@@ -73,7 +75,7 @@ namespace insoles.UserControls
         private ScatterPlot leftInsolePlot;
         private ScatterPlot leftInsoleErrorPlot;
         private ScatterPlot rightInsolePlot;
-
+        NormalStats Ns;
         public Units selectedUnits
         {
             get { return _selectedUnits; }
@@ -178,6 +180,15 @@ namespace insoles.UserControls
 
         private AnalisisState state;
 
+        HSpan hspan;
+
+        double[] ys_left_array;
+
+        Dictionary<int, double> toes_off = new Dictionary<int, double>();
+        Dictionary<int, double> heel_strikes = new Dictionary<int, double>();
+
+        Dictionary<int, List<double>> curves = new Dictionary<int, List<double>>();
+
         // Inicializa eventos
         public GRF(AnalisisState state)
         {
@@ -195,8 +206,15 @@ namespace insoles.UserControls
             rangePlot.Plot.Style(ScottPlot.Style.Seaborn);
             rangePlot.Plot.Palette = ScottPlot.Palette.Amber;
 
+            normPlot.Plot.Title("Normalization Plot");
+            normPlot.Plot.Style(ScottPlot.Style.Seaborn);
+            normPlot.Plot.Palette = ScottPlot.Palette.Amber;
+
+
             plot.Render();
             rangePlot.Render();
+
+            Ns = new NormalStats();
         }
 
         // Imprime en el Xlabel las coordenadas XY (temporalmente)
@@ -348,20 +366,20 @@ namespace insoles.UserControls
         // Este método es el que añade las barras verticales
         private void MouseTracking(object sender, MouseButtonEventArgs e)
         {
-            if ( XPoints.Count >= 0 && XPoints.Count <2)
-            {
-                (double x, double y) = plot.GetMouseCoordinates();
-                rangeVlabel = plot.Plot.AddVerticalLine(x, color: System.Drawing.Color.IndianRed, style: ScottPlot.LineStyle.Solid);
-                rangeVlabel.PositionLabel = true;
-                rangeVlabel.DragEnabled = true;
-                plot.Render();
-                listOfVlabels.Add(rangeVlabel);
-                XPoints.Add(x);
-            }
-            else
-            {
-                MessageBox.Show("No se puede hacer rango con más de dos puntos. Elimina la STDDEV actual","Info",MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
+            //if ( XPoints.Count >= 0 && XPoints.Count <2)
+            //{
+            //    (double x, double y) = plot.GetMouseCoordinates();
+            //    rangeVlabel = plot.Plot.AddVerticalLine(x, color: System.Drawing.Color.IndianRed, style: ScottPlot.LineStyle.Solid);
+            //    rangeVlabel.PositionLabel = true;
+            //    rangeVlabel.DragEnabled = true;
+            //    plot.Render();
+            //    listOfVlabels.Add(rangeVlabel);
+            //    XPoints.Add(x);
+            //}
+            //else
+            //{
+            //    MessageBox.Show("No se puede hacer rango con más de dos puntos. Elimina la STDDEV actual","Info",MessageBoxButton.OK, MessageBoxImage.Warning);
+            //}
        
 
         }
@@ -403,41 +421,64 @@ namespace insoles.UserControls
             return Enumerable.Repeat(std, ys_temp.Count).ToArray();
         }
         private void StdDevButton1_Click(object sender, RoutedEventArgs e)
-        {    
-            double FirstClosest = FindClosest(xs_temp_left, XPoints[0]);
-            double LastClosest = FindClosest(xs_temp_left, XPoints[1]);
+        {
+            //double FirstClosest = FindClosest(xs_temp_left, XPoints[0]);
+            //double LastClosest = FindClosest(xs_temp_left, XPoints[1]);
 
-            int indexFirstClosest = xs_temp_left.IndexOf(FirstClosest);
-            int indexLastClosest = xs_temp_left.IndexOf(LastClosest);
+            //int indexFirstClosest = xs_temp_left.IndexOf(FirstClosest);
+            //int indexLastClosest = xs_temp_left.IndexOf(LastClosest);
 
-            List<double> listXleft = xs_temp_left.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
-            List<double> listYleft = ys_temp_left.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
+            //List<double> listXleft = xs_temp_left.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
+            //List<double> listYleft = ys_temp_left.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
 
-            double[] dataXleft = listXleft.ToArray();
-            double[] dataYleft = listYleft.ToArray();
+            //double[] dataXleft = listXleft.ToArray();
+            //double[] dataYleft = listYleft.ToArray();
 
-            double[] stddevleft = StdDevCalculation(listYleft);
-            leftInsolePlot = rangePlot.Plot.AddScatterLines(dataXleft, dataYleft, System.Drawing.Color.DarkOrange, 2);
-            rangePlot.Plot.AddFillError(dataXleft, dataYleft, stddevleft, System.Drawing.Color.FromArgb(50, System.Drawing.Color.Green));
+            //double[] stddevleft = StdDevCalculation(listYleft);
+            //leftInsolePlot = rangePlot.Plot.AddScatterLines(dataXleft, dataYleft, System.Drawing.Color.DarkOrange, 2);
+            //rangePlot.Plot.AddFillError(dataXleft, dataYleft, stddevleft, System.Drawing.Color.FromArgb(50, System.Drawing.Color.Green));
 
+
+
+            //List<double> listXright = xs_temp_right.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
+            //List<double> listYright = ys_temp_right.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
+
+            //double[] dataXright = listXright.ToArray();
+            //double[] dataYright = listYright.ToArray();
+
+            //double[] stddevright = StdDevCalculation(listYright);
+            //rangePlot.Plot.AddScatterLines(dataXright, dataYright, System.Drawing.Color.DarkBlue, 2);
+            //rangePlot.Plot.AddFillError(dataXright, dataYright, stddevright, System.Drawing.Color.FromArgb(50, System.Drawing.Color.SkyBlue));
+
+            //rangePlot.Render();
+
+            hspan = plot.Plot.AddHorizontalSpan(10, 30);
+
+            hspan.BorderColor = System.Drawing.Color.Red;
+            hspan.BorderLineStyle = ScottPlot.LineStyle.Dash;
+            hspan.BorderLineWidth = 2;
+            hspan.HatchColor = System.Drawing.Color.FromArgb(100, System.Drawing.Color.Blue);
+            hspan.HatchStyle = ScottPlot.Drawing.HatchStyle.None;
+            hspan.Label = "Customized vSpan";
+            hspan.DragEnabled = true;
+
+            hspan.Edge1Dragged += (s, e) =>
+            {
+                XPoints[0] = e;
+                Trace.WriteLine($"X1: {e.ToString("F2")}");
+            };
+            hspan.Edge2Dragged += (s, e) =>
+            {
+                XPoints[1] = e;
+                Trace.WriteLine($"X2: {e.ToString("F2")}");
+
+            };
+
+            plot.Render();
             
-
-            List<double> listXright = xs_temp_right.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
-            List<double> listYright = ys_temp_right.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
-
-            double[] dataXright = listXright.ToArray();
-            double[] dataYright = listYright.ToArray();
-
-            double[] stddevright = StdDevCalculation(listYright);
-            rangePlot.Plot.AddScatterLines(dataXright, dataYright, System.Drawing.Color.DarkBlue, 2);
-            rangePlot.Plot.AddFillError(dataXright, dataYright, stddevright, System.Drawing.Color.FromArgb(50, System.Drawing.Color.SkyBlue));
-
-            rangePlot.Render();
-
-          
-            
-
         }
+        
+        
         // Función que sí utilizamos para obtener el número más cercano de una lista
         private double FindClosest(List<double> data, double value)
         {
@@ -487,30 +528,156 @@ namespace insoles.UserControls
         private void ClearGraphButton_Click(object sender, RoutedEventArgs e)
         {
             
-            grid.Children.Remove(rangePlot);
+            //grid.Children.Remove(rangePlot);
           
-            foreach (var el in listOfVlabels)
+            //foreach (var el in listOfVlabels)
+            //{
+            //    plot.Plot.Remove(el);
+
+            //}
+            //listOfVlabels.Clear();
+            //XPoints.Clear();
+            //plot.Render();
+            //rangePlot.Render();
+        }
+
+        
+
+        private void RangeButton_Click(object sender, RoutedEventArgs e)
+        {
+            Trace.WriteLine($"X1: {XPoints[0]:F2} X2: {XPoints[1]:F2}");
+            int start = xs_left_N_FC.IndexOf(Math.Round(XPoints[0], 2));
+            int end = xs_left_N_FC.IndexOf(Math.Round(XPoints[1], 2));
+
+            List<double> xs_left = xs_left_N_FC.GetRange(0, end - start);
+            List<double> ys_left = ys_left_N_FC.GetRange(start, end - start);
+
+            ys_left_array = Ns.Butterworth(ys_left.ToArray(), 0.01, 6.0);
+
+            List<double> xs_right = xs_right_N_FC.GetRange(0, end - start);
+            List<double> ys_right = ys_right_N_FC.GetRange(start, end - start);
+
+            double[] ys_right_array = Ns.Butterworth(ys_right.ToArray(), 0.01, 6.0);
+
+            rangePlot.Plot.AddScatterLines(xs_left.ToArray(), ys_left_array,color: System.Drawing.Color.Red);
+            rangePlot.Plot.AddScatterLines(xs_right.ToArray(), ys_right_array.ToArray(),color: System.Drawing.Color.Green);
+            rangePlot.Render();
+
+        }
+
+        private void NormalizationButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Añadir los choques (heel_strikes) y la fase de salida (toes_off)
+            // con un threshold de 10
+
+            for (int i = 0; i < ys_left_array.Length - 1; i++)
             {
-                plot.Plot.Remove(el);
+                if (ys_left_array[i] < 10 && ys_left_array[i + 1] > 10)
+                {
+                    heel_strikes.Add(i + 1, ys_left_array[i + 1]);
+
+                }
+
+                if (ys_left_array[i] > 10 && ys_left_array[i + 1] < 10)
+                {
+                    toes_off.Add(i, ys_left_array[i]);
+                }
+
 
             }
-            listOfVlabels.Clear();
-            XPoints.Clear();
-            plot.Render();
-            rangePlot.Render();
+
+            // pintamos lineas verticales en el gráfico para los choques
+
+            foreach (KeyValuePair<int, double> item in heel_strikes)
+            {
+
+                double el = xs_left_N_FC[item.Key];
+
+                var vline = rangePlot.plt.AddVerticalLine(Math.Round(el, 2), color: System.Drawing.Color.Blue);
+
+                vline.PositionLabel = true;
+
+                rangePlot.Render();
+
+            }
+
+            // pintamos las líneas para las salidas
+            foreach (KeyValuePair<int, double> item in toes_off)
+            {
+
+                double el = xs_left_N_FC[item.Key];
+
+                var vline = rangePlot.plt.AddVerticalLine(Math.Round(el, 2), color: System.Drawing.Color.Yellow);
+
+                vline.PositionLabel = true;
+
+                rangePlot.Render();
+
+            }
+
+            // Sacar las curvas
+            for (var i = 0; i < toes_off.Count; i++)
+            {
+                int init = heel_strikes.ElementAt(i).Key;
+                int end = toes_off.ElementAt(i).Key;
+                curves.Add(init, ys_left_array[init..end].ToList());
+
+            }
+
+            List<List<double>> curvasInterpoladas = new List<List<double>>();
+            List<List<double>> tiemposInterpolados = new List<List<double>>();
+
+            for (var i = 0; i < curves.Count(); i++)
+            {
+                double[] second_curve = Ns.linspace(0, 99, curves.ElementAt(i).Value.Count);
+
+                (double[] xs, double[] ys) = stdgraph.Lib.CubicInterpol.InterpolateXY(second_curve, curves.ElementAt(i).Value.ToArray(), 100);
+                curvasInterpoladas.Add(ys.ToList());
+                tiemposInterpolados.Add(xs.ToList());
+            }
+
+            List<double> curvaMedia = new List<double>();
+            List<double> curvaSt = new List<double>();
+            List<double> curvaTime = new List<double>();
+
+            for (int colIndex = 0; colIndex < 100; colIndex++)
+            {
+                List<double> colAvg = new List<double>();
+                List<double> colTime = new List<double>();
+
+                foreach (List<double> item in curvasInterpoladas)
+                {
+                    if (item.Count > colIndex)
+                    {
+                        colAvg.Add(item[colIndex]);
+
+                    }
+                }
+
+                foreach (List<double> item in tiemposInterpolados)
+                {
+
+                    if (item.Count > colIndex)
+                    {
+                        colTime.Add(item[colIndex]);
+                    }
+
+                }
+
+                curvaMedia.Add(colAvg.Average());
+                curvaSt.Add(colAvg.StandardDeviation());
+                curvaTime.Add(colTime.Average());
+            }
+
+            normPlot.Plot.AddScatterLines(curvaTime.ToArray(), curvaMedia.ToArray(), System.Drawing.Color.Blue, lineWidth: 3, label: "Average");
+            normPlot.Plot.AddFillError(curvaTime.ToArray(), curvaMedia.ToArray(), curvaSt.ToArray(), System.Drawing.Color.FromArgb(50, System.Drawing.Color.Blue));
+
+            normPlot.Render();
+
+
         }
 
-        private void leftCheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            
-        }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-      
         // Movido a InformesGeneratorService
         /*
         private void ClearGraphButton_Copy_Click(object sender, RoutedEventArgs e)

@@ -296,6 +296,8 @@ namespace insoles.ViewModel
             };
             Plot = new WpfPlot();
             Plot.Plot.Title("GRF");
+            Plot.Plot.Style(ScottPlot.Style.Seaborn);
+            Plot.Plot.Palette = ScottPlot.Palette.Amber;
             GraphModel = new(Plot);
         }
     }

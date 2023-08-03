@@ -54,6 +54,14 @@
         }
       },
       "coverlet.collector/3.2.0": {},
+      "CsvHelper/30.0.1": {
+        "runtime": {
+          "lib/net6.0/CsvHelper.dll": {
+            "assemblyVersion": "30.0.0.0",
+            "fileVersion": "30.0.1.0"
+          }
+        }
+      },
       "DirectShowLib/1.0.0": {
         "runtime": {
           "lib/DirectShowLib.dll": {
@@ -1485,6 +1493,7 @@
           "AForge": "2.2.5",
           "AForge.Video": "2.2.5",
           "AForge.Video.DirectShow": "2.2.5",
+          "CsvHelper": "30.0.1",
           "DirectShowLib": "1.0.0",
           "Dirkster.AvalonDock": "4.72.0",
           "Emgu.CV": "4.7.0.5276",
@@ -1564,6 +1573,13 @@
       "sha512": "sha512-xjY8xBigSeWIYs4I7DgUHqSNoGqnHi7Fv7/7RZD02rvZyG3hlsjnQKiVKVWKgr9kRKgmV+dEfu8KScvysiC0Wg==",
       "path": "coverlet.collector/3.2.0",
       "hashPath": "coverlet.collector.3.2.0.nupkg.sha512"
+    },
+    "CsvHelper/30.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rcZtgbWR+As4G3Vpgx0AMNmShGuQLFjkHAPIIflzrfkJCx8/AOd4m96ZRmiU1Wi39qS5UVjV0P8qdgqOo5Cwyg==",
+      "path": "csvhelper/30.0.1",
+      "hashPath": "csvhelper.30.0.1.nupkg.sha512"
     },
     "DirectShowLib/1.0.0": {
       "type": "package",
