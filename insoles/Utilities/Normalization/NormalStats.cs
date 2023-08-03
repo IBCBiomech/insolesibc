@@ -7,6 +7,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ScottPlot;
+using MathNet.Numerics.Statistics;
 
 namespace stdgraph.Lib
 {
@@ -227,7 +229,120 @@ namespace stdgraph.Lib
             return Math.Sqrt(variance);
         }
         #endregion
+        
+        public (Dictionary<int, double>, Dictionary<int, double>) CalculateHeelToes(double[] ys , double threshold)
+        {
+            Dictionary<int, double> toes_off = new Dictionary<int, double>();
+            Dictionary<int, double> heel_strikes = new Dictionary<int, double>();
+            for (int i = 0; i < ys.Length - 1; i++)
+            {
+                if (ys[i] < threshold && ys[i + 1] > threshold)
+                {
+                    heel_strikes.Add(i + 1, ys[i + 1]);
 
+                }
+
+                if (ys[i] > threshold && ys[i + 1] < threshold)
+                {
+                    toes_off.Add(i, ys[i]);
+                }
+
+            }
+            return (heel_strikes, toes_off);
+        }
+
+        public void AgregarLineasHeelToes(WpfPlot rangePlot, List<double> xs_N_FC, Dictionary<int,double> heel_strikes , Dictionary<int,double> toes_off)
+        {
+            foreach (KeyValuePair<int, double> item in heel_strikes)
+            {
+
+                double el = xs_N_FC[item.Key];
+
+                var vline = rangePlot.plt.AddVerticalLine(Math.Round(el, 2), color: System.Drawing.Color.Blue);
+
+                vline.PositionLabel = true;
+
+                rangePlot.Render();
+
+            }
+
+            // pintamos las líneas para las salidas
+            foreach (KeyValuePair<int, double> item in toes_off)
+            {
+
+                double el = xs_N_FC[item.Key];
+
+                var vline = rangePlot.plt.AddVerticalLine(Math.Round(el, 2), color: System.Drawing.Color.Yellow);
+
+                vline.PositionLabel = true;
+
+                rangePlot.Render();
+
+            }
+
+        }
+
+        // Retorna (curvaMedia, curvaSt, curvaTime)
+        public (List<double>, List<double>, List<double>) CalcularNormCurvas(Dictionary<int, double> heel_strikes, Dictionary<int, double> toes_off, 
+                                        Dictionary<int, List<double>> curves, double[] ys_array)
+        {
+            // Sacar las curvas
+            for (var i = 0; i < toes_off.Count; i++)
+            {
+                int init = heel_strikes.ElementAt(i).Key;
+                int end = toes_off.ElementAt(i).Key;
+                curves.Add(init, ys_array[init..end].ToList());
+
+            }
+
+            List<List<double>> curvasInterpoladas = new List<List<double>>();
+            List<List<double>> tiemposInterpolados = new List<List<double>>();
+
+            for (var i = 0; i < curves.Count(); i++)
+            {
+                double[] second_curve = linspace(0, 99, curves.ElementAt(i).Value.Count);
+
+                (double[] xs, double[] ys) = stdgraph.Lib.CubicInterpol.InterpolateXY(second_curve, curves.ElementAt(i).Value.ToArray(), 100);
+                curvasInterpoladas.Add(ys.ToList());
+                tiemposInterpolados.Add(xs.ToList());
+            }
+
+            List<double> curvaMedia = new List<double>();
+            List<double> curvaSt = new List<double>();
+            List<double> curvaTime = new List<double>();
+
+            for (int colIndex = 0; colIndex < 100; colIndex++)
+            {
+                List<double> colAvg = new List<double>();
+                List<double> colTime = new List<double>();
+
+                foreach (List<double> item in curvasInterpoladas)
+                {
+                    if (item.Count > colIndex)
+                    {
+                        colAvg.Add(item[colIndex]);
+
+                    }
+                }
+
+                foreach (List<double> item in tiemposInterpolados)
+                {
+
+                    if (item.Count > colIndex)
+                    {
+                        colTime.Add(item[colIndex]);
+                    }
+
+                }
+
+                curvaMedia.Add(colAvg.Average());
+                curvaSt.Add(colAvg.StandardDeviation());
+                curvaTime.Add(colTime.Average());
+            }
+
+            return (curvaMedia, curvaSt, curvaTime);
+
+        }
     }
 
     public class CSVFileHeaders

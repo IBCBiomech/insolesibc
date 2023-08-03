@@ -183,11 +183,22 @@ namespace insoles.UserControls
         HSpan hspan;
 
         double[] ys_left_array;
+        double[] ys_right_array;
 
         Dictionary<int, double> toes_off = new Dictionary<int, double>();
         Dictionary<int, double> heel_strikes = new Dictionary<int, double>();
 
+        Dictionary<int, double> toes_offR = new Dictionary<int, double>();
+        Dictionary<int, double> heel_strikesR = new Dictionary<int, double>();
+
         Dictionary<int, List<double>> curves = new Dictionary<int, List<double>>();
+        Dictionary<int, List<double>> curvesR = new Dictionary<int, List<double>>();
+
+        public const double Threshold = 10.0;
+
+        List<double> curvaMedia, curvaMediaR;
+        List<double> curvaSt, curvaStR;
+        List<double> curvaTime, curvaTimeR;
 
         // Inicializa eventos
         public GRF(AnalisisState state)
@@ -199,6 +210,8 @@ namespace insoles.UserControls
             plot.MouseMove += Plot_MouseMove;
 
             plot.Plot.Title("Raw Signal");
+            plot.Plot.XAxis.Label("Time in Seconds");
+            plot.Plot.YAxis.Label("Newtons/Kg");
             plot.Plot.Style(ScottPlot.Style.Seaborn);
             plot.Plot.Palette = ScottPlot.Palette.Amber;
 
@@ -546,22 +559,35 @@ namespace insoles.UserControls
         private void RangeButton_Click(object sender, RoutedEventArgs e)
         {
             Trace.WriteLine($"X1: {XPoints[0]:F2} X2: {XPoints[1]:F2}");
-            int start = xs_left_N_FC.IndexOf(Math.Round(XPoints[0], 2));
-            int end = xs_left_N_FC.IndexOf(Math.Round(XPoints[1], 2));
 
-            List<double> xs_left = xs_left_N_FC.GetRange(0, end - start);
-            List<double> ys_left = ys_left_N_FC.GetRange(start, end - start);
+           if (XPoints[0] >= XPoints[1])
+            {
 
-            ys_left_array = Ns.Butterworth(ys_left.ToArray(), 0.01, 6.0);
+                plot.Plot.Remove(hspan);
+                plot.Render();
 
-            List<double> xs_right = xs_right_N_FC.GetRange(0, end - start);
-            List<double> ys_right = ys_right_N_FC.GetRange(start, end - start);
+                MessageBox.Show("Rango seleccionado incorrecto");
+                
+            }
+           else
+            {
+                int start = xs_left_N_FC.IndexOf(Math.Round(XPoints[0], 2));
+                int end = xs_left_N_FC.IndexOf(Math.Round(XPoints[1], 2));
 
-            double[] ys_right_array = Ns.Butterworth(ys_right.ToArray(), 0.01, 6.0);
+                List<double> xs_left = xs_left_N_FC.GetRange(start, end - start);
+                List<double> ys_left = ys_left_N_FC.GetRange(start, end - start);
 
-            rangePlot.Plot.AddScatterLines(xs_left.ToArray(), ys_left_array,color: System.Drawing.Color.Red);
-            rangePlot.Plot.AddScatterLines(xs_right.ToArray(), ys_right_array.ToArray(),color: System.Drawing.Color.Green);
-            rangePlot.Render();
+                ys_left_array = Ns.Butterworth(ys_left.ToArray(), 0.01, 6.0);
+
+                List<double> xs_right = xs_right_N_FC.GetRange(start, end - start);
+                List<double> ys_right = ys_right_N_FC.GetRange(start, end - start);
+
+                ys_right_array = Ns.Butterworth(ys_right.ToArray(), 0.01, 6.0);
+
+                rangePlot.Plot.AddScatterLines(xs_left.ToArray(), ys_left_array, color: System.Drawing.Color.Red);
+                rangePlot.Plot.AddScatterLines(xs_right.ToArray(), ys_right_array.ToArray(), color: System.Drawing.Color.Green);
+                rangePlot.Render();
+            }
 
         }
 
@@ -570,107 +596,124 @@ namespace insoles.UserControls
             // Añadir los choques (heel_strikes) y la fase de salida (toes_off)
             // con un threshold de 10
 
-            for (int i = 0; i < ys_left_array.Length - 1; i++)
-            {
-                if (ys_left_array[i] < 10 && ys_left_array[i + 1] > 10)
-                {
-                    heel_strikes.Add(i + 1, ys_left_array[i + 1]);
+            //for (int i = 0; i < ys_left_array.Length - 1; i++)
+            //{
+            //    if (ys_left_array[i] < 10 && ys_left_array[i + 1] > 10)
+            //    {
+            //        heel_strikes.Add(i + 1, ys_left_array[i + 1]);
 
-                }
+            //    }
 
-                if (ys_left_array[i] > 10 && ys_left_array[i + 1] < 10)
-                {
-                    toes_off.Add(i, ys_left_array[i]);
-                }
+            //    if (ys_left_array[i] > 10 && ys_left_array[i + 1] < 10)
+            //    {
+            //        toes_off.Add(i, ys_left_array[i]);
+            //    }
 
+            //}
 
-            }
+            // Método que sustituye el código anterior
+            // Se le pasa el array y el threshold
+
+            (heel_strikes, toes_off) = Ns.CalculateHeelToes(ys_left_array, Threshold);
 
             // pintamos lineas verticales en el gráfico para los choques
 
-            foreach (KeyValuePair<int, double> item in heel_strikes)
-            {
+            //foreach (KeyValuePair<int, double> item in heel_strikes)
+            //{
 
-                double el = xs_left_N_FC[item.Key];
+            //    double el = xs_left_N_FC[item.Key];
 
-                var vline = rangePlot.plt.AddVerticalLine(Math.Round(el, 2), color: System.Drawing.Color.Blue);
+            //    var vline = rangePlot.plt.AddVerticalLine(Math.Round(el, 2), color: System.Drawing.Color.Blue);
 
-                vline.PositionLabel = true;
+            //    vline.PositionLabel = true;
 
-                rangePlot.Render();
+            //    rangePlot.Render();
 
-            }
+            //}
 
-            // pintamos las líneas para las salidas
-            foreach (KeyValuePair<int, double> item in toes_off)
-            {
+            //// pintamos las líneas para las salidas
+            //foreach (KeyValuePair<int, double> item in toes_off)
+            //{
 
-                double el = xs_left_N_FC[item.Key];
+            //    double el = xs_left_N_FC[item.Key];
 
-                var vline = rangePlot.plt.AddVerticalLine(Math.Round(el, 2), color: System.Drawing.Color.Yellow);
+            //    var vline = rangePlot.plt.AddVerticalLine(Math.Round(el, 2), color: System.Drawing.Color.Yellow);
 
-                vline.PositionLabel = true;
+            //    vline.PositionLabel = true;
 
-                rangePlot.Render();
+            //    rangePlot.Render();
 
-            }
+            //}
+
+            Ns.AgregarLineasHeelToes(rangePlot, xs_left_N_FC, heel_strikes, toes_off);
 
             // Sacar las curvas
-            for (var i = 0; i < toes_off.Count; i++)
-            {
-                int init = heel_strikes.ElementAt(i).Key;
-                int end = toes_off.ElementAt(i).Key;
-                curves.Add(init, ys_left_array[init..end].ToList());
+            //for (var i = 0; i < toes_off.Count; i++)
+            //{
+            //    int init = heel_strikes.ElementAt(i).Key;
+            //    int end = toes_off.ElementAt(i).Key;
+            //    curves.Add(init, ys_left_array[init..end].ToList());
 
-            }
+            //}
 
-            List<List<double>> curvasInterpoladas = new List<List<double>>();
-            List<List<double>> tiemposInterpolados = new List<List<double>>();
+            //List<List<double>> curvasInterpoladas = new List<List<double>>();
+            //List<List<double>> tiemposInterpolados = new List<List<double>>();
 
-            for (var i = 0; i < curves.Count(); i++)
-            {
-                double[] second_curve = Ns.linspace(0, 99, curves.ElementAt(i).Value.Count);
+            //for (var i = 0; i < curves.Count(); i++)
+            //{
+            //    double[] second_curve = Ns.linspace(0, 99, curves.ElementAt(i).Value.Count);
 
-                (double[] xs, double[] ys) = stdgraph.Lib.CubicInterpol.InterpolateXY(second_curve, curves.ElementAt(i).Value.ToArray(), 100);
-                curvasInterpoladas.Add(ys.ToList());
-                tiemposInterpolados.Add(xs.ToList());
-            }
+            //    (double[] xs, double[] ys) = stdgraph.Lib.CubicInterpol.InterpolateXY(second_curve, curves.ElementAt(i).Value.ToArray(), 100);
+            //    curvasInterpoladas.Add(ys.ToList());
+            //    tiemposInterpolados.Add(xs.ToList());
+            //}
 
-            List<double> curvaMedia = new List<double>();
-            List<double> curvaSt = new List<double>();
-            List<double> curvaTime = new List<double>();
+            //curvaMedia = new List<double>();
+            //curvaSt = new List<double>();
+            //curvaTime = new List<double>();
 
-            for (int colIndex = 0; colIndex < 100; colIndex++)
-            {
-                List<double> colAvg = new List<double>();
-                List<double> colTime = new List<double>();
+            //for (int colIndex = 0; colIndex < 100; colIndex++)
+            //{
+            //    List<double> colAvg = new List<double>();
+            //    List<double> colTime = new List<double>();
 
-                foreach (List<double> item in curvasInterpoladas)
-                {
-                    if (item.Count > colIndex)
-                    {
-                        colAvg.Add(item[colIndex]);
+            //    foreach (List<double> item in curvasInterpoladas)
+            //    {
+            //        if (item.Count > colIndex)
+            //        {
+            //            colAvg.Add(item[colIndex]);
 
-                    }
-                }
+            //        }
+            //    }
 
-                foreach (List<double> item in tiemposInterpolados)
-                {
+            //    foreach (List<double> item in tiemposInterpolados)
+            //    {
 
-                    if (item.Count > colIndex)
-                    {
-                        colTime.Add(item[colIndex]);
-                    }
+            //        if (item.Count > colIndex)
+            //        {
+            //            colTime.Add(item[colIndex]);
+            //        }
 
-                }
+            //    }
 
-                curvaMedia.Add(colAvg.Average());
-                curvaSt.Add(colAvg.StandardDeviation());
-                curvaTime.Add(colTime.Average());
-            }
+            //    curvaMedia.Add(colAvg.Average());
+            //    curvaSt.Add(colAvg.StandardDeviation());
+            //    curvaTime.Add(colTime.Average());
+            //}
 
-            normPlot.Plot.AddScatterLines(curvaTime.ToArray(), curvaMedia.ToArray(), System.Drawing.Color.Blue, lineWidth: 3, label: "Average");
-            normPlot.Plot.AddFillError(curvaTime.ToArray(), curvaMedia.ToArray(), curvaSt.ToArray(), System.Drawing.Color.FromArgb(50, System.Drawing.Color.Blue));
+            (curvaMedia, curvaSt, curvaTime) = Ns.CalcularNormCurvas(heel_strikes, toes_off, curves, ys_left_array);
+
+            (heel_strikesR, toes_offR) = Ns.CalculateHeelToes(ys_right_array, Threshold);
+            Ns.AgregarLineasHeelToes(rangePlot, xs_right_N_FC, heel_strikesR, toes_offR);
+
+            (curvaMediaR, curvaStR, curvaTimeR) = Ns.CalcularNormCurvas(heel_strikes, toes_off, curvesR, ys_right_array);
+
+            normPlot.Plot.AddScatterLines(curvaTime.ToArray(), curvaMedia.ToArray(), System.Drawing.Color.Red, lineWidth: 3, label: "Average");
+            normPlot.Plot.AddFillError(curvaTime.ToArray(), curvaMedia.ToArray(), curvaSt.ToArray(), System.Drawing.Color.FromArgb(50, System.Drawing.Color.Red));
+
+            normPlot.Plot.AddScatterLines(curvaTimeR.ToArray(), curvaMediaR.ToArray(), System.Drawing.Color.Green, lineWidth: 3, label: "Average");
+            normPlot.Plot.AddFillError(curvaTimeR.ToArray(), curvaMediaR.ToArray(), curvaSt.ToArray(), System.Drawing.Color.FromArgb(50, System.Drawing.Color.Green));
+
 
             normPlot.Render();
 
