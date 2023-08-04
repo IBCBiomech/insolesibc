@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ScottPlot;
 using MathNet.Numerics.Statistics;
+using insoles.Enums;
 
 namespace stdgraph.Lib
 {
@@ -17,6 +18,8 @@ namespace stdgraph.Lib
     {
         public List<double> time = new List<double>();
         public List<double> rtotal = new List<double>();
+
+        public int init, end;
         public NormalStats() { }
         #region Normalization 0-100 api
         //--------------------------------------------------------------------------
@@ -251,12 +254,14 @@ namespace stdgraph.Lib
             return (heel_strikes, toes_off);
         }
 
-        public void AgregarLineasHeelToes(WpfPlot rangePlot, List<double> xs_N_FC, Dictionary<int,double> heel_strikes , Dictionary<int,double> toes_off)
+        public void AgregarLineasHeelToes(WpfPlot rangePlot, List<double> xs_N_FC, Dictionary<int,double> heel_strikes , Dictionary<int,double> toes_off, int init)
         {
             foreach (KeyValuePair<int, double> item in heel_strikes)
             {
-
-                double el = xs_N_FC[item.Key];
+               
+                double el = xs_N_FC[item.Key + init];
+                
+                
 
                 var vline = rangePlot.plt.AddVerticalLine(Math.Round(el, 2), color: System.Drawing.Color.Blue);
 
@@ -270,7 +275,7 @@ namespace stdgraph.Lib
             foreach (KeyValuePair<int, double> item in toes_off)
             {
 
-                double el = xs_N_FC[item.Key];
+                double el = xs_N_FC[item.Key + init];
 
                 var vline = rangePlot.plt.AddVerticalLine(Math.Round(el, 2), color: System.Drawing.Color.Yellow);
 
@@ -289,8 +294,8 @@ namespace stdgraph.Lib
             // Sacar las curvas
             for (var i = 0; i < Math.Min(toes_off.Count, heel_strikes.Count); i++)
             {
-                int init = heel_strikes.ElementAt(i).Key;
-                int end = toes_off.ElementAt(i).Key;
+                init = heel_strikes.ElementAt(i).Key;
+                end = toes_off.ElementAt(i).Key;
                 
                 curves.Add(init, ys_array.ToList().GetRange(init, Math.Abs(end - init) ));
 

@@ -201,6 +201,8 @@ namespace insoles.UserControls
         List<double> curvaStL, curvaStR;
         List<double> curvaTimeL, curvaTimeR;
 
+        public int startL, endL, startR, endR;
+
         // Inicializa eventos
         public GRF(AnalisisState state)
         {
@@ -595,16 +597,19 @@ namespace insoles.UserControls
             }
            else
             {
-                int start = xs_left_N_FC.IndexOf(Math.Round(XPoints[0], 2));
-                int end = xs_left_N_FC.IndexOf(Math.Round(XPoints[1], 2));
+                startL = xs_left_N_FC.IndexOf(Math.Round(XPoints[0], 2));
+                endL = xs_left_N_FC.IndexOf(Math.Round(XPoints[1], 2));
 
-                List<double> xs_left = xs_left_N_FC.GetRange(start, end - start);
-                List<double> ys_left = ys_left_N_FC.GetRange(start, end - start);
+                List<double> xs_left = xs_left_N_FC.GetRange(startL, endL - startL);
+                List<double> ys_left = ys_left_N_FC.GetRange(startL, endL - startL);
 
                 ys_left_array = Ns.Butterworth(ys_left.ToArray(), 0.01, 6.0);
 
-                List<double> xs_right = xs_right_N_FC.GetRange(start, end - start);
-                List<double> ys_right = ys_right_N_FC.GetRange(start, end - start);
+                startR = xs_left_N_FC.IndexOf(Math.Round(XPoints[0], 2));
+                endR = xs_left_N_FC.IndexOf(Math.Round(XPoints[1], 2));
+
+                List<double> xs_right = xs_right_N_FC.GetRange(startR, endR - startR);
+                List<double> ys_right = ys_right_N_FC.GetRange(startR, endR - startR);
 
                 ys_right_array = Ns.Butterworth(ys_right.ToArray(), 0.01, 6.0);
 
@@ -724,20 +729,21 @@ namespace insoles.UserControls
             //    curvaTime.Add(colTime.Average());
             //}
 
-            (heel_strikesL, toes_offL) = Ns.CalculateHeelToes(ys_left_array, Threshold);
+            //(heel_strikesL, toes_offL) = Ns.CalculateHeelToes(ys_left_array, Threshold);
 
-            Ns.AgregarLineasHeelToes(rangePlot, xs_left_N_FC, heel_strikesL, toes_offL);
+            //Ns.AgregarLineasHeelToes(rangePlot, xs_left_N_FC, heel_strikesL, toes_offL, startL);
 
-            (curvaMediaL, curvaStL, curvaTimeL) = Ns.CalcularNormCurvas(heel_strikesL, toes_offL, curvesL, ys_left_array);
+            //(curvaMediaL, curvaStL, curvaTimeL) = Ns.CalcularNormCurvas(heel_strikesL, toes_offL, curvesL, ys_left_array);
+
 
             (heel_strikesR, toes_offR) = Ns.CalculateHeelToes(ys_right_array, Threshold);
 
-            Ns.AgregarLineasHeelToes(rangePlot, xs_right_N_FC, heel_strikesR, toes_offR);
+            Ns.AgregarLineasHeelToes(rangePlot, xs_right_N_FC, heel_strikesR, toes_offR, startR);
 
             (curvaMediaR, curvaStR, curvaTimeR) = Ns.CalcularNormCurvas(heel_strikesR, toes_offR, curvesR, ys_right_array);
 
-            normPlot.Plot.AddScatterLines(curvaTimeL.ToArray(), curvaMediaL.ToArray(), System.Drawing.Color.Red, lineWidth: 3, label: "Average");
-            normPlot.Plot.AddFillError(curvaTimeL.ToArray(), curvaMediaL.ToArray(), curvaStL.ToArray(), System.Drawing.Color.FromArgb(50, System.Drawing.Color.Red));
+            //normPlot.Plot.AddScatterLines(curvaTimeL.ToArray(), curvaMediaL.ToArray(), System.Drawing.Color.Red, lineWidth: 3, label: "Average");
+            //normPlot.Plot.AddFillError(curvaTimeL.ToArray(), curvaMediaL.ToArray(), curvaStL.ToArray(), System.Drawing.Color.FromArgb(50, System.Drawing.Color.Red));
 
             normPlot.Plot.AddScatterLines(curvaTimeR.ToArray(), curvaMediaR.ToArray(), System.Drawing.Color.Green, lineWidth: 3, label: "Average");
             normPlot.Plot.AddFillError(curvaTimeR.ToArray(), curvaMediaR.ToArray(), curvaStR.ToArray(), System.Drawing.Color.FromArgb(50, System.Drawing.Color.Green));
