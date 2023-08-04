@@ -25,18 +25,19 @@
             <userControls:PacientesUserControlAnalisis Pacientes="{Binding Pacientes}"
                                                        syncfusion:DockingManager.Header="Usuarios"
                                                        syncfusion:DockingManager.SideInDockedMode="Left"
-                                                       syncfusion:DockingManager.DesiredWidthInDockedMode="800"
-                                                       syncfusion:DockingManager.DesiredHeightInDockedMode="200"
+                                                       syncfusion:DockingManager.DesiredWidthInDockedMode="200"
+                                                       syncfusion:DockingManager.DesiredHeightInDockedMode="800"
                                                        x:Name="Usuarios"/>
             <ContentControl Content="{Binding timeLine}"
                             syncfusion:DockingManager.Header="Timeline"
-                            syncfusion:DockingManager.SideInDockedMode="Tabbed"
-                            syncfusion:DockingManager.TargetNameInDockedMode="Usuarios"
+                            syncfusion:DockingManager.SideInDockedMode="Bottom"
+                            syncfusion:DockingManager.DesiredHeightInDockedMode="110"
+                           
                             />
             <ContentControl Content="{Binding grf}"
                             syncfusion:DockingManager.Header="GRF"
                             syncfusion:DockingManager.SideInDockedMode="Top"
-                            syncfusion:DockingManager.TargetNameInDockedMode="Usuarios"
+                            syncfusion:DockingManager.State="Document"
                             syncfusion:DockingManager.DesiredHeightInDockedMode="800"
                             x:Name="GRF"/>
             
