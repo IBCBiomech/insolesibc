@@ -29,6 +29,7 @@ using Syncfusion.DocIO.DLS;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using stdgraph.Lib;
 using MathNet.Numerics.Statistics;
+using Syncfusion.UI.Xaml.Gauges;
 
 namespace insoles.UserControls
 {
@@ -185,24 +186,26 @@ namespace insoles.UserControls
         double[] ys_left_array;
         double[] ys_right_array;
 
-        Dictionary<int, double> toes_off = new Dictionary<int, double>();
-        Dictionary<int, double> heel_strikes = new Dictionary<int, double>();
+        Dictionary<int, double> toes_offL = new Dictionary<int, double>();
+        Dictionary<int, double> heel_strikesL = new Dictionary<int, double>();
 
         Dictionary<int, double> toes_offR = new Dictionary<int, double>();
         Dictionary<int, double> heel_strikesR = new Dictionary<int, double>();
 
-        Dictionary<int, List<double>> curves = new Dictionary<int, List<double>>();
+        Dictionary<int, List<double>> curvesL = new Dictionary<int, List<double>>();
         Dictionary<int, List<double>> curvesR = new Dictionary<int, List<double>>();
 
         public const double Threshold = 10.0;
 
-        List<double> curvaMedia, curvaMediaR;
-        List<double> curvaSt, curvaStR;
-        List<double> curvaTime, curvaTimeR;
+        List<double> curvaMediaL, curvaMediaR;
+        List<double> curvaStL, curvaStR;
+        List<double> curvaTimeL, curvaTimeR;
 
         // Inicializa eventos
         public GRF(AnalisisState state)
         {
+        
+
             InitializeComponent();
             DataContext = this;
             this.state = state;
@@ -228,6 +231,8 @@ namespace insoles.UserControls
             rangePlot.Render();
 
             Ns = new NormalStats();
+
+           
         }
 
         // Imprime en el Xlabel las coordenadas XY (temporalmente)
@@ -472,7 +477,7 @@ namespace insoles.UserControls
             hspan.BorderLineWidth = 2;
             hspan.HatchColor = System.Drawing.Color.FromArgb(100, System.Drawing.Color.Blue);
             hspan.HatchStyle = ScottPlot.Drawing.HatchStyle.None;
-            hspan.Label = "Customized vSpan";
+            hspan.Label = "Left Insole Range";
             hspan.DragEnabled = true;
 
             hspan.Edge1Dragged += (s, e) =>
@@ -536,6 +541,21 @@ namespace insoles.UserControls
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
+        }
+
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        {
+            normPlot.Plot.Clear();
+            rangePlot.Plot.Clear();
+            //plot.Plot.Remove(hspan);
+
+            normPlot.Render();
+            rangePlot.Render();
+            plot.Render();
+            curvesL.Clear();
+            curvaMediaL.Clear();
+            curvaStL.Clear();
+            curvaMediaL.Clear();
         }
 
         private void ClearGraphButton_Click(object sender, RoutedEventArgs e)
@@ -614,7 +634,7 @@ namespace insoles.UserControls
             // Método que sustituye el código anterior
             // Se le pasa el array y el threshold
 
-            (heel_strikes, toes_off) = Ns.CalculateHeelToes(ys_left_array, Threshold);
+
 
             // pintamos lineas verticales en el gráfico para los choques
 
@@ -645,7 +665,6 @@ namespace insoles.UserControls
 
             //}
 
-            Ns.AgregarLineasHeelToes(rangePlot, xs_left_N_FC, heel_strikes, toes_off);
 
             // Sacar las curvas
             //for (var i = 0; i < toes_off.Count; i++)
@@ -701,22 +720,35 @@ namespace insoles.UserControls
             //    curvaTime.Add(colTime.Average());
             //}
 
-            (curvaMedia, curvaSt, curvaTime) = Ns.CalcularNormCurvas(heel_strikes, toes_off, curves, ys_left_array);
+            (heel_strikesL, toes_offL) = Ns.CalculateHeelToes(ys_left_array, Threshold);
 
-            (heel_strikesR, toes_offR) = Ns.CalculateHeelToes(ys_right_array, Threshold);
-            Ns.AgregarLineasHeelToes(rangePlot, xs_right_N_FC, heel_strikesR, toes_offR);
+            Ns.AgregarLineasHeelToes(rangePlot, xs_left_N_FC, heel_strikesL, toes_offL);
 
-            (curvaMediaR, curvaStR, curvaTimeR) = Ns.CalcularNormCurvas(heel_strikes, toes_off, curvesR, ys_right_array);
+            (curvaMediaL, curvaStL, curvaTimeL) = Ns.CalcularNormCurvas(heel_strikesL, toes_offL, curvesL, ys_left_array);
 
-            normPlot.Plot.AddScatterLines(curvaTime.ToArray(), curvaMedia.ToArray(), System.Drawing.Color.Red, lineWidth: 3, label: "Average");
-            normPlot.Plot.AddFillError(curvaTime.ToArray(), curvaMedia.ToArray(), curvaSt.ToArray(), System.Drawing.Color.FromArgb(50, System.Drawing.Color.Red));
+            //(heel_strikesR, toes_offR) = Ns.CalculateHeelToes(ys_right_array, Threshold);
 
-            normPlot.Plot.AddScatterLines(curvaTimeR.ToArray(), curvaMediaR.ToArray(), System.Drawing.Color.Green, lineWidth: 3, label: "Average");
-            normPlot.Plot.AddFillError(curvaTimeR.ToArray(), curvaMediaR.ToArray(), curvaSt.ToArray(), System.Drawing.Color.FromArgb(50, System.Drawing.Color.Green));
+            //Ns.AgregarLineasHeelToes(rangePlot, xs_right_N_FC, heel_strikesR, toes_offR);
 
+            //(curvaMediaR, curvaStR, curvaTimeR) = Ns.CalcularNormCurvas(heel_strikesR, toes_offR, curvesR, ys_right_array);
+
+            normPlot.Plot.AddScatterLines(curvaTimeL.ToArray(), curvaMediaL.ToArray(), System.Drawing.Color.Red, lineWidth: 3, label: "Average");
+            normPlot.Plot.AddFillError(curvaTimeL.ToArray(), curvaMediaL.ToArray(), curvaStL.ToArray(), System.Drawing.Color.FromArgb(50, System.Drawing.Color.Red));
+
+            //normPlot.Plot.AddScatterLines(curvaTimeR.ToArray(), curvaMediaR.ToArray(), System.Drawing.Color.Green, lineWidth: 3, label: "Average");
+            //normPlot.Plot.AddFillError(curvaTimeR.ToArray(), curvaMediaR.ToArray(), curvaStR.ToArray(), System.Drawing.Color.FromArgb(50, System.Drawing.Color.Green));
 
             normPlot.Render();
 
+            foreach (var kvp in heel_strikesL)
+            {
+                Trace.WriteLine($"heel: k: {kvp.Key} v: {kvp.Value}");
+            }
+
+            foreach (var kvp in toes_offL)
+            {
+                Trace.WriteLine($"toe: k: {kvp.Key} v: {kvp.Value}");
+            }
 
         }
 

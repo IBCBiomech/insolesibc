@@ -30,6 +30,7 @@
     <PkgSyncfusion_SfBusyIndicator_WPF Condition=" '$(PkgSyncfusion_SfBusyIndicator_WPF)' == '' ">C:\Users\Deva\.nuget\packages\syncfusion.sfbusyindicator.wpf\22.1.36</PkgSyncfusion_SfBusyIndicator_WPF>
     <PkgSyncfusion_SfTreeView_WPF Condition=" '$(PkgSyncfusion_SfTreeView_WPF)' == '' ">C:\Users\Deva\.nuget\packages\syncfusion.sftreeview.wpf\22.1.36</PkgSyncfusion_SfTreeView_WPF>
     <PkgSyncfusion_SfInput_WPF Condition=" '$(PkgSyncfusion_SfInput_WPF)' == '' ">C:\Users\Deva\.nuget\packages\syncfusion.sfinput.wpf\22.1.36</PkgSyncfusion_SfInput_WPF>
+    <PkgSyncfusion_SfGauge_WPF Condition=" '$(PkgSyncfusion_SfGauge_WPF)' == '' ">C:\Users\Deva\.nuget\packages\syncfusion.sfgauge.wpf\22.1.36</PkgSyncfusion_SfGauge_WPF>
     <PkgScottPlot_WPF Condition=" '$(PkgScottPlot_WPF)' == '' ">C:\Users\Deva\.nuget\packages\scottplot.wpf\4.1.64</PkgScottPlot_WPF>
     <PkgNUnit_Analyzers Condition=" '$(PkgNUnit_Analyzers)' == '' ">C:\Users\Deva\.nuget\packages\nunit.analyzers\3.6.1</PkgNUnit_Analyzers>
   </PropertyGroup>

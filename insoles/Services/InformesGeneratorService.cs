@@ -40,6 +40,7 @@ namespace insoles.Services
         {
             grf.rangePlot.Plot.SaveFig("range.png");
             grf.plot.Plot.SaveFig("GRF.png");
+            grf.normPlot.Plot.SaveFig("norm.png");
 
             grafoMariposa.plot.Plot.SaveFig("butterfly.png");
 
@@ -77,7 +78,7 @@ namespace insoles.Services
 
 
             textRange = paragraph.AppendText("A continuación se muestra un informe con el Gráfico de STDDEV:") as WTextRange;
-            IWPicture picture2 = paragraph.AppendPicture(new System.Drawing.Bitmap(@"Range.png")) as WPicture;
+            IWPicture picture2 = paragraph.AppendPicture(new System.Drawing.Bitmap(@"norm.png")) as WPicture;
 
             textRange = paragraph.AppendText("A continuación se muestra un informe con el Gráfico de Mariposa:") as WTextRange;
             IWPicture picture3 = paragraph.AppendPicture(new System.Drawing.Bitmap(@"butterfly.png")) as WPicture;

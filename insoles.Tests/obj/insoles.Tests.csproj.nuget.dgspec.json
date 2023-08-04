@@ -78,6 +78,10 @@
               "target": "Package",
               "version": "[22.1.36, )"
             },
+            "Syncfusion.SfGauge.WPF": {
+              "target": "Package",
+              "version": "[22.1.36, )"
+            },
             "Syncfusion.SfSkinManager.WPF": {
               "target": "Package",
               "version": "[22.1.36, )"
@@ -274,6 +278,10 @@
               "version": "[22.1.36, )"
             },
             "Syncfusion.SfBusyIndicator.WPF": {
+              "target": "Package",
+              "version": "[22.1.36, )"
+            },
+            "Syncfusion.SfGauge.WPF": {
               "target": "Package",
               "version": "[22.1.36, )"
             },

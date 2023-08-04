@@ -14,6 +14,7 @@
           "NUnit3TestAdapter": "4.4.2",
           "Syncfusion.DocIO.Wpf": "22.1.36",
           "Syncfusion.Licensing": "22.1.36",
+          "Syncfusion.SfGauge.WPF": "22.1.36",
           "Syncfusion.SfSkinManager.WPF": "22.1.36",
           "Syncfusion.Shared.WPF": "22.1.36",
           "coverlet.collector": "3.2.0",
@@ -1195,6 +1196,18 @@
           }
         }
       },
+      "Syncfusion.SfGauge.WPF/22.1.36": {
+        "dependencies": {
+          "Syncfusion.Licensing": "22.1.36",
+          "Syncfusion.Shared.WPF": "22.1.36"
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Syncfusion.SfGauge.WPF.dll": {
+            "assemblyVersion": "22.1.36.0",
+            "fileVersion": "22.1.36.0"
+          }
+        }
+      },
       "Syncfusion.SfGridCommon.WPF/22.1.36": {
         "dependencies": {
           "Syncfusion.Licensing": "22.1.36"
@@ -1517,6 +1530,7 @@
           "Syncfusion.DocIO.Wpf": "22.1.36",
           "Syncfusion.Licensing": "22.1.36",
           "Syncfusion.SfBusyIndicator.WPF": "22.1.36",
+          "Syncfusion.SfGauge.WPF": "22.1.36",
           "Syncfusion.SfInput.WPF": "22.1.36",
           "Syncfusion.SfSkinManager.WPF": "22.1.36",
           "Syncfusion.SfTreeView.WPF": "22.1.36",
@@ -2035,6 +2049,13 @@
       "sha512": "sha512-qHbl+c8yVpMrwi24I+POuKe01DTNjAvsVQHqveFaSyvW5bwyaDC2lv1hqsyEllN5HCo/Pscyd9UwMISz/vktFg==",
       "path": "syncfusion.sfbusyindicator.wpf/22.1.36",
       "hashPath": "syncfusion.sfbusyindicator.wpf.22.1.36.nupkg.sha512"
+    },
+    "Syncfusion.SfGauge.WPF/22.1.36": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-rukeufBjEvT2C4hXPMQrtgNAJFHr31lWoNk7xca/ihl4pticy8DTkMZsaEq6s6pfV0rFoFwBSvwK3CnCxxhJTg==",
+      "path": "syncfusion.sfgauge.wpf/22.1.36",
+      "hashPath": "syncfusion.sfgauge.wpf.22.1.36.nupkg.sha512"
     },
     "Syncfusion.SfGridCommon.WPF/22.1.36": {
       "type": "package",

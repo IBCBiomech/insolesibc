@@ -1453,6 +1453,23 @@
           }
         }
       },
+      "Syncfusion.SfGauge.WPF/22.1.36": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "22.1.36",
+          "Syncfusion.Shared.WPF": "22.1.36"
+        },
+        "compile": {
+          "lib/net6.0-windows7.0/Syncfusion.SfGauge.WPF.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Syncfusion.SfGauge.WPF.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Syncfusion.SfGridCommon.WPF/22.1.36": {
         "type": "package",
         "dependencies": {
@@ -1991,6 +2008,7 @@
           "Syncfusion.DocIO.Wpf": "22.1.36",
           "Syncfusion.Licensing": "22.1.36",
           "Syncfusion.SfBusyIndicator.WPF": "22.1.36",
+          "Syncfusion.SfGauge.WPF": "22.1.36",
           "Syncfusion.SfInput.WPF": "22.1.36",
           "Syncfusion.SfSkinManager.WPF": "22.1.36",
           "Syncfusion.SfTreeView.WPF": "22.1.36",
@@ -3864,6 +3882,49 @@
         "tools/VisualStudioToolsManifest.xml"
       ]
     },
+    "Syncfusion.SfGauge.WPF/22.1.36": {
+      "sha512": "rukeufBjEvT2C4hXPMQrtgNAJFHr31lWoNk7xca/ihl4pticy8DTkMZsaEq6s6pfV0rFoFwBSvwK3CnCxxhJTg==",
+      "type": "package",
+      "path": "syncfusion.sfgauge.wpf/22.1.36",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "lib/net40/Design/Syncfusion.Design.Wpf.dll",
+        "lib/net40/Design/Syncfusion.SfGauge.WPF.DesignTools.dll",
+        "lib/net40/Design/Syncfusion.SfGauge.WPF.Expression.Design.dll",
+        "lib/net40/Design/Syncfusion.SfGauge.WPF.VisualStudio.Design.dll",
+        "lib/net40/Syncfusion.SfGauge.WPF.dll",
+        "lib/net40/Syncfusion.SfGauge.WPF.xml",
+        "lib/net45/Design/Syncfusion.Design.Wpf.dll",
+        "lib/net45/Design/Syncfusion.SfGauge.WPF.DesignTools.dll",
+        "lib/net45/Design/Syncfusion.SfGauge.WPF.Expression.Design.dll",
+        "lib/net45/Design/Syncfusion.SfGauge.WPF.VisualStudio.Design.dll",
+        "lib/net45/Syncfusion.SfGauge.WPF.dll",
+        "lib/net45/Syncfusion.SfGauge.WPF.xml",
+        "lib/net451/Design/Syncfusion.Design.Wpf.dll",
+        "lib/net451/Design/Syncfusion.SfGauge.WPF.DesignTools.dll",
+        "lib/net451/Design/Syncfusion.SfGauge.WPF.Expression.Design.dll",
+        "lib/net451/Design/Syncfusion.SfGauge.WPF.VisualStudio.Design.dll",
+        "lib/net451/Syncfusion.SfGauge.WPF.dll",
+        "lib/net451/Syncfusion.SfGauge.WPF.xml",
+        "lib/net46/Design/Syncfusion.Design.Wpf.dll",
+        "lib/net46/Design/Syncfusion.SfGauge.WPF.DesignTools.dll",
+        "lib/net46/Design/Syncfusion.SfGauge.WPF.Expression.Design.dll",
+        "lib/net46/Design/Syncfusion.SfGauge.WPF.VisualStudio.Design.dll",
+        "lib/net46/Syncfusion.SfGauge.WPF.dll",
+        "lib/net46/Syncfusion.SfGauge.WPF.xml",
+        "lib/net6.0-windows7.0/Design/Syncfusion.SfGauge.WPF.DesignTools.dll",
+        "lib/net6.0-windows7.0/Syncfusion.SfGauge.WPF.dll",
+        "lib/net6.0-windows7.0/Syncfusion.SfGauge.WPF.xml",
+        "syncfusion.sfgauge.wpf.22.1.36.nupkg.sha512",
+        "syncfusion.sfgauge.wpf.nuspec",
+        "syncfusion_logo.png",
+        "tools/VisualStudioToolsManifest.xml"
+      ]
+    },
     "Syncfusion.SfGridCommon.WPF/22.1.36": {
       "sha512": "flKF8460cvlBFeCup/MGeG05gC6Mjy5TFo3dnUiOd/PGKLnj3WjdK/6ywiRP8vDKFjKrou5D1U7jgltO7bgX+Q==",
       "type": "package",
@@ -5426,6 +5487,7 @@
       "NUnit3TestAdapter >= 4.4.2",
       "Syncfusion.DocIO.Wpf >= 22.1.36",
       "Syncfusion.Licensing >= 22.1.36",
+      "Syncfusion.SfGauge.WPF >= 22.1.36",
       "Syncfusion.SfSkinManager.WPF >= 22.1.36",
       "Syncfusion.Shared.WPF >= 22.1.36",
       "coverlet.collector >= 3.2.0",
@@ -5510,6 +5572,10 @@
             "version": "[22.1.36, )"
           },
           "Syncfusion.Licensing": {
+            "target": "Package",
+            "version": "[22.1.36, )"
+          },
+          "Syncfusion.SfGauge.WPF": {
             "target": "Package",
             "version": "[22.1.36, )"
           },

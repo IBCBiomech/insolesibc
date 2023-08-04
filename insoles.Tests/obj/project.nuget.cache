@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "2FnIsVDf72jG/tCVjkhUJ4vG6IJcHxba9C8ab5eaJ4J5M26VYfg5/NQLxEPeufASafk3whQ0puQnyS1F1vT2BA==",
+  "dgSpecHash": "0UWzrlLgv40hYfV+P1RniSsAFWAOb90Y1p2r0n02ZzNqQdGpJfu/3juFg5viRyizkWXAlSI3ZqvEx3526/c4DQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Deva\\wsibc\\insolesibc\\insoles.Tests\\insoles.Tests.csproj",
   "expectedPackageFiles": [
@@ -74,6 +74,7 @@
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.licensing\\22.1.36\\syncfusion.licensing.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.officechart.base\\22.1.36\\syncfusion.officechart.base.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfbusyindicator.wpf\\22.1.36\\syncfusion.sfbusyindicator.wpf.22.1.36.nupkg.sha512",
+    "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfgauge.wpf\\22.1.36\\syncfusion.sfgauge.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfgridcommon.wpf\\22.1.36\\syncfusion.sfgridcommon.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfinput.wpf\\22.1.36\\syncfusion.sfinput.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfskinmanager.wpf\\22.1.36\\syncfusion.sfskinmanager.wpf.22.1.36.nupkg.sha512",

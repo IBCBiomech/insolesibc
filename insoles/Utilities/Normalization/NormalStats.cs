@@ -287,11 +287,12 @@ namespace stdgraph.Lib
                                         Dictionary<int, List<double>> curves, double[] ys_array)
         {
             // Sacar las curvas
-            for (var i = 0; i < toes_off.Count; i++)
+            for (var i = 0; i < Math.Min(toes_off.Count, heel_strikes.Count); i++)
             {
                 int init = heel_strikes.ElementAt(i).Key;
                 int end = toes_off.ElementAt(i).Key;
-                curves.Add(init, ys_array[init..end].ToList());
+                
+                curves.Add(init, ys_array.ToList().GetRange(init, Math.Abs(end - init) ));
 
             }
 

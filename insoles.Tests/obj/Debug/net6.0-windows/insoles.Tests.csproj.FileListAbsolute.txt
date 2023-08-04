@@ -1,9 +1,4 @@
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\CoverletSourceRootsMapping
-C:\Users\Deva\wsibc\insolesibc\insoles.Tests\obj\Debug\net6.0-windows\insoles.Tests.csproj.AssemblyReference.cache
-C:\Users\Deva\wsibc\insolesibc\insoles.Tests\obj\Debug\net6.0-windows\insoles.Tests.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Deva\wsibc\insolesibc\insoles.Tests\obj\Debug\net6.0-windows\insoles.Tests.AssemblyInfoInputs.cache
-C:\Users\Deva\wsibc\insolesibc\insoles.Tests\obj\Debug\net6.0-windows\insoles.Tests.AssemblyInfo.cs
-C:\Users\Deva\wsibc\insolesibc\insoles.Tests\obj\Debug\net6.0-windows\insoles.Tests.csproj.CoreCompileInputs.cache
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\testhost.dll
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\insoles.deps.json
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\insoles.runtimeconfig.json
@@ -74,6 +69,7 @@ C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\Syncfusion
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\Syncfusion.Licensing.dll
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\Syncfusion.OfficeChart.Base.dll
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\Syncfusion.SfBusyIndicator.WPF.dll
+C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\Syncfusion.SfGauge.WPF.dll
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\Syncfusion.SfGridCommon.WPF.dll
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\Syncfusion.SfInput.WPF.dll
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\Syncfusion.SfSkinManager.WPF.dll
@@ -235,6 +231,11 @@ C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\runtimes\b
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\insoles.dll
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\WisewalkSDK.dll
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\insoles.pdb
+C:\Users\Deva\wsibc\insolesibc\insoles.Tests\obj\Debug\net6.0-windows\insoles.Tests.csproj.AssemblyReference.cache
+C:\Users\Deva\wsibc\insolesibc\insoles.Tests\obj\Debug\net6.0-windows\insoles.Tests.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Deva\wsibc\insolesibc\insoles.Tests\obj\Debug\net6.0-windows\insoles.Tests.AssemblyInfoInputs.cache
+C:\Users\Deva\wsibc\insolesibc\insoles.Tests\obj\Debug\net6.0-windows\insoles.Tests.AssemblyInfo.cs
+C:\Users\Deva\wsibc\insolesibc\insoles.Tests\obj\Debug\net6.0-windows\insoles.Tests.csproj.CoreCompileInputs.cache
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\obj\Debug\net6.0-windows\insoles.Tests.csproj.CopyComplete
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\obj\Debug\net6.0-windows\insoles.Tests.dll
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\obj\Debug\net6.0-windows\refint\insoles.Tests.dll
