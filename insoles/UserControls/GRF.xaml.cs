@@ -556,6 +556,10 @@ namespace insoles.UserControls
             curvaMediaL.Clear();
             curvaStL.Clear();
             curvaMediaL.Clear();
+            curvesR.Clear();
+            curvaMediaR.Clear();
+            curvaStR.Clear();
+            curvaMediaR.Clear();
         }
 
         private void ClearGraphButton_Click(object sender, RoutedEventArgs e)
@@ -726,17 +730,17 @@ namespace insoles.UserControls
 
             (curvaMediaL, curvaStL, curvaTimeL) = Ns.CalcularNormCurvas(heel_strikesL, toes_offL, curvesL, ys_left_array);
 
-            //(heel_strikesR, toes_offR) = Ns.CalculateHeelToes(ys_right_array, Threshold);
+            (heel_strikesR, toes_offR) = Ns.CalculateHeelToes(ys_right_array, Threshold);
 
-            //Ns.AgregarLineasHeelToes(rangePlot, xs_right_N_FC, heel_strikesR, toes_offR);
+            Ns.AgregarLineasHeelToes(rangePlot, xs_right_N_FC, heel_strikesR, toes_offR);
 
-            //(curvaMediaR, curvaStR, curvaTimeR) = Ns.CalcularNormCurvas(heel_strikesR, toes_offR, curvesR, ys_right_array);
+            (curvaMediaR, curvaStR, curvaTimeR) = Ns.CalcularNormCurvas(heel_strikesR, toes_offR, curvesR, ys_right_array);
 
             normPlot.Plot.AddScatterLines(curvaTimeL.ToArray(), curvaMediaL.ToArray(), System.Drawing.Color.Red, lineWidth: 3, label: "Average");
             normPlot.Plot.AddFillError(curvaTimeL.ToArray(), curvaMediaL.ToArray(), curvaStL.ToArray(), System.Drawing.Color.FromArgb(50, System.Drawing.Color.Red));
 
-            //normPlot.Plot.AddScatterLines(curvaTimeR.ToArray(), curvaMediaR.ToArray(), System.Drawing.Color.Green, lineWidth: 3, label: "Average");
-            //normPlot.Plot.AddFillError(curvaTimeR.ToArray(), curvaMediaR.ToArray(), curvaStR.ToArray(), System.Drawing.Color.FromArgb(50, System.Drawing.Color.Green));
+            normPlot.Plot.AddScatterLines(curvaTimeR.ToArray(), curvaMediaR.ToArray(), System.Drawing.Color.Green, lineWidth: 3, label: "Average");
+            normPlot.Plot.AddFillError(curvaTimeR.ToArray(), curvaMediaR.ToArray(), curvaStR.ToArray(), System.Drawing.Color.FromArgb(50, System.Drawing.Color.Green));
 
             normPlot.Render();
 

@@ -53,15 +53,15 @@
                 <StackPanel Orientation="Horizontal" Width="102" Height="28" HorizontalAlignment="Right">
                     <TextBlock Grid.Column="1" x:Name="ForceTextBlock" Text="{Binding total}" FontSize="20" 
                                
-                               VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Width="99">
-                        <TextBlock.RenderTransform>
+                               VerticalAlignment="Center" Width="99">
+                        <!--<TextBlock.RenderTransform>
                             <TransformGroup>
                                 <ScaleTransform ScaleX="-1"/>
                                 <SkewTransform/>
-                                <RotateTransform Angle="-0.851"/>
+                                <RotateTransform Angle="-179.903"/>
                                 <TranslateTransform/>
                             </TransformGroup>
-                        </TextBlock.RenderTransform>
+                        </TextBlock.RenderTransform>-->
                     </TextBlock>
 
                 </StackPanel>
