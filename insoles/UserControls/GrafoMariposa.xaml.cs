@@ -1,6 +1,7 @@
 ﻿#define ALPHA
 
 using insoles.DataHolders;
+using insoles.Messages;
 using insoles.Services;
 using insoles.Utilities;
 using ScottPlot;
@@ -34,6 +35,9 @@ namespace insoles.UserControls
         private const double PLANTILLA_WIDTH = 615;
         private const int N_FRAMES_ANIMATE = 200;
 
+        private int firstFrame;
+        private int lastFrame;
+
         private FramePressures[]? _framePressures = null;
         public FramePressures[]? framePressures
         {
@@ -43,6 +47,11 @@ namespace insoles.UserControls
             }
             set
             {
+                if(value != null)
+                {
+                    firstFrame = 0;
+                    lastFrame = value.Length - 1;
+                }
                 _framePressures = value;
                 if (animate)
                 {
@@ -77,7 +86,7 @@ namespace insoles.UserControls
                 else
                 {
                     if (framePressures != null)
-                        DrawData(framePressures, 0, framePressures.Length - 1);
+                        DrawData(framePressures, firstFrame, lastFrame);
                 }
             }
         }
@@ -106,6 +115,28 @@ namespace insoles.UserControls
                     {
                         DrawData(framePressures, Math.Max(0, frame - N_FRAMES_ANIMATE), frame);
                     }
+                }
+            }
+        }
+        public void setGraphRange(GraphRange graphRange)
+        {
+            firstFrame = graphRange.first;
+            lastFrame = graphRange.last;
+            if (!animate && framePressures != null)
+            {
+                DrawData(framePressures, graphRange.first, graphRange.last);
+            }
+        }
+        public void clearGraphRange()
+        {
+
+            if (framePressures != null)
+            {
+                firstFrame = 0;
+                lastFrame = framePressures.Length - 1;
+                if(!animate)
+                {
+                    DrawData(framePressures, firstFrame, lastFrame);
                 }
             }
         }

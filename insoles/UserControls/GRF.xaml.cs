@@ -26,7 +26,8 @@ using MathNet.Numerics;
 using insoles.States;
 using System.Reflection.Metadata;
 using Syncfusion.DocIO.DLS;
-
+using insoles.Messages;
+using static insoles.Services.ICameraService;
 
 namespace insoles.UserControls
 {
@@ -75,6 +76,10 @@ namespace insoles.UserControls
         private ScatterPlot leftInsoleErrorPlot;
         private ScatterPlot rightInsolePlot;
 
+        public delegate void GraphRangeEventHandler(GraphRange data);
+        public event GraphRangeEventHandler GraphRangeChanged;
+        public delegate void GraphRangeClearedEventHandler();
+        public event GraphRangeClearedEventHandler GraphRangeCleared;
         public Units selectedUnits
         {
             get { return _selectedUnits; }
@@ -430,8 +435,8 @@ namespace insoles.UserControls
 
             rangePlot.SetValue(Grid.RowProperty, 1);
             grid.Children.Add(rangePlot);
-            
 
+            GraphRangeChanged?.Invoke(new GraphRange(indexFirstClosest, indexLastClosest));
         }
         // Función que sí utilizamos para obtener el número más cercano de una lista
         private double FindClosest(List<double> data, double value)
@@ -493,6 +498,8 @@ namespace insoles.UserControls
             XPoints.Clear();
             plot.Render();
             rangePlot.Render();
+
+            GraphRangeCleared?.Invoke();
         }
 
         private void leftCheckBox_Checked(object sender, RoutedEventArgs e)

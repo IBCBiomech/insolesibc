@@ -1,5 +1,6 @@
 ﻿using insoles.Commands;
 using insoles.DataHolders;
+using insoles.Messages;
 using insoles.Model;
 using insoles.Services;
 using insoles.States;
@@ -123,6 +124,14 @@ namespace insoles.ViewModel
                         });
                     }         
                 }
+            };
+            grf.GraphRangeChanged += (GraphRange graphRange) =>
+            {
+                grafoMariposa.setGraphRange(graphRange);
+            };
+            grf.GraphRangeCleared += () =>
+            {
+                grafoMariposa.clearGraphRange();
             };
         }
     }
