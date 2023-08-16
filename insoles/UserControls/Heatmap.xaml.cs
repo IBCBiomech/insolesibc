@@ -151,7 +151,10 @@ namespace insoles.UserControls
                 else
                 {
                     if (graph_loaded)
-                        DrawDataWPF(pressure_maps_metrics[selectedMetric], plot);
+                        if(pressure_maps_metrics_range == null)
+                            DrawDataWPF(pressure_maps_metrics[selectedMetric], plot);
+                        else
+                            DrawDataWPF(pressure_maps_metrics_range[selectedMetric], plot);
                 }         
             }
         }
@@ -211,6 +214,39 @@ namespace insoles.UserControls
                 {
                     DrawDataWPF(pressure_maps_metrics[selectedMetric], plot);
                     DrawCenters(centersXs, centersYs, plot);
+                }
+                NotifyPropertyChanged();
+                NotifyPropertyChanged(nameof(graph_loaded));
+            }
+        }
+        Dictionary<Metric, Matrix<float>>? _pressure_maps_metrics_range;
+        public Dictionary<Metric, Matrix<float>>? pressure_maps_metrics_range
+        {
+            get
+            {
+                return _pressure_maps_metrics_range;
+            }
+            set
+            {
+                _pressure_maps_metrics_range = value;
+                if (pressure_maps_metrics_range != null)
+                {
+                    SetAxisLimits(pressure_maps_metrics_range[Metric.Avg]);
+                    if (!animate)
+                    {
+                        DrawDataWPF(pressure_maps_metrics_range[selectedMetric], plot);
+                        DrawCenters(centersXs, centersYs, plot);
+                    }
+                }
+                else
+                {
+                    if (pressure_maps_metrics != null)
+                        SetAxisLimits(pressure_maps_metrics[Metric.Avg]);
+                    if (pressure_maps_metrics != null && !animate)
+                    {
+                        DrawDataWPF(pressure_maps_metrics[selectedMetric], plot);
+                        DrawCenters(centersXs, centersYs, plot);
+                    }
                 }
                 NotifyPropertyChanged();
                 NotifyPropertyChanged(nameof(graph_loaded));

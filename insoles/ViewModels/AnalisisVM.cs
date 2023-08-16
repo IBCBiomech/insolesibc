@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -46,6 +47,7 @@ namespace insoles.ViewModel
         public Heatmap heatmap { get; set;}
         public CamaraReplay camaraViewport1 { get; set; }
         public CamaraReplay camaraViewport2 { get; set; }
+        private GraphData graphData;
         public AnalisisVM()
         {
             state = new AnalisisState();
@@ -88,12 +90,12 @@ namespace insoles.ViewModel
                         await Task.Run(async () =>
                         {
                             VariablesData variables = fileExtractor.ExtractVariables(state.test.csv);
-                            GraphData data = await fileExtractor.ExtractCSV(state.test.csv);
-                            await Application.Current.Dispatcher.BeginInvoke(() => timeLine.ChangeLimits(data.maxTime));
+                            graphData = await fileExtractor.ExtractCSV(state.test.csv);
+                            await Application.Current.Dispatcher.BeginInvoke(() => timeLine.ChangeLimits(graphData.maxTime));
                             FramePressures[] frames;
                             List<Tuple<double, double>> cps_left;
                             List<Tuple<double, double>> cps_right;
-                            await butterfly.Calculate(data, out frames, out cps_left, out cps_right);
+                            await butterfly.Calculate(graphData, out frames, out cps_left, out cps_right);
                             await Task.Run(() => grafoMariposa.framePressures = frames);
 
                             if (state.test.video1 != null)
@@ -114,24 +116,36 @@ namespace insoles.ViewModel
                             {
                                 camaraViewport2.video = null;
                             }
-                            await grf.Update(data, variables);
-                            await heatmap.UpdateLimits(data);
+                            await grf.Update(graphData, variables);
+                            await heatmap.UpdateLimits(graphData);
                             await heatmap.CalculateCenters(cps_left, cps_right);
-                            var pressureMaps = await pressureMap.CalculateMetrics(data);
+                            var pressureMaps = await pressureMap.CalculateMetrics(graphData);
                             await Task.Run(() => heatmap.pressure_maps_metrics = pressureMaps);
-                            var pressureMapsLive = await pressureMap.CalculateLive(data);
+                            var pressureMapsLive = await pressureMap.CalculateLive(graphData);
                             await Task.Run(() => heatmap.pressure_maps_live = pressureMapsLive);
                         });
                     }         
                 }
             };
-            grf.GraphRangeChanged += (GraphRange graphRange) =>
+            grf.GraphRangeChanged += async (GraphRange graphRange) =>
             {
                 grafoMariposa.setGraphRange(graphRange);
+                if (graphData != null)
+                {
+                    GraphData graphDataSubset = graphData.Subset(graphRange.first, graphRange.last);
+                    var pressureMaps = await pressureMap.CalculateMetrics(graphDataSubset);
+                    await Task.Run(() => heatmap.pressure_maps_metrics_range = pressureMaps);
+                }
+                else
+                {
+                    Trace.WriteLine("graphData is null");
+                }
             };
-            grf.GraphRangeCleared += () =>
+            grf.GraphRangeCleared += async() =>
             {
                 grafoMariposa.clearGraphRange();
+                await Task.Run(() => heatmap.pressure_maps_metrics_range = null);
+
             };
         }
     }

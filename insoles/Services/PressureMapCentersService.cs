@@ -267,6 +267,38 @@ namespace insoles.Services
             pressure_maps[UserControls.Metric.Min] = await CalculateOne(graphData, min, UserControls.Metric.Min);
             return pressure_maps;
         }
+        public async Task<Dictionary<UserControls.Metric, Matrix<float>>> CalculateMetrics(GraphData graphData, int initFrame, int lastFrame)
+        {
+            Task<Matrix<float>> CalculateOne(GraphData graphData, ActionRef<GraphData, DataInsole, DataInsole> func, UserControls.Metric metric)
+            {
+                double reduceFunc(List<double> pressures)
+                {
+                    return pressures.Sum() / pressures.Count;
+                }
+                DataInsole leftInsole = new DataInsole();
+                DataInsole rightInsole = new DataInsole();
+                func(graphData, ref leftInsole, ref rightInsole);
+                Dictionary<Sensor, double> pressuresLeft = leftInsole.pressures;
+                Dictionary<Sensor, double> pressuresRight = rightInsole.pressures;
+                Dictionary<SensorHeelReduced, double> pressuresLeftReduced = ReduceSensorsHeel(pressuresLeft, reduceFunc);
+                Dictionary<SensorHeelReduced, double> pressuresRightReduced = ReduceSensorsHeel(pressuresRight, reduceFunc);
+
+
+                return CalculateFromPoint(sensor_map, codes,
+                    pressuresLeftReduced, pressuresRightReduced, inverse_reduced_distances,
+                    inverse_distances_background);
+            }
+            while (!isInitialized)
+            {
+                await Task.Delay(1000);
+            }
+            Dictionary<UserControls.Metric, Matrix<float>> pressure_maps = new();
+            GraphData graphDataSubset = graphData.Subset(initFrame, lastFrame);
+            pressure_maps[UserControls.Metric.Avg] = await CalculateOne(graphDataSubset, average, UserControls.Metric.Avg);
+            pressure_maps[UserControls.Metric.Max] = await CalculateOne(graphDataSubset, max, UserControls.Metric.Max);
+            pressure_maps[UserControls.Metric.Min] = await CalculateOne(graphDataSubset, min, UserControls.Metric.Min);
+            return pressure_maps;
+        }
         public async Task<List<Matrix<float>>> CalculateLive(GraphData graphData)
         {
             Task<Matrix<float>> CalculateOne(DataInsole leftInsole, DataInsole rightInsole)

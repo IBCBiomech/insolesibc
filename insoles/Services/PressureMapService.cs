@@ -174,6 +174,35 @@ namespace insoles.Services
             pressure_maps[UserControls.Metric.Min] = CalculateOne(graphData, min, UserControls.Metric.Min);
             return pressure_maps;
         }
+        public async Task<Dictionary<UserControls.Metric, Matrix<float>>> CalculateMetrics(GraphData graphData, int initFrame, int lastFrame)
+        {
+            Matrix<float> CalculateOne(GraphData graphData, ActionRef<GraphData, DataInsole, DataInsole> func, UserControls.Metric metric)
+            {
+                int reduceFunc(List<int> pressures)
+                {
+                    return pressures.Sum() / pressures.Count;
+                }
+                DataInsole leftInsole = new DataInsole();
+                DataInsole rightInsole = new DataInsole();
+                func(graphData, ref leftInsole, ref rightInsole);
+                Dictionary<Sensor, double> pressuresLeft = leftInsole.pressures;
+                Dictionary<Sensor, double> pressuresRight = rightInsole.pressures;
+
+                return CalculateFromPoint(sensor_map, codes,
+                    pressuresLeft, pressuresRight, inverse_distances,
+                    inverse_distances_background);
+            }
+            while (!isInitialized)
+            {
+                await Task.Delay(1000);
+            }
+            Dictionary<UserControls.Metric, Matrix<float>> pressure_maps = new();
+            GraphData graphDataSubset = graphData.Subset(initFrame, lastFrame);
+            pressure_maps[UserControls.Metric.Avg] = CalculateOne(graphDataSubset, average, UserControls.Metric.Avg);
+            pressure_maps[UserControls.Metric.Max] = CalculateOne(graphDataSubset, max, UserControls.Metric.Max);
+            pressure_maps[UserControls.Metric.Min] = CalculateOne(graphDataSubset, min, UserControls.Metric.Min);
+            return pressure_maps;
+        }
         public async Task<List<Matrix<float>>> CalculateLive(GraphData graphData)
         {
             Matrix<float> CalculateOne(DataInsole leftInsole, DataInsole rightInsole)

@@ -51,5 +51,14 @@ namespace insoles.DataHolders
         {
             this.frames = frames;
         }
+        public GraphData Subset(int firstIndex, int lastIndex)
+        {
+            FrameData[] frames = new FrameData[lastIndex - firstIndex + 1];
+            for(int i = firstIndex; i <= lastIndex; i++)
+            {
+                frames[i - firstIndex] = this.frames[i];
+            }
+            return new GraphData(frames);
+        }
     }
 }
