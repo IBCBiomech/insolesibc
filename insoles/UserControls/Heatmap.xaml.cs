@@ -239,6 +239,7 @@ namespace insoles.UserControls
             this.state = state;
             framesTaken = 500;
             DataContext = this;
+            plot.Plot.Style(dataBackground: Color.White);
         }
         public Task UpdateLimits(GraphData data)
         {
@@ -346,7 +347,7 @@ namespace insoles.UserControls
             {
                 plot.Clear(colorbar.GetType());
             }
-            IColormap colormap = extendColormap(Colormap.Jet, Color.Black, HelperFunctions.Interpolate, extendSize: 10, totalSize: 256);
+            IColormap colormap = extendColormap(Colormap.Jet, HelperFunctions.MakeColorDarker(Color.WhiteSmoke, 10), HelperFunctions.noInterpolate, extendSize: 10, totalSize: 256);
             heatmap = plot.AddHeatmap(data, colormap: new Colormap(colormap));
             heatmap.Update(data, min: 0, max: maxBar);
             heatmap.Smooth = true;

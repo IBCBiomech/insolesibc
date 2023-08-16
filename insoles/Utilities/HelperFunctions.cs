@@ -31,6 +31,14 @@ namespace insoles.Utilities
                 (int)(color1.B * ratio + color2.B * ratio2)
             );
         }
+        public static Color MakeColorDarker(Color originalColor, int darkenAmount)
+        {
+            int newRed = Math.Max(originalColor.R - darkenAmount, 0);
+            int newGreen = Math.Max(originalColor.G - darkenAmount, 0);
+            int newBlue = Math.Max(originalColor.B - darkenAmount, 0);
+
+            return Color.FromArgb(originalColor.A, newRed, newGreen, newBlue);
+        }
         public static Color Interpolate(Color color1, Color color2, int alpha)
         {
             const float ratio = 0.5f;
@@ -40,6 +48,10 @@ namespace insoles.Utilities
                 (int)(color1.G * ratio + color2.G * ratio),
                 (int)(color1.B * ratio + color2.B * ratio)
             );
+        }
+        public static Color noInterpolate(Color color, Color extended, float ratio)
+        {
+            return extended;
         }
         public static double?[,] replace(double[,] array, double value, double? replacement)
         {
