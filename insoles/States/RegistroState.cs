@@ -20,9 +20,24 @@ namespace insoles.States
         private bool _recording = false;
         public bool recording { get { return _recording; } set { _recording = value; OnPropertyChanged(); } }
         private bool _calibrating = false;
-        public bool calibrating { get { return _calibrating; } set { _calibrating = value; OnPropertyChanged(); } }
+        public bool calibrating
+        {
+            get { return _calibrating; }
+            set { _calibrating = value; OnPropertyChanged(); }
+        }
+        private bool _normalizing = false;
+        public bool normalizing { get { return _normalizing; } set { _normalizing = value; OnPropertyChanged(); } }
+        private float _lastLeft;
+        public float lastLeft { get { return _lastLeft; } set { _lastLeft = value; OnPropertyChanged(); } }
+        private float _lastRight;
+        public float lastRight { get { return _lastRight; } set { _lastRight = value; OnPropertyChanged(); } }
         public double? timeDiference { get; set; } = null;
         public double? timeDiferenceCamera { get; set; } = null;
+
+        public float? fcLeft { get; set; } = null;
+        public float? fcRight { get; set; } = null;
+        public List<float> weightsLeft { get; set; } = new List<float>();
+        public List<float> weightsRight { get; set; } = new List<float>();
         public int? firstIndex { get; set; } = null;
         public Paciente? selectedPaciente
         {

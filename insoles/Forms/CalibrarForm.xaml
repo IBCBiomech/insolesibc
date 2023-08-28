@@ -1,0 +1,43 @@
+﻿<Window x:Class="insoles.Forms.CalibrarForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+        xmlns:local="clr-namespace:insoles.Forms"
+        mc:Ignorable="d"
+        Title="CalibrarForm" Height="200" Width="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24">L</Label>
+        <Label Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24">R</Label>
+        <syncfusion:SfDigitalGauge Grid.Row="1" Grid.Column="0"
+                                   MaxWidth="150"
+                                   CharacterWidth="10"
+                                   CharacterHeight="15"
+                                   CharactersSpacing="10"
+                                   Value="{Binding state.lastLeft, StringFormat={}{0:F2}}"/>
+        <syncfusion:SfDigitalGauge Grid.Row="1" Grid.Column="1"
+                                   MaxWidth="150"
+                                   CharacterWidth="10"
+                                   CharacterHeight="15"
+                                   CharactersSpacing="10"
+                                   Value="{Binding state.lastRight, StringFormat={}{0:F2}}"/>
+        <Button Grid.Row="2" Grid.Column="0"
+                HorizontalAlignment="Center" VerticalAlignment="Center"
+                Content="Calibrate"
+                Command="{Binding calibrarCommand}"/>
+        <Button Grid.Row="2" Grid.Column="1"
+                HorizontalAlignment="Center" VerticalAlignment="Center"
+                Content="Reset"
+                Command="{Binding resetCommand}"/>
+    </Grid>
+</Window>

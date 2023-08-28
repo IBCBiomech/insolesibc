@@ -1,5 +1,4 @@
-﻿using insoles.Forms;
-using insoles.Model;
+﻿using insoles.Model;
 using insoles.States;
 using System;
 using System.Collections.Generic;
@@ -11,7 +10,7 @@ using System.Windows.Input;
 
 namespace insoles.Commands
 {
-    public class CalibrarCommand : ICommand
+    public class NormalizarCommand : ICommand
     {
         public event EventHandler CanExecuteChanged
         {
@@ -19,19 +18,18 @@ namespace insoles.Commands
             remove { CommandManager.RequerySuggested -= value; }
         }
         private RegistroState state;
-        public CalibrarCommand(RegistroState state) 
+        public NormalizarCommand(RegistroState state) 
         { 
             this.state = state;
         }
         public bool CanExecute(object? parameter)
         {
-            return state.capturing;
+            return state.capturing && !state.normalizing;
         }
 
         public void Execute(object? parameter)
         {
-            CalibrarForm form = new CalibrarForm(state);
-            form.ShowDialog();
+            state.normalizing = true;
         }
     }
 }

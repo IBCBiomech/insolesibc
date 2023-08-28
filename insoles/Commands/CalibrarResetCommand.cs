@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace insoles.Commands
 {
-    public class CalibrarCommand : ICommand
+    public class CalibrarResetCommand : ICommand
     {
         public event EventHandler CanExecuteChanged
         {
@@ -19,19 +19,25 @@ namespace insoles.Commands
             remove { CommandManager.RequerySuggested -= value; }
         }
         private RegistroState state;
-        public CalibrarCommand(RegistroState state) 
+        public CalibrarResetCommand(RegistroState state) 
         { 
             this.state = state;
         }
         public bool CanExecute(object? parameter)
         {
-            return state.capturing;
+            return true;
         }
 
         public void Execute(object? parameter)
         {
-            CalibrarForm form = new CalibrarForm(state);
-            form.ShowDialog();
+            state.fcLeft = null; 
+            state.fcRight = null;
+            if (state.calibrating)
+            {
+                state.calibrating = false;
+                state.weightsLeft.Clear();
+                state.weightsRight.Clear();
+            }
         }
     }
 }

@@ -41,6 +41,7 @@ namespace insoles.ViewModel
         public ObtenerPacientesCommand obtenerPacientesCommand { get; set; }
         public CrearPacienteCommand crearPacienteCommand { get; set; }
         public CalibrarCommand calibrarCommand { get; set; }
+        public NormalizarCommand normalizarCommand { get; set; }
         public ObservableCollection<CameraModel> Cameras { get; set; }
         public ObservableCollection<InsoleModel> Insoles { get; set; }
         private BitmapSource currentFrameTop;
@@ -96,7 +97,8 @@ namespace insoles.ViewModel
         public bool FC { get; set; }
         private List<float> fcs = new List<float>();
         private float? fc = null;
-        private const int FRAMES_TO_CALIBRATE = 50;
+        private const int FRAMES_TO_CALIBRATE = 500;
+        private const int FRAMES_TO_NORMALIZE = 50;
         private const float DEFAULT_WEIGHT = 70;
         private string _total;
         public string total { get { return _total; } set { _total = value; OnPropertyChanged(); } }
@@ -131,6 +133,7 @@ namespace insoles.ViewModel
             crearPacienteCommand = new CrearPacienteCommand(databaseBridge);
             obtenerPacientesCommand = new ObtenerPacientesCommand(databaseBridge);
             calibrarCommand = new CalibrarCommand(state);
+            normalizarCommand = new NormalizarCommand(state);
             //Init listeners
             apiService.ScanReceived += (List<InsoleScan> insolesReceived) =>
             {
@@ -228,11 +231,39 @@ namespace insoles.ViewModel
                     float[] metricLeft, float[] metricRight
                 ) =>
             {
-                List<Dictionary<Sensor, double>> left_pure = DeepCopy.Clone(left);
-                List<Dictionary<Sensor, double>> right_pure = DeepCopy.Clone(right);
-                float[] metricLeft_pure = (float[])metricLeft.Clone();
-                float[] metricRight_pure = (float[])metricRight.Clone();
+                state.lastLeft = metricLeft[metricLeft.Length - 1];
+                state.lastRight = metricRight[metricRight.Length - 1];
                 if (state.calibrating)
+                {
+                    for (int i = 0; i < metricLeft.Length; i++)
+                    {
+                        state.weightsLeft.Add(metricLeft[i]);
+                    }
+                    for(int i = 0; i < metricRight.Length; i++)
+                    {
+                        state.weightsRight.Add(metricRight[i]);
+                    }
+                    if(state.weightsLeft.Count > FRAMES_TO_CALIBRATE)
+                    {
+                        float avgLeft = state.weightsLeft.Average();
+                        float avgRight = state.weightsRight.Average();
+                        if(avgLeft > avgRight)
+                        {
+                            state.fcLeft = 1;
+                            state.fcRight = avgLeft / avgRight;
+                        }
+                        else
+                        {
+                            state.fcLeft = avgRight / avgLeft;
+                            state.fcRight = 1;
+                        }
+                        Trace.WriteLine("calibrated " + state.fcLeft + " " + state.fcRight);
+                        state.weightsLeft.Clear();
+                        state.weightsRight.Clear();
+                        state.calibrating = false;
+                    }
+                }
+                if (state.normalizing)
                 {
                     float G = 9.80665f;
                     float FNominal = state.selectedPaciente.Peso.GetValueOrDefault(DEFAULT_WEIGHT) * G;
@@ -245,14 +276,43 @@ namespace insoles.ViewModel
                             fcs.Add(fc);
                         }
                     }
-                    if(fcs.Count >= FRAMES_TO_CALIBRATE)
+                    if(fcs.Count >= FRAMES_TO_NORMALIZE)
                     {
                         fc = fcs.Sum() / fcs.Count;
                         fcs = new();
-                        state.calibrating = false;
+                        state.normalizing = false;
                         saveService.AddHeaderInfo("fc", fc.Value.ToString("F2", CultureInfo.InvariantCulture));
                     }
                 }
+                if(state.fcLeft != null && state.fcRight != null)
+                {
+                    if (state.fcLeft != 1)
+                    {
+                        for (int i = 0; i < metricLeft.Length; i++)
+                        {
+                            metricLeft[i] *= state.fcLeft.Value;
+                            foreach (Sensor sensor in left[i].Keys)
+                            {
+                                left[i][sensor] *= state.fcLeft.Value;
+                            }
+                        }
+                    }
+                    if(state.fcRight != 1)
+                    {
+                        for (int i = 0; i < metricRight.Length; i++)
+                        {
+                            metricRight[i] *= state.fcRight.Value;
+                            foreach (Sensor sensor in left[i].Keys)
+                            {
+                                left[i][sensor] *= state.fcRight.Value;
+                            }
+                        }
+                    }
+                }
+                List<Dictionary<Sensor, double>> left_pure = DeepCopy.Clone(left);
+                List<Dictionary<Sensor, double>> right_pure = DeepCopy.Clone(right);
+                float[] metricLeft_pure = (float[])metricLeft.Clone();
+                float[] metricRight_pure = (float[])metricRight.Clone();
                 if (FC)
                 {
                     if (fc != null)
