@@ -100,7 +100,12 @@ namespace insoles.UserControls
             set
             {
                 _selectedMetric = value;
-                if(pressure_maps_metrics != null && !animate) 
+                if(pressure_maps_metrics_range != null && !animate)
+                {
+                    DrawDataWPF(pressure_maps_metrics_range[selectedMetric], plot);
+                    DrawCenters(centersXsRange, centersYsRange, plot);
+                }
+                else if(pressure_maps_metrics != null && !animate) 
                 {
                     DrawDataWPF(pressure_maps_metrics[selectedMetric], plot);
                     DrawCenters(centersXs, centersYs, plot);
@@ -151,10 +156,16 @@ namespace insoles.UserControls
                 else
                 {
                     if (graph_loaded)
-                        if(pressure_maps_metrics_range == null)
+                        if (pressure_maps_metrics_range == null)
+                        {
                             DrawDataWPF(pressure_maps_metrics[selectedMetric], plot);
+                            DrawCenters(centersXs, centersYs, plot);
+                        }
                         else
+                        {
                             DrawDataWPF(pressure_maps_metrics_range[selectedMetric], plot);
+                            DrawCenters(centersXsRange, centersYsRange, plot);
+                        }
                 }         
             }
         }
@@ -229,13 +240,13 @@ namespace insoles.UserControls
             set
             {
                 _pressure_maps_metrics_range = value;
-                if (pressure_maps_metrics_range != null)
+                if (value != null)
                 {
-                    SetAxisLimits(pressure_maps_metrics_range[Metric.Avg]);
+                    SetAxisLimits(value[Metric.Avg]);
                     if (!animate)
                     {
                         DrawDataWPF(pressure_maps_metrics_range[selectedMetric], plot);
-                        DrawCenters(centersXs, centersYs, plot);
+                        DrawCenters(centersXsRange, centersYsRange, plot);
                     }
                 }
                 else
@@ -268,6 +279,8 @@ namespace insoles.UserControls
         }
         private double[] centersXs;
         private double[] centersYs;
+        private double[] centersXsRange;
+        private double[] centersYsRange;
         public AnalisisState state { get;set; }
         public Heatmap(AnalisisState state)
         {
@@ -433,6 +446,46 @@ namespace insoles.UserControls
             CPsToXsYs(left, right, out centersXs, out centersYs);
             return Task.CompletedTask;
         }
+        public Task CalculateCentersRange(List<Tuple<double, double>> left, List<Tuple<double, double>> right)
+        {
+            void ReduceSorting(ref List<Tuple<double, double>> left, ref List<Tuple<double, double>> right, int NumResult)
+            {
+                left = ReduceCPsSorting(left, NumResult);
+                right = ReduceCPsSorting(right, NumResult);
+            }
+            void ReduceByRanges(ref List<Tuple<double, double>> left, ref List<Tuple<double, double>> right, int range)
+            {
+                left = ReduceCPsByRanges(left, range);
+                right = ReduceCPsByRanges(right, range);
+            }
+#if REDUCE_SORT
+            double CalculateSlope(Dictionary<Sensor, (float, float)> centers)
+            {
+                float item1Top = (centers[Sensor.HALLUX].Item1 + centers[Sensor.TOES].Item1) / 2;
+                float item2Top = (centers[Sensor.HALLUX].Item2 + centers[Sensor.TOES].Item2) / 2;
+                (float, float) top = (item1Top, item2Top);
+                float item1Bot = (centers[Sensor.HEEL_L].Item1 + centers[Sensor.HEEL_R].Item1) / 2;
+                float item2Bot = (centers[Sensor.HEEL_L].Item2 + centers[Sensor.HEEL_R].Item2) / 2;
+                (float, float) bot = (item1Bot, item2Bot);
+                return 0;
+            }
+            if(slopeLeft == null)
+            {
+                slopeLeft = CalculateSlope(pressureMap.centersLeft);
+            }
+            if(slopeRight == null)
+            {
+                slopeRight = CalculateSlope(pressureMap.centersRight);
+            }
+            ReduceByRanges(ref left, ref right, 1);
+            ReduceSorting(ref left, ref right, 50);   
+#else
+            left = ReduceCPsByRanges(left);
+            right = ReduceCPsByRanges(right);
+#endif
+            CPsToXsYs(left, right, out centersXsRange, out centersYsRange);
+            return Task.CompletedTask;
+        }
         private void CPsToXsYs(List<Tuple<double, double>> left, List<Tuple<double, double>> right,
             out double[] xs, out double[] ys)
         {
@@ -525,6 +578,7 @@ namespace insoles.UserControls
             }
             centers = plot.Plot.AddScatter(xs, ys, lineWidth: 0, color: Color.WhiteSmoke);
             plot.Plot.MoveLast(centers);
+            Dispatcher.Invoke(() => plot.Refresh());
         }
         private IColormap extendColormap(Colormap colormapBase, Color colorExtend,
             Func<Color, Color, float, Color> interpolationFunction,

@@ -13,6 +13,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 
@@ -129,10 +130,17 @@ namespace insoles.ViewModel
             };
             grf.GraphRangeChanged += async (GraphRange graphRange) =>
             {
-                grafoMariposa.setGraphRange(graphRange);
                 if (graphData != null)
                 {
                     GraphData graphDataSubset = graphData.Subset(graphRange.first, graphRange.last);
+
+                    FramePressures[] frames;
+                    List<Tuple<double, double>> cps_left, cps_right;
+                    await butterfly.Calculate(graphDataSubset, out frames, out cps_left, out cps_right);
+                    await Task.Run(() => grafoMariposa.framePressuresRange = frames);
+
+                    await heatmap.CalculateCentersRange(cps_left, cps_right);
+
                     var pressureMaps = await pressureMap.CalculateMetrics(graphDataSubset);
                     await Task.Run(() => heatmap.pressure_maps_metrics_range = pressureMaps);
                 }
@@ -143,9 +151,8 @@ namespace insoles.ViewModel
             };
             grf.GraphRangeCleared += async() =>
             {
-                grafoMariposa.clearGraphRange();
+                await Task.Run(() => grafoMariposa.framePressuresRange = null);
                 await Task.Run(() => heatmap.pressure_maps_metrics_range = null);
-
             };
         }
     }

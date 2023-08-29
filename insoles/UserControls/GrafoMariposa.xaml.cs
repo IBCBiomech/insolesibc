@@ -65,6 +65,29 @@ namespace insoles.UserControls
                 }
             }
         }
+        private FramePressures[]? _framePressuresRange = null;
+        public FramePressures[]? framePressuresRange
+        {
+            get
+            {
+                return _framePressuresRange;
+            }
+            set
+            {
+                _framePressuresRange = value;
+                if (!animate)
+                {
+                    if (value != null)
+                    {
+                        DrawData(value, 0, value.Length - 1);
+                    }
+                    else if(framePressures != null)
+                    {
+                        DrawData(framePressures, 0, framePressures.Length - 1);
+                    }
+                }
+            }
+        }
 
         private bool _animate;
         public bool animate
@@ -80,13 +103,21 @@ namespace insoles.UserControls
                 //NotifyPropertyChanged(nameof(graph_loaded));
                 if (value)
                 {
+
                     if (framePressures != null)
                         DrawData(framePressures, Math.Max(0, frame - N_FRAMES_ANIMATE), frame);
                 }
                 else
                 {
-                    if (framePressures != null)
-                        DrawData(framePressures, firstFrame, lastFrame);
+                    if (framePressuresRange == null)
+                    {
+                        if(framePressures != null)
+                            DrawData(framePressures, firstFrame, lastFrame);
+                    }
+                    else
+                    {
+                        DrawData(framePressuresRange, 0, framePressuresRange.Length - 1);
+                    }
                 }
             }
         }
@@ -115,28 +146,6 @@ namespace insoles.UserControls
                     {
                         DrawData(framePressures, Math.Max(0, frame - N_FRAMES_ANIMATE), frame);
                     }
-                }
-            }
-        }
-        public void setGraphRange(GraphRange graphRange)
-        {
-            firstFrame = graphRange.first;
-            lastFrame = graphRange.last;
-            if (!animate && framePressures != null)
-            {
-                DrawData(framePressures, graphRange.first, graphRange.last);
-            }
-        }
-        public void clearGraphRange()
-        {
-
-            if (framePressures != null)
-            {
-                firstFrame = 0;
-                lastFrame = framePressures.Length - 1;
-                if(!animate)
-                {
-                    DrawData(framePressures, firstFrame, lastFrame);
                 }
             }
         }
