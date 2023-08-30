@@ -32,8 +32,11 @@
     <Grid Background="White">
         <syncfusion:DockingManager>
             <DockPanel syncfusion:DockingManager.Header="GRF" x:Name="GRF"
+                       syncfusion:DockingManager.State="Document"
+                       syncfusion:DockingManager.SideInDockedMode="Top"
                        syncfusion:DockingManager.DesiredWidthInDockedMode="800"
                        syncfusion:DockingManager.DesiredHeightInDockedMode="300">
+                    
                 <DockPanel DockPanel.Dock="Top">
                     <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Grid.Row="0">
                         <!-- Capture -->
@@ -71,12 +74,13 @@
             </DockPanel>
             <userControls:Dispositivos syncfusion:DockingManager.Header="Dispositivos"
                                        syncfusion:DockingManager.SideInDockedMode="Bottom"
-                                       syncfusion:DockingManager.TargetNameInDockedMode="GRF"
+                                       
+
                                        x:Name="Dispositivos"
                 Insoles="{Binding Insoles}" Cameras="{Binding Cameras}"/>
             <userControls:PacientesUserControl syncfusion:DockingManager.Header="Usuarios"
-                                               syncfusion:DockingManager.SideInDockedMode="Tabbed"
-                                               syncfusion:DockingManager.TargetNameInDockedMode="Dispositivos"
+                                               syncfusion:DockingManager.SideInDockedMode="Left"
+                                               syncfusion:DockingManager.DesiredWidthInDockedMode="200"
                                                x:Name="Usuarios"
                 Pacientes="{Binding Pacientes}"/>
             <Image syncfusion:DockingManager.Header="Cam1"

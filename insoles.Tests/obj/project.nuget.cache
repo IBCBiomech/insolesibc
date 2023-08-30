@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "UOYu6otcq8ogPf+9qiFTPzQtn8dio29zpUefy+LW2OgKmrtOsOhkh52T6ljFww+C1LTkOJDrA5NDzJ0dXMragQ==",
+  "dgSpecHash": "0UWzrlLgv40hYfV+P1RniSsAFWAOb90Y1p2r0n02ZzNqQdGpJfu/3juFg5viRyizkWXAlSI3ZqvEx3526/c4DQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Deva\\wsibc\\insolesibc\\insoles.Tests\\insoles.Tests.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\Deva\\.nuget\\packages\\aforge.video\\2.2.5\\aforge.video.2.2.5.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\aforge.video.directshow\\2.2.5\\aforge.video.directshow.2.2.5.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\coverlet.collector\\3.2.0\\coverlet.collector.3.2.0.nupkg.sha512",
+    "C:\\Users\\Deva\\.nuget\\packages\\csvhelper\\30.0.1\\csvhelper.30.0.1.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\directshowlib\\1.0.0\\directshowlib.1.0.0.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\dirkster.avalondock\\4.72.0\\dirkster.avalondock.4.72.0.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\emgu.cv\\4.7.0.5276\\emgu.cv.4.7.0.5276.nupkg.sha512",
@@ -73,8 +74,10 @@
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.licensing\\22.1.36\\syncfusion.licensing.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.officechart.base\\22.1.36\\syncfusion.officechart.base.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfbusyindicator.wpf\\22.1.36\\syncfusion.sfbusyindicator.wpf.22.1.36.nupkg.sha512",
+    "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfgauge.wpf\\22.1.36\\syncfusion.sfgauge.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfgridcommon.wpf\\22.1.36\\syncfusion.sfgridcommon.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfinput.wpf\\22.1.36\\syncfusion.sfinput.wpf.22.1.36.nupkg.sha512",
+    "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfskinmanager.wpf\\22.1.36\\syncfusion.sfskinmanager.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sftreeview.wpf\\22.1.36\\syncfusion.sftreeview.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.shared.wpf\\22.1.36\\syncfusion.shared.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.tools.wpf\\22.1.36\\syncfusion.tools.wpf.22.1.36.nupkg.sha512",

@@ -25,33 +25,53 @@ dotnet ef database update
 
 # Estructura de la aplicación
 
-Views
-Models
-ViewModels
+## ROOT
+1. App.xaml
+    - Llama al MainWindow.xaml
+2. App.xaml.cs 
+    - Crear carpeta de grabación de datos
+    - Key de Syncfusion
+3. MainWindow.xaml
+    - DataContext: NavigationVM
+    - Son los comandos de navegar por las vistas
+    - currentView tiene el valor de la vista cuando haces click en los 
+    botones de Home, Análisis, Registro e Informes.
+4. MainWindow.xaml.cs
+    - States\DataBaseBridge inicializado
+5. mydatabase.db -> base de datos
+                
+## Carpetas
 
-UserControls -> son controles particulares
-Styles -> estilos 
-States-> 
-	RegistroState
-	DatabaseBridge
-	AnalisisState
-Services->
-Proxys-> deprecated (revisa Bernat)
-Precálculus-> matrices
-Migrations -> EF automated
-Messages -> datos intermedios:
+1. Views
+    - Home.xaml y Home.xaml.cs tienen sólo para cargar el logo de la app.
+    - 
+- Models
+- ViewModels
+
+- UserControls -> son controles particulares
+- Styles -> estilos 
+- States-> 
+    * RegistroState -> son una serie de estados. Guardar estados de la aplicación?
+    * DatabaseBridge->creación del CRUD de base de datos.
+    * AnalisisState -> también implementa INotify... 
+- Migrations: DDL creado por el EF para sqlite.
+- Services->
+- Proxys-> deprecated (revisa Bernat)
+    * Precálculus-> matrices
+    * Migrations -> EF automated
+    * Messages -> datos intermedios:
 	       CameraScan, InsoleData, InsoleScan
-Libraries-> dll
-Images
-Forms-> crearpaciente, etc. Flotantes.
-Fonts-> Fuentes
-Enums
-DataTemplateSelectors -> syncfusion
-DataHolders: Para cargar los tests al UI
-•	FrameData, GraphDAta es el total vista de frame data, framedatinsoles hereda framedata y tiene left y data son DataInsoles. El FramaDataFactory, FrameDataFactoryInsoles (compatible para diferentes ficheros). 
-Database: EF
-Converters: booleanos a imágenes
-Controls_ colormap
-Commands
-Behaviours: obsoletos
+- Libraries-> dll
+- Images
+- Forms-> crearpaciente, etc. Flotantes.
+- Fonts-> Fuentes
+- Enums
+- DataTemplateSelectors -> syncfusion
+- DataHolders: Para cargar los tests al UI
+    * FrameData, GraphDAta es el total vista de frame data, framedatinsoles hereda framedata y tiene left y data son DataInsoles. El FramaDataFactory, FrameDataFactoryInsoles (compatible para diferentes ficheros). 
+- Database: EF
+- Converters: booleanos a imágenes
+- Controls_ colormap
+- Commands
+- Behaviours: obsoletos
 

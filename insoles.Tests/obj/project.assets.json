@@ -41,6 +41,19 @@
           "build/netstandard1.0/coverlet.collector.targets": {}
         }
       },
+      "CsvHelper/30.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/CsvHelper.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/CsvHelper.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "DirectShowLib/1.0.0": {
         "type": "package",
         "compile": {
@@ -1440,6 +1453,23 @@
           }
         }
       },
+      "Syncfusion.SfGauge.WPF/22.1.36": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "22.1.36",
+          "Syncfusion.Shared.WPF": "22.1.36"
+        },
+        "compile": {
+          "lib/net6.0-windows7.0/Syncfusion.SfGauge.WPF.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Syncfusion.SfGauge.WPF.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Syncfusion.SfGridCommon.WPF/22.1.36": {
         "type": "package",
         "dependencies": {
@@ -1469,6 +1499,22 @@
         },
         "runtime": {
           "lib/net6.0-windows7.0/Syncfusion.SfInput.WPF.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Syncfusion.SfSkinManager.WPF/22.1.36": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Licensing": "22.1.36"
+        },
+        "compile": {
+          "lib/net6.0-windows7.0/Syncfusion.SfSkinManager.WPF.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Syncfusion.SfSkinManager.WPF.dll": {
             "related": ".xml"
           }
         }
@@ -1938,6 +1984,7 @@
           "AForge": "2.2.5",
           "AForge.Video": "2.2.5",
           "AForge.Video.DirectShow": "2.2.5",
+          "CsvHelper": "30.0.1",
           "DirectShowLib": "1.0.0",
           "Dirkster.AvalonDock": "4.72.0",
           "Emgu.CV": "4.7.0.5276",
@@ -1961,7 +2008,9 @@
           "Syncfusion.DocIO.Wpf": "22.1.36",
           "Syncfusion.Licensing": "22.1.36",
           "Syncfusion.SfBusyIndicator.WPF": "22.1.36",
+          "Syncfusion.SfGauge.WPF": "22.1.36",
           "Syncfusion.SfInput.WPF": "22.1.36",
+          "Syncfusion.SfSkinManager.WPF": "22.1.36",
           "Syncfusion.SfTreeView.WPF": "22.1.36",
           "Syncfusion.Shared.WPF": "22.1.36",
           "Syncfusion.Tools.WPF": "22.1.36",
@@ -2072,6 +2121,30 @@
         "coverlet-icon.png",
         "coverlet.collector.3.2.0.nupkg.sha512",
         "coverlet.collector.nuspec"
+      ]
+    },
+    "CsvHelper/30.0.1": {
+      "sha512": "rcZtgbWR+As4G3Vpgx0AMNmShGuQLFjkHAPIIflzrfkJCx8/AOd4m96ZRmiU1Wi39qS5UVjV0P8qdgqOo5Cwyg==",
+      "type": "package",
+      "path": "csvhelper/30.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "csvhelper.30.0.1.nupkg.sha512",
+        "csvhelper.nuspec",
+        "lib/net45/CsvHelper.dll",
+        "lib/net45/CsvHelper.xml",
+        "lib/net47/CsvHelper.dll",
+        "lib/net47/CsvHelper.xml",
+        "lib/net5.0/CsvHelper.dll",
+        "lib/net5.0/CsvHelper.xml",
+        "lib/net6.0/CsvHelper.dll",
+        "lib/net6.0/CsvHelper.xml",
+        "lib/netstandard2.0/CsvHelper.dll",
+        "lib/netstandard2.0/CsvHelper.xml",
+        "lib/netstandard2.1/CsvHelper.dll",
+        "lib/netstandard2.1/CsvHelper.xml"
       ]
     },
     "DirectShowLib/1.0.0": {
@@ -3809,6 +3882,49 @@
         "tools/VisualStudioToolsManifest.xml"
       ]
     },
+    "Syncfusion.SfGauge.WPF/22.1.36": {
+      "sha512": "rukeufBjEvT2C4hXPMQrtgNAJFHr31lWoNk7xca/ihl4pticy8DTkMZsaEq6s6pfV0rFoFwBSvwK3CnCxxhJTg==",
+      "type": "package",
+      "path": "syncfusion.sfgauge.wpf/22.1.36",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "lib/net40/Design/Syncfusion.Design.Wpf.dll",
+        "lib/net40/Design/Syncfusion.SfGauge.WPF.DesignTools.dll",
+        "lib/net40/Design/Syncfusion.SfGauge.WPF.Expression.Design.dll",
+        "lib/net40/Design/Syncfusion.SfGauge.WPF.VisualStudio.Design.dll",
+        "lib/net40/Syncfusion.SfGauge.WPF.dll",
+        "lib/net40/Syncfusion.SfGauge.WPF.xml",
+        "lib/net45/Design/Syncfusion.Design.Wpf.dll",
+        "lib/net45/Design/Syncfusion.SfGauge.WPF.DesignTools.dll",
+        "lib/net45/Design/Syncfusion.SfGauge.WPF.Expression.Design.dll",
+        "lib/net45/Design/Syncfusion.SfGauge.WPF.VisualStudio.Design.dll",
+        "lib/net45/Syncfusion.SfGauge.WPF.dll",
+        "lib/net45/Syncfusion.SfGauge.WPF.xml",
+        "lib/net451/Design/Syncfusion.Design.Wpf.dll",
+        "lib/net451/Design/Syncfusion.SfGauge.WPF.DesignTools.dll",
+        "lib/net451/Design/Syncfusion.SfGauge.WPF.Expression.Design.dll",
+        "lib/net451/Design/Syncfusion.SfGauge.WPF.VisualStudio.Design.dll",
+        "lib/net451/Syncfusion.SfGauge.WPF.dll",
+        "lib/net451/Syncfusion.SfGauge.WPF.xml",
+        "lib/net46/Design/Syncfusion.Design.Wpf.dll",
+        "lib/net46/Design/Syncfusion.SfGauge.WPF.DesignTools.dll",
+        "lib/net46/Design/Syncfusion.SfGauge.WPF.Expression.Design.dll",
+        "lib/net46/Design/Syncfusion.SfGauge.WPF.VisualStudio.Design.dll",
+        "lib/net46/Syncfusion.SfGauge.WPF.dll",
+        "lib/net46/Syncfusion.SfGauge.WPF.xml",
+        "lib/net6.0-windows7.0/Design/Syncfusion.SfGauge.WPF.DesignTools.dll",
+        "lib/net6.0-windows7.0/Syncfusion.SfGauge.WPF.dll",
+        "lib/net6.0-windows7.0/Syncfusion.SfGauge.WPF.xml",
+        "syncfusion.sfgauge.wpf.22.1.36.nupkg.sha512",
+        "syncfusion.sfgauge.wpf.nuspec",
+        "syncfusion_logo.png",
+        "tools/VisualStudioToolsManifest.xml"
+      ]
+    },
     "Syncfusion.SfGridCommon.WPF/22.1.36": {
       "sha512": "flKF8460cvlBFeCup/MGeG05gC6Mjy5TFo3dnUiOd/PGKLnj3WjdK/6ywiRP8vDKFjKrou5D1U7jgltO7bgX+Q==",
       "type": "package",
@@ -3873,6 +3989,30 @@
         "syncfusion.sfinput.wpf.nuspec",
         "syncfusion_logo.png",
         "tools/VisualStudioToolsManifest.xml"
+      ]
+    },
+    "Syncfusion.SfSkinManager.WPF/22.1.36": {
+      "sha512": "Mnr43S8OdOfHqVwYlJQTA/b7dMHyssPGeVm+EMH7chHgtDgKVa9hMXYvEhfPFRkNXIN6WJBTF/Yi16ejtnCDjg==",
+      "type": "package",
+      "path": "syncfusion.sfskinmanager.wpf/22.1.36",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "lib/net40/Syncfusion.SfSkinManager.WPF.dll",
+        "lib/net40/Syncfusion.SfSkinManager.WPF.xml",
+        "lib/net45/Syncfusion.SfSkinManager.WPF.dll",
+        "lib/net45/Syncfusion.SfSkinManager.WPF.xml",
+        "lib/net451/Syncfusion.SfSkinManager.WPF.dll",
+        "lib/net451/Syncfusion.SfSkinManager.WPF.xml",
+        "lib/net46/Syncfusion.SfSkinManager.WPF.dll",
+        "lib/net46/Syncfusion.SfSkinManager.WPF.xml",
+        "lib/net6.0-windows7.0/Syncfusion.SfSkinManager.WPF.dll",
+        "lib/net6.0-windows7.0/Syncfusion.SfSkinManager.WPF.xml",
+        "syncfusion.sfskinmanager.wpf.22.1.36.nupkg.sha512",
+        "syncfusion.sfskinmanager.wpf.nuspec",
+        "syncfusion_logo.png"
       ]
     },
     "Syncfusion.SfTreeView.WPF/22.1.36": {
@@ -5347,6 +5487,8 @@
       "NUnit3TestAdapter >= 4.4.2",
       "Syncfusion.DocIO.Wpf >= 22.1.36",
       "Syncfusion.Licensing >= 22.1.36",
+      "Syncfusion.SfGauge.WPF >= 22.1.36",
+      "Syncfusion.SfSkinManager.WPF >= 22.1.36",
       "Syncfusion.Shared.WPF >= 22.1.36",
       "coverlet.collector >= 3.2.0",
       "insoles >= 1.0.0"
@@ -5430,6 +5572,14 @@
             "version": "[22.1.36, )"
           },
           "Syncfusion.Licensing": {
+            "target": "Package",
+            "version": "[22.1.36, )"
+          },
+          "Syncfusion.SfGauge.WPF": {
+            "target": "Package",
+            "version": "[22.1.36, )"
+          },
+          "Syncfusion.SfSkinManager.WPF": {
             "target": "Package",
             "version": "[22.1.36, )"
           },

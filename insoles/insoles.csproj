@@ -69,6 +69,7 @@
     <PackageReference Include="AForge" Version="2.2.5" />
     <PackageReference Include="AForge.Video" Version="2.2.5" />
     <PackageReference Include="AForge.Video.DirectShow" Version="2.2.5" />
+    <PackageReference Include="CsvHelper" Version="30.0.1" />
     <PackageReference Include="DirectShowLib" Version="1.0.0" />
     <PackageReference Include="Dirkster.AvalonDock" Version="4.72.0" />
     <PackageReference Include="Emgu.CV" Version="4.7.0.5276" />
@@ -102,6 +103,7 @@
     <PackageReference Include="Syncfusion.SfBusyIndicator.WPF" Version="22.1.36" />
     <PackageReference Include="Syncfusion.SfGauge.WPF" Version="22.1.36" />
     <PackageReference Include="Syncfusion.SfInput.WPF" Version="22.1.36" />
+    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="22.1.36" />
     <PackageReference Include="Syncfusion.SfTreeView.WPF" Version="22.1.36" />
     <PackageReference Include="Syncfusion.Shared.WPF" Version="22.1.36" />
     <PackageReference Include="Syncfusion.Tools.WPF" Version="22.1.36" />

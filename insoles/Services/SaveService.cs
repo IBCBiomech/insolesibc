@@ -95,10 +95,8 @@ namespace insoles.Services
                 StringBuilder lines = new StringBuilder();
                 for (int i = 0; i < left.Count; i++)
                 {
-                    float cameraDiference = state.timeDiferenceCamera != null? 
-                        (float)state.timeDiferenceCamera.Value / 2 : 0;
                     float syncFakets = fakets + (float)state.timeDiference - 0.01f * (left.Count - 1) - 
-                        apiService.Latency() + cameraDiference;
+                        apiService.Latency();
                     if (syncFakets >= 0)
                     {
                         string line = "1 " +

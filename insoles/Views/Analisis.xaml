@@ -11,11 +11,12 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="White">
         <syncfusion:DockingManager>
+        
             <ContentControl Content="{Binding grafoMariposa}" 
                             syncfusion:DockingManager.Header="Butterfly"
                             syncfusion:DockingManager.SideInDockedMode="Right"
                             syncfusion:DockingManager.TargetNameInDockedMode="Butterfly"
-                            syncfusion:DockingManager.DesiredWidthInDockedMode="650"
+                            syncfusion:DockingManager.DesiredWidthInDockedMode="500"
                             x:Name="Butterfly"/>
             <ContentControl Content="{Binding heatmap}"
                             syncfusion:DockingManager.Header="Pressure Map"
@@ -24,27 +25,31 @@
             <userControls:PacientesUserControlAnalisis Pacientes="{Binding Pacientes}"
                                                        syncfusion:DockingManager.Header="Usuarios"
                                                        syncfusion:DockingManager.SideInDockedMode="Left"
-                                                       syncfusion:DockingManager.DesiredWidthInDockedMode="650"
+                                                       syncfusion:DockingManager.DesiredWidthInDockedMode="200"
+                                                       syncfusion:DockingManager.DesiredHeightInDockedMode="800"
                                                        x:Name="Usuarios"/>
             <ContentControl Content="{Binding timeLine}"
                             syncfusion:DockingManager.Header="Timeline"
-                            syncfusion:DockingManager.SideInDockedMode="Tabbed"
-                            syncfusion:DockingManager.TargetNameInDockedMode="Usuarios"
+                            syncfusion:DockingManager.SideInDockedMode="Bottom"
+                            syncfusion:DockingManager.DesiredHeightInDockedMode="110"
+                           
                             />
             <ContentControl Content="{Binding grf}"
                             syncfusion:DockingManager.Header="GRF"
                             syncfusion:DockingManager.SideInDockedMode="Top"
-                            syncfusion:DockingManager.TargetNameInDockedMode="Usuarios"
-                            syncfusion:DockingManager.DesiredHeightInDockedMode="300"
+                            syncfusion:DockingManager.State="Document"
+                            syncfusion:DockingManager.DesiredHeightInDockedMode="800"
                             x:Name="GRF"/>
+            
             <ContentControl Content="{Binding camaraViewport1}"
                             syncfusion:DockingManager.Header="Cam1"
                             syncfusion:DockingManager.SideInDockedMode="Top"
                             syncfusion:DockingManager.TargetNameInDockedMode="Butterfly"
+                            syncfusion:DockingManager.DesiredWidthInDockedMode="500"
                             x:Name="Cam1"/>
             <ContentControl Content="{Binding camaraViewport2}"
                             syncfusion:DockingManager.Header="Cam2"
-                            syncfusion:DockingManager.SideInDockedMode="Right"
+                            syncfusion:DockingManager.SideInDockedMode="Tabbed"
                             syncfusion:DockingManager.TargetNameInDockedMode="Cam1"
                             x:Name="Cam2"/>
         </syncfusion:DockingManager>
