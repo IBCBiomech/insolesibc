@@ -482,6 +482,13 @@ namespace insoles.UserControls
 
             hspan = plot.Plot.AddHorizontalSpan(10, 30);
 
+            XPoints[0] = FindClosest(xs_temp_left, hspan.X1);
+            XPoints[1] = FindClosest(xs_temp_left, hspan.X2);
+            startL = xs_left_N_FC.IndexOf(Math.Round(XPoints[0], 2));
+            endL = xs_left_N_FC.IndexOf(Math.Round(XPoints[1], 2));
+            GraphRangeChanged?.Invoke(new GraphRange(startL, endL));
+
+
             hspan.BorderColor = System.Drawing.Color.Red;
             hspan.BorderLineStyle = ScottPlot.LineStyle.Dash;
             hspan.BorderLineWidth = 2;
@@ -494,12 +501,17 @@ namespace insoles.UserControls
             {
                 XPoints[0] = e;
                 Trace.WriteLine($"X1: {e.ToString("F2")}");
+                startL = xs_left_N_FC.IndexOf(Math.Round(XPoints[0], 2));
+                endL = xs_left_N_FC.IndexOf(Math.Round(XPoints[1], 2));
+                GraphRangeChanged?.Invoke(new GraphRange(startL, endL));
             };
             hspan.Edge2Dragged += (s, e) =>
             {
                 XPoints[1] = e;
                 Trace.WriteLine($"X2: {e.ToString("F2")}");
-
+                startL = xs_left_N_FC.IndexOf(Math.Round(XPoints[0], 2));
+                endL = xs_left_N_FC.IndexOf(Math.Round(XPoints[1], 2));
+                GraphRangeChanged?.Invoke(new GraphRange(startL, endL));
             };
 
             plot.Render();
@@ -569,6 +581,8 @@ namespace insoles.UserControls
             curvaMediaR.Clear();
             curvaStR.Clear();
             curvaMediaR.Clear();
+
+            GraphRangeCleared?.Invoke();
         }
 
         private void ClearGraphButton_Click(object sender, RoutedEventArgs e)
@@ -584,7 +598,7 @@ namespace insoles.UserControls
             //XPoints.Clear();
             //plot.Render();
             //rangePlot.Render();
-            GraphRangeCleared?.Invoke();
+            
         }
 
         
@@ -623,7 +637,7 @@ namespace insoles.UserControls
                 rangePlot.Plot.AddScatterLines(xs_left.ToArray(), ys_left_array, color: System.Drawing.Color.Red);
                 rangePlot.Plot.AddScatterLines(xs_right.ToArray(), ys_right_array.ToArray(), color: System.Drawing.Color.Green);
                 rangePlot.Render();
-                GraphRangeChanged?.Invoke(new GraphRange(startL, endL));
+                //GraphRangeChanged?.Invoke(new GraphRange(startL, endL));
             }
 
         }

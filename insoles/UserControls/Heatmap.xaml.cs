@@ -42,6 +42,8 @@ namespace insoles.UserControls
         private Text L;
         private Text R;
 
+        private object drawingCentersLock = new object();
+
         private double maxTime;
 
         private int colorbarMax;
@@ -572,13 +574,16 @@ namespace insoles.UserControls
         #endregion CPs
         public void DrawCenters(double[] xs, double[] ys, ScottPlot.WpfPlot plot)
         {
-            if (centers != null)
+            lock (drawingCentersLock)
             {
-                plot.Plot.Clear(centers.GetType());
+                if (centers != null)
+                {
+                    plot.Plot.Clear(centers.GetType());
+                }
+                centers = plot.Plot.AddScatter(xs, ys, lineWidth: 0, color: Color.WhiteSmoke);
+                plot.Plot.MoveLast(centers);
+                Dispatcher.Invoke(() => plot.Refresh());
             }
-            centers = plot.Plot.AddScatter(xs, ys, lineWidth: 0, color: Color.WhiteSmoke);
-            plot.Plot.MoveLast(centers);
-            Dispatcher.Invoke(() => plot.Refresh());
         }
         private IColormap extendColormap(Colormap colormapBase, Color colorExtend,
             Func<Color, Color, float, Color> interpolationFunction,
