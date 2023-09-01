@@ -1,9 +1,11 @@
 ﻿using insoles.Controlls;
 using insoles.DataHolders;
+using insoles.Services;
 using insoles.States;
 using insoles.Utilities;
 using MathNet.Numerics.LinearAlgebra;
 using MathNet.Numerics.Statistics;
+using OpenCvSharp;
 using ScottPlot;
 using ScottPlot.Drawing;
 using ScottPlot.Plottable;
@@ -35,6 +37,12 @@ namespace insoles.UserControls
     {
         const int BACKGROUND = -1;
         const int PERCENTIL_MAX = 10;
+
+        private const double PLANTILLA_HEIGHT = 445;
+        private const double PLANTILLA_WIDTH = 615;
+
+        private double scaleX;
+        private double scaleY;
 
         private ScottPlot.Plottable.Heatmap heatmap;
         private Colorbar colorbar;
@@ -284,13 +292,15 @@ namespace insoles.UserControls
         private double[] centersXsRange;
         private double[] centersYsRange;
         public AnalisisState state { get;set; }
-        public Heatmap(AnalisisState state)
+        public Heatmap(AnalisisState state, IPlantillaService plantilla)
         {
             InitializeComponent();
             this.state = state;
             framesTaken = 500;
+            scaleX = PLANTILLA_WIDTH / plantilla.getLength(0);
+            scaleY = PLANTILLA_HEIGHT / plantilla.getLength(1);
             DataContext = this;
-            plot.Plot.Style(dataBackground: Color.White);
+            plot.Plot.Style(dataBackground: Color.Gray);
         }
         public Task UpdateLimits(GraphData data)
         {
@@ -341,19 +351,19 @@ namespace insoles.UserControls
         }
         private void SetAxisLimits(Matrix<float> matrix)
         {
-            xMin = matrix.ColumnCount * 0.15;
-            xMax = matrix.ColumnCount * 0.75;
+            xMin = -PLANTILLA_WIDTH / 2;
+            xMax = PLANTILLA_WIDTH / 2;
             yMin = 0;
-            yMax = matrix.RowCount * 0.75;
+            yMax = PLANTILLA_HEIGHT;
             plot.Plot.SetInnerViewLimits(xMin, xMax, yMin, yMax);
             plot.Plot.SetOuterViewLimits(yMin: 0);
 
             plot.Plot.SetAxisLimits(xMin, xMax, yMin, yMax);
             plot.Plot.AxisScaleLock(true);
             if (L == null)
-                L = plot.Plot.AddText("L", matrix.ColumnCount * 0.2, matrix.RowCount * 0.25, size: 50, color: Color.DarkGray);
+                L = plot.Plot.AddText("L", xMin + (xMax - xMin) * 0.2, yMin + (yMax - yMin) * 0.25, size: 50, color: Color.DarkGray);
             if (R == null)
-                R = plot.Plot.AddText("R", matrix.ColumnCount * 1.05, matrix.RowCount * 0.25, size: 50, color: Color.DarkGray);
+                R = plot.Plot.AddText("R", xMin + (xMax - xMin) * 0.75, yMin + (yMax - yMin) * 0.25, size: 50, color: Color.DarkGray);
         }
         public void ClearData()
         {
@@ -398,18 +408,34 @@ namespace insoles.UserControls
             {
                 plot.Clear(colorbar.GetType());
             }
-            IColormap colormap = extendColormap(Colormap.Jet, HelperFunctions.MakeColorDarker(Color.WhiteSmoke, 10), HelperFunctions.noInterpolate, extendSize: 10, totalSize: 256);
+            IColormap colormap = extendColormap(Colormap.Jet, Color.WhiteSmoke, HelperFunctions.noInterpolate, extendSize: 10, totalSize: 256);
             heatmap = plot.AddHeatmap(data, colormap: new Colormap(colormap));
             heatmap.Update(data, min: 0, max: maxBar);
             heatmap.Smooth = true;
+            heatmap.XMin = -PLANTILLA_WIDTH / 2;
+            heatmap.XMax = PLANTILLA_WIDTH / 2;
+            heatmap.YMin = 0;
+            heatmap.YMax = PLANTILLA_HEIGHT;
             colorbar = plot.AddColorbar(heatmap);
             plot.Margins(0, 0);
             plot.MoveFirst(heatmap);
             plot.SetAxisLimits(xMin, xMax, yMin, yMax);
         }
         #region CPS
+        private List<Tuple<double, double>> ScaleCenters(List<Tuple<double, double>> centers)
+        {
+            for (int i = 0; i < centers.Count; i++)
+            {
+                double Item1 = centers[i].Item1 * scaleX - PLANTILLA_WIDTH / 2;
+                double Item2 = centers[i].Item2 * scaleY;
+                centers[i] = new Tuple<double, double> ( Item1, Item2 );
+            }
+            return centers;
+        }
         public Task CalculateCenters(List<Tuple<double, double>> left, List<Tuple<double, double>> right)
         {
+            left = ScaleCenters(left);
+            right = ScaleCenters(right);
             void ReduceSorting(ref List<Tuple<double, double>> left, ref List<Tuple<double, double>> right, int NumResult)
             {
                 left = ReduceCPsSorting(left, NumResult);
@@ -450,6 +476,8 @@ namespace insoles.UserControls
         }
         public Task CalculateCentersRange(List<Tuple<double, double>> left, List<Tuple<double, double>> right)
         {
+            left = ScaleCenters(left);
+            right = ScaleCenters(right);
             void ReduceSorting(ref List<Tuple<double, double>> left, ref List<Tuple<double, double>> right, int NumResult)
             {
                 left = ReduceCPsSorting(left, NumResult);
@@ -574,16 +602,13 @@ namespace insoles.UserControls
         #endregion CPs
         public void DrawCenters(double[] xs, double[] ys, ScottPlot.WpfPlot plot)
         {
-            lock (drawingCentersLock)
+            if (centers != null)
             {
-                if (centers != null)
-                {
-                    plot.Plot.Clear(centers.GetType());
-                }
-                centers = plot.Plot.AddScatter(xs, ys, lineWidth: 0, color: Color.WhiteSmoke);
-                plot.Plot.MoveLast(centers);
-                Dispatcher.Invoke(() => plot.Refresh());
+                plot.Plot.Clear(centers.GetType());
             }
+            centers = plot.Plot.AddScatter(xs, ys, lineWidth: 0, color: Color.WhiteSmoke);
+            plot.Plot.MoveLast(centers);
+            Dispatcher.Invoke(() => plot.Refresh());
         }
         private IColormap extendColormap(Colormap colormapBase, Color colorExtend,
             Func<Color, Color, float, Color> interpolationFunction,

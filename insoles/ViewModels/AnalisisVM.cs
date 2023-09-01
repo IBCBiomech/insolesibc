@@ -49,6 +49,8 @@ namespace insoles.ViewModel
         public CamaraReplay camaraViewport1 { get; set; }
         public CamaraReplay camaraViewport2 { get; set; }
         private GraphData graphData;
+
+        object drawingHeatmaplock = new object();
         public AnalisisVM()
         {
             state = new AnalisisState();
@@ -62,7 +64,7 @@ namespace insoles.ViewModel
             pressureMap = new PressureMapCentersService(state, plantilla.sensor_map, codes,
                 plantilla.CalculateSensorPositionsLeft(), plantilla.CalculateSensorPositionsRight());
             grafoMariposa = new GrafoMariposa(plantilla);
-            heatmap = new Heatmap(state);
+            heatmap = new Heatmap(state, plantilla);
             informesGeneratorService = new InformesGeneratorService(grf, grafoMariposa, heatmap);
             ((MainWindow)Application.Current.MainWindow).informesGeneratorService = informesGeneratorService;
             camaraViewport1 = new CamaraReplay();
@@ -139,10 +141,13 @@ namespace insoles.ViewModel
                     await butterfly.Calculate(graphDataSubset, out frames, out cps_left, out cps_right);
                     await Task.Run(() => grafoMariposa.framePressuresRange = frames);
 
-                    await heatmap.CalculateCentersRange(cps_left, cps_right);
+                    lock (drawingHeatmaplock)
+                    {
+                        heatmap.CalculateCentersRange(cps_left, cps_right);
 
-                    var pressureMaps = await pressureMap.CalculateMetrics(graphDataSubset);
-                    await Task.Run(() => heatmap.pressure_maps_metrics_range = pressureMaps);
+                        var pressureMaps = pressureMap.CalculateMetrics(graphDataSubset).Result;
+                        heatmap.pressure_maps_metrics_range = pressureMaps;
+                    }
                 }
                 else
                 {
