@@ -408,7 +408,7 @@ namespace insoles.UserControls
             {
                 plot.Clear(colorbar.GetType());
             }
-            IColormap colormap = extendColormap(Colormap.Jet, Color.WhiteSmoke, HelperFunctions.noInterpolate, extendSize: 10, totalSize: 256);
+            IColormap colormap = CustomColormap();
             heatmap = plot.AddHeatmap(data, colormap: new Colormap(colormap));
             heatmap.Update(data, min: 0, max: maxBar);
             heatmap.Smooth = true;
@@ -632,6 +632,61 @@ namespace insoles.UserControls
             }
             return new CustomColormap(new Func<double, Color>(function),
                 colormapBase.Name + "Extended");
+        }
+        private IColormap CustomColormap()
+        {
+            const int TOTAL = 100;
+            Color[] colors = new Color[TOTAL];
+            Color color0 = Color.White;
+            Color color1 = Color.SkyBlue;
+            Color color2 = Color.DeepSkyBlue;
+            Color color3 = Color.LightGreen;
+            Color color4 = Color.Yellow;
+            Color color5 = Color.Red;
+            Color color6 = Color.Black;
+            const int INDEX1 = 15;
+            for (int i = 0; i < INDEX1; i++)
+            {
+                colors[i] = HelperFunctions.Interpolate(color1, color0, (float)i / INDEX1);
+            }
+            const int INDEX2 = 30;
+            for (int i = INDEX1; i < INDEX2; i++)
+            {
+                colors[i] = HelperFunctions.Interpolate(
+                    color2, color1, (float)(i - INDEX1) / (INDEX2 - INDEX1));
+            }
+            const int INDEX3 = 45;
+            for (int i = INDEX2; i < INDEX3; i++)
+            {
+                colors[i] = HelperFunctions.Interpolate(
+                    color3, color2, (float)(i - INDEX2) / (INDEX3 - INDEX2));
+            }
+            const int INDEX4 = 60;
+            for (int i = INDEX3; i < INDEX4; i++)
+            {
+                colors[i] = HelperFunctions.Interpolate(
+                    color4, color3, (float)(i - INDEX3) / (INDEX4 - INDEX3));
+            }
+            const int INDEX5 = 80;
+            for (int i = INDEX4; i < INDEX5; i++)
+            {
+                colors[i] = HelperFunctions.Interpolate(
+                    color5, color4, (float)(i - INDEX4) / (INDEX5 - INDEX4));
+            }
+            const int INDEX6 = 100;
+            for (int i = INDEX5; i < INDEX6; i++)
+            {
+                colors[i] = HelperFunctions.Interpolate(
+                    color6, color5, (float)(i - INDEX5) / (INDEX6 - INDEX5));
+            }
+            Color function(double value)
+            {
+                int index = (int)(value * TOTAL);
+                index = Math.Min(Math.Max(index, 0), TOTAL - 1);
+                return colors[index];
+            }
+            return new CustomColormap(new Func<double, Color>(function),
+                "Custom colormap");
         }
         public Task SaveFigs()
         {
