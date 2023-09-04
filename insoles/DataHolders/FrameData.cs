@@ -56,5 +56,6 @@ namespace insoles.DataHolders
                 return 0;
             }
         }
+        public abstract void ApplyFC(float fc);
     }
 }

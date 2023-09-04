@@ -64,5 +64,12 @@ namespace insoles.DataHolders
             }
             return result;
         }
+        public void ApplyFC(float fc)
+        {
+            foreach(var key in  pressures.Keys)
+            {
+                pressures[key] *= fc;
+            }
+        }
     }
 }

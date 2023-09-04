@@ -18,5 +18,11 @@ namespace insoles.DataHolders
             left = new DataInsole(values, 3);
             right = new DataInsole(values, 11);
         }
+
+        public override void ApplyFC(float fc)
+        {
+            left.ApplyFC(fc);
+            right.ApplyFC(fc);
+        }
     }
 }

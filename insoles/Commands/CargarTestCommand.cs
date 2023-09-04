@@ -17,9 +17,11 @@ namespace insoles.Commands
             remove { CommandManager.RequerySuggested -= value; }
         }
         private Test test;
-        public CargarTestCommand(Test test)
+        private float peso;
+        public CargarTestCommand(Test test, float peso)
         {
             this.test = test;
+            this.peso = peso;
         }
 
         public bool CanExecute(object? parameter)
@@ -30,6 +32,7 @@ namespace insoles.Commands
         public void Execute(object? parameter)
         {
             ((MainWindow)Application.Current.MainWindow).analisisState.test = test;
+            ((MainWindow)Application.Current.MainWindow).analisisState.peso = peso;
         }
     }
 }

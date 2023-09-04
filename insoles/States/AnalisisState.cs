@@ -13,6 +13,7 @@ namespace insoles.States
     {
         private Test? _test;
         public Test? test { get { return _test; }  set { _test = value; OnPropertyChanged(); } }
+        public float peso;
         public bool paused = true;
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string propName = null)

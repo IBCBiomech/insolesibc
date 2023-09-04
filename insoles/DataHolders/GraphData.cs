@@ -60,5 +60,12 @@ namespace insoles.DataHolders
             }
             return new GraphData(frames);
         }
+        public void ApplyFC(float fc)
+        {
+            foreach(FrameData frame in frames)
+            {
+                frame.ApplyFC(fc);
+            }
+        }
     }
 }

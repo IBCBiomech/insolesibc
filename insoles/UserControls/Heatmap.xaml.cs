@@ -1,5 +1,6 @@
 ﻿using insoles.Controlls;
 using insoles.DataHolders;
+using insoles.Enums;
 using insoles.Services;
 using insoles.States;
 using insoles.Utilities;
@@ -22,6 +23,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Markup;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace insoles.UserControls
 {
@@ -37,6 +39,11 @@ namespace insoles.UserControls
     {
         const int BACKGROUND = -1;
         const int PERCENTIL_MAX = 10;
+        
+        const float FACTOR_COLORBAR_ANIMATE = 2f;
+        const float FACTOR_COLORBAR_MAX = 5f;
+        const float FACTOR_COLORBAR_AVG = 1f;
+
 
         private const double PLANTILLA_HEIGHT = 445;
         private const double PLANTILLA_WIDTH = 615;
@@ -55,6 +62,8 @@ namespace insoles.UserControls
         private double maxTime;
 
         private int colorbarMax;
+        private int colorbarAvg;
+        private int colorbarAnimate;
         private int colorbarPercentile;
 
         double xMin;
@@ -302,8 +311,9 @@ namespace insoles.UserControls
             DataContext = this;
             plot.Plot.Style(dataBackground: Color.Gray);
         }
-        public Task UpdateLimits(GraphData data)
+        public Task UpdateLimits(GraphData data, float peso)
         {
+            /*
             List<int> pressures = new List<int>();
             for (int i = 0; i < data.length; i++)
             {
@@ -322,6 +332,7 @@ namespace insoles.UserControls
             pressures.Sort((x, y) => y.CompareTo(x));
             colorbarPercentile = pressures[pressures.Count * PERCENTIL_MAX / 100];
             colorbarMax = pressures[0];
+            */
             /* MAX Pressure
             int max = 0;
             for(int i = 0; i < data.length; i++)
@@ -346,6 +357,10 @@ namespace insoles.UserControls
             }
             colorbarMax = max;
             */
+            int numSensors = Enum.GetValues(typeof(Sensor)).Length;
+            colorbarAnimate = (int)(peso * 9.8f / numSensors * FACTOR_COLORBAR_ANIMATE);
+            colorbarMax = (int)(peso * 9.8f / numSensors * FACTOR_COLORBAR_MAX);
+            colorbarAvg = (int)(peso * 9.8f / numSensors * FACTOR_COLORBAR_AVG);
             maxTime = data.maxTime;
             return Task.CompletedTask;
         }
@@ -373,13 +388,20 @@ namespace insoles.UserControls
         private void DrawDataWPF(Matrix<float> data, WpfPlot plot) 
         {
             int max;
-            if (selectedMetric == Metric.Max && !animate)
+            if (animate)
             {
-                max = colorbarMax;
+                max = colorbarAnimate;
             }
             else
             {
-                max = colorbarPercentile;
+                if (selectedMetric == Metric.Max)
+                {
+                    max = colorbarMax;
+                }
+                else
+                {
+                    max = colorbarAvg;
+                }
             }
             DrawData(data, plot.Plot, ref heatmap, ref colorbar, max);
             Dispatcher.Invoke(() => plot.Refresh());
@@ -717,7 +739,7 @@ namespace insoles.UserControls
                 pressure_maps_metrics[Metric.Avg].RowCount * 0.25, size: 50, color: Color.DarkGray);
             R = plot.Plot.AddText("R", pressure_maps_metrics[Metric.Avg].ColumnCount * 1.05,
                 pressure_maps_metrics[Metric.Avg].RowCount * 0.25, size: 50, color: Color.DarkGray);
-            DrawData(pressure_maps_metrics[Metric.Avg], plot.Plot, ref heatmap, ref colorbar, colorbarPercentile);
+            DrawData(pressure_maps_metrics[Metric.Avg], plot.Plot, ref heatmap, ref colorbar, colorbarAvg);
             plot.Plot.SetAxisLimits(xMin, xMax * 1.5, yMin, yMax);
             plot.Refresh();
             plot.Render();
@@ -727,7 +749,7 @@ namespace insoles.UserControls
             plot.Refresh();
             plot.Render();
             plot.Plot.SaveFig("heatmap_max.png");
-            DrawData(pressure_maps_metrics[Metric.Min], plot.Plot, ref heatmap, ref colorbar, colorbarPercentile);
+            DrawData(pressure_maps_metrics[Metric.Min], plot.Plot, ref heatmap, ref colorbar, colorbarAvg);
             plot.Plot.SetAxisLimits(xMin, xMax * 1.5, yMin, yMax);
             plot.Refresh();
             plot.Render();

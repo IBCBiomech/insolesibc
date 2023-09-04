@@ -22,7 +22,7 @@ namespace insoles.Model
             Tests = new ObservableCollection<TestTreeView>();
             foreach(Test test in tests)
             {
-                Tests.Add(new TestTreeView(test, databaseBridge));
+                Tests.Add(new TestTreeView(test, databaseBridge, paciente.Peso != null?paciente.Peso.Value:70));
             }
             crearCarpetaTestCommand = new CrearCarpetaTestCommand(databaseBridge, paciente);
         }

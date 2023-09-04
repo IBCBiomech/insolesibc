@@ -22,7 +22,7 @@ namespace insoles.Model
         public CargarTestCommand cargarTestCommand { get; set; }
         public ImportarTestCommand importarTestCommand { get; set; }
         public ExportarFCTestCommand exportarFCTestCommand { get; set; }
-        public TestTreeView(Test test, DatabaseBridge databaseBridge) 
+        public TestTreeView(Test test, DatabaseBridge databaseBridge, float peso) 
         { 
             testDB = test;
             Files = new ObservableCollection<TestFileTreeView>();
@@ -43,7 +43,7 @@ namespace insoles.Model
             }
             renombrarCarpetaTestCommand = new RenombrarCarpetaTestCommand(databaseBridge);
             borrarTestCommand = new BorrarTestCommand(databaseBridge);
-            cargarTestCommand = new CargarTestCommand(test);
+            cargarTestCommand = new CargarTestCommand(test, peso);
             importarTestCommand = new ImportarTestCommand(test, databaseBridge);
             exportarFCTestCommand = new ExportarFCTestCommand(test);
         }
