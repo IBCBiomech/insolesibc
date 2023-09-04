@@ -14,12 +14,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.CompilerServices;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Resources;
-using static System.Windows.Forms.AxHost;
 
 namespace insoles.UserControls
 {
@@ -218,7 +216,7 @@ namespace insoles.UserControls
             Tuple<double, double> firstPoint = firstFrame.totalCenter;
             x.Add(firstPoint.Item1);
             y.Add(firstPoint.Item2);
-            colors.Add(colormap.GetColor(firstFrame.totalPressure / FramePressures.maxPressure));
+            //colors.Add(colormap.GetColor(firstFrame.totalPressure / FramePressures.maxPressure));
             for (int i = index + 1; i < lastFrame; i++)
             {
                 if (data[i].totalCenter != null)
@@ -227,7 +225,7 @@ namespace insoles.UserControls
                     Tuple<double, double> point = frame.totalCenter;
                     x.Add(point.Item1);
                     y.Add(point.Item2);
-                    colors.Add(colormap.GetColor(frame.totalPressure / FramePressures.maxPressure));
+                    //colors.Add(colormap.GetColor(frame.totalPressure / FramePressures.maxPressure));
                 }
             }
             await DrawData(x, y, colors);
@@ -252,6 +250,8 @@ namespace insoles.UserControls
             {
                 y[i] = y_list[i] * scaleY;
             }
+            plot.Plot.AddScatterLines(x, y, Color.Black);
+            /*
             for (int i = 0; i < Math.Min(x.Length, y.Length) - 1; i++)
             {
 #if ALPHA
@@ -262,6 +262,7 @@ namespace insoles.UserControls
                 plot.Plot.AddScatterLines(new double[] { x[i], x[i + 1] }, new double[] { y[i], y[i + 1] },
                     color);
             }
+            */
             await Application.Current.Dispatcher.BeginInvoke(new Action(() =>
             {
                     plot.Refresh();
