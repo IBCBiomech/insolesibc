@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using insoles.States;
 using System.Windows;
 using System.Windows.Input;
+using insoles.Messages;
 
 namespace insoles.UserControls
 {
@@ -25,11 +26,8 @@ namespace insoles.UserControls
         private HSpan line;
         private double pos = 0;
         private const double PERCENT_WIDTH = 0.5;
-        private double width = 0.5;
-        private double minX = 0;
-        private double maxX = 100;
-        private double minY = 0;
-        private double maxY = 1;
+        private double min = 0;
+        private double max;
         private double lastTime;
         private double MIN_CHANGE_TO_NOTIFY;
 
@@ -108,6 +106,7 @@ namespace insoles.UserControls
         }
         public void ChangeLimits(double max)
         {
+            this.max = max;
             slider.Maximum = max;
             slider.TickFrequency = Math.Round(slider.Maximum / 10);
         }
@@ -129,6 +128,16 @@ namespace insoles.UserControls
 
                 e.Handled = true; // Set to true to prevent default slider behavior
             }
+        }
+        public void ChangeRange(GraphRange graphRange)
+        {
+            slider.Minimum = graphRange.first * TICK_MS / 1000.0;
+            slider.Maximum = graphRange.last * TICK_MS / 1000.0;
+        }
+        public void ClearRange()
+        {
+            slider.Minimum = 0;
+            slider.Maximum = max;
         }
         /*
 private void slider_PreviewMouseMove(object sender, MouseEventArgs e)

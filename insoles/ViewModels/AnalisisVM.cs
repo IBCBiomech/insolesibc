@@ -133,6 +133,7 @@ namespace insoles.ViewModel
             };
             grf.GraphRangeChanged += async (GraphRange graphRange) =>
             {
+                timeLine.ChangeRange(graphRange);
                 if (graphData != null)
                 {
                     GraphData graphDataSubset = graphData.Subset(graphRange.first, graphRange.last);
@@ -157,6 +158,7 @@ namespace insoles.ViewModel
             };
             grf.GraphRangeCleared += async() =>
             {
+                timeLine.ClearRange();
                 await Task.Run(() => grafoMariposa.framePressuresRange = null);
                 await Task.Run(() => heatmap.pressure_maps_metrics_range = null);
             };
