@@ -16,6 +16,13 @@
                                                syncfusion:DockingManager.DesiredHeightInDockedMode="200"
                                                syncfusion:DockingManager.SideInDockedMode="Bottom"
                 Pacientes="{Binding Pacientes}"/>
+            <!--<userControls:EditorInformes  syncfusion:DockingManager.Header="Usuarios"
+                                               syncfusion:DockingManager.DesiredWidthInDockedMode="800"
+                                               syncfusion:DockingManager.DesiredHeightInDockedMode="200"
+                                               syncfusion:DockingManager.SideInDockedMode="Tabbed"></userControls:EditorInformes>-->
+
+            <syncfusion:RibbonWindow></syncfusion:RibbonWindow>
         </syncfusion:DockingManager>
+        
     </Grid>
 </UserControl>
