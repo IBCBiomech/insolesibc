@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "0UWzrlLgv40hYfV+P1RniSsAFWAOb90Y1p2r0n02ZzNqQdGpJfu/3juFg5viRyizkWXAlSI3ZqvEx3526/c4DQ==",
+  "dgSpecHash": "ZlBxEIGEk5/XC/4rRaRQJZAqJ19hUWcUv5LxoH9yHwc5VKCXDeb3MONSCnVjMUKUb2aq3ZXa6//leCy/czbhKg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Deva\\wsibc\\insolesibc\\insoles.Tests\\insoles.Tests.csproj",
   "expectedPackageFiles": [
@@ -77,6 +77,8 @@
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfgauge.wpf\\22.1.36\\syncfusion.sfgauge.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfgridcommon.wpf\\22.1.36\\syncfusion.sfgridcommon.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfinput.wpf\\22.1.36\\syncfusion.sfinput.wpf.22.1.36.nupkg.sha512",
+    "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfrichtextboxadv.wpf\\22.1.36\\syncfusion.sfrichtextboxadv.wpf.22.1.36.nupkg.sha512",
+    "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfrichtextribbon.wpf\\22.1.36\\syncfusion.sfrichtextribbon.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfskinmanager.wpf\\22.1.36\\syncfusion.sfskinmanager.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sftreeview.wpf\\22.1.36\\syncfusion.sftreeview.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.shared.wpf\\22.1.36\\syncfusion.shared.wpf.22.1.36.nupkg.sha512",
@@ -92,7 +94,7 @@
     "C:\\Users\\Deva\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\system.reflection\\4.3.0\\system.reflection.4.3.0.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\system.reflection.extensions\\4.3.0\\system.reflection.extensions.4.3.0.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.reflection.metadata\\1.6.0\\system.reflection.metadata.1.6.0.nupkg.sha512",
+    "C:\\Users\\Deva\\.nuget\\packages\\system.reflection.metadata\\1.6.0\\system.reflection.metadata.1.6.0.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\system.reflection.primitives\\4.3.0\\system.reflection.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\system.resources.resourcemanager\\4.3.0\\system.resources.resourcemanager.4.3.0.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\system.runtime\\4.3.1\\system.runtime.4.3.1.nupkg.sha512",

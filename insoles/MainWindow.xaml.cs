@@ -24,6 +24,8 @@ namespace insoles
     {
         public DatabaseBridge databaseBridge { get; set; }
         public AnalisisState analisisState { get; set; }
+
+        public InformesState informesState { get; set; }
         public IInformesGeneratorService informesGeneratorService { get; set; }
         public event EventHandler viewChanged;
 

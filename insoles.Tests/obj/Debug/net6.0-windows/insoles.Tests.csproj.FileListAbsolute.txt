@@ -242,3 +242,5 @@ C:\Users\Deva\wsibc\insolesibc\insoles.Tests\obj\Debug\net6.0-windows\refint\ins
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\obj\Debug\net6.0-windows\insoles.Tests.pdb
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\obj\Debug\net6.0-windows\insoles.Tests.genruntimeconfig.cache
 C:\Users\Deva\wsibc\insolesibc\insoles.Tests\obj\Debug\net6.0-windows\ref\insoles.Tests.dll
+C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\Syncfusion.SfRichTextBoxAdv.WPF.dll
+C:\Users\Deva\wsibc\insolesibc\insoles.Tests\bin\Debug\net6.0-windows\Syncfusion.SfRichTextRibbon.WPF.dll
