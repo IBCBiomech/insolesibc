@@ -79,6 +79,14 @@
               "target": "Package",
               "version": "[22.1.36, )"
             },
+            "Syncfusion.SfRichTextBoxAdv.WPF": {
+              "target": "Package",
+              "version": "[22.1.36, )"
+            },
+            "Syncfusion.SfRichTextRibbon.WPF": {
+              "target": "Package",
+              "version": "[22.1.36, )"
+            },
             "Syncfusion.SfSkinManager.WPF": {
               "target": "Package",
               "version": "[22.1.36, )"
@@ -280,6 +288,14 @@
               "version": "[22.1.36, )"
             },
             "Syncfusion.SfInput.WPF": {
+              "target": "Package",
+              "version": "[22.1.36, )"
+            },
+            "Syncfusion.SfRichTextBoxAdv.WPF": {
+              "target": "Package",
+              "version": "[22.1.36, )"
+            },
+            "Syncfusion.SfRichTextRibbon.WPF": {
               "target": "Package",
               "version": "[22.1.36, )"
             },

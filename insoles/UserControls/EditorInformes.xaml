@@ -3,10 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:insoles.UserControls"
+             xmlns:local="clr-namespace:insoles.UserControls" 
+             xmlns:vm="clr-namespace:insoles.ViewModel"
+             xmlns:Syncfusion="clr-namespace:Syncfusion.Windows.Controls.RichTextBoxAdv;assembly=Syncfusion.SfRichTextRibbon.WPF" 
+             xmlns:Syncfusion1="http://schemas.syncfusion.com/wpf"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <DocumentViewer x:Name="documentViewer" />
+             d:DesignHeight="450" d:DesignWidth="1024">
+   
+    <Grid x:Name="Root">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <Syncfusion1:SfRichTextBoxAdv Grid.Row="0"  Name="sfRichTextAdv"  />
+
     </Grid>
 </UserControl>

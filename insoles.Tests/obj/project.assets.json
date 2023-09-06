@@ -1503,6 +1503,48 @@
           }
         }
       },
+      "Syncfusion.SfRichTextBoxAdv.WPF/22.1.36": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Compression.Base": "22.1.36",
+          "Syncfusion.DocIO.Wpf": "22.1.36",
+          "Syncfusion.Licensing": "22.1.36",
+          "Syncfusion.OfficeChart.Base": "22.1.36",
+          "Syncfusion.Shared.WPF": "22.1.36"
+        },
+        "compile": {
+          "lib/net6.0-windows7.0/Syncfusion.SfRichTextBoxAdv.WPF.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Syncfusion.SfRichTextBoxAdv.WPF.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Syncfusion.SfRichTextRibbon.WPF/22.1.36": {
+        "type": "package",
+        "dependencies": {
+          "Syncfusion.Compression.Base": "22.1.36",
+          "Syncfusion.DocIO.Wpf": "22.1.36",
+          "Syncfusion.Licensing": "22.1.36",
+          "Syncfusion.OfficeChart.Base": "22.1.36",
+          "Syncfusion.SfRichTextBoxAdv.WPF": "22.1.36",
+          "Syncfusion.Shared.WPF": "22.1.36",
+          "Syncfusion.Tools.WPF": "22.1.36"
+        },
+        "compile": {
+          "lib/net6.0-windows7.0/Syncfusion.SfRichTextRibbon.WPF.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Syncfusion.SfRichTextRibbon.WPF.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Syncfusion.SfSkinManager.WPF/22.1.36": {
         "type": "package",
         "dependencies": {
@@ -2010,6 +2052,8 @@
           "Syncfusion.SfBusyIndicator.WPF": "22.1.36",
           "Syncfusion.SfGauge.WPF": "22.1.36",
           "Syncfusion.SfInput.WPF": "22.1.36",
+          "Syncfusion.SfRichTextBoxAdv.WPF": "22.1.36",
+          "Syncfusion.SfRichTextRibbon.WPF": "22.1.36",
           "Syncfusion.SfSkinManager.WPF": "22.1.36",
           "Syncfusion.SfTreeView.WPF": "22.1.36",
           "Syncfusion.Shared.WPF": "22.1.36",
@@ -3991,6 +4035,84 @@
         "tools/VisualStudioToolsManifest.xml"
       ]
     },
+    "Syncfusion.SfRichTextBoxAdv.WPF/22.1.36": {
+      "sha512": "2VI/kDAhYXjw+n7H2ZxG3+CMSLJQ0tFqx5aki0Xzsuk26i6KBxAAp9lP85VNy1EpQGgDEuUPb2jcV2oJqM62VA==",
+      "type": "package",
+      "path": "syncfusion.sfrichtextboxadv.wpf/22.1.36",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "lib/net40/Design/Syncfusion.SfRichTextBoxAdv.WPF.DesignTools.dll",
+        "lib/net40/Design/Syncfusion.SfRichTextBoxAdv.WPF.Expression.Design.dll",
+        "lib/net40/Design/Syncfusion.SfRichTextBoxAdv.WPF.VisualStudio.Design.dll",
+        "lib/net40/Syncfusion.SfRichTextBoxAdv.WPF.dll",
+        "lib/net40/Syncfusion.SfRichTextBoxAdv.WPF.xml",
+        "lib/net45/Design/Syncfusion.SfRichTextBoxAdv.WPF.DesignTools.dll",
+        "lib/net45/Design/Syncfusion.SfRichTextBoxAdv.WPF.Expression.Design.dll",
+        "lib/net45/Design/Syncfusion.SfRichTextBoxAdv.WPF.VisualStudio.Design.dll",
+        "lib/net45/Syncfusion.SfRichTextBoxAdv.WPF.dll",
+        "lib/net45/Syncfusion.SfRichTextBoxAdv.WPF.xml",
+        "lib/net451/Design/Syncfusion.SfRichTextBoxAdv.WPF.DesignTools.dll",
+        "lib/net451/Design/Syncfusion.SfRichTextBoxAdv.WPF.Expression.Design.dll",
+        "lib/net451/Design/Syncfusion.SfRichTextBoxAdv.WPF.VisualStudio.Design.dll",
+        "lib/net451/Syncfusion.SfRichTextBoxAdv.WPF.dll",
+        "lib/net451/Syncfusion.SfRichTextBoxAdv.WPF.xml",
+        "lib/net46/Design/Syncfusion.SfRichTextBoxAdv.WPF.DesignTools.dll",
+        "lib/net46/Design/Syncfusion.SfRichTextBoxAdv.WPF.Expression.Design.dll",
+        "lib/net46/Design/Syncfusion.SfRichTextBoxAdv.WPF.VisualStudio.Design.dll",
+        "lib/net46/Syncfusion.SfRichTextBoxAdv.WPF.dll",
+        "lib/net46/Syncfusion.SfRichTextBoxAdv.WPF.xml",
+        "lib/net6.0-windows7.0/Design/Syncfusion.SfRichTextBoxAdv.WPF.DesignTools.dll",
+        "lib/net6.0-windows7.0/Syncfusion.SfRichTextBoxAdv.WPF.dll",
+        "lib/net6.0-windows7.0/Syncfusion.SfRichTextBoxAdv.WPF.xml",
+        "syncfusion.sfrichtextboxadv.wpf.22.1.36.nupkg.sha512",
+        "syncfusion.sfrichtextboxadv.wpf.nuspec",
+        "syncfusion_logo.png",
+        "tools/VisualStudioToolsManifest.xml"
+      ]
+    },
+    "Syncfusion.SfRichTextRibbon.WPF/22.1.36": {
+      "sha512": "N9IZnWIGoDWCeit0e+nUWgCLbowQ3Dlr7nHbxNfdpw98ZktRickuGFLuK9/yY4KLfLhAZTK+Gtk1QGLxzGdgMA==",
+      "type": "package",
+      "path": "syncfusion.sfrichtextribbon.wpf/22.1.36",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.txt",
+        "README.md",
+        "lib/net40/Design/Syncfusion.SfRichTextRibbon.WPF.DesignTools.dll",
+        "lib/net40/Design/Syncfusion.SfRichTextRibbon.WPF.Expression.Design.dll",
+        "lib/net40/Design/Syncfusion.SfRichTextRibbon.WPF.VisualStudio.Design.dll",
+        "lib/net40/Syncfusion.SfRichTextRibbon.WPF.dll",
+        "lib/net40/Syncfusion.SfRichTextRibbon.WPF.xml",
+        "lib/net45/Design/Syncfusion.SfRichTextRibbon.WPF.DesignTools.dll",
+        "lib/net45/Design/Syncfusion.SfRichTextRibbon.WPF.Expression.Design.dll",
+        "lib/net45/Design/Syncfusion.SfRichTextRibbon.WPF.VisualStudio.Design.dll",
+        "lib/net45/Syncfusion.SfRichTextRibbon.WPF.dll",
+        "lib/net45/Syncfusion.SfRichTextRibbon.WPF.xml",
+        "lib/net451/Design/Syncfusion.SfRichTextRibbon.WPF.DesignTools.dll",
+        "lib/net451/Design/Syncfusion.SfRichTextRibbon.WPF.Expression.Design.dll",
+        "lib/net451/Design/Syncfusion.SfRichTextRibbon.WPF.VisualStudio.Design.dll",
+        "lib/net451/Syncfusion.SfRichTextRibbon.WPF.dll",
+        "lib/net451/Syncfusion.SfRichTextRibbon.WPF.xml",
+        "lib/net46/Design/Syncfusion.SfRichTextRibbon.WPF.DesignTools.dll",
+        "lib/net46/Design/Syncfusion.SfRichTextRibbon.WPF.Expression.Design.dll",
+        "lib/net46/Design/Syncfusion.SfRichTextRibbon.WPF.VisualStudio.Design.dll",
+        "lib/net46/Syncfusion.SfRichTextRibbon.WPF.dll",
+        "lib/net46/Syncfusion.SfRichTextRibbon.WPF.xml",
+        "lib/net6.0-windows7.0/Design/Syncfusion.SfRichTextRibbon.WPF.DesignTools.dll",
+        "lib/net6.0-windows7.0/Syncfusion.SfRichTextRibbon.WPF.dll",
+        "lib/net6.0-windows7.0/Syncfusion.SfRichTextRibbon.WPF.xml",
+        "syncfusion.sfrichtextribbon.wpf.22.1.36.nupkg.sha512",
+        "syncfusion.sfrichtextribbon.wpf.nuspec",
+        "syncfusion_logo.png",
+        "tools/VisualStudioToolsManifest.xml"
+      ]
+    },
     "Syncfusion.SfSkinManager.WPF/22.1.36": {
       "sha512": "Mnr43S8OdOfHqVwYlJQTA/b7dMHyssPGeVm+EMH7chHgtDgKVa9hMXYvEhfPFRkNXIN6WJBTF/Yi16ejtnCDjg==",
       "type": "package",
@@ -5488,6 +5610,8 @@
       "Syncfusion.DocIO.Wpf >= 22.1.36",
       "Syncfusion.Licensing >= 22.1.36",
       "Syncfusion.SfGauge.WPF >= 22.1.36",
+      "Syncfusion.SfRichTextBoxAdv.WPF >= 22.1.36",
+      "Syncfusion.SfRichTextRibbon.WPF >= 22.1.36",
       "Syncfusion.SfSkinManager.WPF >= 22.1.36",
       "Syncfusion.Shared.WPF >= 22.1.36",
       "coverlet.collector >= 3.2.0",
@@ -5572,6 +5696,14 @@
             "version": "[22.1.36, )"
           },
           "Syncfusion.SfGauge.WPF": {
+            "target": "Package",
+            "version": "[22.1.36, )"
+          },
+          "Syncfusion.SfRichTextBoxAdv.WPF": {
+            "target": "Package",
+            "version": "[22.1.36, )"
+          },
+          "Syncfusion.SfRichTextRibbon.WPF": {
             "target": "Package",
             "version": "[22.1.36, )"
           },

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "RMMtbwwkqA5L3brAjouq6ecyZvDcFqTqlS4Bvnw4hflcA50GAvdcLpG83WaCyiocN2Xgf6T+5yrIH23Qgo1tcQ==",
+  "dgSpecHash": "ZlBxEIGEk5/XC/4rRaRQJZAqJ19hUWcUv5LxoH9yHwc5VKCXDeb3MONSCnVjMUKUb2aq3ZXa6//leCy/czbhKg==",
   "success": true,
   "projectFilePath": "C:\\Users\\Deva\\wsibc\\insolesibc\\insoles.Tests\\insoles.Tests.csproj",
   "expectedPackageFiles": [
@@ -77,6 +77,8 @@
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfgauge.wpf\\22.1.36\\syncfusion.sfgauge.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfgridcommon.wpf\\22.1.36\\syncfusion.sfgridcommon.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfinput.wpf\\22.1.36\\syncfusion.sfinput.wpf.22.1.36.nupkg.sha512",
+    "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfrichtextboxadv.wpf\\22.1.36\\syncfusion.sfrichtextboxadv.wpf.22.1.36.nupkg.sha512",
+    "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfrichtextribbon.wpf\\22.1.36\\syncfusion.sfrichtextribbon.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sfskinmanager.wpf\\22.1.36\\syncfusion.sfskinmanager.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.sftreeview.wpf\\22.1.36\\syncfusion.sftreeview.wpf.22.1.36.nupkg.sha512",
     "C:\\Users\\Deva\\.nuget\\packages\\syncfusion.shared.wpf\\22.1.36\\syncfusion.shared.wpf.22.1.36.nupkg.sha512",
