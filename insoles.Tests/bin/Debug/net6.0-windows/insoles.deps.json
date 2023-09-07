@@ -39,6 +39,8 @@
           "Syncfusion.SfBusyIndicator.WPF": "22.1.36",
           "Syncfusion.SfGauge.WPF": "22.1.36",
           "Syncfusion.SfInput.WPF": "22.1.36",
+          "Syncfusion.SfRichTextBoxAdv.WPF": "22.1.36",
+          "Syncfusion.SfRichTextRibbon.WPF": "22.1.36",
           "Syncfusion.SfSkinManager.WPF": "22.1.36",
           "Syncfusion.SfTreeView.WPF": "22.1.36",
           "Syncfusion.Shared.WPF": "22.1.36",
@@ -1009,6 +1011,38 @@
           }
         }
       },
+      "Syncfusion.SfRichTextBoxAdv.WPF/22.1.36": {
+        "dependencies": {
+          "Syncfusion.Compression.Base": "22.1.36",
+          "Syncfusion.DocIO.Wpf": "22.1.36",
+          "Syncfusion.Licensing": "22.1.36",
+          "Syncfusion.OfficeChart.Base": "22.1.36",
+          "Syncfusion.Shared.WPF": "22.1.36"
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Syncfusion.SfRichTextBoxAdv.WPF.dll": {
+            "assemblyVersion": "22.1.36.0",
+            "fileVersion": "22.1.36.0"
+          }
+        }
+      },
+      "Syncfusion.SfRichTextRibbon.WPF/22.1.36": {
+        "dependencies": {
+          "Syncfusion.Compression.Base": "22.1.36",
+          "Syncfusion.DocIO.Wpf": "22.1.36",
+          "Syncfusion.Licensing": "22.1.36",
+          "Syncfusion.OfficeChart.Base": "22.1.36",
+          "Syncfusion.SfRichTextBoxAdv.WPF": "22.1.36",
+          "Syncfusion.Shared.WPF": "22.1.36",
+          "Syncfusion.Tools.WPF": "22.1.36"
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/Syncfusion.SfRichTextRibbon.WPF.dll": {
+            "assemblyVersion": "22.1.36.0",
+            "fileVersion": "22.1.36.0"
+          }
+        }
+      },
       "Syncfusion.SfSkinManager.WPF/22.1.36": {
         "dependencies": {
           "Syncfusion.Licensing": "22.1.36"
@@ -1762,6 +1796,20 @@
       "sha512": "sha512-CNBsvdZp8kQ+aF//qXyWXYdUyhQcwd90qN3t8XGiCCzVzC3SJQNodgE/rH4PYGE7x34uqVZMMRC3wOt+Vf0CsA==",
       "path": "syncfusion.sfinput.wpf/22.1.36",
       "hashPath": "syncfusion.sfinput.wpf.22.1.36.nupkg.sha512"
+    },
+    "Syncfusion.SfRichTextBoxAdv.WPF/22.1.36": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-2VI/kDAhYXjw+n7H2ZxG3+CMSLJQ0tFqx5aki0Xzsuk26i6KBxAAp9lP85VNy1EpQGgDEuUPb2jcV2oJqM62VA==",
+      "path": "syncfusion.sfrichtextboxadv.wpf/22.1.36",
+      "hashPath": "syncfusion.sfrichtextboxadv.wpf.22.1.36.nupkg.sha512"
+    },
+    "Syncfusion.SfRichTextRibbon.WPF/22.1.36": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-N9IZnWIGoDWCeit0e+nUWgCLbowQ3Dlr7nHbxNfdpw98ZktRickuGFLuK9/yY4KLfLhAZTK+Gtk1QGLxzGdgMA==",
+      "path": "syncfusion.sfrichtextribbon.wpf/22.1.36",
+      "hashPath": "syncfusion.sfrichtextribbon.wpf.22.1.36.nupkg.sha512"
     },
     "Syncfusion.SfSkinManager.WPF/22.1.36": {
       "type": "package",

@@ -51,8 +51,11 @@ namespace insoles.ViewModel
         private GraphData graphData;
 
         object drawingHeatmaplock = new object();
+
         public AnalisisVM()
         {
+
+
             state = new AnalisisState();
             ((MainWindow)Application.Current.MainWindow).analisisState = state; // Cambiar despues
             timeLine = new TimeLine(state);

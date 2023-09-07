@@ -5,13 +5,12 @@
     <RestoreTool Condition=" '$(RestoreTool)' == '' ">NuGet</RestoreTool>
     <ProjectAssetsFile Condition=" '$(ProjectAssetsFile)' == '' ">$(MSBuildThisFileDirectory)project.assets.json</ProjectAssetsFile>
     <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">$(UserProfile)\.nuget\packages\</NuGetPackageRoot>
-    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\Deva\.nuget\packages\;C:\Program Files\DevExpress 23.1\Components\Offline Packages;C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages;C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\21.1.35\ToolboxNuGetPackages;C:\Program Files\dotnet\sdk\NuGetFallbackFolder</NuGetPackageFolders>
+    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\Deva\.nuget\packages\;C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages;C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\21.1.35\ToolboxNuGetPackages;C:\Program Files\dotnet\sdk\NuGetFallbackFolder</NuGetPackageFolders>
     <NuGetProjectStyle Condition=" '$(NuGetProjectStyle)' == '' ">PackageReference</NuGetProjectStyle>
-    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.6.0</NuGetToolVersion>
+    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.7.0</NuGetToolVersion>
   </PropertyGroup>
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <SourceRoot Include="C:\Users\Deva\.nuget\packages\" />
-    <SourceRoot Include="C:\Program Files\DevExpress 23.1\Components\Offline Packages\" />
     <SourceRoot Include="C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages\" />
     <SourceRoot Include="C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\21.1.35\ToolboxNuGetPackages\" />
     <SourceRoot Include="C:\Program Files\dotnet\sdk\NuGetFallbackFolder\" />
@@ -29,6 +28,8 @@
     <PkgSyncfusion_Tools_WPF Condition=" '$(PkgSyncfusion_Tools_WPF)' == '' ">C:\Users\Deva\.nuget\packages\syncfusion.tools.wpf\22.1.36</PkgSyncfusion_Tools_WPF>
     <PkgSyncfusion_SfBusyIndicator_WPF Condition=" '$(PkgSyncfusion_SfBusyIndicator_WPF)' == '' ">C:\Users\Deva\.nuget\packages\syncfusion.sfbusyindicator.wpf\22.1.36</PkgSyncfusion_SfBusyIndicator_WPF>
     <PkgSyncfusion_SfTreeView_WPF Condition=" '$(PkgSyncfusion_SfTreeView_WPF)' == '' ">C:\Users\Deva\.nuget\packages\syncfusion.sftreeview.wpf\22.1.36</PkgSyncfusion_SfTreeView_WPF>
+    <PkgSyncfusion_SfRichTextBoxAdv_WPF Condition=" '$(PkgSyncfusion_SfRichTextBoxAdv_WPF)' == '' ">C:\Users\Deva\.nuget\packages\syncfusion.sfrichtextboxadv.wpf\22.1.36</PkgSyncfusion_SfRichTextBoxAdv_WPF>
+    <PkgSyncfusion_SfRichTextRibbon_WPF Condition=" '$(PkgSyncfusion_SfRichTextRibbon_WPF)' == '' ">C:\Users\Deva\.nuget\packages\syncfusion.sfrichtextribbon.wpf\22.1.36</PkgSyncfusion_SfRichTextRibbon_WPF>
     <PkgSyncfusion_SfInput_WPF Condition=" '$(PkgSyncfusion_SfInput_WPF)' == '' ">C:\Users\Deva\.nuget\packages\syncfusion.sfinput.wpf\22.1.36</PkgSyncfusion_SfInput_WPF>
     <PkgSyncfusion_SfGauge_WPF Condition=" '$(PkgSyncfusion_SfGauge_WPF)' == '' ">C:\Users\Deva\.nuget\packages\syncfusion.sfgauge.wpf\22.1.36</PkgSyncfusion_SfGauge_WPF>
     <PkgScottPlot_WPF Condition=" '$(PkgScottPlot_WPF)' == '' ">C:\Users\Deva\.nuget\packages\scottplot.wpf\4.1.64</PkgScottPlot_WPF>
