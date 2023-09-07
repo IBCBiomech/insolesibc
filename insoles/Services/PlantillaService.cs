@@ -21,11 +21,14 @@ namespace insoles.Services
         private ICodesService codes { get; set; }
         public PlantillaService(ICodesService codes)
         {
-            Uri uri = new Uri("pack://application:,,,/Images/bitmap_reduced2.png");
+            Uri uri = new Uri("pack://application:,,,/Images/bitmap_reduced.png");
             StreamResourceInfo sri = Application.GetResourceStream(uri);
             Stream stream = sri.Stream;
             Bitmap bmp = new Bitmap(stream);
             sensor_map = MathNetHelpers.ImageToMatrix(bmp);
+
+            IRetocarPlantillaService retocarPlantillaService = new RetocarPlantillaReducedService(codes);
+            sensor_map = retocarPlantillaService.retocar(sensor_map);
 
             this.codes = codes;
             length[0] = sensor_map.RowCount;
