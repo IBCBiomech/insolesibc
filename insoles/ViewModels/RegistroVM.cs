@@ -182,10 +182,6 @@ namespace insoles.ViewModel
             {
                 if (index == 0)
                 {
-                    Application.Current.Dispatcher.BeginInvoke(() =>
-                    {
-                        CurrentFrameTop = FormatConversions.ToBitmapSource(frame);
-                    });
                     if (state.recording)
                     {
                         saveService.AppendVideo(frame, index);
@@ -194,13 +190,14 @@ namespace insoles.ViewModel
                             stopwatch.Restart();
                         }
                     }
+                    Application.Current.Dispatcher.BeginInvoke(() =>
+                    {
+                        CurrentFrameTop = FormatConversions.ToBitmapSource(frame);
+                        frame.Dispose();
+                    });
                 }
                 else if(index == 1)
                 {
-                    Application.Current.Dispatcher.BeginInvoke(() =>
-                    {
-                        CurrentFrameBottom = FormatConversions.ToBitmapSource(frame);
-                    });
                     if (state.recording)
                     {
                         saveService.AppendVideo(frame, index);
@@ -209,6 +206,11 @@ namespace insoles.ViewModel
                             stopwatch.Restart();
                         }
                     }
+                    Application.Current.Dispatcher.BeginInvoke(() =>
+                    {
+                        CurrentFrameBottom = FormatConversions.ToBitmapSource(frame);
+                        frame.Dispose();
+                    });
                 }
             };
             apiService.DataReceived += (byte handler, List<InsoleData> packet) =>
