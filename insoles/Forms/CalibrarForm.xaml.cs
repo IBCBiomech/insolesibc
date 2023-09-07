@@ -21,14 +21,16 @@ namespace insoles.Forms
     /// </summary>
     public partial class CalibrarForm : Window
     {
-        public CalibrarStartCommand calibrarCommand { get; set; }
+        public CalibrarLeftStartCommand calibrarLeftCommand { get; set; }
+        public CalibrarRightStartCommand calibrarRightCommand { get; set; }
         public CalibrarResetCommand resetCommand { get; set; }
         public RegistroState state { get; set; }
         public CalibrarForm(RegistroState state)
         {
             InitializeComponent();
             this.state = state;
-            calibrarCommand = new CalibrarStartCommand(state);
+            calibrarLeftCommand = new CalibrarLeftStartCommand(state);
+            calibrarRightCommand = new CalibrarRightStartCommand(state);
             resetCommand = new CalibrarResetCommand(state);
             DataContext = this;
         }

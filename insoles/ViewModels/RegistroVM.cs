@@ -223,34 +223,30 @@ namespace insoles.ViewModel
             {
                 state.lastLeft = metricLeft[metricLeft.Length - 1];
                 state.lastRight = metricRight[metricRight.Length - 1];
-                if (state.calibrating)
+                if (state.calibratingLeft)
                 {
                     for (int i = 0; i < metricLeft.Length; i++)
                     {
                         state.weightsLeft.Add(metricLeft[i]);
                     }
-                    for(int i = 0; i < metricRight.Length; i++)
+                    if(state.weightsLeft.Count > FRAMES_TO_CALIBRATE)
+                    {
+                        state.avgLeft = state.weightsLeft.Average();
+                        state.weightsLeft.Clear();
+                        state.calibratingLeft = false;
+                    }
+                }
+                if (state.calibratingRight)
+                {
+                    for (int i = 0; i < metricRight.Length; i++)
                     {
                         state.weightsRight.Add(metricRight[i]);
                     }
-                    if(state.weightsLeft.Count > FRAMES_TO_CALIBRATE)
+                    if (state.weightsRight.Count > FRAMES_TO_CALIBRATE)
                     {
-                        float avgLeft = state.weightsLeft.Average();
-                        float avgRight = state.weightsRight.Average();
-                        if(avgLeft > avgRight)
-                        {
-                            state.fcLeft = 1;
-                            state.fcRight = avgLeft / avgRight;
-                        }
-                        else
-                        {
-                            state.fcLeft = avgRight / avgLeft;
-                            state.fcRight = 1;
-                        }
-                        Trace.WriteLine("calibrated " + state.fcLeft + " " + state.fcRight);
-                        state.weightsLeft.Clear();
+                        state.avgRight = state.weightsRight.Average();
                         state.weightsRight.Clear();
-                        state.calibrating = false;
+                        state.calibratingRight = false;
                     }
                 }
                 if (state.normalizing)

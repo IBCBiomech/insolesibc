@@ -16,6 +16,7 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24">L</Label>
         <Label Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24">R</Label>
@@ -33,9 +34,13 @@
                                    Value="{Binding state.lastRight, StringFormat={}{0:F2}}"/>
         <Button Grid.Row="2" Grid.Column="0"
                 HorizontalAlignment="Center" VerticalAlignment="Center"
-                Content="Calibrate"
-                Command="{Binding calibrarCommand}"/>
+                Content="Calibrate Left"
+                Command="{Binding calibrarLeftCommand}"/>
         <Button Grid.Row="2" Grid.Column="1"
+                HorizontalAlignment="Center" VerticalAlignment="Center"
+                Content="Calibrate Right"
+                Command="{Binding calibrarRightCommand}"/>
+        <Button Grid.Row="3" Grid.ColumnSpan="2"
                 HorizontalAlignment="Center" VerticalAlignment="Center"
                 Content="Reset"
                 Command="{Binding resetCommand}"/>

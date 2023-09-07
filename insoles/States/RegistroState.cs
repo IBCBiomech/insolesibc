@@ -19,11 +19,17 @@ namespace insoles.States
         public bool capturing { get { return _capturing; } set { _capturing = value; OnPropertyChanged(); } }
         private bool _recording = false;
         public bool recording { get { return _recording; } set { _recording = value; OnPropertyChanged(); } }
-        private bool _calibrating = false;
-        public bool calibrating
+        private bool _calibratingLeft = false;
+        public bool calibratingLeft
         {
-            get { return _calibrating; }
-            set { _calibrating = value; OnPropertyChanged(); }
+            get { return _calibratingLeft; }
+            set { _calibratingLeft = value; OnPropertyChanged(); }
+        }
+        private bool _calibratingRight = false;
+        public bool calibratingRight
+        {
+            get { return _calibratingRight; }
+            set { _calibratingRight = value; OnPropertyChanged(); }
         }
         private bool _normalizing = false;
         public bool normalizing { get { return _normalizing; } set { _normalizing = value; OnPropertyChanged(); } }
@@ -38,6 +44,79 @@ namespace insoles.States
         public float? fcRight { get; set; } = null;
         public List<float> weightsLeft { get; set; } = new List<float>();
         public List<float> weightsRight { get; set; } = new List<float>();
+        private float? avgLeft_ { get; set; } = null;
+        private float? avgRight_ { get; set; } = null;
+        public float? avgLeft {
+            get
+            {
+                return avgLeft_;
+            }
+            set
+            {
+                avgLeft_ = value;
+                if(value == null)
+                {
+                    if(fcLeft != null)
+                    {
+                        fcLeft = null;
+                    }
+                    if(fcRight != null)
+                    {
+                        fcRight = null;
+                    }
+                }
+                else
+                {
+                    if(avgRight != null)
+                    {
+                        CalculateFCs();
+                    }
+                }
+            } 
+        }
+        public float? avgRight
+        {
+            get
+            {
+                return avgRight_;
+            }
+            set
+            {
+                avgRight_ = value;
+                if (value == null)
+                {
+                    if (fcLeft != null)
+                    {
+                        fcLeft = null;
+                    }
+                    if (fcRight != null)
+                    {
+                        fcRight = null;
+                    }
+                }
+                else
+                {
+                    if (avgLeft != null)
+                    {
+                        CalculateFCs();
+                    }
+                }
+            }
+        }
+        private void CalculateFCs()
+        {
+            if (avgLeft > avgRight)
+            {
+                fcLeft = 1;
+                fcRight = avgLeft / avgRight;
+            }
+            else
+            {
+                fcLeft = avgRight / avgLeft;
+                fcRight = 1;
+            }
+            Trace.WriteLine("left " + fcLeft + " right " + fcRight);
+        }
         public int? firstIndex { get; set; } = null;
         public Paciente? selectedPaciente
         {
