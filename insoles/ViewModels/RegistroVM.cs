@@ -195,6 +195,8 @@ namespace insoles.ViewModel
                         CurrentFrameTop = FormatConversions.ToBitmapSource(frame);
                         frame.Dispose();
                         GC.Collect();
+                        GC.WaitForPendingFinalizers();
+                        GC.Collect();
                     });
                 }
                 else if(index == 1)
@@ -211,6 +213,8 @@ namespace insoles.ViewModel
                     {
                         CurrentFrameBottom = FormatConversions.ToBitmapSource(frame);
                         frame.Dispose();
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
                         GC.Collect();
                     });
                 }
