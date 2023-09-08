@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -37,7 +38,7 @@ namespace insoles.Commands
         }
         private async Task TransformCSV(Test test)
         {
-            using (var reader = new StreamReader(test.csv))
+            using (var reader = new StreamReader(Environment.ExpandEnvironmentVariables(test.csv)))
             {
                 int headerLines = 5; //Hay un salto de linea al final del header
                 try
@@ -68,11 +69,14 @@ namespace insoles.Commands
                             }
                             dataHolder.AppendLine(string.Join(" ", numbers));
                         }
-                        string originalFileName = Path.GetFileNameWithoutExtension(test.csv);
-                        string originalExtension = Path.GetExtension(test.csv);
+                        Trace.WriteLine(test.csv);
+                        string originalPath = Environment.ExpandEnvironmentVariables(test.csv);
+                        Trace.WriteLine(originalPath);
+                        string originalFileName = Path.GetFileNameWithoutExtension(originalPath);
+                        string originalExtension = Path.GetExtension(originalPath);
 
                         string newFileName = originalFileName + "fc" + originalExtension;
-                        string filePath = Path.Combine(Path.GetDirectoryName(test.csv), newFileName);
+                        string filePath = Path.Combine(Path.GetDirectoryName(originalPath), newFileName);
                         await File.WriteAllTextAsync(filePath, dataHolder.ToString());
                     }
                 }
