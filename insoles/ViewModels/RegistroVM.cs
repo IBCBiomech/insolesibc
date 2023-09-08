@@ -290,9 +290,9 @@ namespace insoles.ViewModel
                         for (int i = 0; i < metricRight.Length; i++)
                         {
                             metricRight[i] *= state.fcRight.Value;
-                            foreach (Sensor sensor in left[i].Keys)
+                            foreach (Sensor sensor in right[i].Keys)
                             {
-                                left[i][sensor] *= state.fcRight.Value;
+                                right[i][sensor] *= state.fcRight.Value;
                             }
                         }
                     }
