@@ -23,6 +23,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Markup;
+using System.Windows.Threading;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace insoles.UserControls
@@ -74,6 +75,7 @@ namespace insoles.UserControls
         private int avg_ = int.MinValue;
         private int max_ = int.MinValue;
         private int min_ = int.MinValue;
+        private DispatcherTimer gcTimer;
         public int avg
         {
             get
@@ -169,11 +171,22 @@ namespace insoles.UserControls
                 NotifyPropertyChanged(nameof(graph_loaded));
                 if (value)
                 {
+                    gcTimer = new DispatcherTimer();
+                    gcTimer.Tick += (sender, e) =>
+                    {
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+                        GC.Collect();
+                    };
+                    gcTimer.Interval = TimeSpan.FromMilliseconds(500);
+                    gcTimer.Start();
                     if (graph_loaded)
                         DrawDataWPF(pressure_maps_live[Math.Min(frame, pressure_maps_live.Count - 1)], plot);
                 }
                 else
                 {
+                    gcTimer.Stop();
+                    gcTimer = null;
                     if (graph_loaded)
                         if (pressure_maps_metrics_range == null)
                         {
