@@ -9,6 +9,8 @@ using AForge.Video.DirectShow;
 using FilterCategory = DirectShowLib.FilterCategory;
 using System.Drawing;
 using Emgu.CV;
+using System.Windows.Threading;
+using System;
 
 namespace insoles.Services
 {
@@ -22,6 +24,7 @@ namespace insoles.Services
 
         public event ICameraService.FrameAvailableEventHandler FrameAvailable;
         public Dictionary<int, int> indicesMap = new Dictionary<int, int>();
+        private DispatcherTimer gcTimer;
         public CameraService()
         {
 
@@ -147,6 +150,13 @@ namespace insoles.Services
                     break;
                 }
             }
+            if (cameraStreams.Count == 1)
+            {
+                gcTimer = new DispatcherTimer();
+                gcTimer.Tick += (sender, e) => { GC.Collect(); }; 
+                gcTimer.Interval = TimeSpan.FromSeconds(1); 
+                gcTimer.Start();
+            }
         }
         public void InvokeFrameAvailable(int index, Mat frame)
         {
@@ -196,6 +206,11 @@ namespace insoles.Services
                     indicesMap.Remove(index);
                     break;
                 }             
+            }
+            if (cameraStreams.Count == 0)
+            {
+                gcTimer.Stop();
+                gcTimer = null;
             }
         }
     }
