@@ -323,6 +323,14 @@ namespace insoles.UserControls
             scaleY = PLANTILLA_HEIGHT / plantilla.getLength(1);
             DataContext = this;
             plot.Plot.Style(dataBackground: Color.Gray);
+            plot.SizeChanged += (s, e) =>
+            {
+                plot.Plot.SetInnerViewLimits(xMin, xMax, yMin, yMax);
+                plot.Plot.SetOuterViewLimits(yMin: 0);
+
+                plot.Plot.SetAxisLimits(xMin, xMax, yMin, yMax);
+                plot.Plot.AxisScaleLock(true);
+            };
         }
         public Task UpdateLimits(GraphData data, float peso)
         {

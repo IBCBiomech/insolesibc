@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace insoles.Converters
+namespace insoles.Converter
 {
     [ValueConversion(typeof(int), typeof(string))]
     public class FractionConverter : IValueConverter

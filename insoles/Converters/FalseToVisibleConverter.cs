@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
-namespace insoles.Converters
+namespace insoles.Converter
 {
     [ValueConversion(typeof(bool), typeof(Visibility))]
     public class FalseToVisibleConverter : IValueConverter
