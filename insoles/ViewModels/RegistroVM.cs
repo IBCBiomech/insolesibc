@@ -251,6 +251,31 @@ namespace insoles.ViewModel
                         state.calibratingRight = false;
                     }
                 }
+                if (state.fcLeft != null && state.fcRight != null)
+                {
+                    if (state.fcLeft != 1)
+                    {
+                        for (int i = 0; i < metricLeft.Length; i++)
+                        {
+                            metricLeft[i] *= state.fcLeft.Value;
+                            foreach (Sensor sensor in left[i].Keys)
+                            {
+                                left[i][sensor] *= state.fcLeft.Value;
+                            }
+                        }
+                    }
+                    if (state.fcRight != 1)
+                    {
+                        for (int i = 0; i < metricRight.Length; i++)
+                        {
+                            metricRight[i] *= state.fcRight.Value;
+                            foreach (Sensor sensor in right[i].Keys)
+                            {
+                                right[i][sensor] *= state.fcRight.Value;
+                            }
+                        }
+                    }
+                }
                 if (state.normalizing)
                 {
                     float G = 9.80665f;
@@ -270,31 +295,6 @@ namespace insoles.ViewModel
                         fcs = new();
                         state.normalizing = false;
                         saveService.AddHeaderInfo("fc", fc.Value.ToString("F2", CultureInfo.InvariantCulture));
-                    }
-                }
-                if(state.fcLeft != null && state.fcRight != null)
-                {
-                    if (state.fcLeft != 1)
-                    {
-                        for (int i = 0; i < metricLeft.Length; i++)
-                        {
-                            metricLeft[i] *= state.fcLeft.Value;
-                            foreach (Sensor sensor in left[i].Keys)
-                            {
-                                left[i][sensor] *= state.fcLeft.Value;
-                            }
-                        }
-                    }
-                    if(state.fcRight != 1)
-                    {
-                        for (int i = 0; i < metricRight.Length; i++)
-                        {
-                            metricRight[i] *= state.fcRight.Value;
-                            foreach (Sensor sensor in right[i].Keys)
-                            {
-                                right[i][sensor] *= state.fcRight.Value;
-                            }
-                        }
                     }
                 }
                 List<Dictionary<Sensor, double>> left_pure = DeepCopy.Clone(left);
