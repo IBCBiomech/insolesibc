@@ -153,8 +153,13 @@ namespace insoles.Services
             if (cameraStreams.Count == 1)
             {
                 gcTimer = new DispatcherTimer();
-                gcTimer.Tick += (sender, e) => { GC.Collect(); }; 
-                gcTimer.Interval = TimeSpan.FromSeconds(1); 
+                gcTimer.Tick += (sender, e) => 
+                {
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                    GC.Collect();
+                }; 
+                gcTimer.Interval = TimeSpan.FromMilliseconds(500); 
                 gcTimer.Start();
             }
         }
