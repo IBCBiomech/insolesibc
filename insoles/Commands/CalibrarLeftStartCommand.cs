@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace insoles.Commands
@@ -22,6 +23,16 @@ namespace insoles.Commands
         public CalibrarLeftStartCommand(RegistroState state) 
         { 
             this.state = state;
+            state.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == "capturing" || e.PropertyName == "calibratingLeft" || e.PropertyName == "calibratingRight")
+                {
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        CommandManager.InvalidateRequerySuggested();
+                    });
+                }
+            };
         }
         public bool CanExecute(object? parameter)
         {
