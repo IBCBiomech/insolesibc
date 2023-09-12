@@ -36,6 +36,10 @@ namespace insoles.Services
             string filename = year + month + day + '-' + hour + '-' + minute + '-' + second + '-' + milisecond;
             return filename;
         }
+
+        /**
+         * Método para generar infornme
+         */
         public async Task<string> GenerarInforme()
         {
             grf.rangePlot.Plot.SaveFig("range.png");

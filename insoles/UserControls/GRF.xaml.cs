@@ -232,7 +232,9 @@ namespace insoles.UserControls
             rangePlot.Plot.Style(ScottPlot.Style.Seaborn);
             rangePlot.Plot.Palette = ScottPlot.Palette.Amber;
 
-            normPlot.Plot.Title("Normalization Plot");
+            normPlot.Plot.Title("Vertical Ground Reaction Forces");
+            normPlot.Plot.XAxis.Label("Time in Seconds");
+            normPlot.Plot.YAxis.Label("Newtons/Kg");
             normPlot.Plot.Style(ScottPlot.Style.Seaborn);
             normPlot.Plot.Palette = ScottPlot.Palette.Amber;
 
@@ -539,25 +541,23 @@ namespace insoles.UserControls
         {
             normPlot.Plot.Clear();
             rangePlot.Plot.Clear();
-            //plot.Plot.Remove(hspan);
+            plot.Plot.Remove(hspan);
 
             normPlot.Render();
             rangePlot.Render();
             plot.Render();
-            curvesL.Clear();
-            //curvaMediaL.Clear();
-            //curvaStL.Clear();
-            //curvaMediaL.Clear();
-            curvesR.Clear();
-            curvaMediaR.Clear();
-            curvaStR.Clear();
-            curvaMediaR.Clear();
+            curvesL?.Clear();
+            curvaStL?.Clear();
+            curvaMediaL?.Clear();
+            curvesR?.Clear();
+            curvaStR?.Clear();
+            curvaMediaR?.Clear();
 
             GraphRangeCleared?.Invoke();
         }
 
             
-
+        // Calcula el rango de ambas curvas L y R 
         private void RangeButton_Click(object sender, RoutedEventArgs e)
         {
             Trace.WriteLine($"X1: {XPoints[0]:F2} X2: {XPoints[1]:F2}");
@@ -573,11 +573,11 @@ namespace insoles.UserControls
             }
            else
             {
-                startL = xs_left_N_FC.IndexOf(Math.Round(XPoints[0], 2));
-                endL = xs_left_N_FC.IndexOf(Math.Round(XPoints[1], 2));
+                startL = xs_left_N_FC.IndexOf(Math.Round(XPoints[0] + 0.5, 2));
+                endL = xs_left_N_FC.IndexOf(Math.Round(XPoints[1] - 0.5, 2));
 
-                List<double> xs_left = xs_left_N_FC.GetRange(startL, endL - startL);
-                List<double> ys_left = ys_left_N_FC.GetRange(startL, endL - startL);
+                List<double> xs_left = xs_left_N_FC.GetRange(startL,  endL - startL); 
+                List<double> ys_left = ys_left_N_FC.GetRange(startL, endL -  startL );
 
                 ys_left_array = Ns.Butterworth(ys_left.ToArray(), 0.01, 6.0);
 
