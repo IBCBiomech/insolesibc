@@ -32,6 +32,7 @@
     <None Remove="Images\green-circle-icon.png" />
     <None Remove="Images\Home_Icon.png" />
     <None Remove="Images\home_page.png" />
+    <None Remove="Images\ibc.png" />
     <None Remove="Images\img_customer.png" />
     <None Remove="Images\img_home.png" />
     <None Remove="Images\img_order.png" />
@@ -46,6 +47,7 @@
     <None Remove="Images\red-circle-icon.png" />
     <None Remove="Images\reload-sync-icon.png" />
     <None Remove="Images\reset_dock_icon.png" />
+    <None Remove="Images\seat.png" />
     <None Remove="Images\shipment_page.png" />
     <None Remove="Images\shutdown_def.png" />
     <None Remove="Images\shutdown_mo.png" />
@@ -172,6 +174,9 @@
     <Resource Include="Images\home_page.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Images\ibc.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\img_customer.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -209,6 +214,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\reset_dock_icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\seat.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\shipment_page.png">
