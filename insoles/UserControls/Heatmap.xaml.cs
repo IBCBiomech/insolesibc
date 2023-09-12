@@ -171,6 +171,7 @@ namespace insoles.UserControls
                 NotifyPropertyChanged(nameof(graph_loaded));
                 if (value)
                 {
+                    /*
                     gcTimer = new DispatcherTimer();
                     gcTimer.Tick += (sender, e) =>
                     {
@@ -180,13 +181,16 @@ namespace insoles.UserControls
                     };
                     gcTimer.Interval = TimeSpan.FromMilliseconds(500);
                     gcTimer.Start();
+                    */
                     if (graph_loaded)
                         DrawDataWPF(pressure_maps_live[Math.Min(frame, pressure_maps_live.Count - 1)], plot);
                 }
                 else
                 {
+                    /*
                     gcTimer.Stop();
                     gcTimer = null;
+                    */
                     if (graph_loaded)
                         if (pressure_maps_metrics_range == null)
                         {

@@ -150,6 +150,7 @@ namespace insoles.Services
                     break;
                 }
             }
+            /*
             if (cameraStreams.Count == 1)
             {
                 gcTimer = new DispatcherTimer();
@@ -162,6 +163,7 @@ namespace insoles.Services
                 gcTimer.Interval = TimeSpan.FromMilliseconds(500); 
                 gcTimer.Start();
             }
+            */
         }
         public void InvokeFrameAvailable(int index, Mat frame)
         {
@@ -212,11 +214,13 @@ namespace insoles.Services
                     break;
                 }             
             }
+            /*
             if (cameraStreams.Count == 0)
             {
                 gcTimer.Stop();
                 gcTimer = null;
             }
+            */
         }
     }
 }
