@@ -450,36 +450,6 @@ namespace insoles.UserControls
         }
         private void StdDevButton1_Click(object sender, RoutedEventArgs e)
         {
-            //double FirstClosest = FindClosest(xs_temp_left, XPoints[0]);
-            //double LastClosest = FindClosest(xs_temp_left, XPoints[1]);
-
-            //int indexFirstClosest = xs_temp_left.IndexOf(FirstClosest);
-            //int indexLastClosest = xs_temp_left.IndexOf(LastClosest);
-
-            //List<double> listXleft = xs_temp_left.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
-            //List<double> listYleft = ys_temp_left.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
-
-            //double[] dataXleft = listXleft.ToArray();
-            //double[] dataYleft = listYleft.ToArray();
-
-            //double[] stddevleft = StdDevCalculation(listYleft);
-            //leftInsolePlot = rangePlot.Plot.AddScatterLines(dataXleft, dataYleft, System.Drawing.Color.DarkOrange, 2);
-            //rangePlot.Plot.AddFillError(dataXleft, dataYleft, stddevleft, System.Drawing.Color.FromArgb(50, System.Drawing.Color.Green));
-
-
-
-            //List<double> listXright = xs_temp_right.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
-            //List<double> listYright = ys_temp_right.GetRange(indexFirstClosest, (indexLastClosest - indexFirstClosest));
-
-            //double[] dataXright = listXright.ToArray();
-            //double[] dataYright = listYright.ToArray();
-
-            //double[] stddevright = StdDevCalculation(listYright);
-            //rangePlot.Plot.AddScatterLines(dataXright, dataYright, System.Drawing.Color.DarkBlue, 2);
-            //rangePlot.Plot.AddFillError(dataXright, dataYright, stddevright, System.Drawing.Color.FromArgb(50, System.Drawing.Color.SkyBlue));
-
-            //rangePlot.Render();
-
             hspan = plot.Plot.AddHorizontalSpan(10, 30);
 
             XPoints[0] = FindClosest(xs_temp_left, hspan.X1);
@@ -564,6 +534,7 @@ namespace insoles.UserControls
             }
         }
 
+        // Borra los cálculos gráficos para la normalización
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
             normPlot.Plot.Clear();
@@ -574,9 +545,9 @@ namespace insoles.UserControls
             rangePlot.Render();
             plot.Render();
             curvesL.Clear();
-            curvaMediaL.Clear();
-            curvaStL.Clear();
-            curvaMediaL.Clear();
+            //curvaMediaL.Clear();
+            //curvaStL.Clear();
+            //curvaMediaL.Clear();
             curvesR.Clear();
             curvaMediaR.Clear();
             curvaStR.Clear();
@@ -585,23 +556,7 @@ namespace insoles.UserControls
             GraphRangeCleared?.Invoke();
         }
 
-        private void ClearGraphButton_Click(object sender, RoutedEventArgs e)
-        {
-
-            //grid.Children.Remove(rangePlot);
-
-            //foreach (var el in listOfVlabels)
-            //{
-            //    plot.Plot.Remove(el);
-            //}
-            //listOfVlabels.Clear();
-            //XPoints.Clear();
-            //plot.Render();
-            //rangePlot.Render();
             
-        }
-
-        
 
         private void RangeButton_Click(object sender, RoutedEventArgs e)
         {
@@ -644,119 +599,7 @@ namespace insoles.UserControls
 
         private void NormalizationButton_Click(object sender, RoutedEventArgs e)
         {
-            // Añadir los choques (heel_strikes) y la fase de salida (toes_off)
-            // con un threshold de 10
-
-            //for (int i = 0; i < ys_left_array.Length - 1; i++)
-            //{
-            //    if (ys_left_array[i] < 10 && ys_left_array[i + 1] > 10)
-            //    {
-            //        heel_strikes.Add(i + 1, ys_left_array[i + 1]);
-
-            //    }
-
-            //    if (ys_left_array[i] > 10 && ys_left_array[i + 1] < 10)
-            //    {
-            //        toes_off.Add(i, ys_left_array[i]);
-            //    }
-
-            //}
-
-            // Método que sustituye el código anterior
-            // Se le pasa el array y el threshold
-
-
-
-            // pintamos lineas verticales en el gráfico para los choques
-
-            //foreach (KeyValuePair<int, double> item in heel_strikes)
-            //{
-
-            //    double el = xs_left_N_FC[item.Key];
-
-            //    var vline = rangePlot.plt.AddVerticalLine(Math.Round(el, 2), color: System.Drawing.Color.Blue);
-
-            //    vline.PositionLabel = true;
-
-            //    rangePlot.Render();
-
-            //}
-
-            //// pintamos las líneas para las salidas
-            //foreach (KeyValuePair<int, double> item in toes_off)
-            //{
-
-            //    double el = xs_left_N_FC[item.Key];
-
-            //    var vline = rangePlot.plt.AddVerticalLine(Math.Round(el, 2), color: System.Drawing.Color.Yellow);
-
-            //    vline.PositionLabel = true;
-
-            //    rangePlot.Render();
-
-            //}
-
-
-            // Sacar las curvas
-            //for (var i = 0; i < toes_off.Count; i++)
-            //{
-            //    int init = heel_strikes.ElementAt(i).Key;
-            //    int end = toes_off.ElementAt(i).Key;
-            //    curves.Add(init, ys_left_array[init..end].ToList());
-
-            //}
-
-            //List<List<double>> curvasInterpoladas = new List<List<double>>();
-            //List<List<double>> tiemposInterpolados = new List<List<double>>();
-
-            //for (var i = 0; i < curves.Count(); i++)
-            //{
-            //    double[] second_curve = Ns.linspace(0, 99, curves.ElementAt(i).Value.Count);
-
-            //    (double[] xs, double[] ys) = stdgraph.Lib.CubicInterpol.InterpolateXY(second_curve, curves.ElementAt(i).Value.ToArray(), 100);
-            //    curvasInterpoladas.Add(ys.ToList());
-            //    tiemposInterpolados.Add(xs.ToList());
-            //}
-
-            //curvaMedia = new List<double>();
-            //curvaSt = new List<double>();
-            //curvaTime = new List<double>();
-
-            //for (int colIndex = 0; colIndex < 100; colIndex++)
-            //{
-            //    List<double> colAvg = new List<double>();
-            //    List<double> colTime = new List<double>();
-
-            //    foreach (List<double> item in curvasInterpoladas)
-            //    {
-            //        if (item.Count > colIndex)
-            //        {
-            //            colAvg.Add(item[colIndex]);
-
-            //        }
-            //    }
-
-            //    foreach (List<double> item in tiemposInterpolados)
-            //    {
-
-            //        if (item.Count > colIndex)
-            //        {
-            //            colTime.Add(item[colIndex]);
-            //        }
-
-            //    }
-
-            //    curvaMedia.Add(colAvg.Average());
-            //    curvaSt.Add(colAvg.StandardDeviation());
-            //    curvaTime.Add(colTime.Average());
-            //}
-
-            //(heel_strikesL, toes_offL) = Ns.CalculateHeelToes(ys_left_array, Threshold);
-
-            //Ns.AgregarLineasHeelToes(rangePlot, xs_left_N_FC, heel_strikesL, toes_offL, startL);
-
-            //(curvaMediaL, curvaStL, curvaTimeL) = Ns.CalcularNormCurvas(heel_strikesL, toes_offL, curvesL, ys_left_array);
-
+            
 
             (heel_strikesR, toes_offR) = Ns.CalculateHeelToes(ys_right_array, Threshold);
 
@@ -764,13 +607,26 @@ namespace insoles.UserControls
 
             (curvaMediaR, curvaStR, curvaTimeR) = Ns.CalcularNormCurvas(heel_strikesR, toes_offR, curvesR, ys_right_array);
 
-            //normPlot.Plot.AddScatterLines(curvaTimeL.ToArray(), curvaMediaL.ToArray(), System.Drawing.Color.Red, lineWidth: 3, label: "Average");
-            //normPlot.Plot.AddFillError(curvaTimeL.ToArray(), curvaMediaL.ToArray(), curvaStL.ToArray(), System.Drawing.Color.FromArgb(50, System.Drawing.Color.Red));
+            normPlot.Render();
+
 
             normPlot.Plot.AddScatterLines(curvaTimeR.ToArray(), curvaMediaR.ToArray(), System.Drawing.Color.Green, lineWidth: 3, label: "Average");
             normPlot.Plot.AddFillError(curvaTimeR.ToArray(), curvaMediaR.ToArray(), curvaStR.ToArray(), System.Drawing.Color.FromArgb(50, System.Drawing.Color.Green));
 
+            // para l
+            (heel_strikesL, toes_offL) = Ns.CalculateHeelToes(ys_left_array, Threshold);
+
+            Ns.AgregarLineasHeelToes(rangePlot, xs_left_N_FC, heel_strikesL, toes_offL, startL);
+
+            (curvaMediaL, curvaStL, curvaTimeL) = Ns.CalcularNormCurvas(heel_strikesL, toes_offL, curvesL, ys_left_array);
+
+
+            normPlot.Plot.AddScatterLines(curvaTimeL.ToArray(), curvaMediaL.ToArray(), System.Drawing.Color.Red, lineWidth: 3, label: "Average");
+            normPlot.Plot.AddFillError(curvaTimeL.ToArray(), curvaMediaL.ToArray(), curvaStL.ToArray(), System.Drawing.Color.FromArgb(50, System.Drawing.Color.Red));
+
+
             normPlot.Render();
+
 
             foreach (var kvp in heel_strikesL)
             {
@@ -785,52 +641,6 @@ namespace insoles.UserControls
         }
 
 
-        // Movido a InformesGeneratorService
-        /*
-        private void ClearGraphButton_Copy_Click(object sender, RoutedEventArgs e)
-        {
-            rangePlot.Plot.SaveFig("range.png");
-            plot.Plot.SaveFig("GRF.png");
-
-            // Creating a new document.
-            WordDocument document = new WordDocument();
-            //Adding a new section to the document.
-            WSection section = document.AddSection() as WSection;
-            //Set Margin of the section
-            section.PageSetup.Margins.All = 72;
-            //Set page size of the section
-            section.PageSetup.PageSize = new System.Drawing.SizeF(612, 792);
-
-
-
-            IWParagraph paragraph = section.HeadersFooters.Header.AddParagraph();
-
-            paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Left;
-            WTextRange textRange = paragraph.AppendText("InnerFEET Pressure Register Tool") as WTextRange;
-            textRange.CharacterFormat.FontSize = 12f;
-            textRange.CharacterFormat.FontName = "Calibri";
-
-            
-
-            //Appends paragraph.
-            paragraph = section.AddParagraph();
-            paragraph.ParagraphFormat.FirstLineIndent = 36;
-            paragraph.BreakCharacterFormat.FontSize = 12f;
-            textRange = paragraph.AppendText("A continuación se muestra un informe con el Gráfico de GRF:") as WTextRange;
-            textRange.CharacterFormat.FontSize = 12f;
-
-            // Gets the image stream.
-            IWPicture picture = paragraph.AppendPicture(new System.Drawing.Bitmap(@"GRF.png")) as WPicture;
-
-
-            textRange = paragraph.AppendText("A continuación se muestra un informe con el Gráfico de STDDEV:") as WTextRange;
-            IWPicture picture2 = paragraph.AppendPicture(new System.Drawing.Bitmap(@"Range.png")) as WPicture;
-
-
-            document.Save("Sample.docx");
-
-
-        }
-        */
+      
     }
 }
