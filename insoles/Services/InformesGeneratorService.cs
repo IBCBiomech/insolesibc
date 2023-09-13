@@ -1,13 +1,16 @@
 ﻿using insoles.UserControls;
 using ScottPlot;
+using Syncfusion.DocIO;
 using Syncfusion.DocIO.DLS;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace insoles.Services
@@ -36,6 +39,10 @@ namespace insoles.Services
             string filename = year + month + day + '-' + hour + '-' + minute + '-' + second + '-' + milisecond;
             return filename;
         }
+
+        /**
+         * Método para generar infornme
+         */
         public async Task<string> GenerarInforme()
         {
             grf.rangePlot.Plot.SaveFig("range.png");
@@ -47,50 +54,198 @@ namespace insoles.Services
             await heatmap.SaveFigs();
 
             // Creating a new document.
+
+
+
             WordDocument document = new WordDocument();
+
+            WParagraph paragraph = new WParagraph(document);
+
             //Adding a new section to the document.
             WSection section = document.AddSection() as WSection;
             //Set Margin of the section
             section.PageSetup.Margins.All = 72;
             //Set page size of the section
-            section.PageSetup.PageSize = new System.Drawing.SizeF(612, 792);
+            //section.PageSetup.PageSize = new System.Drawing.SizeF(612, 792);
 
 
+            paragraph = section.HeadersFooters.Header.AddParagraph() as WParagraph;
 
-            IWParagraph paragraph = section.HeadersFooters.Header.AddParagraph();
+            // Gets the image stream.
+            IWPicture seatpicture = paragraph.AppendPicture(System.Drawing.Image.FromFile(@"Images\seat.png"));
 
-            paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Left;
-            WTextRange textRange = paragraph.AppendText("InnerFEET Pressure Register Tool") as WTextRange;
+            IWTextRange textRange = paragraph.AppendText("\t\t\t\t\t\t\t\t");
+            IWPicture ibcpicture = paragraph.AppendPicture(new System.Drawing.Bitmap(@"Images\ibc.png"));
+
+
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+            textRange = paragraph.AppendText("SW. Salud y Seguridad en el Trabajo") as WTextRange;
             textRange.CharacterFormat.FontSize = 12f;
+            textRange.CharacterFormat.Bold = true;
+            textRange.CharacterFormat.FontName = "Calibri";
+            paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Center;
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+            textRange = paragraph.AppendText("INFORME DE VALORACIÓN BIOMECÁNICA") as WTextRange;
+            textRange.CharacterFormat.FontSize = 12f;
+            textRange.CharacterFormat.Bold = true;
+            textRange.CharacterFormat.FontName = "Calibri";
+
+            paragraph = (WParagraph)section.AddParagraph();
+            paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Left;
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+            //Nombre:
+
+
+            textRange = paragraph.AppendText("NOMBRE:") as WTextRange;
+            textRange.CharacterFormat.FontSize = 12f;
+            textRange.CharacterFormat.Bold = true;
+            textRange.CharacterFormat.FontName = "Calibri";
+            paragraph.AppendBreak(BreakType.LineBreak);
+
+            //NIS:
+            //Nombre:
+            textRange = paragraph.AppendText("NIS:") as WTextRange;
+            textRange.CharacterFormat.FontSize = 12f;
+            textRange.CharacterFormat.Bold = true;
+            textRange.CharacterFormat.FontName = "Calibri";
+            paragraph.AppendBreak(BreakType.LineBreak);
+            //Exploración:
+            //Nombre:
+            textRange = paragraph.AppendText("Exploración:") as WTextRange;
+            textRange.CharacterFormat.FontSize = 12f;
+            textRange.CharacterFormat.Bold = true;
+            textRange.CharacterFormat.FontName = "Calibri";
+            paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Left;
+            textRange = paragraph.AppendText("Test cinético de la marcha") as WTextRange;
+            textRange.CharacterFormat.FontSize = 12f;
+            textRange.CharacterFormat.Bold = false;
+            textRange.CharacterFormat.FontName = "Calibri";
+            paragraph.AppendBreak(BreakType.LineBreak);
+
+            //Fecha:
+            //Nombre:
+            textRange = paragraph.AppendText("Fecha:") as WTextRange;
+            textRange.CharacterFormat.FontSize = 12f;
+            textRange.CharacterFormat.Bold = true;
+            textRange.CharacterFormat.FontName = "Calibri";
+            paragraph.AppendBreak(BreakType.LineBreak);
+
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+
+            paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Center;
+            textRange = paragraph.AppendText("Los laboratorios de biomecánica de IBC poseen la autorización del Departament de Salut de la Generalitat de Catalunya con los códigos de registro: E08589869 y E08592300") as WTextRange;
+            textRange.CharacterFormat.FontSize = 12f;
+            textRange.CharacterFormat.Bold = false;
+            textRange.CharacterFormat.FontName = "Calibri";
+
+            paragraph.AppendBreak(BreakType.PageBreak);
+            paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Left;
+            textRange = (WTextRange)paragraph.AppendText("DATOS DEL PACIENTE");
+            textRange.CharacterFormat.FontSize = 12f;
+            textRange.CharacterFormat.Bold = true;
             textRange.CharacterFormat.FontName = "Calibri";
 
 
-
-            //Appends paragraph.
-            paragraph = section.AddParagraph();
-            paragraph.ParagraphFormat.FirstLineIndent = 36;
-            paragraph.BreakCharacterFormat.FontSize = 12f;
-            textRange = paragraph.AppendText("A continuación se muestra un informe con el Gráfico de GRF:") as WTextRange;
+            paragraph.AppendBreak(BreakType.PageBreak);
+            paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Left;
+            textRange = (WTextRange)paragraph.AppendText("1. HISTORIA CLÍNICA");
             textRange.CharacterFormat.FontSize = 12f;
+            textRange.CharacterFormat.Bold = true;
+            textRange.CharacterFormat.FontName = "Calibri";
 
-            // Gets the image stream.
-            IWPicture picture = paragraph.AppendPicture(new System.Drawing.Bitmap(@"GRF.png")) as WPicture;
+            paragraph.AppendBreak(BreakType.PageBreak);
+            textRange = (WTextRange)paragraph.AppendText("2. ANÁLISIS CINÉTICO DE LA MARCHA");
+            textRange.CharacterFormat.FontSize = 12f;
+            textRange.CharacterFormat.Bold = true;
+            textRange.CharacterFormat.FontName = "Calibri";
+
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
 
 
-            textRange = paragraph.AppendText("A continuación se muestra un informe con el Gráfico de STDDEV:") as WTextRange;
-            IWPicture picture2 = paragraph.AppendPicture(new System.Drawing.Bitmap(@"norm.png")) as WPicture;
+            textRange = (WTextRange)paragraph.AppendText("Intervalo de la marcha");
+            textRange.CharacterFormat.FontSize = 12f;
+            textRange.CharacterFormat.Bold = false;
+            textRange.CharacterFormat.FontName = "Calibri";
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+            IWPicture rango = paragraph.AppendPicture(System.Drawing.Image.FromFile(@"C:\Users\Deva\wsibc\insolesibc\insoles\bin\Debug\net6.0-windows\range.png"));
 
-            textRange = paragraph.AppendText("A continuación se muestra un informe con el Gráfico de Mariposa:") as WTextRange;
-            IWPicture picture3 = paragraph.AppendPicture(new System.Drawing.Bitmap(@"butterfly.png")) as WPicture;
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
 
-            textRange = paragraph.AppendText("A continuación se muestra un informe con el Gráfico de Presiones Maximo:") as WTextRange;
-            IWPicture picture4 = paragraph.AppendPicture(new System.Drawing.Bitmap(@"heatmap_max.png")) as WPicture;
+            textRange = (WTextRange)paragraph.AppendText("Total de la marcha");
+            textRange.CharacterFormat.FontSize = 12f;
+            textRange.CharacterFormat.Bold = false;
+            textRange.CharacterFormat.FontName = "Calibri";
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+            IWPicture total = paragraph.AppendPicture(System.Drawing.Image.FromFile(@"C:\Users\Deva\wsibc\insolesibc\insoles\bin\Debug\net6.0-windows\GRF.png"));
 
-            textRange = paragraph.AppendText("A continuación se muestra un informe con el Gráfico de Presiones Medio:") as WTextRange;
-            IWPicture picture5 = paragraph.AppendPicture(new System.Drawing.Bitmap(@"heatmap_avg.png")) as WPicture;
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
 
-            textRange = paragraph.AppendText("A continuación se muestra un informe con el Gráfico de Presiones Mínimo:") as WTextRange;
-            IWPicture picture6 = paragraph.AppendPicture(new System.Drawing.Bitmap(@"heatmap_min.png")) as WPicture;
+            textRange = (WTextRange)paragraph.AppendText("Distribución del centro de presiones");
+            textRange.CharacterFormat.FontSize = 12f;
+            textRange.CharacterFormat.Bold = false;
+            textRange.CharacterFormat.FontName = "Calibri";
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+            IWPicture butterfly = paragraph.AppendPicture(System.Drawing.Image.FromFile(@"C:\Users\Deva\wsibc\insolesibc\insoles\bin\Debug\net6.0-windows\butterfly.png"));
+
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+
+            textRange = (WTextRange)paragraph.AppendText("Distribución máxima");
+            textRange.CharacterFormat.FontSize = 12f;
+            textRange.CharacterFormat.Bold = false;
+            textRange.CharacterFormat.FontName = "Calibri";
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+            IWPicture maxpressure = paragraph.AppendPicture(System.Drawing.Image.FromFile(@"C:\Users\Deva\wsibc\insolesibc\insoles\bin\Debug\net6.0-windows\heatmap_max.png"));
+
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+
+            textRange = (WTextRange)paragraph.AppendText("Distribución media");
+            textRange.CharacterFormat.FontSize = 12f;
+            textRange.CharacterFormat.Bold = false;
+            textRange.CharacterFormat.FontName = "Calibri";
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+            IWPicture avgpressure = paragraph.AppendPicture(System.Drawing.Image.FromFile(@"C:\Users\Deva\wsibc\insolesibc\insoles\bin\Debug\net6.0-windows\heatmap_avg.png"));
+
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+
+            textRange = (WTextRange)paragraph.AppendText("Gráficas de fuerza normalizadas");
+            textRange.CharacterFormat.FontSize = 12f;
+            textRange.CharacterFormat.Bold = false;
+            textRange.CharacterFormat.FontName = "Calibri";
+            paragraph.AppendBreak(BreakType.LineBreak);
+            paragraph.AppendBreak(BreakType.LineBreak);
+            IWPicture grfnorm = paragraph.AppendPicture(System.Drawing.Image.FromFile(@"C:\Users\Deva\wsibc\insolesibc\insoles\bin\Debug\net6.0-windows\norm.png"));
+
+            paragraph.AppendBreak(BreakType.PageBreak);
+            paragraph.ParagraphFormat.HorizontalAlignment = Syncfusion.DocIO.DLS.HorizontalAlignment.Left;
+            textRange = (WTextRange)paragraph.AppendText("3. CONCLUSIONES");
+            textRange.CharacterFormat.FontSize = 12f;
+            textRange.CharacterFormat.Bold = true;
+            textRange.CharacterFormat.FontName = "Calibri";
 
             string path = @"%HOMEDRIVE%%HOMEPATH%\insoles";
             string filename = FileNameGenerator() + ".docx";
