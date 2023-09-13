@@ -192,7 +192,9 @@ namespace insoles.ViewModel
                     }
                     Application.Current.Dispatcher.BeginInvoke(() =>
                     {
-                        CurrentFrameTop = frame.ToBitmapSource();
+                        BitmapSource bitmapSource = frame.ToBitmapSource();
+                        bitmapSource.Freeze();
+                        CurrentFrameTop = bitmapSource;
                         frame.Dispose();
                     });
                 }
@@ -208,7 +210,9 @@ namespace insoles.ViewModel
                     }
                     Application.Current.Dispatcher.BeginInvoke(() =>
                     {
-                        CurrentFrameBottom = frame.ToBitmapSource();
+                        BitmapSource bitmapSource = frame.ToBitmapSource();
+                        bitmapSource.Freeze();
+                        CurrentFrameBottom = bitmapSource;
                         frame.Dispose();
                     });
                 }
