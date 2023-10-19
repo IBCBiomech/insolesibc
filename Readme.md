@@ -1,7 +1,7 @@
-﻿# Prototype: BiotecGAIT
+﻿# Captura de Datos de la Marcha: BiotecGAIT
 # BioTec :registered: 2023
 
-![Bio](Images/biotecgait.png)
+![Bio](/insoles/Images/biotecgait.png)
   
 
 ## Configuraciones
