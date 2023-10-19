@@ -1,7 +1,7 @@
-﻿# Proyecto Prototipo InnerInsoles
-# IBC Bio :registered: 2023
+﻿# Prototype: BiotecGAIT
+# BioTec :registered: 2023
 
-![Bio](Images/bio.png)
+![Bio](Images/biotecgait.png)
   
 
 ## Configuraciones
