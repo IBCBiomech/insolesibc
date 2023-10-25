@@ -29,7 +29,8 @@ namespace insoles.WPFHeatmap.Effects
         public HeatColorizer()
         {
             PixelShader pixelShader = new PixelShader();
-            pixelShader.UriSource = new Uri("/WPFHeatMap;component/Effects/HeatColorizer.ps", UriKind.Relative);
+            pixelShader.UriSource = new Uri("pack://application:,,,/WPFHeatmap/Effects/HeatColorizer.ps");
+            //pixelShader.UriSource = new Uri("/WPFHeatMap;component/Effects/HeatColorizer.ps", UriKind.Relative);
             this.PixelShader = pixelShader;
             this.UpdateShaderValue(InputProperty);
             this.UpdateShaderValue(PaletteProperty);

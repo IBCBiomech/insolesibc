@@ -22,6 +22,10 @@
                             syncfusion:DockingManager.Header="Pressure Map"
                             syncfusion:DockingManager.SideInDockedMode="Tabbed"
                             syncfusion:DockingManager.TargetNameInDockedMode="Butterfly"/>
+            <ContentControl Content="{Binding wpfHeatmap}"
+                syncfusion:DockingManager.Header="Heatmap"
+                syncfusion:DockingManager.SideInDockedMode="Tabbed"
+                syncfusion:DockingManager.TargetNameInDockedMode="Butterfly"/>
             <userControls:PacientesUserControlAnalisis Pacientes="{Binding Pacientes}"
                                                        syncfusion:DockingManager.Header="Usuarios"
                                                        syncfusion:DockingManager.SideInDockedMode="Left"

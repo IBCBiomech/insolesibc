@@ -16,6 +16,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
+using insoles.WPFHeatmap;
 
 namespace insoles.ViewModel
 {
@@ -46,6 +47,7 @@ namespace insoles.ViewModel
         public GRF grf { get; set; }
         public GrafoMariposa grafoMariposa {get; set;}
         public Heatmap heatmap { get; set;}
+        public WPFHeatmap.WPFHeatmap wpfHeatmap { get; set; }
         public CamaraReplay camaraViewport1 { get; set; }
         public CamaraReplay camaraViewport2 { get; set; }
         private GraphData graphData;
@@ -54,8 +56,6 @@ namespace insoles.ViewModel
 
         public AnalisisVM()
         {
-
-
             state = new AnalisisState();
             ((MainWindow)Application.Current.MainWindow).analisisState = state; // Cambiar despues
             timeLine = new TimeLine(state);
@@ -68,6 +68,7 @@ namespace insoles.ViewModel
                 plantilla.CalculateSensorPositionsLeft(), plantilla.CalculateSensorPositionsRight());
             grafoMariposa = new GrafoMariposa(plantilla);
             heatmap = new Heatmap(state, plantilla);
+            wpfHeatmap = new WPFHeatmap.WPFHeatmap(state, plantilla, codes);
             informesGeneratorService = new InformesGeneratorService(grf, grafoMariposa, heatmap);
             ((MainWindow)Application.Current.MainWindow).informesGeneratorService = informesGeneratorService;
             camaraViewport1 = new CamaraReplay();
@@ -83,9 +84,10 @@ namespace insoles.ViewModel
             {
                 camaraViewport1.time = time;
                 camaraViewport2.time = time;
-                grf.time = time;
-                heatmap.time = time;
-                grafoMariposa.time = time;
+                //grf.time = time;
+                //heatmap.time = time;
+                //grafoMariposa.time = time;
+                wpfHeatmap.time = time;
             };
             state.PropertyChanged += async(object sender, PropertyChangedEventArgs e) =>
             {
@@ -130,6 +132,7 @@ namespace insoles.ViewModel
                             await Task.Run(() => heatmap.pressure_maps_metrics = pressureMaps);
                             var pressureMapsLive = await pressureMap.CalculateLive(graphData);
                             await Task.Run(() => heatmap.pressure_maps_live = pressureMapsLive);
+                            wpfHeatmap.Update(graphData);
                         });
                     }         
                 }

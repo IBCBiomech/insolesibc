@@ -106,6 +106,36 @@ namespace insoles.WPFHeatmap
 			}
 		}
 
-		#endregion
-	}
+		public void Render(ImageSource foot, ImageSource alphaOverlay)
+		{
+            DrawingVisual foot_visual = new DrawingVisual();
+
+            using (DrawingContext overlayDc = foot_visual.RenderOpen())
+            {
+                overlayDc.DrawImage(foot, new Rect(0, 0, foot.Width, foot.Height));
+            }
+            m_heat_map_visuals.Add(foot_visual);
+            Render();
+            DrawingVisual overlay_visual = new DrawingVisual();
+
+            using (DrawingContext overlayDc = overlay_visual.RenderOpen())
+            {
+                overlayDc.DrawImage(alphaOverlay, new Rect(0, 0, alphaOverlay.Width, alphaOverlay.Height));
+            }
+            m_heat_map_visuals.Add(overlay_visual);
+        }
+        public void Render(ImageSource alphaOverlay)
+        {
+            Render();
+            DrawingVisual overlay_visual = new DrawingVisual();
+
+            using (DrawingContext overlayDc = overlay_visual.RenderOpen())
+            {
+                overlayDc.DrawImage(alphaOverlay, new Rect(0, 0, alphaOverlay.Width, alphaOverlay.Height));
+            }
+            m_heat_map_visuals.Add(overlay_visual);
+        }
+
+        #endregion
+    }
 }
