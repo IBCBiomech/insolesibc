@@ -1,26 +1,16 @@
-﻿using ConsoleDebug;
-using HeatMap;
+﻿using HeatMap;
 using insoles.DataHolders;
 using insoles.Enums;
 using insoles.Services;
 using insoles.States;
-using insoles.WPFHeatmap;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media;
+using MathNet.Numerics.LinearAlgebra;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace insoles.HeatMap
 {
@@ -34,8 +24,8 @@ namespace insoles.HeatMap
 
         private GraphData graphData;
 
-        private WriteableBitmap footMap;
-        private WriteableBitmap alphaMap;
+        private Bitmap footMap;
+        private Bitmap alphaMap;
 
         const float FACTOR_COLORBAR_ANIMATE = 2f;
         const float FACTOR_COLORBAR_MAX = 5f;
@@ -72,6 +62,7 @@ namespace insoles.HeatMap
         public HeatMap(AnalisisState state, IPlantillaService plantilla, ICodesService codes)
         {
             InitializeComponent();
+            alphaMap = CreateAlphaOverlayImage(plantilla.sensor_map, codes);
             CalculateCenters(plantilla.CalculateSensorPositionsLeft(),
                 plantilla.CalculateSensorPositionsRight(),
                 out sensors_left, out sensors_right);
@@ -131,9 +122,13 @@ namespace insoles.HeatMap
                 double intensity = CalculateIntensity(right[sensor]);
                 datas.Add(new DataType() { X = (int)point.Item1, Y = (int)point.Item2, Weight = intensity });
             }
-            HeatMapImage heatMapImage = new HeatMapImage(width, height, 200, 50);
+            HeatMapImage heatMapImage = new HeatMapImage(width, height, 40, 10);
             heatMapImage.SetDatas(datas);
             Bitmap bitmap = heatMapImage.GetHeatMap();
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.DrawImage(alphaMap, new System.Drawing.Point(0, 0));
+            }
             BitmapSource bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(
                 bitmap.GetHbitmap(),
                 IntPtr.Zero,
@@ -152,6 +147,61 @@ namespace insoles.HeatMap
             {
                 return percent * 10;
             }
+        }
+        private Bitmap CreateAlphaOverlayImage(Matrix<float> matrix, ICodesService codes)
+        {
+            int width = matrix.RowCount;
+            int height = matrix.ColumnCount;
+
+            Bitmap alphaOverlay = new Bitmap(width, height);
+
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    byte alphaByte;
+                    if (matrix[i, j] == codes.Background())
+                    {
+                        alphaByte = 255;
+                    }
+                    else
+                    {
+                        alphaByte = 0;
+                    }
+
+                    Color pixelColor = Color.FromArgb(alphaByte, 255, 255, 255);
+                    alphaOverlay.SetPixel(i, j, pixelColor);
+                }
+            }
+
+            return alphaOverlay;
+        }
+
+        private Bitmap CreateFootImage(Matrix<float> matrix, ICodesService codes)
+        {
+            int width = matrix.RowCount;
+            int height = matrix.ColumnCount;
+
+            Bitmap alphaOverlay = new Bitmap(width, height);
+
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    Color pixelColor;
+                    if (matrix[i, j] == codes.Background())
+                    {
+                        pixelColor = Color.FromArgb(255, 255, 255, 255);
+                    }
+                    else
+                    {
+                        pixelColor = Color.FromArgb(255, 0, 0, 0);
+                    }
+                    alphaOverlay.SetPixel(i, j, pixelColor);
+                }
+            }
+
+            return alphaOverlay;
         }
     }
 }
