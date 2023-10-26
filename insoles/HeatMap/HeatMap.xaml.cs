@@ -1,4 +1,5 @@
-﻿using HeatMap;
+﻿using ConsoleDebug;
+using HeatMap;
 using insoles.DataHolders;
 using insoles.Enums;
 using insoles.Services;
