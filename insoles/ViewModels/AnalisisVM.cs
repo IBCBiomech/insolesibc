@@ -17,6 +17,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 using insoles.WPFHeatmap;
+using insoles.HeatMap;
 
 namespace insoles.ViewModel
 {
@@ -48,6 +49,7 @@ namespace insoles.ViewModel
         public GrafoMariposa grafoMariposa {get; set;}
         public Heatmap heatmap { get; set;}
         public WPFHeatmap.WPFHeatmap wpfHeatmap { get; set; }
+        public HeatMap.HeatMap HeatMap { get; set; }
         public CamaraReplay camaraViewport1 { get; set; }
         public CamaraReplay camaraViewport2 { get; set; }
         private GraphData graphData;
@@ -68,7 +70,7 @@ namespace insoles.ViewModel
                 plantilla.CalculateSensorPositionsLeft(), plantilla.CalculateSensorPositionsRight());
             grafoMariposa = new GrafoMariposa(plantilla);
             heatmap = new Heatmap(state, plantilla);
-            wpfHeatmap = new WPFHeatmap.WPFHeatmap(state, plantilla, codes);
+            HeatMap = new HeatMap.HeatMap(state, plantilla, codes);
             informesGeneratorService = new InformesGeneratorService(grf, grafoMariposa, heatmap);
             ((MainWindow)Application.Current.MainWindow).informesGeneratorService = informesGeneratorService;
             camaraViewport1 = new CamaraReplay();
@@ -87,7 +89,7 @@ namespace insoles.ViewModel
                 //grf.time = time;
                 //heatmap.time = time;
                 //grafoMariposa.time = time;
-                wpfHeatmap.time = time;
+                HeatMap.time = time;
             };
             state.PropertyChanged += async(object sender, PropertyChangedEventArgs e) =>
             {
@@ -132,7 +134,7 @@ namespace insoles.ViewModel
                             await Task.Run(() => heatmap.pressure_maps_metrics = pressureMaps);
                             var pressureMapsLive = await pressureMap.CalculateLive(graphData);
                             await Task.Run(() => heatmap.pressure_maps_live = pressureMapsLive);
-                            wpfHeatmap.Update(graphData);
+                            HeatMap.Update(graphData);
                         });
                     }         
                 }

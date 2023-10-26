@@ -22,7 +22,7 @@
                             syncfusion:DockingManager.Header="Pressure Map"
                             syncfusion:DockingManager.SideInDockedMode="Tabbed"
                             syncfusion:DockingManager.TargetNameInDockedMode="Butterfly"/>
-            <ContentControl Content="{Binding wpfHeatmap}"
+            <ContentControl Content="{Binding HeatMap}"
                 syncfusion:DockingManager.Header="Heatmap"
                 syncfusion:DockingManager.SideInDockedMode="Tabbed"
                 syncfusion:DockingManager.TargetNameInDockedMode="Butterfly"/>

@@ -50,7 +50,7 @@ namespace insoles.WPFHeatmap
                 if (value != _frame)
                 {
                     _frame = value;
-                    Update(value, 1);
+                    Update(value);
                 }
             }
         }
