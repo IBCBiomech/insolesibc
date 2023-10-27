@@ -21,6 +21,9 @@
     <Compile Update="Forms\TextInputForm.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="HeatMap\HeatMap.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="UserControls\CamaraReplay.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -66,6 +69,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Forms\TextInputForm.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="HeatMap\HeatMap.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">

@@ -3,8 +3,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
-	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	<Nullable>enable</Nullable>
+    <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
     <DocumentationFile>C:\Users\berna\source\repos\insolesibc\insoles\bin\Debug\net6.0-windows\doc\Documentation.xml</DocumentationFile>
@@ -15,7 +14,6 @@
     <None Remove="Images\bio.png" />
     <None Remove="Images\bio2.png" />
     <None Remove="Images\bio3.png" />
-    <None Remove="Images\biotecgait.png" />
     <None Remove="Images\bitmap.png" />
     <None Remove="Images\bitmap_mariposa.png" />
     <None Remove="Images\bitmap_reduced.png" />
@@ -33,7 +31,6 @@
     <None Remove="Images\green-circle-icon.png" />
     <None Remove="Images\Home_Icon.png" />
     <None Remove="Images\home_page.png" />
-    <None Remove="Images\ibc.png" />
     <None Remove="Images\img_customer.png" />
     <None Remove="Images\img_home.png" />
     <None Remove="Images\img_order.png" />
@@ -48,7 +45,6 @@
     <None Remove="Images\red-circle-icon.png" />
     <None Remove="Images\reload-sync-icon.png" />
     <None Remove="Images\reset_dock_icon.png" />
-    <None Remove="Images\seat.png" />
     <None Remove="Images\shipment_page.png" />
     <None Remove="Images\shutdown_def.png" />
     <None Remove="Images\shutdown_mo.png" />
@@ -63,8 +59,6 @@
     <None Remove="Precalculus\inverse_distances_reduced.mtx" />
     <None Remove="Precalculus\inverse_distances_reduced_from_reduced.mtx" />
     <None Remove="Precalculus\inverse_distances_reduced_from_reduced2.mtx" />
-    <None Remove="WPFHeatmap\Effects\HeatColorizer.fx" />
-    <None Remove="WPFHeatmap\Effects\HeatColorizer.ps" />
   </ItemGroup>
 
   <ItemGroup>
@@ -99,7 +93,6 @@
     <PackageReference Include="Microsoft.Win32.SystemEvents" Version="7.0.0" />
     <PackageReference Include="MultiSelectTreeView" Version="1.0.9" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="NumSharp" Version="0.30.0" />
     <PackageReference Include="OpenCvSharp4" Version="4.7.0.20230115" />
     <PackageReference Include="OpenCvSharp4.Extensions" Version="4.7.0.20230115" />
     <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.7.0.20230115" />
@@ -134,7 +127,6 @@
     <Resource Include="Images\bio.png" />
     <Resource Include="Images\bio2.png" />
     <Resource Include="Images\bio3.png" />
-    <Resource Include="Images\biotecgait.png" />
     <Resource Include="Images\bitmap.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -178,9 +170,6 @@
     <Resource Include="Images\home_page.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Images\ibc.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
     <Resource Include="Images\img_customer.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -218,9 +207,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\reset_dock_icon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\seat.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\shipment_page.png">
@@ -261,12 +247,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Precalculus\inverse_distances_reduced_from_reduced2.mtx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="WPFHeatmap\Effects\HeatColorizer.fx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="WPFHeatmap\Effects\HeatColorizer.ps">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
