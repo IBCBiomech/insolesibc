@@ -128,18 +128,18 @@ namespace insoles.ViewModel
                                 camaraViewport2.video = null;
                             }
                             await grf.Update(graphData, variables);
-                            await heatmap.UpdateLimits(graphData, state.peso);
-                            await heatmap.CalculateCenters(cps_left, cps_right);
-                            var pressureMaps = await pressureMap.CalculateMetrics(graphData);
-                            await Task.Run(() => heatmap.pressure_maps_metrics = pressureMaps);
-                            var pressureMapsLive = await pressureMap.CalculateLive(graphData);
-                            await Task.Run(() => heatmap.pressure_maps_live = pressureMapsLive);
-                            await HeatMap.Update(graphData);
+                            //await heatmap.UpdateLimits(graphData, state.peso);
+                            //await heatmap.CalculateCenters(cps_left, cps_right);
+                            //var pressureMaps = await pressureMap.CalculateMetrics(graphData);
+                            //await Task.Run(() => heatmap.pressure_maps_metrics = pressureMaps);
+                            //var pressureMapsLive = await pressureMap.CalculateLive(graphData);
+                            //await Task.Run(() => heatmap.pressure_maps_live = pressureMapsLive);
                         });
+                        HeatMap.Update(graphData);
                     }         
                 }
             };
-            grf.GraphRangeChanged += async (GraphRange graphRange) =>
+            grf.GraphRangeChanged += (GraphRange graphRange) =>
             {
                 timeLine.ChangeRange(graphRange);
                 if (graphData != null)
@@ -148,9 +148,10 @@ namespace insoles.ViewModel
 
                     FramePressures[] frames;
                     List<Tuple<double, double>> cps_left, cps_right;
-                    await butterfly.Calculate(graphDataSubset, out frames, out cps_left, out cps_right);
-                    await Task.Run(() => grafoMariposa.framePressuresRange = frames);
-
+                    butterfly.Calculate(graphDataSubset, out frames, out cps_left, out cps_right);
+                    grafoMariposa.framePressuresRange = frames;
+                    HeatMap.range = (graphRange.first, graphRange.last);
+                    /*
                     lock (drawingHeatmaplock)
                     {
                         heatmap.CalculateCentersRange(cps_left, cps_right);
@@ -158,17 +159,19 @@ namespace insoles.ViewModel
                         var pressureMaps = pressureMap.CalculateMetrics(graphDataSubset).Result;
                         heatmap.pressure_maps_metrics_range = pressureMaps;
                     }
+                    */
                 }
                 else
                 {
                     Trace.WriteLine("graphData is null");
                 }
             };
-            grf.GraphRangeCleared += async() =>
+            grf.GraphRangeCleared += () =>
             {
                 timeLine.ClearRange();
-                await Task.Run(() => grafoMariposa.framePressuresRange = null);
-                await Task.Run(() => heatmap.pressure_maps_metrics_range = null);
+                grafoMariposa.framePressuresRange = null;
+                heatmap.pressure_maps_metrics_range = null;
+                HeatMap.ClearRange();
             };
         }
     }

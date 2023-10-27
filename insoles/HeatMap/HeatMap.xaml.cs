@@ -14,7 +14,6 @@ using System.Windows.Media.Imaging;
 using System.Linq;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace insoles.HeatMap
@@ -53,8 +52,55 @@ namespace insoles.HeatMap
         private int width;
         private int height;
 
-        private (int, int) range;
-
+        private (int, int) _range;
+        public (int, int) range
+        {
+            get
+            {
+                return _range;
+            }
+            set
+            {
+                _range = value;
+                if (graphData != null && !animate)
+                {
+                    switch (selectedMetric)
+                    {
+                        case Metric.Min:
+                            Update(Min, colorbarAvg);
+                            break;
+                        case Metric.Max:
+                            Update(Max, colorbarMax);
+                            break;
+                        case Metric.Avg:
+                            Update(Average, colorbarAvg);
+                            break;
+                    }
+                }
+            }
+        }
+        public void ClearRange()
+        {
+            if (graphData != null)
+            {
+                range = (0, graphData.length - 1);
+                if (!animate)
+                {
+                    switch (selectedMetric)
+                    {
+                        case Metric.Min:
+                            Update(Min, colorbarAvg);
+                            break;
+                        case Metric.Max:
+                            Update(Max, colorbarMax);
+                            break;
+                        case Metric.Avg:
+                            Update(Average, colorbarAvg);
+                            break;
+                    }
+                }
+            }
+        }
         private const double TIME_PER_FRAME = 0.01;
         public double time
         {
@@ -229,7 +275,7 @@ namespace insoles.HeatMap
                 centersRight[sensor] = CalculateCenter(sensor_positions_right[sensor]);
             }
         }
-        public async Task Update(GraphData graphData)
+        public void Update(GraphData graphData)
         {
             this.graphData = graphData;
             float peso = state.peso;
@@ -240,25 +286,25 @@ namespace insoles.HeatMap
             range = (0, graphData.length - 1);
             if (animate)
             {
-                await Update(frame);
+                Update(frame);
             }
             else
             {
                 switch (selectedMetric)
                 {
                     case Metric.Min:
-                        await Update(Min, colorbarAvg);
+                        Update(Min, colorbarAvg);
                         break;
                     case Metric.Max:
-                        await Update(Max, colorbarMax);
+                        Update(Max, colorbarMax);
                         break;
                     case Metric.Avg:
-                        await Update(Average, colorbarAvg);
+                        Update(Average, colorbarAvg);
                         break;
                 }
             }
         }
-        private async Task Update(int frame)
+        private void Update(int frame)
         {
             List<DataType> datas = new List<DataType>();
             frame = Math.Max(Math.Min(frame, graphData.length), 0);
@@ -288,12 +334,12 @@ namespace insoles.HeatMap
                 IntPtr.Zero,
                 Int32Rect.Empty,
                 BitmapSizeOptions.FromEmptyOptions());
-            await Dispatcher.BeginInvoke(() =>
+            Dispatcher.Invoke(() =>
             {
                 image.Source = bitmapSource;
             });
         }
-        private async Task Update(ActionRef<GraphData, DataInsole, DataInsole, int, int> func, int colorbar)
+        private void Update(ActionRef<GraphData, DataInsole, DataInsole, int, int> func, int colorbar)
         {
             List<DataType> datas = new List<DataType>();
             DataInsole left = new();
@@ -323,7 +369,7 @@ namespace insoles.HeatMap
                 IntPtr.Zero,
                 Int32Rect.Empty,
                 BitmapSizeOptions.FromEmptyOptions());
-            await Dispatcher.BeginInvoke(() =>
+            Dispatcher.Invoke(() =>
             {
                 image.Source = bitmapSource;
             });
