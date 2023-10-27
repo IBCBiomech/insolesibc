@@ -134,7 +134,7 @@ namespace insoles.ViewModel
                             await Task.Run(() => heatmap.pressure_maps_metrics = pressureMaps);
                             var pressureMapsLive = await pressureMap.CalculateLive(graphData);
                             await Task.Run(() => heatmap.pressure_maps_live = pressureMapsLive);
-                            HeatMap.Update(graphData);
+                            await HeatMap.Update(graphData);
                         });
                     }         
                 }
