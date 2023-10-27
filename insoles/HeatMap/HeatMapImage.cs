@@ -106,6 +106,7 @@ namespace HeatMap
         private void CreateColorMap()
         {
             ColorBlend colorBlend = new ColorBlend(8);
+            /*
             colorBlend.Colors = new Color[8]
             {
                 Color.FromArgb(0, 255, 255, 255),
@@ -116,6 +117,18 @@ namespace HeatMap
                 Color.FromArgb(130, 255, 255, 0),
                 Color.FromArgb(145, 255, 128, 0),
                 Color.FromArgb(155, 255, 0, 0)
+            };
+            */
+            colorBlend.Colors = new Color[8]
+            {
+                Color.FromArgb(0, 255, 255, 255),
+                Color.FromArgb(15, 128, 0, 128),
+                Color.FromArgb(50, 128, 0, 255),
+                Color.FromArgb(115, 0, 0, 255),
+                Color.FromArgb(180, 0, 255, 0),
+                Color.FromArgb(214, 255, 255, 0),
+                Color.FromArgb(238, 255, 128, 0),
+                Color.FromArgb(255, 255, 0, 0)
             };
             colorBlend.Positions = new float[8] { 0.0f, 0.1f, 0.25f, 0.4f, 0.65f, 0.75f, 0.9f, 1.0f };
             Color startColor = colorBlend.Colors[0];

@@ -153,28 +153,33 @@ namespace insoles.UserControls
         {
             get { return Enum.GetValues(typeof(Units)).Cast<Units>(); }
         }
-        private const double MIN_REFRESH = 0.1;
+        private const double MIN_REFRESH = 0.05;
+        private Stopwatch stopwatchRefresh = new Stopwatch();
         private double lastTime = 0;
         public double time
         {
             set
             {
-                if(timeLine != null)
-                    timeLine.X = value;
-                if (Math.Abs(value - lastTime) > MIN_REFRESH && xs_temp_left != null)
+                if (stopwatchRefresh.Elapsed.TotalSeconds > MIN_REFRESH)
                 {
-                    lastTime = value;
-                    double closest = FindClosest(xs_temp_left, value);
-                    int indexClosest = xs_temp_left.IndexOf(closest);
-                    leftPlot.Label = "Left = " + ys_temp_left[indexClosest].ToString("0.##");
-                    rightPlot.Label = "Right = " + ys_temp_right[indexClosest].ToString("0.##");
-                    total = (ys_temp_left[indexClosest] + ys_temp_right[indexClosest]).Round(2).ToString() +
-                        selectedUnits.ToString();
+                    stopwatchRefresh.Restart();
+                    if (timeLine != null)
+                        timeLine.X = value;
+                    if (xs_temp_left != null)
+                    {
+                        lastTime = value;
+                        double closest = FindClosest(xs_temp_left, value);
+                        int indexClosest = xs_temp_left.IndexOf(closest);
+                        leftPlot.Label = "Left = " + ys_temp_left[indexClosest].ToString("0.##");
+                        rightPlot.Label = "Right = " + ys_temp_right[indexClosest].ToString("0.##");
+                        total = (ys_temp_left[indexClosest] + ys_temp_right[indexClosest]).Round(2).ToString() +
+                            selectedUnits.ToString();
+                    }
+                    Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        plot.Refresh();
+                    }));
                 }
-                Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    plot.Refresh();
-                }));
             }
         }
         private string _total;
@@ -244,7 +249,7 @@ namespace insoles.UserControls
 
             Ns = new NormalStats();
 
-           
+            stopwatchRefresh.Restart();
         }
 
         // Imprime en el Xlabel las coordenadas XY (temporalmente)

@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Interop;
 using MathNet.Numerics.LinearAlgebra;
 using System.Windows.Media.Imaging;
+using System.Diagnostics;
 
 namespace insoles.HeatMap
 {
@@ -24,12 +25,16 @@ namespace insoles.HeatMap
 
         private GraphData graphData;
 
+        private AnalisisState state;
+
         private Bitmap footMap;
         private Bitmap alphaMap;
 
         const float FACTOR_COLORBAR_ANIMATE = 2f;
         const float FACTOR_COLORBAR_MAX = 5f;
         const float FACTOR_COLORBAR_AVG = 1f;
+
+        const double MAX_INTENSITY = 10;
 
         private int colorbarMax;
         private int colorbarAvg;
@@ -68,11 +73,7 @@ namespace insoles.HeatMap
                 out sensors_left, out sensors_right);
             width = plantilla.getLength(0);
             height = plantilla.getLength(1);
-            float peso = 70;
-            int numSensors = Enum.GetValues(typeof(Sensor)).Length;
-            colorbarAnimate = (int)(peso * 9.8f / numSensors * FACTOR_COLORBAR_ANIMATE);
-            colorbarMax = (int)(peso * 9.8f / numSensors * FACTOR_COLORBAR_MAX);
-            colorbarAvg = (int)(peso * 9.8f / numSensors * FACTOR_COLORBAR_AVG);
+            this.state = state;
         }
         private void CalculateCenters(Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_left,
             Dictionary<Sensor, List<Tuple<int, int>>> sensor_positions_right,
@@ -103,6 +104,11 @@ namespace insoles.HeatMap
         public async void Update(GraphData graphData)
         {
             this.graphData = graphData;
+            float peso = state.peso;
+            int numSensors = Enum.GetValues(typeof(Sensor)).Length;
+            colorbarAnimate = (int)(peso * 9.8f / numSensors * FACTOR_COLORBAR_ANIMATE);
+            colorbarMax = (int)(peso * 9.8f / numSensors * FACTOR_COLORBAR_MAX);
+            colorbarAvg = (int)(peso * 9.8f / numSensors * FACTOR_COLORBAR_AVG);
         }
         private async void Update(int frame)
         {
@@ -141,11 +147,11 @@ namespace insoles.HeatMap
             double percent = pressure / colorbarAnimate;
             if (percent >= 1)
             {
-                return 10;
+                return MAX_INTENSITY;
             }
             else
             {
-                return percent * 10;
+                return percent * MAX_INTENSITY;
             }
         }
         private Bitmap CreateAlphaOverlayImage(Matrix<float> matrix, ICodesService codes)
