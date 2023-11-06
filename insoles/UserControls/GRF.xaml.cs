@@ -578,8 +578,11 @@ namespace insoles.UserControls
             }
            else
             {
-                startL = xs_left_N_FC.IndexOf(Math.Round(XPoints[0] + 0.5, 2));
-                endL = xs_left_N_FC.IndexOf(Math.Round(XPoints[1] - 0.5, 2));
+                startL = xs_left_N_FC.IndexOf(Math.Round(XPoints[0], 2));
+                endL = xs_left_N_FC.IndexOf(Math.Round(XPoints[1], 2));
+
+                startL = ClosestIndexToLeft(ys_left_N_FC, startL);
+                endL = ClosestIndexToRight(ys_left_N_FC, endL);
 
                 List<double> xs_left = xs_left_N_FC.GetRange(startL,  endL - startL); 
                 List<double> ys_left = ys_left_N_FC.GetRange(startL, endL -  startL );
@@ -589,22 +592,62 @@ namespace insoles.UserControls
                 startR = xs_left_N_FC.IndexOf(Math.Round(XPoints[0], 2));
                 endR = xs_left_N_FC.IndexOf(Math.Round(XPoints[1], 2));
 
+                startR = ClosestIndexToLeft(ys_right_N_FC, startL);
+                endR = ClosestIndexToRight(ys_right_N_FC, endL);
+
                 List<double> xs_right = xs_right_N_FC.GetRange(startR, endR - startR);
                 List<double> ys_right = ys_right_N_FC.GetRange(startR, endR - startR);
 
                 ys_right_array = Ns.Butterworth(ys_right.ToArray(), 0.01, 6.0);
 
                 rangePlot.Plot.AddScatterLines(xs_left.ToArray(), ys_left_array, color: System.Drawing.Color.Red);
-                rangePlot.Plot.AddScatterLines(xs_right.ToArray(), ys_right_array.ToArray(), color: System.Drawing.Color.Green);
+                rangePlot.Plot.AddScatterLines(xs_right.ToArray(), ys_right_array, color: System.Drawing.Color.Green);
                 rangePlot.Render();
                 //GraphRangeChanged?.Invoke(new GraphRange(startL, endL));
             }
 
         }
 
+        private int ClosestIndexToLeft(List<double> values, int index, double treshold = 1)
+        {
+            for(int i = index; i >= 0; i--)
+            {
+                if (values[i] < treshold)
+                {
+                    for (int j = i; j >= 0; j--)
+                    {
+                        if (values[j] > treshold)
+                        {
+                            return (i + j) / 2;
+                        }
+                    }
+                    return -1;
+                }
+            }
+            return -1;
+        }
+        private int ClosestIndexToRight(List<double> values, int index, double treshold = 1)
+        {
+            for (int i = index; i < values.Count; i++)
+            {
+                if (values[i] < treshold)
+                {
+                    for (int j = i; j < values.Count; j++)
+                    {
+                        if (values[j] > treshold)
+                        {
+                            return (i + j) / 2;
+                        }
+                    }
+                    return -1;
+                }
+            }
+            return -1;
+        }
+
         private void NormalizationButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            Trace.WriteLine("right");
 
             (heel_strikesR, toes_offR) = Ns.CalculateHeelToes(ys_right_array, Threshold);
 
@@ -619,6 +662,7 @@ namespace insoles.UserControls
             normPlot.Plot.AddFillError(curvaTimeR.ToArray(), curvaMediaR.ToArray(), curvaStR.ToArray(), System.Drawing.Color.FromArgb(50, System.Drawing.Color.Green));
 
             // para l
+            Trace.WriteLine("left");
             (heel_strikesL, toes_offL) = Ns.CalculateHeelToes(ys_left_array, Threshold);
 
             Ns.AgregarLineasHeelToes(rangePlot, xs_left_N_FC, heel_strikesL, toes_offL, startL);
