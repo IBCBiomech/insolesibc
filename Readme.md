@@ -75,3 +75,8 @@ dotnet ef database update
 - Commands
 - Behaviours: obsoletos
 
+# Nuevo
+Documentación en la carpeta docs/  
+Guarda los tests y videos en esta carpeta: %HOMEDRIVE%%HOMEPATH%\insoles , si no existe la crea al principio del programa
+## Ejecutar el programa
+Abrir con VisualStudio22. Publicar proyecto en la ubicacion deseada
