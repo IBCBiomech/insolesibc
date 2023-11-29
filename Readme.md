@@ -80,3 +80,16 @@ Documentación en la carpeta docs/
 Guarda los tests y videos en esta carpeta: %HOMEDRIVE%%HOMEPATH%\insoles , si no existe la crea al principio del programa
 ## Ejecutar el programa
 Abrir con VisualStudio22. Publicar proyecto en la ubicacion deseada
+## Dibujar la plantilla
+Necesita una imagen con colores diferentes en blanco y negro para el fondo, la plantilla y cada sensor. En el fichero CodesService hay que setear el valor de cada uno para que corresponda con la imagen de la plantilla.  
+ 
+background = 255;
+foot = 0;
+sensor[Sensor.Hallux] = 10;
+sensor[Sensor.Toes] = 20;
+sensor[Sensor.Met1] = 30;
+sensor[Sensor.Met3] = 40;
+sensor[Sensor.Met5] = 50;
+sensor[Sensor.Arch] = 60;
+sensor[Sensor.HeelL] = 70;
+sensor[Sensor.HeelR] = 80;
