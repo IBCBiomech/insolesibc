@@ -79,7 +79,7 @@ dotnet ef database update
 Documentación en la carpeta docs/  
 Guarda los tests y videos en esta carpeta: %HOMEDRIVE%%HOMEPATH%\insoles , si no existe la crea al principio del programa
 ## Ejecutar el programa
-Abrir con VisualStudio22. Publicar proyecto en la ubicacion deseada
+Abrir con VisualStudio22. Publicar proyecto en la ubicacion deseada. Ejecutar insoles.exe
 ## Dibujar la plantilla
 Necesita una imagen con colores diferentes en blanco y negro para el fondo, la plantilla y cada sensor. En el fichero CodesService hay que setear el valor de cada uno para que corresponda con la imagen de la plantilla.  
  
@@ -93,3 +93,4 @@ sensor[Sensor.Met5] = 50;
 sensor[Sensor.Arch] = 60;
 sensor[Sensor.HeelL] = 70;
 sensor[Sensor.HeelR] = 80;
+
