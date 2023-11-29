@@ -79,4 +79,4 @@ dotnet ef database update
 Documentación en la carpeta docs/  
 Guarda los tests y videos en esta carpeta: %HOMEDRIVE%%HOMEPATH%\insoles , si no existe la crea al principio del programa
 ## Ejecutar el programa
-Abrir con VisualStudio22. Publicar proyecto en la ubicacion deseada
+Abrir con VisualStudio22. Publicar proyecto en la ubicacion deseada. Ejecutar insoles.exe
