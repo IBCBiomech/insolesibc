@@ -1,0 +1,213 @@
+- Commands
+    - AcceptarCrearPacienteCommand.cs
+    - AcceptarEditarPacienteCommand.cs
+    - BorrarPacienteCommand.cs
+    - BorrarTestCommand.cs
+    - CalibrarCommand.cs
+    - CalibrarLeftStartCommand.cs
+    - CalibrarResetCommand.cs
+    - CalibrarRightStartCommand.cs
+    - CaptureCommand.cs
+    - CargarInformeCommand.cs
+    - CargarTestCommand.cs
+    - CargarCameraCommand.cs
+    - ConnectCommand.cs
+    - CrearCarpetaInformeCommand.cs
+    - CrearCarpetaTestCommand.cs
+    - CrearPacienteCommand.cs
+    - DisconnectCommand.cs
+    - EditarPacienteCommand.cs
+    - ExportarFCTestCommand.cs
+    - GenerarInformeCommand.cs
+    - ImportarTestCommand.cs
+    - NormalizarCommand.cs
+    - ObtenerPacientesCommand.cs
+    - OpenCameraCommand.cs
+    - PauseCommand.cs
+    - RecordCommand.cs
+    - RenombrarCarpetaInformeCommand.cs
+    - RenombrarCarpetaTestCommand.cs
+    - RenombrarFicheroCSVTestCommand.cs
+    - RenombrarFicheroVideo1TestCommand.cs
+    - RenombrarFicheroVideo2TestCommand.cs
+    - ResetLayoutCommand.cs
+    - ScanCommand.cs
+    - StopCommand.cs
+    - TimelineFastBackwardCommand.cs
+    - TimelineFastFordwardCommand.cs
+    - TimelinePauseCommand.cs
+    - TimelinePlayCommand.cs
+- Controlls
+    - CustomCollormap.cs
+- Converters
+    - BooleanToCircleConverter.cs
+    - FalseToVisibleConverter.cs
+    - FractionConverter.cs
+    - IntToPercentageConverter.cs
+    - NullToVisibilityConverter.cs
+    - PathToFileNameConverter.cs
+    - PreTextConverter.cs
+    - TimeSpanConverter.cs
+    - TrueToVisibleConverter.cs
+- Database
+    - DBContextSqlLite.cs
+- DataHolders
+    - DataInsole.cs
+    - FrameData.cs
+    - FrameDataFactory.cs
+    - FrameDataFactoryInsoles.cs
+    - FrameDataInsoles.cs
+    - FramePressures.cs
+    - GraphData.cs
+    - VariablesData.cs
+- DataTemplateSelectors
+    - PacienteDataTemplateSelector.cs
+- Enums
+    - Metric.cs
+    - Sensor.cs
+    - Side.cs
+    - Units.cs
+- Forms
+    - CalibrarForm.xaml
+    - CalibrarForm.xaml.cs
+    - CrearPacienteForm.xaml
+    - CrearPacienteForm.xaml.cs
+    - EditarPacienteForm.xaml
+    - EditarPacienteForm.xaml.cs
+    - TextInputForm.xaml
+    - TextInputForm.xaml.cs
+- HeatMap
+    - DataType.cs
+    - HeatMap.xaml
+    - HeatMap.xaml.cs
+    - HeatMapImage.cs
+    - MockDatasGen.cs
+- Messages
+    - CameraScan.cs
+    - GraphRange.cs
+    - InsoleData.cs
+    - InsoleScan.cs
+- Models
+    - CameraModel.cs
+    - GraphSumPressuresLiveModel.cs
+    - Infome.cs
+    - InformeFile.cs
+    - InformeFileTreeView.cs
+    - InformeTreeView.cs
+    - InsoleModel.cs
+    - MetaFolderTreeView.cs
+    - Paciente.cs
+    - PacientesTreeView.cs
+    - PacientesTreeViewBase.cs
+    - PacienteTreeView.cs
+    - Test.cs
+    - TestFileTreeView.cs
+    - TestsTreeView.cs
+    - TestTreeView.cs
+    - TextTestFileTreeView.cs
+    - VideoTestFileTreeView.cs
+- Proxys
+    - ListViewProxy.cs
+- Services
+    - ApiService.cs
+    - ButterflyService.cs
+    - CamaraService.cs
+    - CamaraStreamService.cs
+    - CodesService.cs
+    - FakeApiService.cs
+    - FileExtractorService.cs
+    - IApiService.cs
+    - IButterflyService.cs
+    - ICameraService.cs
+    - ICodesService.cs
+    - IDatabaseService.cs
+    - IFileExtractorService.cs
+    - InformesGeneratorService.cs
+    - IPlantillaService.cs
+    - IPressureMapService.cs
+    - IRetocarPlantillaService.cs
+    - ISaveService.cs
+    - LiveCalculationsService.cs
+    - PlantillaService.cs
+    - PressureMapCentersSevice.cs
+    - PressureMapService.cs
+    - RetocarPlantillaReducedService.cs
+    - SaveService.cs
+    - SQLiteDatabaseService.cs
+- States
+    - AnalisisState.cs
+    - DatabaseBridge.cs
+    - InformesState.cs
+    - RegistroState.cs
+- Styles
+    - Button.xaml
+    - ButtonIcon.xaml
+    - Icon.xaml
+    - Image.xaml
+    - InsoleColumns.xamls
+    - Page.xaml
+    - Text.xaml
+- UserControls
+    - CamaraReplay.xaml
+    - CamaraReplay.xaml.cs
+    - Dispositivos.xaml
+    - Dispositivos.xaml.cs
+    - EditorInformes.xaml
+    - EditorInformes.xaml.cs
+    - GrafoMariposa.xaml
+    - GrafoMariposa.xaml.cs
+    - GRF.xaml
+    - GRF.xaml.cs
+    - Heatmap.xaml
+    - Heatmap.xaml.cs
+    - PacientesUserControl.xaml
+    - PacientesUserControl.xaml.cs
+    - PacientesUserControlAnalisis.xaml
+    - PacientesUserControlAnalisis.xaml.cs
+    - TimeLine.xaml
+    - TimeLine.xaml.cs
+- Utilities
+    - Normalization
+        - Cargas.cs
+        - CubicInterpol.cs
+        - NormalStats.cs
+    - Btn.cs
+    - DataTemplate.xaml
+    - DeepCopy.cs
+    - FormatConversions.cs
+    - HelperFunctions.cs
+    - MathNetHelpers.cs
+    - ModelBase.cs
+    - RelayCommand.cs
+    - UnitsConversion.cs
+    - ViewModelBase.cs
+- ViewModels
+    - AnalisisVM.cs
+    - HomeVM.cs
+    - InformesVM.cs
+    - NavigationVM.cs
+    - RegistroVM.cs
+- Views
+    - Analisis.xaml
+    - Analisis.xaml.cs
+    - Home.xaml
+    - Home.xaml.cs
+    - Informes.xaml
+    - Informes.xaml.cs
+    - Registro.xaml
+    - Registro.xaml.cs
+- WPFHeatmap
+    - Effects
+        - HeatColorizer.cs
+        - HeatColorizer.fx
+        - HeatColorizer.ps
+    - AttachedTitle.cs
+    - HeatMap.cs
+    - HeatPoint.cs
+    - WPFHeatmap.xaml
+    - WPFHeatmap.xaml.cs
+- App.xaml
+- App.xaml.cs
+- MainWindow.xaml
+- MainWindow.xaml.cs
+- mydatabase.db
